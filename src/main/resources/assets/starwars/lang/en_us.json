@@ -1,0 +1,33 @@
+{
+  "item.starwars.gas_cartridge": "Cartridge",
+  "item.starwars.tibanna_gas": "Cartridge of Tibanna Gas",
+  "item.starwars.ionized_tibanna_gas": "Cartridge of Ionized Tibanna Gas",
+  "item.starwars.spin_sealed_tibanna_gas": "Cartridge of Spin-Sealed Tibanna Gas",
+  "item.starwars.tibannax_gas": "Cartridge of TibannaX Gas",
+  "item.starwars.sig_gas": "Cartridge of Sig Gas",
+  "item.starwars.magnetized_sig_gas": "Cartridge of Magnetized Sig Gas",
+  "item.starwars.skevon_gas": "Cartridge of Skevon Gas",
+
+  "item.starwars.tibanna_blaster_bolt": "Tibanna Blaster Bolt",
+  "item.starwars.ionized_tibanna_blaster_bolt": "Ionized Tibanna Blaster Bolt",
+  "item.starwars.spin_sealed_tibanna_blaster_bolt": "Spin Sealed Tibanna Blaster Bolt",
+  "item.starwars.tibannax_blaster_bolt": "TibannaX Blaster Bolt",
+  "item.starwars.sig_blaster_bolt": "Sig Blaster Bolt",
+  "item.starwars.magnetized_sig_blaster_bolt": "Magnetized Sig Blaster Bolt",
+  "item.starwars.skevon_blaster_bolt": "Skevon Blaster Bolt",
+
+  "item.starwars.dc17": "DC-17 Hand Blaster",
+  "item.starwars.dh17": "DH-17 Blaster Pistol",
+  "item.starwars.dl44": "DL-44 Heavy Blaster Pistol",
+  "item.starwars.ee3": "EE-3 Blaster Carbine",
+
+  "itemGroup.starwars.hand_blasters": "Hand Blasters",
+  "itemGroup.starwars.carbine_blasters": "Carbine Blasters",
+  "itemGroup.starwars.rifle_blasters": "Rifle Blasters",
+  "itemGroup.starwars.repeating_blasters": "Repeating Blasters",
+  "itemGroup.starwars.scattershot_blasters": "Scattershot Blasters",
+  "itemGroup.starwars.sniper_blasters": "Sniper Blasters",
+  "itemGroup.starwars.slugthrowers": "Slugthrowers",
+  "itemGroup.starwars.disruptors": "Disruptors",
+  "itemGroup.starwars.misc_weapons": "Misc Weapons"
+}

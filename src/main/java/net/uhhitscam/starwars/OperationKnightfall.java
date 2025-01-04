@@ -1,12 +1,22 @@
 package net.uhhitscam.starwars;
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.uhhitscam.starwars.component.ModDataComponentTypes;
+import net.uhhitscam.starwars.entity.ModEntities;
+import net.uhhitscam.starwars.entity.client.TibannaBlasterBoltRenderer;
+import net.uhhitscam.starwars.entity.client.IonizedTibannaBlasterBoltRenderer;
+import net.uhhitscam.starwars.entity.client.SpinSealedTibannaBlasterBoltRenderer;
+import net.uhhitscam.starwars.entity.client.TibannaXBlasterBoltRenderer;
+import net.uhhitscam.starwars.entity.client.SigBlasterBoltRenderer;
+import net.uhhitscam.starwars.entity.client.MagnetizedSigBlasterBoltRenderer;
+import net.uhhitscam.starwars.entity.client.SkevonBlasterBoltRenderer;
+import net.uhhitscam.starwars.item.ModCreativeModeTabs;
+import net.uhhitscam.starwars.item.ModItems;
+import net.uhhitscam.starwars.util.KeyBinding;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,7 +28,6 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(OperationKnightfall.MODID)
@@ -31,8 +40,13 @@ public class OperationKnightfall {
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public OperationKnightfall(IEventBus modEventBus, ModContainer modContainer) {
-        // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+
+        KeyBinding.register(modEventBus);
+        ModCreativeModeTabs.register(modEventBus);
+        ModItems.register(modEventBus);
+        ModEntities.register(modEventBus);
+        ModDataComponentTypes.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
@@ -47,15 +61,7 @@ public class OperationKnightfall {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        // Some common setup code
-        LOGGER.info("HELLO FROM COMMON SETUP");
 
-        if (Config.logDirtBlock)
-            LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
-
-        LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-
-        Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
     // Add the example block item to the building blocks tab
@@ -63,21 +69,18 @@ public class OperationKnightfall {
 
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
-    }
-
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            EntityRenderers.register(ModEntities.TIBANNA_BLASTER_BOLT.get(), TibannaBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), IonizedTibannaBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), SpinSealedTibannaBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.TIBANNAX_BLASTER_BOLT.get(), TibannaXBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.SIG_BLASTER_BOLT.get(), SigBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), MagnetizedSigBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.SKEVON_BLASTER_BOLT.get(), SkevonBlasterBoltRenderer::new);
         }
     }
 }
