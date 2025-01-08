@@ -53,7 +53,7 @@ public class GasItem extends Item {
 
         if (gasAmmo > 0) {
             for (ItemStack stack : player.getInventory().items) {
-                if (stack.getItem() instanceof Blasteritem blaster) {
+                if (stack.getItem() instanceof BlasterItem blaster) {
                     int blasterAmmo = blaster.getAmmo(stack);
                     int ammoNeeded = blaster.getMaxAmmo() - blasterAmmo;
 

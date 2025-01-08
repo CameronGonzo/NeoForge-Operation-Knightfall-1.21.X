@@ -5,8 +5,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.starwars.OperationKnightfall;
-import net.uhhitscam.starwars.item.custom.Blasteritem;
+import net.uhhitscam.starwars.item.custom.BlasterItem;
 import net.uhhitscam.starwars.item.custom.GasItem;
+
+import java.util.List;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(OperationKnightfall.MODID);
@@ -43,12 +45,15 @@ public class ModItems {
 
     //Blasters
     public static final DeferredItem<Item> DC17 = ITEMS.register("dc17",
-            () -> new Blasteritem(new Item.Properties().stacksTo(1), 2.0F, 2.0F, 50, 14, 1, Blasteritem.FiringMode.SEMI_AUTO, 0));
+            () -> new BlasterItem(new Item.Properties().stacksTo(1), 2.0F, 2.0F, 50, 14, 1, 0, 0, List.of("SEMI_AUTO"),
+                    0F, 0F, 0F));
     public static final DeferredItem<Item> DH17 = ITEMS.register("dh17",
-            () -> new Blasteritem(new Item.Properties().stacksTo(1), 2.0F, 1.5F, 500, 17, 10, Blasteritem.FiringMode.SEMI_AUTO, 0));
+            () -> new BlasterItem(new Item.Properties().stacksTo(1), 2.0F, 1.5F, 500, 17, 5, 20, 8, List.of("SEMI_AUTO", "BURST", "FULL_AUTO"),
+                    0.2F, 0.9F, 1.7F));
     public static final DeferredItem<Item> DL44 = ITEMS.register("dl44",
-            () -> new Blasteritem(new Item.Properties().stacksTo(1), 2.8F, 1.2F, 50, 16, 5, Blasteritem.FiringMode.SEMI_AUTO, 0));
+            () -> new BlasterItem(new Item.Properties().stacksTo(1), 2.8F, 1.2F, 50, 16, 5, 0, 0, List.of("SEMI_AUTO"),
+                    0.7F, 0F, 0F));
     public static final DeferredItem<Item> EE3 = ITEMS.register("ee3",
-            () -> new Blasteritem(new Item.Properties().stacksTo(1), 3.0F, 1.0F, 300, 8, 20, Blasteritem.FiringMode.BURST, 0));
-
+            () -> new BlasterItem(new Item.Properties().stacksTo(1), 3.0F, 1.0F, 300, 8, 0, 20, 0, List.of("BURST"),
+                    0F, 0.5F, 0F));
 }
