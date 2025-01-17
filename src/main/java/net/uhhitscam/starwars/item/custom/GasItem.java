@@ -29,15 +29,21 @@ public class GasItem extends Item {
 
     // Getter for the gas type
     public String getGasType() {
+        System.out.println("made it to gasItem getGasType");
         return gasType;
     }
 
     public int getAmmo(ItemStack stack) {
         GasAmmoData data = stack.get(ModDataComponentTypes.GAS_AMMO.get());
-        return data != null ? data.ammo() : maxAmmo;
+        if (data == null) {
+            setAmmo(stack, maxAmmo); // Initialize with maxAmmo
+            return maxAmmo;
+        }
+        return data.ammo();
     }
 
     public void setAmmo(ItemStack stack, int ammo) {
+        System.out.println("made it to gasItem setAmmo");
         stack.set(ModDataComponentTypes.GAS_AMMO.get(), new GasAmmoData(ammo));
     }
 
