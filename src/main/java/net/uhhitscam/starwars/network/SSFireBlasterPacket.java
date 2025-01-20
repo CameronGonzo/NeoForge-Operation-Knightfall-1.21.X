@@ -5,6 +5,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,20 +26,19 @@ public record SSFireBlasterPacket(ItemStack blaster, String gasType) implements 
 
     @Override
     public void handle(IPayloadContext context) {
-        System.out.println("running SSFireBlasterPacket.handle");
         Player player = context.player();
         Level level = player.level();
 
         if (!level.isClientSide) {
-            System.out.println("SSGasAmmoPacket.handle is serverside");
             // Get the ItemStack from the player's inventory
             ItemStack serverBlasterStack = player.getItemInHand(player.getUsedItemHand());
 
             if (serverBlasterStack.getItem() instanceof BlasterItem) {
                 BlasterItem blasterItem = (BlasterItem) serverBlasterStack.getItem();
+                InteractionHand hand = player.getUsedItemHand();
 
                 // Call the firing method on the server-side
-                blasterItem.mainHandFiring(player, serverBlasterStack);
+                blasterItem.mainHandFiring(player, serverBlasterStack, hand);
             }
         }
     }

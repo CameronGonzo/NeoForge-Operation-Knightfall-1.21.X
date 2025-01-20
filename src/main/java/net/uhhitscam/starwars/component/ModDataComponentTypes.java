@@ -18,6 +18,8 @@ public class ModDataComponentTypes {
             builder -> builder.persistent(GasTypeData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<FiringModeData>> FIRING_MODE = register("firing_mode",
             builder -> builder.persistent(FiringModeData.CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<CoolDownData>> COOLDOWN = register("cooldown",
+            builder -> builder.persistent(CoolDownData.CODEC));
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());

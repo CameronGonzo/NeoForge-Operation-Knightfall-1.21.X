@@ -27,12 +27,10 @@ public record SSReloadPacket(ItemStack blaster, int ammo, String gasType) implem
 
     @Override
     public void handle(IPayloadContext context) {
-        System.out.println("running SSReloadPacket.handle");
         Player player = context.player();
         Level level = player.level();
 
         if (!level.isClientSide) {
-            System.out.println("SSGasAmmoPacket.handle is serverside");
             // Get the ItemStack from the player's inventory
             ItemStack serverBlasterStack = player.getItemInHand(player.getUsedItemHand());
 

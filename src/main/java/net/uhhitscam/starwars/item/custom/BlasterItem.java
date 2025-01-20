@@ -14,11 +14,13 @@ import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.starwars.component.FiringModeData;
 import net.uhhitscam.starwars.component.GasAmmoData;
 import net.uhhitscam.starwars.component.GasTypeData;
+import net.uhhitscam.starwars.component.CoolDownData;
 import net.uhhitscam.starwars.component.ModDataComponentTypes;
 import net.uhhitscam.starwars.entity.custom.*;
 import net.uhhitscam.starwars.network.PayloadRegister;
@@ -42,7 +44,6 @@ public class BlasterItem extends Item{
     private final float fullRecoil;
 
     private final Map<UUID, Float> recoilMap = new HashMap<>();
-    private final Map<UUID, Long> lastFireTime = new HashMap<>();
 
     public BlasterItem(Properties properties, float bolt_speed, float inaccuracy, int max_ammo, int blasterDamage,
                        int semiFireRate, int burstFireRate, int fullFireRate, List<String> firingModes, float semiRecoil, float burstRecoil, float fullRecoil) {
@@ -62,205 +63,52 @@ public class BlasterItem extends Item{
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        System.out.println("made it to use method");
-        ItemStack itemstack = player.getItemInHand(hand);
+        ItemStack itemstack = player.getMainHandItem();
+        String firingMode = getFiringMode(itemstack);
 
-        // Retrieve the firing mode from the FiringModeData component
-        FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
-        System.out.println("the firingModeData is " + firingModeData);
-        if (firingModeData == null) {
-            System.out.println("FiringModeData is missing, defaulting to SEMI_AUTO");
-            firingModeData = new FiringModeData("SEMI_AUTO");
-            itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
-        }
-        String firingMode = firingModeData.firingMode();
-        System.out.println("firingMode is " + firingMode);
-
-        if (!firingMode.equals("SEMI_AUTO")) {
-            System.out.println("it is not semi auto");
-            if (!level.isClientSide) {
-                System.out.println("you are in server side");
-                firingBlaster(level, player, itemstack);
-                return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
-            }
+        if (firingMode.equals("FULL_AUTO")) {
+            firingBlaster(level, player, itemstack);
         }
         return InteractionResultHolder.fail(itemstack);
     }
 
-    public void mainHandFiring(Player player, ItemStack itemstack) {
-        System.out.println("made it to mainHandFiring method");
+    public void mainHandFiring(Player player, ItemStack itemstack, InteractionHand hand) {
+        System.out.println("mainHandFiring method");
+        String firingMode = getFiringMode(itemstack);
 
-        // Retrieve the firing mode from the FiringModeData component
-        FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
-        System.out.println("the firingModeData is " + firingModeData);
-        if (firingModeData == null) {
-            System.out.println("FiringModeData is missing, defaulting to SEMI_AUTO");
-            firingModeData = new FiringModeData("SEMI_AUTO");
-            itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
-        }
-        String firingMode = firingModeData.firingMode();
-        System.out.println("firingMode is " + firingMode);
-
-        if (firingMode.equals("SEMI_AUTO")) {
-            Level level = player.level();
-            if (!level.isClientSide) {
-                System.out.println("you are in Server side");
-                firingBlaster(level, player, itemstack);
-            }
+        if (firingMode.equals("SEMI_AUTO") || firingMode.equals("SCATTER") || firingMode.equals("BURST")) {
+            firingBlaster(player.level(), player, itemstack);
         }
     }
-
-//    @Override
-//    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-//        return super.onLeftClickEntity(stack, player, entity);
-//    }
-
-//    public void offHandFiring(ItemStack blaster, Player player) {
-//        if (!player.level().isClientSide) {
-//            firingBlaster(player.level(), player, blaster);
-//        }
-//    }
-
-    //use to add animation when you use item
-//    @Override
-//    public UseAnim getUseAnimation(ItemStack stack) {
-//        return UseAnim.NONE; // Disables use animation
-//    }
-
-    @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return false; // Prevents the item from triggering reequip animations
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000;
-    }
-
-//    private void firingBlaster(Level level, Player player, ItemStack itemstack) {
-//        System.out.println("made it to firingBlaster method");
-//        int currentAmmo = getAmmo(itemstack);
-//        int fireRate;
-//        long currentTime = System.currentTimeMillis();
-//        long lastTime = lastFireTime.getOrDefault(player.getUUID(), 0L);
-//        int shots = 1;
-//        Timer timer = new Timer();
-//
-//        System.out.println("Before firing: Current Ammo = " + currentAmmo);
-//
-//        if  (currentAmmo > 0 && !level.isClientSide) {
-//            System.out.println("current Ammo > 0 and is server side");
-//            String currentGasType = getGasType(itemstack);
-//
-//            // Retrieve the firing mode from the FiringModeData component
-//            FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
-//            if (firingModeData == null) {
-//                System.out.println("FiringModeData is missing, defaulting to SEMI_AUTO");
-//                firingModeData = new FiringModeData("SEMI_AUTO");
-//                itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
-//            }
-//            String firingMode = firingModeData.firingMode();
-//            System.out.println("firingMode is " + firingMode);
-//
-//            switch (firingMode) {
-//                case "SEMI_AUTO", "SCATTER" -> fireRate = semiFireRate;
-//                case "BURST" -> fireRate = burstFireRate;
-//                case "FULL_AUTO" -> fireRate = fullFireRate;
-//                default -> fireRate = 0;
-//            }
-//            System.out.println("fireRate is " + fireRate);
-//            System.out.println("firingMode is " + firingMode);
-//
-//            if ((currentTime - lastTime) < fireRate * 50) {
-//                return;
-//            }
-//
-//            lastFireTime.put(player.getUUID(), currentTime);
-//
-//            switch (firingMode) {
-//                case "SEMI_AUTO", "FULL_AUTO", "SCATTER" -> shots = 1;
-//                case "BURST" -> shots = Math.min(3, currentAmmo);
-//            }
-//
-//            for (int i = 0; i < shots; i++) {
-//                if (currentAmmo > 0) {
-//                    if (shots > 1) {
-//                        int finalAmmo = currentAmmo; // Capture updated ammo for this task
-//                        timer.schedule(new TimerTask() {
-//                            @Override
-//                            public void run() {
-//                                if (firingMode.equals("SCATTER")) {
-//                                    for (int scatter_bolt = 0; scatter_bolt < 5; scatter_bolt++) {
-//                                        fireBolt(level, player, itemstack, finalAmmo, currentGasType);
-//                                    }
-//                                } else {
-//                                    fireBolt(level, player, itemstack, finalAmmo, currentGasType);
-//                                }
-//                            }
-//                        }, i * 100); // Delay each shot by 100ms
-//                    } else {
-//                        fireBolt(level, player, itemstack, currentAmmo, currentGasType);
-//                    }
-//                    currentAmmo--; // Decrement ammo
-//                    setAmmo(itemstack, currentAmmo); // Update the ammo in the ItemStack
-//                } else {
-//                    // Feedback for empty blaster
-//                    level.playSound(null, player.getX(), player.getY(), player.getZ(),
-//                            SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-//                }
-//            }
-//
-//            player.awardStat(Stats.ITEM_USED.get(this));
-//        } else {
-//            System.out.println("No ammo left to fire.");
-//
-//            // Feedback for empty blaster
-//            level.playSound(null, player.getX(), player.getY(), player.getZ(),
-//                    SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-//        }
-//    }
 
     private void firingBlaster(Level level, Player player, ItemStack itemstack) {
-        System.out.println("made it to firingBlaster method");
-
         int currentAmmo = getAmmo(itemstack);
-        long currentTime = System.currentTimeMillis();
-        long lastTime = lastFireTime.getOrDefault(player.getUUID(), 0L);
 
         if (currentAmmo <= 0) {
             System.out.println("No ammo left to fire.");
-            // Feedback for empty blaster
+            //Feedback for empty blaster
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
             return;
         }
 
+        CoolDownData cooldownData = itemstack.get(ModDataComponentTypes.COOLDOWN);
+        if (cooldownData == null) {
+            cooldownData = new CoolDownData(0);
+            itemstack.set(ModDataComponentTypes.COOLDOWN, cooldownData);
+        }
+
+        if (cooldownData.isOnCooldown(level)) {
+            //The item is still on cooldown
+            return;
+        }
+
         if (level.isClientSide) {
-            return; // Prevent firing logic on the client side
+            return; //Prevent firing logic on the client side
         }
 
         String currentGasType = getGasType(itemstack);
-        FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
-        if (firingModeData == null) {
-            System.out.println("FiringModeData is missing, defaulting to SEMI_AUTO");
-            firingModeData = new FiringModeData("SEMI_AUTO");
-            itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
-        }
-        String firingMode = firingModeData.firingMode();
-        System.out.println("firingMode is " + firingMode);
-
-        int fireRate = switch (firingMode) {
-            case "SEMI_AUTO", "SCATTER" -> semiFireRate;
-            case "BURST" -> burstFireRate;
-            case "FULL_AUTO" -> fullFireRate;
-            default -> 0;
-        };
-
-        if ((currentTime - lastTime) < fireRate * 50) {
-            return; // Enforce fire rate delay
-        }
-
-        lastFireTime.put(player.getUUID(), currentTime);
+        String firingMode = getFiringMode(itemstack);
 
         int shots = switch (firingMode) {
             case "BURST" -> Math.min(3, currentAmmo);
@@ -269,8 +117,8 @@ public class BlasterItem extends Item{
         };
 
         for (int i = 0; i < shots; i++) {
-            int delay = i * 100; // Delay between shots for burst and scatter modes
-            int finalAmmo = currentAmmo - i; // Calculate remaining ammo for each shot
+            int delay = i * 100; //Delay between shots for burst and scatter modes
+            int finalAmmo = currentAmmo - i; //Calculate remaining ammo for each shot
 
             if (finalAmmo > 0) {
                 new Timer().schedule(new TimerTask() {
@@ -290,14 +138,69 @@ public class BlasterItem extends Item{
                         SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
+
+        //Set the new cooldown time
+        long cooldownEndTime = level.getGameTime() + getCoolDown(firingMode);
+        itemstack.set(ModDataComponentTypes.COOLDOWN, cooldownData.withCooldownEndTime(cooldownEndTime));
+    }
+
+    public int getCoolDown(String firingMode) {
+        return switch (firingMode) {
+            case "SEMI_AUTO" -> semiFireRate;
+            case "BURST" -> burstFireRate;
+            case "FULL_AUTO" -> fullFireRate;
+            case "SCATTER" -> semiFireRate;
+            default -> 50; //fallback just incase
+        };
+    }
+
+//    @Override
+//    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
+//        return super.onLeftClickEntity(stack, player, entity);
+//    }
+
+//    public void offHandFiring(ItemStack blaster, Player player) {
+//        if (!player.level().isClientSide) {
+//            firingBlaster(player.level(), player, blaster);
+//        }
+//    }
+
+    //use to add animation when you use item
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.NONE; //Disables use animation
+    }
+
+    public String getFiringMode(ItemStack itemstack) {
+        FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
+        if (firingModeData == null) {
+            initializeFiringMode(itemstack);
+            firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
+        }
+        return firingModeData.firingMode();
+    }
+
+    private void initializeFiringMode(ItemStack itemstack) {
+        String defaultFiringMode = firingModes.get(0); //First index in the firingModes list
+        FiringModeData firingModeData = new FiringModeData(defaultFiringMode);
+        itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
+    }
+
+
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return false; //Prevents the item from triggering reequip animations
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 72000;
     }
 
     private void fireBolt(Level level, Player player, ItemStack itemstack, int currentAmmo, String currentGasType) {
-        System.out.println("made it to fireBolt method");
-        System.out.println("currentAmmo is " + currentAmmo);
         float recoil;
 
-        // Retrieve the firing mode from the FiringModeData component
+        //Retrieve the firing mode from the FiringModeData component
         FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (firingModeData == null) {
             System.out.println("FiringModeData is missing, defaulting to SEMI_AUTO");
@@ -305,7 +208,6 @@ public class BlasterItem extends Item{
             itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
         }
         String firingMode = firingModeData.firingMode();
-        System.out.println("firingMode is " + firingMode);
 
         if (currentAmmo > 0) {
             Snowball bolt = switch (currentGasType) {
@@ -342,32 +244,33 @@ public class BlasterItem extends Item{
             double yVelocity = Math.sin(pitch);
             double zVelocity = Math.cos(pitch) * Math.cos(yaw);
 
-            double accuracyFactor = this.inaccuracy / 100; // Lower value = more accurate
+            double accuracyFactor = this.inaccuracy / 100; //Lower value = more accurate
             xVelocity += (level.getRandom().nextDouble() - 0.5) * accuracyFactor;
             yVelocity += (level.getRandom().nextDouble() - 0.5) * accuracyFactor;
             zVelocity += (level.getRandom().nextDouble() - 0.5) * accuracyFactor;
 
-            Vec3 velocity = new Vec3(xVelocity, yVelocity, zVelocity).normalize().scale(this.bolt_speed); // Use custom velocity
+            Vec3 velocity = new Vec3(xVelocity, yVelocity, zVelocity).normalize().scale(this.bolt_speed); //Use custom velocity
             bolt.setDeltaMovement(velocity);
 
             level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
             level.addFreshEntity(bolt);
 
             setAmmo(itemstack, currentAmmo - 1);
-            player.awardStat(Stats.ITEM_USED.get(this));
-            System.out.println("firingMode before applying recoil is " + firingMode);
 
-            if (this.semiRecoil != 0 || this.burstRecoil != 0 || this.fullRecoil != 0) {
-                switch (firingMode) {
-                    case "SEMI_AUTO", "SCATTER" -> recoil = semiRecoil;
-                    case "BURST" -> recoil = burstRecoil;
-                    case "FULL_AUTO" -> recoil = fullRecoil;
-                    default -> recoil = 0F;
-                }
-                addRecoil(player, recoil);
+            player.awardStat(Stats.ITEM_USED.get(this));
+
+            switch (firingMode) {
+                case "SEMI_AUTO", "SCATTER" -> recoil = semiRecoil;
+                case "BURST" -> recoil = burstRecoil;
+                case "FULL_AUTO" -> recoil = fullRecoil;
+                default -> recoil = 1;
             }
+
+            applyRecoil(player, recoil / 5);
+            System.out.println("RecoilMap: " + recoilMap);
+            System.out.println("Applying recoil: " + recoil);
         } else {
-            // Feedback for empty blaster
+            //Feedback for empty blaster
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
@@ -376,42 +279,38 @@ public class BlasterItem extends Item{
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof Player player && recoilMap.containsKey(player.getUUID())) {
-            // Get current recoil amount
-            float recoilAmount = recoilMap.get(player.getUUID());
+            UUID playerId = player.getUUID();
+            float recoilAmount = recoilMap.get(playerId);
 
-            // Apply a small amount of recoil this tick
-            applyRecoil(player, recoilAmount * 0.2f); // Adjust pitch smoothly
+            //Gradual recovery
+            recoilAmount *= 0.8f; //Adjust this factor for faster/slower recovery
 
-            // Decrease recoil amount over time
-            recoilAmount *= 0.4f; // Reduce recoil (damping factor)
+            //Apply the recoil effect to the player's pitch
+            float currentPitch = player.getXRot();
+            float recoilEffect = recoilMap.get(playerId) - recoilAmount; //Calculate the difference
+            float newPitch = currentPitch - recoilEffect;
 
+            //Clamp the pitch
+            newPitch = Math.max(-90.0f, Math.min(90.0f, newPitch));
+            player.setXRot(newPitch);
+
+            //Update the recoil map
             if (recoilAmount < 0.01f) {
-                // Remove player from map if recoil is negligible
-                recoilMap.remove(player.getUUID());
+                recoilMap.remove(playerId);
             } else {
-                recoilMap.put(player.getUUID(), recoilAmount);
+                recoilMap.put(playerId, recoilAmount);
             }
         }
     }
 
-    public void addRecoil(Player player, float totalRecoil) {
-        // Get the current recoil, add the new recoil, and ensure it's within the limits
-        float currentRecoil = recoilMap.getOrDefault(player.getUUID(), 0.0f);
-        recoilMap.put(player.getUUID(), Math.min(currentRecoil + totalRecoil, 5.0f)); // Cap at 5.0f for smoother recoil
-    }
-
     public void applyRecoil(Player player, float recoil) {
-        // Get the current pitch (up/down) of the player
-        float currentPitch = player.getXRot();
+        UUID playerId = player.getUUID();
+        float currentRecoil = recoilMap.getOrDefault(playerId, 0.0f);
+        float totalRecoil = currentRecoil + recoil;
 
-        // Apply vertical recoil (adjust pitch upwards)
-        float newPitch = currentPitch - recoil;
-
-        // Clamp the new pitch to ensure the player doesn't tilt too far
-        newPitch = Math.max(-90.0f, Math.min(90.0f, newPitch));
-
-        // Smoothly set the player's new rotation (you can adjust smoothness if needed)
-        player.setXRot(newPitch);
+        //Cap the total recoil to a reasonable maximum
+        totalRecoil = Math.min(totalRecoil, 20.0f); //Adjust max value if needed
+        recoilMap.put(playerId, totalRecoil);
     }
 
     public int getAmmo(ItemStack stack) {
@@ -420,28 +319,22 @@ public class BlasterItem extends Item{
     }
 
     public void setAmmo(ItemStack stack, int ammo) {
-        System.out.println("made it to setAmmo method");
         stack.set(ModDataComponentTypes.GAS_AMMO.get(), new GasAmmoData(ammo));
 
-        // Sync to ensure the state is updated client-side
+        //Sync to ensure the state is updated client-side
         if (stack.getEntityRepresentation() instanceof Player player) {
             player.inventoryMenu.broadcastChanges();
         }
     }
 
     private String getGasType(ItemStack stack) {
-        System.out.println("made it to getGasType method");
         return stack.get(ModDataComponentTypes.GAS_TYPE.get()).gasType();
     }
 
     public void reload(Player player, ItemStack blasterStack) {
-        System.out.println("made it to reload method");
         int currentAmmo = getAmmo(blasterStack);
         GasTypeData blasterGasTypeData = blasterStack.get(ModDataComponentTypes.GAS_TYPE.get());
         String currentGasType = (blasterGasTypeData != null) ? blasterGasTypeData.gasType() : null;
-        System.out.println("gas type of the blaster is " + currentGasType);
-
-        System.out.println("Before reload: Current Ammo = " + currentAmmo);
 
         if (currentAmmo >= max_ammo) {
             player.displayClientMessage(Component.translatable("item.starwars.blaster.full_ammo"), true);
@@ -455,40 +348,34 @@ public class BlasterItem extends Item{
 
             if (stack.getItem() instanceof GasItem gasItem) {
                 int gasAmmo = gasItem.getAmmo(stack);
-                System.out.println("found gasItem with ammo of " + gasAmmo);
 
                 if (gasAmmo > 0) {
-                    System.out.println("ammo is > 0");
                     foundGasItem = true;
                     String gasType = gasItem.getGasType();
-                    System.out.println("The gas type of the gasItem is " + gasType);
 
                     if (currentAmmo <= 0 || (currentGasType != null && currentGasType.equals(gasType))) {
-                        System.out.println("either the blaster is empty or the gas type of the gasItem matches the blaster");
                         int ammoNeeded = max_ammo - currentAmmo;
                         int ammoToReload = Math.min(ammoNeeded, gasAmmo);
 
-                        // Update the blaster's ammo
-                        setAmmo(blasterStack, currentAmmo + ammoToReload);
-                        gasItem.setAmmo(stack, gasAmmo - ammoToReload);
                         currentAmmo += ammoToReload;
                         gasAmmo -= ammoToReload;
 
-                        System.out.println("Reloaded Ammo = " + (currentAmmo));
-                        System.out.println("Remaining GasItem Ammo = " + (gasAmmo));
+                        //Update the blaster's ammo
+                        setAmmo(blasterStack, currentAmmo);
+                        gasItem.setAmmo(stack, gasAmmo);
 
-                        // Notify the server about the ammo update
+                        //Notify the server about the ammo update
                         PayloadRegister.sendToServer(new SSReloadPacket(blasterStack, currentAmmo, gasType));
-                        PayloadRegister.sendToServer(new SSGasAmmoPacket(stack, gasAmmo));
+                        PayloadRegister.sendToServer(new SSGasAmmoPacket(stack, gasAmmo, i));
 
-                        // Sync inventory changes
+                        //Sync inventory changes
                         player.inventoryMenu.broadcastChanges();
 
                         player.displayClientMessage(Component.translatable("item.starwars.blaster.reloaded"), true);
                         player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                                 SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                        // If full, exit the loop
+                        //If full, exit the loop
                         if (currentAmmo >= max_ammo) {
                             break;
                         }
@@ -507,10 +394,10 @@ public class BlasterItem extends Item{
     public void switchFiringMode(ItemStack blasterStack) {
         System.out.println("Switching firing mode");
 
-        // Retrieve the FiringModeData component from the blaster stack.
+        //Retrieve the FiringModeData component from the blaster stack.
         FiringModeData firingModeData = blasterStack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (firingModeData == null) {
-            // If no firing mode is currently set, initialize it to the first mode in the list.
+            //If no firing mode is currently set, initialize it to the first mode in the list.
             firingModeData = new FiringModeData(firingModes.get(0));
             blasterStack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
         }
@@ -518,18 +405,18 @@ public class BlasterItem extends Item{
         String currentFiringMode = firingModeData.firingMode();
         System.out.println("Current firing mode: " + currentFiringMode);
 
-        // Find the index of the current firing mode.
+        //Find the index of the current firing mode.
         int currentModeIndex = firingModes.indexOf(currentFiringMode);
         if (currentModeIndex == -1) {
-            // If the current mode is invalid, default to the first mode.
+            //If the current mode is invalid, default to the first mode.
             currentModeIndex = 0;
         }
 
-        // Cycle to the next firing mode.
+        //Cycle to the next firing mode.
         int nextModeIndex = (currentModeIndex + 1) % firingModes.size();
         String nextFiringMode = firingModes.get(nextModeIndex);
 
-        // Update the FiringModeData component with the new firing mode.
+        //Update the FiringModeData component with the new firing mode.
         FiringModeData updatedFiringModeData = firingModeData.withFiringMode(nextFiringMode);
         blasterStack.set(ModDataComponentTypes.FIRING_MODE.get(), updatedFiringModeData);
         PayloadRegister.sendToServer(new SSFiringModePacket(blasterStack, nextFiringMode));
@@ -537,7 +424,7 @@ public class BlasterItem extends Item{
         System.out.println("Switched to firing mode: " + nextFiringMode);
 
         if (blasterStack.getEntityRepresentation() instanceof Player player) {
-            // Notify the player about the new firing mode.
+            //Notify the player about the new firing mode.
             player.displayClientMessage(Component.translatable("item.starwars.blaster.firing_mode_changed", nextFiringMode), true);
         }
         System.out.println("firingMode is " + blasterStack.get(ModDataComponentTypes.FIRING_MODE.get()));
@@ -551,16 +438,16 @@ public class BlasterItem extends Item{
         int currentAmmo = getAmmo(stack);
         color = ChatFormatting.WHITE;
         if (currentAmmo <= 0) {
-            // No ammo, default to white
+            //No ammo, default to white
             color = ChatFormatting.WHITE;
             stack.set(ModDataComponentTypes.GAS_TYPE.get(), null);
         } else {
-            // Safely retrieve the gas type
+            //Safely retrieve the gas type
             if (stack.get(ModDataComponentTypes.GAS_TYPE.get()) != null) {
                 gasType = stack.get(ModDataComponentTypes.GAS_TYPE.get()).gasType();
             }
 
-            // Assign colors based on the gas type
+            //Assign colors based on the gas type
             color = switch (gasType) {
                 case "TIBANNA_GAS" -> ChatFormatting.RED;
                 case "IONIZED_TIBANNA_GAS" -> ChatFormatting.BLUE;
