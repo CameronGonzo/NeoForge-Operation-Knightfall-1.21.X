@@ -12,16 +12,19 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.uhhitscam.starwars.item.custom.BlasterItem;
 
-public record SSFireBlasterPacket(ItemStack blaster, String gasType) implements Packet {
-
-    // Define the packet type and stream codec for serialization/deserialization
+public record SSFireBlasterPacket(ItemStack blaster, String gasType, boolean repeat, boolean mainHand) implements Packet {
+    //Define the packet type and stream codec for serialization/deserialization
     public static final Type<SSFireBlasterPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("starwars", "fire_blaster"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SSFireBlasterPacket> STREAM_CODEC = StreamCodec.composite(
-            ItemStack.STREAM_CODEC,          // The ItemStack codec to serialize/deserialize the blaster
-            SSFireBlasterPacket::blaster,   // The blaster item
-            ByteBufCodecs.STRING_UTF8,      // The gas type as a string
-            SSFireBlasterPacket::gasType,   // The gas type
-            SSFireBlasterPacket::new        // Constructor for the packet
+            ItemStack.STREAM_CODEC,         //The ItemStack codec to serialize/deserialize the blaster
+            SSFireBlasterPacket::blaster,   //The blaster item
+            ByteBufCodecs.STRING_UTF8,      //The gas type as a string
+            SSFireBlasterPacket::gasType,   //The gas type
+            ByteBufCodecs.BOOL,
+            SSFireBlasterPacket::repeat,
+            ByteBufCodecs.BOOL,
+            SSFireBlasterPacket::mainHand,
+            SSFireBlasterPacket::new        //Constructor for the packet
     );
 
     @Override
@@ -30,15 +33,20 @@ public record SSFireBlasterPacket(ItemStack blaster, String gasType) implements 
         Level level = player.level();
 
         if (!level.isClientSide) {
-            // Get the ItemStack from the player's inventory
-            ItemStack serverBlasterStack = player.getItemInHand(player.getUsedItemHand());
+            if (mainHand) {
+                ItemStack serverBlasterStack = player.getMainHandItem();
 
-            if (serverBlasterStack.getItem() instanceof BlasterItem) {
-                BlasterItem blasterItem = (BlasterItem) serverBlasterStack.getItem();
-                InteractionHand hand = player.getUsedItemHand();
+                if (serverBlasterStack.getItem() instanceof BlasterItem) {
+                    BlasterItem blasterItem = (BlasterItem) serverBlasterStack.getItem();
+                    blasterItem.mainHandFiring(player, serverBlasterStack);
+                }
+            } else {
+                ItemStack serverBlasterStack = player.getOffhandItem();
 
-                // Call the firing method on the server-side
-                blasterItem.mainHandFiring(player, serverBlasterStack, hand);
+                if (serverBlasterStack.getItem() instanceof BlasterItem) {
+                    BlasterItem blasterItem = (BlasterItem) serverBlasterStack.getItem();
+                    blasterItem.offHandFiring(player, serverBlasterStack);
+                }
             }
         }
     }

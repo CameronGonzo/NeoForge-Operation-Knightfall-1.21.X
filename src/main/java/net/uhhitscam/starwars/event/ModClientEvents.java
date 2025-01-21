@@ -2,7 +2,14 @@ package net.uhhitscam.starwars.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -13,23 +20,149 @@ import net.uhhitscam.starwars.network.PayloadRegister;
 import net.uhhitscam.starwars.network.SSFireBlasterPacket;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
+
 @EventBusSubscriber(modid = OperationKnightfall.MODID, value = Dist.CLIENT)
 public class ModClientEvents {
 
+    private static boolean firing = false; // Track the firing state outside of the method
+    private static Timer fullAutoTimer = new Timer(); // Timer for scheduling full-auto firing
+
     @SubscribeEvent
-    public static void onMouseInput(InputEvent.MouseButton.Post event) {
+    public static void onMouseInput(InputEvent.MouseButton.Pre event) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
 
-        // Check if the right mouse button is clicked
-        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && event.getAction() == GLFW.GLFW_PRESS && player != null) {
-            ItemStack heldItem = player.getMainHandItem();
+        if (player == null) return;
 
-            // Check if the item in the main hand is a BlasterItem
-            if (heldItem.getItem() instanceof BlasterItem) {
-                // Send the packet to the server to fire the blaster
-                PayloadRegister.sendToServer(new SSFireBlasterPacket(heldItem, "blasterGasType"));
+        //Check if a GUI screen is open
+        if (minecraft.screen != null) {
+            return; //Exit if the player is in a GUI (e.g., inventory, pause menu)
+        }
+
+        //Check if the right mouse button is clicked
+        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && event.getAction() == GLFW.GLFW_PRESS) {
+            ItemStack mainHandItem = player.getMainHandItem();
+            firing = true;
+
+            if (mainHandItem.getItem() instanceof BlasterItem) {
+                BlasterItem blasterItem = (BlasterItem) mainHandItem.getItem();
+                if ("FULL_AUTO".equals(blasterItem.getFiringMode(mainHandItem))) {
+                    scheduleFullAutoFiring(player, mainHandItem, true);
+                } else {
+                    PayloadRegister.sendToServer(new SSFireBlasterPacket(mainHandItem, "blasterGasType", false, true));
+                }
             }
         }
+
+        // Check if the right mouse button is released
+        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && event.getAction() == GLFW.GLFW_RELEASE) {
+            ItemStack mainHandItem = player.getMainHandItem();
+
+            if (mainHandItem.getItem() instanceof BlasterItem) {
+                BlasterItem blasterItem = (BlasterItem) mainHandItem.getItem();
+                if ("FULL_AUTO".equals(blasterItem.getFiringMode(mainHandItem))) {
+                    firing = false;
+                    fullAutoTimer.cancel();
+                    fullAutoTimer = new Timer(); // Reset the timer
+                }
+            }
+        }
+
+        // Check if the left mouse button is clicked
+        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT && event.getAction() == GLFW.GLFW_PRESS) {
+            boolean test = false;
+            ItemStack offHandItem = player.getOffhandItem();
+
+            if (offHandItem.getItem() instanceof BlasterItem) {
+                firing = true;
+                // Check if the player is targeting an entity
+                HitResult hitResult = getPlayerHitResult(player);
+                if (hitResult instanceof EntityHitResult) {
+                    EntityHitResult entityHitResult = (EntityHitResult) hitResult;
+                    Entity target = entityHitResult.getEntity();
+                    if (player.distanceTo(target) <= 3) {
+                        test = true;
+                    }
+                }
+            }
+
+            if (!test && offHandItem.getItem() instanceof BlasterItem) {
+                System.out.println("entered else if statement of item in offhand is blaster item");
+                BlasterItem blasterItem = (BlasterItem) offHandItem.getItem();
+                if ("FULL_AUTO".equals(blasterItem.getFiringMode(offHandItem))) {
+                    scheduleFullAutoFiring(player, offHandItem, false);
+                } else {
+                    PayloadRegister.sendToServer(new SSFireBlasterPacket(offHandItem, "blasterGasType", false, false));
+                }
+                event.setCanceled(true); // Prevent default swinging action
+            }
+        }
+
+        // Check if the left mouse button is released
+        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT && event.getAction() == GLFW.GLFW_RELEASE) {
+            ItemStack offHandItem = player.getOffhandItem();
+
+            if (offHandItem.getItem() instanceof BlasterItem) {
+                BlasterItem blasterItem = (BlasterItem) offHandItem.getItem();
+                if ("FULL_AUTO".equals(blasterItem.getFiringMode(offHandItem))) {
+                    firing = false;
+                    fullAutoTimer.cancel();
+                    fullAutoTimer = new Timer(); // Reset the timer
+                }
+            }
+        }
+    }
+
+    private static void scheduleFullAutoFiring(LocalPlayer player, ItemStack heldItem, boolean mainHand) {
+        fullAutoTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (firing) {
+                    PayloadRegister.sendToServer(new SSFireBlasterPacket(heldItem, "blasterGasType", true, mainHand));
+                    scheduleFullAutoFiring(player, heldItem, mainHand); // Schedule the next firing
+                }
+            }
+        }, 50); // Delay between shots in milliseconds
+    }
+
+    private static HitResult getPlayerHitResult(Player player) {
+        // Maximum reach for players
+        double reach = 20.0;
+
+        // Start and end points for the ray trace
+        Vec3 start = player.getEyePosition(1.0F);
+        Vec3 look = player.getViewVector(1.0F);
+        Vec3 end = start.add(look.scale(reach));
+
+        // Perform ray trace for entities
+        AABB searchBox = new AABB(start, end).inflate(1.0);
+        List<Entity> entities = player.getCommandSenderWorld().getEntities(player, searchBox, entity -> !entity.isSpectator() && entity.isPickable());
+
+        EntityHitResult closestEntityHitResult = null;
+        double closestDistance = reach;
+
+        for (Entity entity : entities) {
+            AABB entityBox = entity.getBoundingBox().inflate(entity.getPickRadius());
+            Optional<Vec3> optionalHit = entityBox.clip(start, end);
+
+            if (optionalHit.isPresent()) {
+                double distance = start.distanceTo(optionalHit.get());
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestEntityHitResult = new EntityHitResult(entity, optionalHit.get());
+                }
+            }
+        }
+
+        if (closestEntityHitResult != null) {
+            return closestEntityHitResult;
+        }
+
+        // If no entities are hit, perform a block ray trace
+        return player.getCommandSenderWorld().clip(new ClipContext(start, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
     }
 }

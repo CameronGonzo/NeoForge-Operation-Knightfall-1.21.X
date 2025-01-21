@@ -12,8 +12,9 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.uhhitscam.starwars.component.GasAmmoData;
 import net.uhhitscam.starwars.component.GasTypeData;
 import net.uhhitscam.starwars.component.ModDataComponentTypes;
+import net.uhhitscam.starwars.item.custom.BlasterItem;
 
-public record SSReloadPacket(ItemStack blaster, int ammo, String gasType) implements Packet {
+public record SSReloadPacket(ItemStack blaster, int ammo, String gasType, boolean mainHand) implements Packet {
     public static final Type<SSReloadPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("starwars", "reload"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SSReloadPacket> STREAM_CODEC = StreamCodec.composite(
             ItemStack.STREAM_CODEC,  // Correctly use the ItemStack codec from the example
@@ -22,6 +23,8 @@ public record SSReloadPacket(ItemStack blaster, int ammo, String gasType) implem
             SSReloadPacket::ammo,
             ByteBufCodecs.STRING_UTF8,
             SSReloadPacket::gasType,
+            ByteBufCodecs.BOOL,
+            SSReloadPacket::mainHand,
             SSReloadPacket::new
     );
 
@@ -31,18 +34,22 @@ public record SSReloadPacket(ItemStack blaster, int ammo, String gasType) implem
         Level level = player.level();
 
         if (!level.isClientSide) {
-            // Get the ItemStack from the player's inventory
-            ItemStack serverBlasterStack = player.getItemInHand(player.getUsedItemHand());
+            if (mainHand) {
+                ItemStack serverBlasterStack = player.getMainHandItem();
+                serverBlasterStack.set(ModDataComponentTypes.GAS_AMMO.get(), new GasAmmoData(ammo));
 
-            // Update ammo
-            serverBlasterStack.set(ModDataComponentTypes.GAS_AMMO.get(), new GasAmmoData(ammo));
+                if (gasType != null) {
+                    serverBlasterStack.set(ModDataComponentTypes.GAS_TYPE.get(), new GasTypeData(gasType));
+                }
+            } else {
+                ItemStack serverBlasterStack = player.getOffhandItem();
+                serverBlasterStack.set(ModDataComponentTypes.GAS_AMMO.get(), new GasAmmoData(ammo));
 
-            // Update gas type
-            if (gasType != null) {
-                serverBlasterStack.set(ModDataComponentTypes.GAS_TYPE.get(), new GasTypeData(gasType));
+                if (gasType != null) {
+                    serverBlasterStack.set(ModDataComponentTypes.GAS_TYPE.get(), new GasTypeData(gasType));
+                }
             }
 
-            // Sync changes
             player.inventoryMenu.broadcastChanges();
         }
     }

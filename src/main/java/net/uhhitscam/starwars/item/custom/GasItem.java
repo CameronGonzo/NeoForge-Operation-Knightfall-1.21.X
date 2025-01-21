@@ -2,16 +2,13 @@ package net.uhhitscam.starwars.item.custom;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.event.level.NoteBlockEvent;
 import net.uhhitscam.starwars.component.GasAmmoData;
 import net.uhhitscam.starwars.component.ModDataComponentTypes;
-import net.uhhitscam.starwars.util.GeneralUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -28,7 +25,7 @@ public class GasItem extends Item {
         this.maxAmmo = maxAmmo;
     }
 
-    // Getter for the gas type
+    //Getter for the gas type
     public String getGasType() {
         return gasType;
     }
@@ -36,20 +33,17 @@ public class GasItem extends Item {
     public int getAmmo(ItemStack stack) {
         GasAmmoData data = stack.get(ModDataComponentTypes.GAS_AMMO.get());
         if (data == null) {
-            System.out.println("Ammo data missing on reload. Initializing...");
             setAmmo(stack, maxAmmo);
             return maxAmmo;
         }
-        System.out.println("Ammo data found on reload: " + data.ammo());
         return data.ammo();
     }
 
 
     public void setAmmo(ItemStack stack, int ammo) {
-        System.out.println("GasItem: Setting ammo to " + ammo);
         stack.set(ModDataComponentTypes.GAS_AMMO.get(), new GasAmmoData(ammo));
 
-        // Sync to ensure the state is updated client-side
+        //Sync to ensure the state is updated client-side
         if (stack.getEntityRepresentation() instanceof Player player) {
             player.inventoryMenu.broadcastChanges();
         }
@@ -65,7 +59,7 @@ public class GasItem extends Item {
             case "SIG_GAS" -> ChatFormatting.YELLOW;
             case "MAGNETIZED_SIG_GAS" -> ChatFormatting.DARK_PURPLE;
             case "SKEVON_GAS" -> ChatFormatting.GOLD;
-            case null, default -> ChatFormatting.WHITE; // Fallback to white
+            case null, default -> ChatFormatting.WHITE; //Fallback to white
         };
 
         return super.getName(stack).copy().withStyle(style -> style.withColor(color));

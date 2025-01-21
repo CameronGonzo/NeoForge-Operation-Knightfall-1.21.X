@@ -21,8 +21,6 @@ public class KeyBinding {
             "key.starwars.reload", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_R), CATEGORY);
     public static final KeyMapping SWITCH_FIRING_MODE_KEY = new KeyMapping(
             "key.starwars.switch", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_B), CATEGORY);
-//    public static final KeyMapping MAIN_HAND_FIRING = new KeyMapping(
-//            "key.starwars.mainfiring", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_RIGHT), CATEGORY);
 
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(EventPriority.HIGH, KeyBinding::onRegisterKeyMappings);
@@ -32,7 +30,6 @@ public class KeyBinding {
     private static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(RELOAD_KEY);
         event.register(SWITCH_FIRING_MODE_KEY);
-//        event.register(MAIN_HAND_FIRING);
     }
 
     private static void onClientTick(ClientTickEvent.Post event) {
@@ -42,21 +39,24 @@ public class KeyBinding {
         if (SWITCH_FIRING_MODE_KEY.consumeClick()) {
             handleSwitchFiringMode();
         }
-//        if (MAIN_HAND_FIRING.consumeClick()) {
-//            handleMainHandFiring();
-//        }
     }
 
     private static void handleReload() {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
-        if (player != null) {
-            ItemStack heldItem = player.getMainHandItem();
 
-            // Check if the held item is a Blasteritem before reloading
-            if (heldItem.getItem() instanceof BlasterItem blaster) {
-                // Now it's safe to reload the Blasteritem
-                blaster.reload(player, heldItem);
+        if (player != null) {
+            ItemStack mainHandItem = player.getMainHandItem();
+            ItemStack offHandItem = player.getOffhandItem();
+
+            // Check if the main hand item is a BlasterItem and reload it
+            if (mainHandItem.getItem() instanceof BlasterItem blasterMain) {
+                blasterMain.reload(player, mainHandItem, true);
+            }
+
+            // Check if the offhand item is a BlasterItem and reload it
+            if (offHandItem.getItem() instanceof BlasterItem blasterOff) {
+                blasterOff.reload(player, offHandItem, false);
             }
         }
     }
@@ -64,25 +64,22 @@ public class KeyBinding {
     private static void handleSwitchFiringMode() {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
-        if (player != null) {
-            ItemStack blaster = player.getMainHandItem();
 
-            // Check if the held item is a Blasteritem before reloading
-            if (blaster.getItem() instanceof BlasterItem stack) {
+        if (player != null) {
+            ItemStack mainHandItem = player.getMainHandItem();
+            ItemStack offHandItem = player.getOffhandItem();
+
+            // Check if the main hand item is a BlasterItem and reload it
+            if (mainHandItem.getItem() instanceof BlasterItem blasterMain) {
                 // Now it's safe to switch the firing mode of the Blasteritem
-                stack.switchFiringMode(blaster);
+                blasterMain.switchFiringMode(mainHandItem, true);
+            }
+
+            // Check if the offhand item is a BlasterItem and reload it
+            if (offHandItem.getItem() instanceof BlasterItem blasterOff) {
+                // Now it's safe to switch the firing mode of the Blasteritem
+                blasterOff.switchFiringMode(offHandItem, false);
             }
         }
     }
-
-//    private static void handleMainHandFiring() {
-//        Minecraft minecraft = Minecraft.getInstance();
-//        LocalPlayer player = minecraft.player;
-//        if (player != null) {
-//            ItemStack heldItem = player.getMainHandItem();
-//            if (heldItem.getItem() instanceof BlasterItem blaster) {
-//                blaster.mainHandFiring(player, heldItem); // New method in BlasterItem for firing
-//            }
-//        }
-//    }
 }

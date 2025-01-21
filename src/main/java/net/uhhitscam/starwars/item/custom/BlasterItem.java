@@ -44,6 +44,7 @@ public class BlasterItem extends Item{
     private final float fullRecoil;
 
     private final Map<UUID, Float> recoilMap = new HashMap<>();
+    private static final ThreadLocal<Random> THREAD_LOCAL_RANDOM = ThreadLocal.withInitial(Random::new);
 
     public BlasterItem(Properties properties, float bolt_speed, float inaccuracy, int max_ammo, int blasterDamage,
                        int semiFireRate, int burstFireRate, int fullFireRate, List<String> firingModes, float semiRecoil, float burstRecoil, float fullRecoil) {
@@ -63,20 +64,17 @@ public class BlasterItem extends Item{
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getMainHandItem();
-        String firingMode = getFiringMode(itemstack);
-
-        if (firingMode.equals("FULL_AUTO")) {
-            firingBlaster(level, player, itemstack);
-        }
-        return InteractionResultHolder.fail(itemstack);
+        return InteractionResultHolder.fail(player.getItemInHand(hand));
     }
 
-    public void mainHandFiring(Player player, ItemStack itemstack, InteractionHand hand) {
-        System.out.println("mainHandFiring method");
-        String firingMode = getFiringMode(itemstack);
+    public void mainHandFiring(Player player, ItemStack itemstack) {
+        if (player.getMainHandItem().getItem() instanceof BlasterItem) {
+            firingBlaster(player.level(), player, itemstack);
+        }
+    }
 
-        if (firingMode.equals("SEMI_AUTO") || firingMode.equals("SCATTER") || firingMode.equals("BURST")) {
+    public void offHandFiring(Player player, ItemStack itemstack) {
+        if (player.getOffhandItem().getItem() instanceof BlasterItem) {
             firingBlaster(player.level(), player, itemstack);
         }
     }
@@ -85,7 +83,6 @@ public class BlasterItem extends Item{
         int currentAmmo = getAmmo(itemstack);
 
         if (currentAmmo <= 0) {
-            System.out.println("No ammo left to fire.");
             //Feedback for empty blaster
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -154,17 +151,6 @@ public class BlasterItem extends Item{
         };
     }
 
-//    @Override
-//    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-//        return super.onLeftClickEntity(stack, player, entity);
-//    }
-
-//    public void offHandFiring(ItemStack blaster, Player player) {
-//        if (!player.level().isClientSide) {
-//            firingBlaster(player.level(), player, blaster);
-//        }
-//    }
-
     //use to add animation when you use item
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
@@ -203,7 +189,6 @@ public class BlasterItem extends Item{
         //Retrieve the firing mode from the FiringModeData component
         FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (firingModeData == null) {
-            System.out.println("FiringModeData is missing, defaulting to SEMI_AUTO");
             firingModeData = new FiringModeData("SEMI_AUTO");
             itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
         }
@@ -227,7 +212,6 @@ public class BlasterItem extends Item{
                         new SkevonBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
                 default ->
                         new TibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType); //Fallback if all fails
-
             };
 
             bolt.setOwner(player);
@@ -245,9 +229,10 @@ public class BlasterItem extends Item{
             double zVelocity = Math.cos(pitch) * Math.cos(yaw);
 
             double accuracyFactor = this.inaccuracy / 100; //Lower value = more accurate
-            xVelocity += (level.getRandom().nextDouble() - 0.5) * accuracyFactor;
-            yVelocity += (level.getRandom().nextDouble() - 0.5) * accuracyFactor;
-            zVelocity += (level.getRandom().nextDouble() - 0.5) * accuracyFactor;
+            Random random = THREAD_LOCAL_RANDOM.get();
+            xVelocity += (random.nextDouble() - 0.5) * accuracyFactor;
+            yVelocity += (random.nextDouble() - 0.5) * accuracyFactor;
+            zVelocity += (random.nextDouble() - 0.5) * accuracyFactor;
 
             Vec3 velocity = new Vec3(xVelocity, yVelocity, zVelocity).normalize().scale(this.bolt_speed); //Use custom velocity
             bolt.setDeltaMovement(velocity);
@@ -267,8 +252,6 @@ public class BlasterItem extends Item{
             }
 
             applyRecoil(player, recoil / 5);
-            System.out.println("RecoilMap: " + recoilMap);
-            System.out.println("Applying recoil: " + recoil);
         } else {
             //Feedback for empty blaster
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -278,27 +261,31 @@ public class BlasterItem extends Item{
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof Player player && recoilMap.containsKey(player.getUUID())) {
+        if (entity instanceof Player player) {
             UUID playerId = player.getUUID();
-            float recoilAmount = recoilMap.get(playerId);
+            if (recoilMap.containsKey(playerId)) {
+                Float recoilAmount = recoilMap.get(playerId); // Safely retrieve the value
 
-            //Gradual recovery
-            recoilAmount *= 0.8f; //Adjust this factor for faster/slower recovery
+                if (recoilAmount != null) { // Ensure the value is not null
+                    // Gradual recovery
+                    recoilAmount *= 0.8f; // Adjust this factor for faster/slower recovery
 
-            //Apply the recoil effect to the player's pitch
-            float currentPitch = player.getXRot();
-            float recoilEffect = recoilMap.get(playerId) - recoilAmount; //Calculate the difference
-            float newPitch = currentPitch - recoilEffect;
+                    // Apply the recoil effect to the player's pitch
+                    float currentPitch = player.getXRot();
+                    float recoilEffect = recoilMap.get(playerId) - recoilAmount; // Calculate the difference
+                    float newPitch = currentPitch - recoilEffect;
 
-            //Clamp the pitch
-            newPitch = Math.max(-90.0f, Math.min(90.0f, newPitch));
-            player.setXRot(newPitch);
+                    // Clamp the pitch
+                    newPitch = Math.max(-90.0f, Math.min(90.0f, newPitch));
+                    player.setXRot(newPitch);
 
-            //Update the recoil map
-            if (recoilAmount < 0.01f) {
-                recoilMap.remove(playerId);
-            } else {
-                recoilMap.put(playerId, recoilAmount);
+                    // Update the recoil map
+                    if (recoilAmount < 0.01f) {
+                        recoilMap.remove(playerId);
+                    } else {
+                        recoilMap.put(playerId, recoilAmount);
+                    }
+                }
             }
         }
     }
@@ -331,7 +318,7 @@ public class BlasterItem extends Item{
         return stack.get(ModDataComponentTypes.GAS_TYPE.get()).gasType();
     }
 
-    public void reload(Player player, ItemStack blasterStack) {
+    public void reload(Player player, ItemStack blasterStack, boolean mainHand) {
         int currentAmmo = getAmmo(blasterStack);
         GasTypeData blasterGasTypeData = blasterStack.get(ModDataComponentTypes.GAS_TYPE.get());
         String currentGasType = (blasterGasTypeData != null) ? blasterGasTypeData.gasType() : null;
@@ -365,7 +352,7 @@ public class BlasterItem extends Item{
                         gasItem.setAmmo(stack, gasAmmo);
 
                         //Notify the server about the ammo update
-                        PayloadRegister.sendToServer(new SSReloadPacket(blasterStack, currentAmmo, gasType));
+                        PayloadRegister.sendToServer(new SSReloadPacket(blasterStack, currentAmmo, gasType, mainHand));
                         PayloadRegister.sendToServer(new SSGasAmmoPacket(stack, gasAmmo, i));
 
                         //Sync inventory changes
@@ -391,9 +378,7 @@ public class BlasterItem extends Item{
         }
     }
 
-    public void switchFiringMode(ItemStack blasterStack) {
-        System.out.println("Switching firing mode");
-
+    public void switchFiringMode(ItemStack blasterStack, boolean mainHand) {
         //Retrieve the FiringModeData component from the blaster stack.
         FiringModeData firingModeData = blasterStack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (firingModeData == null) {
@@ -403,7 +388,6 @@ public class BlasterItem extends Item{
         }
 
         String currentFiringMode = firingModeData.firingMode();
-        System.out.println("Current firing mode: " + currentFiringMode);
 
         //Find the index of the current firing mode.
         int currentModeIndex = firingModes.indexOf(currentFiringMode);
@@ -419,9 +403,7 @@ public class BlasterItem extends Item{
         //Update the FiringModeData component with the new firing mode.
         FiringModeData updatedFiringModeData = firingModeData.withFiringMode(nextFiringMode);
         blasterStack.set(ModDataComponentTypes.FIRING_MODE.get(), updatedFiringModeData);
-        PayloadRegister.sendToServer(new SSFiringModePacket(blasterStack, nextFiringMode));
-
-        System.out.println("Switched to firing mode: " + nextFiringMode);
+        PayloadRegister.sendToServer(new SSFiringModePacket(blasterStack, nextFiringMode, mainHand));
 
         if (blasterStack.getEntityRepresentation() instanceof Player player) {
             //Notify the player about the new firing mode.
