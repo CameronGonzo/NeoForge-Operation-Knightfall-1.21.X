@@ -1,6 +1,10 @@
 package net.uhhitscam.starwars.event;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.uhhitscam.starwars.OperationKnightfall;
+import net.uhhitscam.starwars.entity.ModEntities;
 import net.uhhitscam.starwars.entity.client.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -17,6 +21,7 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.SIG_BLASTER_BOLT, SigBlasterBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.MAGNETIZED_SIG_BLASTER_BOLT, MagnetizedSigBlasterBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SKEVON_BLASTER_BOLT, SkevonBlasterBoltModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.STUN_BLASTER_BOLT, StunBlasterBoltModel::createBodyLayer);
     }
 
 //    @SubscribeEvent

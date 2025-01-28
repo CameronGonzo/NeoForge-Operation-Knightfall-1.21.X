@@ -14,7 +14,7 @@ import net.uhhitscam.starwars.component.GasAmmoData;
 import net.uhhitscam.starwars.component.ModDataComponentTypes;
 import net.uhhitscam.starwars.item.ModItems;
 import net.uhhitscam.starwars.item.custom.GasItem;
-import net.uhhitscam.starwars.util.GeneralUtil;
+import net.uhhitscam.starwars.util.InventoryUtil;
 
 public record SSGasAmmoPacket(ItemStack gasStack, int ammo, int i) implements Packet {
     public static final Type<SSGasAmmoPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("starwars", "sync_gas_ammo"));
@@ -42,7 +42,7 @@ public record SSGasAmmoPacket(ItemStack gasStack, int ammo, int i) implements Pa
             if (stack.getItem() instanceof GasItem gasItem) {
                 if (gasItem.getAmmo(stack) == 0 || stack.get(ModDataComponentTypes.GAS_AMMO.get()).ammo() == 0) {
                     ItemStack gasCartridge = new ItemStack(ModItems.GAS_CARTRIDGE.get());
-                    GeneralUtil.replaceItem(stack, player, gasCartridge, i);
+                    InventoryUtil.replaceItem(stack, player, gasCartridge, i);
                 }
             }
 

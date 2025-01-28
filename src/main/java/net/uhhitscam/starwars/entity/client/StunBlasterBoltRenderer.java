@@ -7,22 +7,21 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.uhhitscam.starwars.OperationKnightfall;
-import net.uhhitscam.starwars.entity.custom.TibannaXBlasterBoltEntity;
+import net.uhhitscam.starwars.entity.custom.StunBlasterBoltEntity;
 
-public class TibannaXBlasterBoltRenderer extends EntityRenderer<TibannaXBlasterBoltEntity> {
-    private TibannaXBlasterBoltModel model;
+public class StunBlasterBoltRenderer extends EntityRenderer<StunBlasterBoltEntity> {
+    private StunBlasterBoltModel model;
 
-    public TibannaXBlasterBoltRenderer(EntityRendererProvider.Context context) {
+    public StunBlasterBoltRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new TibannaXBlasterBoltModel(context.bakeLayer(ModModelLayers.TIBANNAX_BLASTER_BOLT));
+        this.model = new StunBlasterBoltModel(context.bakeLayer(ModModelLayers.STUN_BLASTER_BOLT));
     }
 
     @Override
-    public void render(TibannaXBlasterBoltEntity pEntity, float entityYaw, float partialTicks, PoseStack poseStack,
+    public void render(StunBlasterBoltEntity pEntity, float entityYaw, float partialTicks, PoseStack poseStack,
                        MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
 
@@ -49,7 +48,7 @@ public class TibannaXBlasterBoltRenderer extends EntityRenderer<TibannaXBlasterB
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TibannaXBlasterBoltEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/tibannax_blaster_bolt.png");
+    public ResourceLocation getTextureLocation(StunBlasterBoltEntity entity) {
+        return ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/stun_blaster_bolt.png");
     }
 }

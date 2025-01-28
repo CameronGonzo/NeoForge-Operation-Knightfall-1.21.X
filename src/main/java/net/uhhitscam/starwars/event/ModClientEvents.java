@@ -3,6 +3,7 @@ package net.uhhitscam.starwars.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -11,10 +12,15 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.uhhitscam.starwars.OperationKnightfall;
+import net.uhhitscam.starwars.effect.ModEffects;
+import net.uhhitscam.starwars.gui.HudClient;
 import net.uhhitscam.starwars.item.custom.BlasterItem;
 import net.uhhitscam.starwars.network.PayloadRegister;
 import net.uhhitscam.starwars.network.SSFireBlasterPacket;
@@ -27,9 +33,18 @@ import java.util.TimerTask;
 
 @EventBusSubscriber(modid = OperationKnightfall.MODID, value = Dist.CLIENT)
 public class ModClientEvents {
-
-    private static boolean firing = false; // Track the firing state outside of the method
+    public static boolean firing = false; // Track the firing state outside of the method
     private static Timer fullAutoTimer = new Timer(); // Timer for scheduling full-auto firing
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onRenderGui(RenderGuiEvent.Post event) {
+        HudClient.onRenderHUD(event.getGuiGraphics());
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Post event) {
+        HudClient.onClientTick();
+    }
 
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseButton.Pre event) {
@@ -45,6 +60,10 @@ public class ModClientEvents {
 
         //Check if the right mouse button is clicked
         if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && event.getAction() == GLFW.GLFW_PRESS) {
+            if (minecraft.screen != null || player.hasEffect(ModEffects.STUN_EFFECT)) {
+                return; //Exit if the player is in a GUI
+            }
+
             ItemStack mainHandItem = player.getMainHandItem();
             firing = true;
 
@@ -74,7 +93,11 @@ public class ModClientEvents {
 
         // Check if the left mouse button is clicked
         if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT && event.getAction() == GLFW.GLFW_PRESS) {
-            boolean test = false;
+            if (minecraft.screen != null || player.hasEffect(ModEffects.STUN_EFFECT)) {
+                return; //Exit if the player is in a GUI
+            }
+
+            boolean punching = false;
             ItemStack offHandItem = player.getOffhandItem();
 
             if (offHandItem.getItem() instanceof BlasterItem) {
@@ -85,13 +108,12 @@ public class ModClientEvents {
                     EntityHitResult entityHitResult = (EntityHitResult) hitResult;
                     Entity target = entityHitResult.getEntity();
                     if (player.distanceTo(target) <= 3) {
-                        test = true;
+                        punching = true;
                     }
                 }
             }
 
-            if (!test && offHandItem.getItem() instanceof BlasterItem) {
-                System.out.println("entered else if statement of item in offhand is blaster item");
+            if (!punching && offHandItem.getItem() instanceof BlasterItem) {
                 BlasterItem blasterItem = (BlasterItem) offHandItem.getItem();
                 if ("FULL_AUTO".equals(blasterItem.getFiringMode(offHandItem))) {
                     scheduleFullAutoFiring(player, offHandItem, false);
@@ -164,5 +186,31 @@ public class ModClientEvents {
 
         // If no entities are hit, perform a block ray trace
         return player.getCommandSenderWorld().clip(new ClipContext(start, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
+    }
+
+    @SubscribeEvent
+    public static void onKeyboardInput(InputEvent.Key event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
+
+        if (player == null) return;
+
+        //Check if a GUI screen is open
+        if (minecraft.screen != null) {
+            return; //Exit if the player is in a GUI (e.g., inventory, pause menu)
+        }
+
+//        //Check if the W key is pressed
+//        if (event.getKey() == GLFW.GLFW_KEY_SPACE && event.getAction() == GLFW.GLFW_PRESS) {
+//            System.out.println("press Space");
+//            if (player.hasEffect(ModEffects.STUN_EFFECT)) {
+//                System.out.println("has stun");
+//            }
+//        }
+//
+//        //Check if the W key is released
+//        if (event.getKey() == GLFW.GLFW_KEY_SPACE && event.getAction() == GLFW.GLFW_RELEASE) {
+//            System.out.println("W released");
+//        }
     }
 }

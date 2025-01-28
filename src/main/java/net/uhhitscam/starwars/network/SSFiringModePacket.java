@@ -10,10 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.uhhitscam.starwars.component.FiringModeData;
-import net.uhhitscam.starwars.component.GasAmmoData;
-import net.uhhitscam.starwars.component.GasTypeData;
 import net.uhhitscam.starwars.component.ModDataComponentTypes;
-import net.uhhitscam.starwars.item.custom.BlasterItem;
 
 public record SSFiringModePacket(ItemStack blaster, String firingMode, boolean mainHand) implements Packet {
 

@@ -42,6 +42,8 @@ public class BlasterItem extends Item{
     private final float semiRecoil;
     private final float burstRecoil;
     private final float fullRecoil;
+    private final int stunFireRate = 15;
+    private final int stunRecoil = 2;
 
     private final Map<UUID, Float> recoilMap = new HashMap<>();
     private static final ThreadLocal<Random> THREAD_LOCAL_RANDOM = ThreadLocal.withInitial(Random::new);
@@ -67,27 +69,21 @@ public class BlasterItem extends Item{
         return InteractionResultHolder.fail(player.getItemInHand(hand));
     }
 
-    public void mainHandFiring(Player player, ItemStack itemstack) {
+    public void mainHandFiring(Player player, ItemStack mainHandItemStack) {
         if (player.getMainHandItem().getItem() instanceof BlasterItem) {
-            firingBlaster(player.level(), player, itemstack);
+            firingBlaster(player.level(), player, true);
         }
     }
 
-    public void offHandFiring(Player player, ItemStack itemstack) {
+    public void offHandFiring(Player player, ItemStack offHandItemStack) {
         if (player.getOffhandItem().getItem() instanceof BlasterItem) {
-            firingBlaster(player.level(), player, itemstack);
+            firingBlaster(player.level(), player, false);
         }
     }
 
-    private void firingBlaster(Level level, Player player, ItemStack itemstack) {
+    private void firingBlaster(Level level, Player player, boolean mainHand) {
+        ItemStack itemstack = mainHand ? player.getMainHandItem() : player.getOffhandItem();
         int currentAmmo = getAmmo(itemstack);
-
-        if (currentAmmo <= 0) {
-            //Feedback for empty blaster
-            level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                    SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-            return;
-        }
 
         CoolDownData cooldownData = itemstack.get(ModDataComponentTypes.COOLDOWN);
         if (cooldownData == null) {
@@ -100,6 +96,17 @@ public class BlasterItem extends Item{
             return;
         }
 
+        if (currentAmmo <= 0) {
+            //Feedback for empty blaster
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            String firingMode = getFiringMode(itemstack);
+            long cooldownEndTime = level.getGameTime() + getCoolDown(firingMode);
+            itemstack.set(ModDataComponentTypes.COOLDOWN, cooldownData.withCooldownEndTime(cooldownEndTime));
+            return;
+        }
+
         if (level.isClientSide) {
             return; //Prevent firing logic on the client side
         }
@@ -109,7 +116,7 @@ public class BlasterItem extends Item{
 
         int shots = switch (firingMode) {
             case "BURST" -> Math.min(3, currentAmmo);
-            case "SCATTER", "SEMI_AUTO", "FULL_AUTO" -> 1;
+            case "SCATTER", "SEMI_AUTO", "FULL_AUTO", "STUN" -> 1;
             default -> 1;
         };
 
@@ -147,6 +154,7 @@ public class BlasterItem extends Item{
             case "BURST" -> burstFireRate;
             case "FULL_AUTO" -> fullFireRate;
             case "SCATTER" -> semiFireRate;
+            case "STUN" -> stunFireRate;
             default -> 50; //fallback just incase
         };
     }
@@ -189,30 +197,37 @@ public class BlasterItem extends Item{
         //Retrieve the firing mode from the FiringModeData component
         FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (firingModeData == null) {
-            firingModeData = new FiringModeData("SEMI_AUTO");
+            initializeFiringMode(itemstack);
             itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
         }
         String firingMode = firingModeData.firingMode();
 
         if (currentAmmo > 0) {
-            Snowball bolt = switch (currentGasType) {
-                case "TIBANNA_GAS" ->
-                        new TibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
-                case "IONIZED_TIBANNA_GAS" ->
-                        new IonizedTibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
-                case "SPIN_SEALED_TIBANNA_GAS" ->
-                        new SpinSealedTibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
-                case "TIBANNAX_GAS" ->
-                        new TibannaXBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
-                case "SIG_GAS" ->
-                        new SigBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
-                case "MAGNETIZED_SIG_GAS" ->
-                        new MagnetizedSigBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
-                case "SKEVON_GAS" ->
-                        new SkevonBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
-                default ->
-                        new TibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType); //Fallback if all fails
-            };
+            Snowball bolt;
+            Snowball specific_bolt;
+            if (firingMode.equals("STUN")) {
+                specific_bolt = new StunBlasterBoltEntity(level, player, 1.5F);
+            } else {
+                specific_bolt = switch (currentGasType) {
+                    case "TIBANNA_GAS" ->
+                            new TibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
+                    case "IONIZED_TIBANNA_GAS" ->
+                            new IonizedTibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
+                    case "SPIN_SEALED_TIBANNA_GAS" ->
+                            new SpinSealedTibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
+                    case "TIBANNAX_GAS" ->
+                            new TibannaXBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
+                    case "SIG_GAS" ->
+                            new SigBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
+                    case "MAGNETIZED_SIG_GAS" ->
+                            new MagnetizedSigBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
+                    case "SKEVON_GAS" ->
+                            new SkevonBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType);
+                    default ->
+                            new TibannaBlasterBoltEntity(level, player, this.bolt_speed, this.blasterDamage, currentGasType); //Fallback if all fails
+                };
+            }
+            bolt = specific_bolt;
 
             bolt.setOwner(player);
             bolt.setPos(
@@ -248,6 +263,7 @@ public class BlasterItem extends Item{
                 case "SEMI_AUTO", "SCATTER" -> recoil = semiRecoil;
                 case "BURST" -> recoil = burstRecoil;
                 case "FULL_AUTO" -> recoil = fullRecoil;
+                case "STUN" -> recoil = stunRecoil;
                 default -> recoil = 1;
             }
 
@@ -409,7 +425,6 @@ public class BlasterItem extends Item{
             //Notify the player about the new firing mode.
             player.displayClientMessage(Component.translatable("item.starwars.blaster.firing_mode_changed", nextFiringMode), true);
         }
-        System.out.println("firingMode is " + blasterStack.get(ModDataComponentTypes.FIRING_MODE.get()));
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.common.NeoForge;
+import net.uhhitscam.starwars.event.ModClientEvents;
 import net.uhhitscam.starwars.item.custom.BlasterItem;
 import org.lwjgl.glfw.GLFW;
 
@@ -21,6 +22,10 @@ public class KeyBinding {
             "key.starwars.reload", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_R), CATEGORY);
     public static final KeyMapping SWITCH_FIRING_MODE_KEY = new KeyMapping(
             "key.starwars.switch", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_B), CATEGORY);
+
+    public static void init() {
+
+    }
 
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(EventPriority.HIGH, KeyBinding::onRegisterKeyMappings);
@@ -73,12 +78,14 @@ public class KeyBinding {
             if (mainHandItem.getItem() instanceof BlasterItem blasterMain) {
                 // Now it's safe to switch the firing mode of the Blasteritem
                 blasterMain.switchFiringMode(mainHandItem, true);
+                ModClientEvents.firing = false;
             }
 
             // Check if the offhand item is a BlasterItem and reload it
             if (offHandItem.getItem() instanceof BlasterItem blasterOff) {
                 // Now it's safe to switch the firing mode of the Blasteritem
                 blasterOff.switchFiringMode(offHandItem, false);
+                ModClientEvents.firing = false;
             }
         }
     }

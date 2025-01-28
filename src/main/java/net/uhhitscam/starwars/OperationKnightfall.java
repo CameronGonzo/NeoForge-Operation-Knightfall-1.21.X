@@ -16,6 +16,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.starwars.component.ModDataComponentTypes;
+import net.uhhitscam.starwars.effect.ModEffects;
 import net.uhhitscam.starwars.entity.ModEntities;
 import net.uhhitscam.starwars.entity.client.*;
 import net.uhhitscam.starwars.item.ModCreativeModeTabs;
@@ -23,6 +24,7 @@ import net.uhhitscam.starwars.item.ModItems;
 import net.uhhitscam.starwars.network.PayloadRegister;
 import net.uhhitscam.starwars.util.KeyBinding;
 import org.slf4j.Logger;
+import org.spongepowered.asm.launch.MixinBootstrap;
 
 @Mod(OperationKnightfall.MODID)
 public class OperationKnightfall {
@@ -40,6 +42,7 @@ public class OperationKnightfall {
         ModItems.register(modEventBus);
         ModEntities.register(modEventBus);
         ModDataComponentTypes.register(modEventBus);
+        ModEffects.MOB_EFFECTS.register(modEventBus);
         ENTITY_TYPE_DEFERRED_REGISTER.register(modEventBus);
 
         modEventBus.register(PayloadRegister.class);
@@ -49,11 +52,15 @@ public class OperationKnightfall {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        MixinBootstrap.init();
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
 
+    }
+
+    public static void init() {
+        LOGGER.info("Where Am I?");
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -68,6 +75,7 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.SIG_BLASTER_BOLT.get(), SigBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), MagnetizedSigBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.SKEVON_BLASTER_BOLT.get(), SkevonBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.STUN_BLASTER_BOLT.get(), StunBlasterBoltRenderer::new);
         }
     }
 }

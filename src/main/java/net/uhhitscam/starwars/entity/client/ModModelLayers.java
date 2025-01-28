@@ -19,4 +19,6 @@ public class ModModelLayers {
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "magnetized_sig_blaster_bolt"), "main");
     public static final ModelLayerLocation SKEVON_BLASTER_BOLT = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "skevon_blaster_bolt"), "main");
+    public static final ModelLayerLocation STUN_BLASTER_BOLT = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "stun_blaster_bolt"), "main");
 }

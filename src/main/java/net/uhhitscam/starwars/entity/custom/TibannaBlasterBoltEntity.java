@@ -93,7 +93,7 @@ public class TibannaBlasterBoltEntity extends Snowball {
         // Keep the movement constant
         this.setDeltaMovement(velocity.normalize().scale(this.bolt_speed));
 
-        if (!this.level().isClientSide && this.tickCount > 300) {
+        if (!this.level().isClientSide && this.tickCount > 2000) {
             this.discard();
         }
     }

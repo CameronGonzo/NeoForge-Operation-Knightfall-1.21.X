@@ -42,13 +42,14 @@ public class ModItems {
     public static final DeferredItem<Item> SIG_BLASTER_BOLT = ITEMS.registerSimpleItem("sig_blaster_bolt");
     public static final DeferredItem<Item> MAGNETIZED_SIG_BLASTER_BOLT = ITEMS.registerSimpleItem("magnetized_sig_blaster_bolt");
     public static final DeferredItem<Item> SKEVON_BLASTER_BOLT = ITEMS.registerSimpleItem("skevon_blaster_bolt");
+    public static final DeferredItem<Item> STUN_BLASTER_BOLT = ITEMS.registerSimpleItem("stun_blaster_bolt");
 
     //Blasters
     public static final DeferredItem<Item> DC17 = ITEMS.register("dc17",
-            () -> new BlasterItem(new Item.Properties().stacksTo(1), 2.0F, 2.0F, 50, 14, 1, 0, 0, List.of("SEMI_AUTO"),
+            () -> new BlasterItem(new Item.Properties().stacksTo(1), 2.0F, 2.0F, 50, 14, 1, 0, 0, List.of("SEMI_AUTO", "STUN"),
                     0F, 0F, 0F));
     public static final DeferredItem<Item> DH17 = ITEMS.register("dh17",
-            () -> new BlasterItem(new Item.Properties().stacksTo(1), 2.0F, 1.5F, 500, 17, 5, 20, 8, List.of("SEMI_AUTO", "BURST", "FULL_AUTO"),
+            () -> new BlasterItem(new Item.Properties().stacksTo(1), 2.0F, 1.5F, 500, 17, 5, 20, 8, List.of("SEMI_AUTO", "BURST", "FULL_AUTO", "STUN"),
                     0.2F, 0.9F, 1.7F));
     public static final DeferredItem<Item> DL44 = ITEMS.register("dl44",
             () -> new BlasterItem(new Item.Properties().stacksTo(1), 2.8F, 1.2F, 50, 16, 5, 0, 0, List.of("SEMI_AUTO"),
