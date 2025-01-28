@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
-license="${mod_license}"
+license="MIT"
 
 # A URL to refer people to when problems occur with this mod
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
@@ -23,7 +23,7 @@ displayName="${mod_name}"
 #credits="" #optional
 
 authors="${mod_authors}"
-description='''A Star Wars-inspired Mod'''
+description='''${mod_description}'''
 
 [[mixins]]
 config="starwars.mixins.json"
