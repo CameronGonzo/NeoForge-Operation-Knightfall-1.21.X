@@ -38,18 +38,25 @@ public class BlasterItem extends Item{
     private final int semiFireRate;
     private final int burstFireRate;
     private final int fullFireRate;
+    private final int chargedFireRate;
+    private final int repulseFireRate;
+    private final int stunFireRate = 15;
     private final List<String> firingModes;
     private final float semiRecoil;
     private final float burstRecoil;
     private final float fullRecoil;
-    private final int stunFireRate = 15;
+    private final float chargedRecoil;
+    private final float repulseRecoil;
     private final int stunRecoil = 2;
+    private final String typFiringMode;
+    private final String typGasType;
 
     private final Map<UUID, Float> recoilMap = new HashMap<>();
     private static final ThreadLocal<Random> THREAD_LOCAL_RANDOM = ThreadLocal.withInitial(Random::new);
 
     public BlasterItem(Properties properties, float bolt_speed, float inaccuracy, int max_ammo, int blasterDamage,
-                       int semiFireRate, int burstFireRate, int fullFireRate, List<String> firingModes, float semiRecoil, float burstRecoil, float fullRecoil) {
+                       int semiFireRate, int burstFireRate, int fullFireRate, int chargedFireRate, int repulseFireRate, List<String> firingModes,
+                       float semiRecoil, float burstRecoil, float fullRecoil, float chargedRecoil, float repulseRecoil, String typFiringMode, String typGasType) {
         super(properties);
         this.bolt_speed = bolt_speed;
         this.inaccuracy = inaccuracy;
@@ -58,10 +65,16 @@ public class BlasterItem extends Item{
         this.semiFireRate = semiFireRate;
         this.burstFireRate = burstFireRate;
         this.fullFireRate = fullFireRate;
+        this.chargedFireRate = chargedFireRate;
+        this.repulseFireRate = repulseFireRate;
         this.firingModes = firingModes;
         this.semiRecoil = semiRecoil * 10;
         this.burstRecoil = burstRecoil * 10;
         this.fullRecoil = fullRecoil * 10;
+        this.chargedRecoil = chargedRecoil * 10;
+        this.repulseRecoil = repulseRecoil * 10;
+        this.typFiringMode = typFiringMode;
+        this.typGasType = typGasType;
     }
 
     @Override
@@ -116,7 +129,7 @@ public class BlasterItem extends Item{
 
         int shots = switch (firingMode) {
             case "BURST" -> Math.min(3, currentAmmo);
-            case "SCATTER", "SEMI_AUTO", "FULL_AUTO", "STUN" -> 1;
+            case "SCATTER", "SEMI_AUTO", "FULL_AUTO", "STUN", "CHARGED", "REPULSE" -> 1;
             default -> 1;
         };
 
@@ -150,10 +163,11 @@ public class BlasterItem extends Item{
 
     public int getCoolDown(String firingMode) {
         return switch (firingMode) {
-            case "SEMI_AUTO" -> semiFireRate;
+            case "SEMI_AUTO", "SCATTER" -> semiFireRate;
             case "BURST" -> burstFireRate;
             case "FULL_AUTO" -> fullFireRate;
-            case "SCATTER" -> semiFireRate;
+            case "CHARGED" -> chargedFireRate;
+            case "REPULSE" -> repulseFireRate;
             case "STUN" -> stunFireRate;
             default -> 50; //fallback just incase
         };
@@ -175,8 +189,7 @@ public class BlasterItem extends Item{
     }
 
     private void initializeFiringMode(ItemStack itemstack) {
-        String defaultFiringMode = firingModes.get(0); //First index in the firingModes list
-        FiringModeData firingModeData = new FiringModeData(defaultFiringMode);
+        FiringModeData firingModeData = new FiringModeData(typFiringMode);
         itemstack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
     }
 
@@ -263,6 +276,8 @@ public class BlasterItem extends Item{
                 case "SEMI_AUTO", "SCATTER" -> recoil = semiRecoil;
                 case "BURST" -> recoil = burstRecoil;
                 case "FULL_AUTO" -> recoil = fullRecoil;
+                case "CHARGED" -> recoil = chargedRecoil;
+                case "REPULSE" -> recoil = repulseRecoil;
                 case "STUN" -> recoil = stunRecoil;
                 default -> recoil = 1;
             }
@@ -388,7 +403,25 @@ public class BlasterItem extends Item{
         }
 
         if (!foundGasItem) {
-            player.displayClientMessage(Component.translatable("item.starwars.blaster.no_gas_items"), true);
+            if (player.isCreative() && (currentAmmo <= 0)) {
+                setAmmo(blasterStack, max_ammo);
+                PayloadRegister.sendToServer(new SSReloadPacket(blasterStack, max_ammo, typGasType, mainHand));
+                player.inventoryMenu.broadcastChanges();
+                player.displayClientMessage(Component.translatable("item.starwars.blaster.reloaded"), true);
+                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            } else if (player.isCreative()) {
+                int ammoNeeded = max_ammo - currentAmmo;
+                currentAmmo += ammoNeeded;
+                setAmmo(blasterStack, currentAmmo);
+                PayloadRegister.sendToServer(new SSReloadPacket(blasterStack, currentAmmo, currentGasType, mainHand));
+                player.inventoryMenu.broadcastChanges();
+                player.displayClientMessage(Component.translatable("item.starwars.blaster.reloaded"), true);
+                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            } else {
+                player.displayClientMessage(Component.translatable("item.starwars.blaster.no_gas_items"), true);
+            }
         } else if (currentAmmo < max_ammo) {
             player.displayClientMessage(Component.translatable("item.starwars.blaster.no_compatible_gas"), true);
         }
@@ -399,7 +432,7 @@ public class BlasterItem extends Item{
         FiringModeData firingModeData = blasterStack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (firingModeData == null) {
             //If no firing mode is currently set, initialize it to the first mode in the list.
-            firingModeData = new FiringModeData(firingModes.get(0));
+            firingModeData = new FiringModeData(typFiringMode);
             blasterStack.set(ModDataComponentTypes.FIRING_MODE.get(), firingModeData);
         }
 

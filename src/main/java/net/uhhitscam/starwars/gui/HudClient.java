@@ -68,6 +68,8 @@ public class HudClient {
                 case "STUN" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
                 case "SCATTER" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
                 case "FULL_AUTO" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
+                case "CHARGED" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
+                case "REPULSE" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
                 default -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/semi_auto_icon.png");
             };
             guiGraphics.blit(texture, guiMidWidth - 195, guiHeight - 17, 0, 0, 12, 12, 12, 12);
@@ -87,6 +89,8 @@ public class HudClient {
                 case "STUN" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
                 case "SCATTER" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
                 case "FULL_AUTO" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
+                case "CHARGED" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
+                case "REPULSE" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
                 default -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/semi_auto_icon.png");
             };
             guiGraphics.blit(texture, guiMidWidth + 100, guiHeight - 17, 0, 0, 12, 12, 12, 12);

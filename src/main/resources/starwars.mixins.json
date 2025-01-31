@@ -4,7 +4,9 @@
   "package": "net.uhhitscam.starwars.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "LivingEntityRendererMixin",
+    "GameRendererMixin"
   ],
   "client": [],
   "injectors": {

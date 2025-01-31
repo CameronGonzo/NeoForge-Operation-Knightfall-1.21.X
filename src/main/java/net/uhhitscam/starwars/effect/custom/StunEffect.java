@@ -1,6 +1,5 @@
 package net.uhhitscam.starwars.effect.custom;
 
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,10 +12,6 @@ public class StunEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        if (entity instanceof LocalPlayer player) {
-
-        }
-//        entity.setSwimming(true);
         return true;
     }
 

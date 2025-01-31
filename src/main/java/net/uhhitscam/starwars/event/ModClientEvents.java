@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -64,6 +65,16 @@ public class ModClientEvents {
                 return; //Exit if the player is in a GUI
             }
 
+            // Check if the player is interacting with an entity or block
+            HitResult hitResult = minecraft.hitResult;
+            if (hitResult.getType() == HitResult.Type.ENTITY && !player.isShiftKeyDown()) {
+                EntityHitResult entityHitResult = (EntityHitResult) hitResult;
+                Entity entity = entityHitResult.getEntity();
+                if (entity instanceof Villager) {
+                    return; // Exit if interacting with a villager
+                }
+            }
+
             ItemStack mainHandItem = player.getMainHandItem();
             firing = true;
 
@@ -103,11 +114,11 @@ public class ModClientEvents {
             if (offHandItem.getItem() instanceof BlasterItem) {
                 firing = true;
                 // Check if the player is targeting an entity
-                HitResult hitResult = getPlayerHitResult(player);
+                HitResult hitResult = minecraft.hitResult;
                 if (hitResult instanceof EntityHitResult) {
                     EntityHitResult entityHitResult = (EntityHitResult) hitResult;
                     Entity target = entityHitResult.getEntity();
-                    if (player.distanceTo(target) <= 3) {
+                    if (player.distanceTo(target) <= 3 && !player.isShiftKeyDown()) {
                         punching = true;
                     }
                 }
