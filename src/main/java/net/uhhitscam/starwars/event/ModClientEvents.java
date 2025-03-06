@@ -3,8 +3,8 @@ package net.uhhitscam.starwars.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -70,7 +70,7 @@ public class ModClientEvents {
             if (hitResult.getType() == HitResult.Type.ENTITY && !player.isShiftKeyDown()) {
                 EntityHitResult entityHitResult = (EntityHitResult) hitResult;
                 Entity entity = entityHitResult.getEntity();
-                if (entity instanceof Villager) {
+                if (entity instanceof Villager || entity instanceof WanderingTrader) {
                     return; // Exit if interacting with a villager
                 }
             }

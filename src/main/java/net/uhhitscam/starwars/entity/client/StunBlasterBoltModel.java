@@ -19,7 +19,8 @@ public class StunBlasterBoltModel extends HierarchicalModel<StunBlasterBoltEntit
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition stun_blaster_bolt = partdefinition.addOrReplaceChild("stun_blaster_bolt", CubeListBuilder.create().texOffs(0, 6).addBox(-2.5F, -1.0F, 0.0F, 5.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+        PartDefinition stun_blaster_bolt = partdefinition.addOrReplaceChild("stun_blaster_bolt", CubeListBuilder.create()
+                .texOffs(0, 6).addBox(-2.5F, -1.0F, 0.0F, 5.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(14, 15).addBox(-4.5F, -2.0F, 0.0F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(32, 15).addBox(-4.5F, -3.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(18, 4).addBox(-3.5F, -1.5F, 0.0F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
@@ -115,7 +116,7 @@ public class StunBlasterBoltModel extends HierarchicalModel<StunBlasterBoltEntit
                 .texOffs(22, 25).addBox(-2.5F, -12.25F, -0.5F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(26, 0).addBox(1.5F, -12.25F, -0.5F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(26, 8).addBox(1.5F, -1.75F, -0.5F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(26, 3).addBox(-2.5F, -1.75F, -0.5F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+                .texOffs(26, 3).addBox(-2.5F, -1.75F, -0.5F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -10.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }

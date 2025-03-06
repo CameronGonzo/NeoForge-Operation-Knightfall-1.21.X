@@ -13,6 +13,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.starwars.component.ModDataComponentTypes;
@@ -22,6 +23,10 @@ import net.uhhitscam.starwars.entity.client.*;
 import net.uhhitscam.starwars.item.ModCreativeModeTabs;
 import net.uhhitscam.starwars.item.ModItems;
 import net.uhhitscam.starwars.network.PayloadRegister;
+import net.uhhitscam.starwars.particle.SparkParticles;
+import net.uhhitscam.starwars.particle.ModParticles;
+import net.uhhitscam.starwars.particle.StunSparkParticles;
+import net.uhhitscam.starwars.sound.ModSounds;
 import net.uhhitscam.starwars.util.KeyBinding;
 import org.slf4j.Logger;
 import org.spongepowered.asm.launch.MixinBootstrap;
@@ -42,6 +47,8 @@ public class OperationKnightfall {
         ModItems.register(modEventBus);
         ModEntities.register(modEventBus);
         ModDataComponentTypes.register(modEventBus);
+        ModParticles.register(modEventBus);
+        ModSounds.register(modEventBus);
         ModEffects.MOB_EFFECTS.register(modEventBus);
         ENTITY_TYPE_DEFERRED_REGISTER.register(modEventBus);
 
@@ -76,6 +83,12 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), MagnetizedSigBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.SKEVON_BLASTER_BOLT.get(), SkevonBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.STUN_BLASTER_BOLT.get(), StunBlasterBoltRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
+            event.registerSpriteSet(ModParticles.SPARK_PARTICLES.get(), SparkParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.STUN_SPARK_PARTICLES.get(), StunSparkParticles.Provider::new);
         }
     }
 }

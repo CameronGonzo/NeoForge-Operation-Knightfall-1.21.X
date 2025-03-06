@@ -36,16 +36,14 @@ public record SSFireBlasterPacket(ItemStack blaster, String gasType, boolean rep
             if (mainHand) {
                 ItemStack serverBlasterStack = player.getMainHandItem();
 
-                if (serverBlasterStack.getItem() instanceof BlasterItem) {
-                    BlasterItem blasterItem = (BlasterItem) serverBlasterStack.getItem();
-                    blasterItem.mainHandFiring(player, serverBlasterStack);
+                if (serverBlasterStack.getItem() instanceof BlasterItem blasterItem) {
+                    blasterItem.mainHandFiring(player);
                 }
             } else {
                 ItemStack serverBlasterStack = player.getOffhandItem();
 
-                if (serverBlasterStack.getItem() instanceof BlasterItem) {
-                    BlasterItem blasterItem = (BlasterItem) serverBlasterStack.getItem();
-                    blasterItem.offHandFiring(player, serverBlasterStack);
+                if (serverBlasterStack.getItem() instanceof BlasterItem blasterItem) {
+                    blasterItem.offHandFiring(player);
                 }
             }
         }

@@ -77,14 +77,14 @@ public class KeyBinding {
             // Check if the main hand item is a BlasterItem and reload it
             if (mainHandItem.getItem() instanceof BlasterItem blasterMain) {
                 // Now it's safe to switch the firing mode of the Blasteritem
-                blasterMain.switchFiringMode(mainHandItem, true);
+                blasterMain.switchFiringMode(player, mainHandItem, true);
                 ModClientEvents.firing = false;
             }
 
             // Check if the offhand item is a BlasterItem and reload it
             if (offHandItem.getItem() instanceof BlasterItem blasterOff) {
                 // Now it's safe to switch the firing mode of the Blasteritem
-                blasterOff.switchFiringMode(offHandItem, false);
+                blasterOff.switchFiringMode(player, offHandItem, false);
                 ModClientEvents.firing = false;
             }
         }

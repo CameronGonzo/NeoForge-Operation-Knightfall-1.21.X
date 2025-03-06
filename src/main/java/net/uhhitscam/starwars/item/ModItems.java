@@ -48,17 +48,21 @@ public class ModItems {
     public static final DeferredItem<Item> DC17 = ITEMS.register("dc17",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.0F, 2.0F, 50, 14,
-                    1, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO", "IONIZED_TIBANNA_GAS"));
+                    1, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO", "IONIZED_TIBANNA_GAS",
+                    "PISTOL"));
     public static final DeferredItem<Item> DH17 = ITEMS.register("dh17",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.0F, 1.5F, 500, 17,
-                    5, 20, 8, 0, 0, List.of("SEMI_AUTO", "BURST", "FULL_AUTO", "STUN"), 0.2F, 0.9F, 1.7F, 0F, 0F, "SEMI_AUTO", "TIBANNA_GAS"));
+                    5, 20, 8, 0, 0, List.of("SEMI_AUTO", "BURST", "FULL_AUTO", "STUN"), 0.2F, 0.9F, 1.7F, 0F, 0F, "SEMI_AUTO", "TIBANNA_GAS",
+                    "PISTOL"));
     public static final DeferredItem<Item> DL44 = ITEMS.register("dl44",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.8F, 1.2F, 50, 16,
-                    5, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0.7F, 0F, 0F, 0F, 0F, "SEMI_AUTO", "TIBANNA_GAS"));
+                    5, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0.7F, 0F, 0F, 0F, 0F, "SEMI_AUTO", "TIBANNA_GAS",
+                    "PISTOL"));
     public static final DeferredItem<Item> EE3 = ITEMS.register("ee3",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     3.0F, 1.0F, 300, 8,
-                    0, 20, 0, 0, 0, List.of("BURST"), 0F, 0.5F, 0F, 0F, 0F, "BURST", "TIBANNA_GAS"));
+                    0, 20, 0, 0, 0, List.of("SEMI_AUTO", "BURST"), 0F, 0.5F, 0F, 0F, 0F, "BURST", "TIBANNA_GAS",
+                    "CARBINE"));
 }

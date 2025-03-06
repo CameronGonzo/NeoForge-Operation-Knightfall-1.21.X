@@ -20,6 +20,8 @@ public class ModDataComponentTypes {
             builder -> builder.persistent(FiringModeData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CoolDownData>> COOLDOWN = register("cooldown",
             builder -> builder.persistent(CoolDownData.CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ExtraFiringRateData>> EXTRA_FIRING_RATE = register("extra_firing_rate",
+            builder -> builder.persistent(ExtraFiringRateData.CODEC));
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());

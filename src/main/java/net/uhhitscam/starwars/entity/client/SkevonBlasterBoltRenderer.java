@@ -30,10 +30,10 @@ public class SkevonBlasterBoltRenderer extends EntityRenderer<SkevonBlasterBoltE
         float scale = 0.5f;  // Scale factor of bolt size
         poseStack.scale(scale, scale, scale);  // Apply uniform scaling
 
-        poseStack.translate(0.0F, -1.4F, 0.0F); //adjust spawn position of blaster bolt to gun height
+        poseStack.translate(0.0F, 0.2F, 0.0F); //adjust spawn position of blaster bolt to gun height
 
         float yaw = pEntity.getYRot();  // Horizontal rotation (yaw)
-        float pitch = pEntity.getXRot();  // Vertical rotation (pitch)
+        float pitch = -pEntity.getXRot();  // Vertical rotation (pitch)
 
         // Apply the rotations to the blaster bolt
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw)); // Rotate around Y-axis (horizontal)

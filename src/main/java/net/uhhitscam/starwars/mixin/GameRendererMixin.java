@@ -22,7 +22,7 @@ public abstract class GameRendererMixin {
     @Accessor("renderBuffers")
     abstract RenderBuffers getRenderBuffers();
 
-    @Inject(method = "render", at = @At("TAIL"))
+    @Inject(method = "render", at = @At("TAIL"), cancellable = false)
     private void injectCustomScreenEffect(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.screen != null) return; // Avoid drawing over menus
@@ -44,7 +44,6 @@ public abstract class GameRendererMixin {
     }
 
     private void renderCustomOverlay(GuiGraphics guiGraphics) {
-        System.out.println("rendering?");
         int screenWidth = guiGraphics.guiWidth();
         int screenHeight = guiGraphics.guiHeight();
 
