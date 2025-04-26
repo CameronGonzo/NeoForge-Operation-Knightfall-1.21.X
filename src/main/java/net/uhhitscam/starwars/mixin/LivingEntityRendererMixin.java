@@ -15,12 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
 
-    @Inject(method = "setupRotations", at = @At("TAIL"), cancellable = false)
-    private void modifyRotationForEffect(T entity, PoseStack poseStack, float bob, float yBodyRot, float partialTick, float scale, CallbackInfo ci) {
-        if (entity.hasEffect(ModEffects.STUN_EFFECT)) {
-            poseStack.mulPose(Axis.YP.rotationDegrees(yBodyRot));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
-            poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
-        }
-    }
+//    @Inject(method = "setupRotations", at = @At("TAIL"), cancellable = false)
+//    private void modifyRotationForEffect(T entity, PoseStack poseStack, float bob, float yBodyRot, float partialTick, float scale, CallbackInfo ci) {
+//        if (entity.hasEffect(ModEffects.STUN_EFFECT)) {
+//            poseStack.mulPose(Axis.YP.rotationDegrees(yBodyRot));
+//            poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
+//            poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
+//        }
+//    }
 }

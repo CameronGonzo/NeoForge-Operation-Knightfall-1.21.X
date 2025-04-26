@@ -18,8 +18,10 @@ public class ModDataComponentTypes {
             builder -> builder.persistent(GasTypeData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<FiringModeData>> FIRING_MODE = register("firing_mode",
             builder -> builder.persistent(FiringModeData.CODEC));
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<CoolDownData>> COOLDOWN = register("cooldown",
-            builder -> builder.persistent(CoolDownData.CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<FireCoolDownData>> FIRE_COOLDOWN = register("fire_cooldown",
+            builder -> builder.persistent(FireCoolDownData.CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ReloadNSwitchCoolDownData>> RELOAD_N_SWITCH_COOLDOWN = register("reload_n_switch_cooldown",
+            builder -> builder.persistent(ReloadNSwitchCoolDownData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ExtraFiringRateData>> EXTRA_FIRING_RATE = register("extra_firing_rate",
             builder -> builder.persistent(ExtraFiringRateData.CODEC));
 

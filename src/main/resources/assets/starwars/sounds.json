@@ -68,10 +68,38 @@
       "starwars:blaster/a140/weapons_blaster_a140_fire_06"
     ]
   },
-  "a180_fire": {
-    "subtitle": "sounds.starwars.a180_fire",
+  "a180_pistol_fire": {
+    "subtitle": "sounds.starwars.a180_pistol_fire",
     "sounds": [
-
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_01",
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_02",
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_03",
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_04",
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_05",
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_06",
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_07",
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_08",
+      "starwars:blaster/a180/weapons_blaster_a180_pistol_fire_09"
+    ]
+  },
+  "a180_rifle_fire": {
+    "subtitle": "sounds.starwars.a180_rifle_fire",
+    "sounds": [
+      "starwars:blaster/a180/weapons_blaster_a180_rifle_fire_01",
+      "starwars:blaster/a180/weapons_blaster_a180_rifle_fire_02",
+      "starwars:blaster/a180/weapons_blaster_a180_rifle_fire_03"
+    ]
+  },
+  "a180_sniper_fire": {
+    "subtitle": "sounds.starwars.a180_sniper_fire",
+    "sounds": [
+      "starwars:blaster/a180/weapons_blaster_a180_sniper_fire_01",
+      "starwars:blaster/a180/weapons_blaster_a180_sniper_fire_02",
+      "starwars:blaster/a180/weapons_blaster_a180_sniper_fire_03",
+      "starwars:blaster/a180/weapons_blaster_a180_sniper_fire_04",
+      "starwars:blaster/a180/weapons_blaster_a180_sniper_fire_05",
+      "starwars:blaster/a180/weapons_blaster_a180_sniper_fire_06",
+      "starwars:blaster/a180/weapons_blaster_a180_sniper_fire_07"
     ]
   },
   "a280_fire": {
@@ -102,15 +130,37 @@
       "starwars:blaster/a280c/weapons_blaster_a280c_fire_09"
     ]
   },
-  "a280cfe_fire": {
-    "subtitle": "sounds.starwars.a280cfe_fire",
+  "a280cfe_pistol_fire": {
+    "subtitle": "sounds.starwars.a280cfe_pistol_fire",
     "sounds": [
-      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_fire_01",
-      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_fire_02",
-      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_fire_03",
-      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_fire_04",
-      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_fire_05",
-      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_fire_06"
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_pistol_fire_01",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_pistol_fire_02",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_pistol_fire_03",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_pistol_fire_04",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_pistol_fire_05",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_pistol_fire_06"
+    ]
+  },
+  "a280cfe_rifle_fire": {
+    "subtitle": "sounds.starwars.a280cfe_rifle_fire",
+    "sounds": [
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_rifle_fire_01",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_rifle_fire_02",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_rifle_fire_03",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_rifle_fire_04",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_rifle_fire_05",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_rifle_fire_06"
+    ]
+  },
+  "a280cfe_sniper_fire": {
+    "subtitle": "sounds.starwars.a280cfe_sniper_fire",
+    "sounds": [
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_sniper_fire_01",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_sniper_fire_02",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_sniper_fire_03",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_sniper_fire_04",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_sniper_fire_05",
+      "starwars:blaster/a280cfe/weapons_blaster_a280cfe_sniper_fire_06"
     ]
   },
   "a295_fire": {
@@ -260,6 +310,17 @@
       "starwars:blaster/b22/weapons_blaster_b22_fire_07"
     ]
   },
+  "balnab_fire": {
+    "subtitle": "sounds.starwars.balnab_fire",
+    "sounds": [
+      "starwars:blaster/balnab/weapons_blaster_balnab_fire_01",
+      "starwars:blaster/balnab/weapons_blaster_balnab_fire_02",
+      "starwars:blaster/balnab/weapons_blaster_balnab_fire_03",
+      "starwars:blaster/balnab/weapons_blaster_balnab_fire_04",
+      "starwars:blaster/balnab/weapons_blaster_balnab_fire_05",
+      "starwars:blaster/balnab/weapons_blaster_balnab_fire_06"
+    ]
+  },
   "barmst12_fire": {
     "subtitle": "sounds.starwars.barmst12_fire",
     "sounds": [
@@ -352,6 +413,17 @@
       "starwars:blaster/blndrbus/weapons_blaster_blndr_bus_fire_06"
     ]
   },
+  "blndrbus_repulse_fire": {
+    "subtitle": "sounds.starwars.blndrbus_repulse_fire",
+    "sounds": [
+      "starwars:blaster/blndrbus/weapons_blaster_blndr_bus_repulse_fire_01",
+      "starwars:blaster/blndrbus/weapons_blaster_blndr_bus_repulse_fire_02",
+      "starwars:blaster/blndrbus/weapons_blaster_blndr_bus_repulse_fire_03",
+      "starwars:blaster/blndrbus/weapons_blaster_blndr_bus_repulse_fire_04",
+      "starwars:blaster/blndrbus/weapons_blaster_blndr_bus_repulse_fire_05",
+      "starwars:blaster/blndrbus/weapons_blaster_blndr_bus_repulse_fire_06"
+    ]
+  },
   "blurrg1120_fire": {
     "subtitle": "sounds.starwars.blurrg1120_fire",
     "sounds": [
@@ -398,7 +470,30 @@
   "bowcaster_fire": {
     "subtitle": "sounds.starwars.bowcaster_fire",
     "sounds": [
-
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_01",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_02",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_03",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_04",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_05",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_06",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_07",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_08",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_09",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_10",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_fire_11"
+    ]
+  },
+  "bowcaster_charged_fire": {
+    "subtitle": "sounds.starwars.bowcaster_charged_fire",
+    "sounds": [
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_charged_fire_01",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_charged_fire_02",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_charged_fire_03",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_charged_fire_04",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_charged_fire_05",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_charged_fire_06",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_charged_fire_07",
+      "starwars:blaster/bowcaster/weapons_blaster_bowcaster_charged_fire_08"
     ]
   },
   "br14_fire": {
@@ -424,6 +519,26 @@
       "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_fire_07",
       "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_fire_08",
       "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_fire_09"
+    ]
+  },
+  "bryar_rifle_charged_fire": {
+    "subtitle": "sounds.starwars.bryar_rifle_charged_fire",
+    "sounds": [
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_01",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_02",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_03",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_04",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_05",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_06",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_07",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_08",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_09",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_10",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_11",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_12",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_13",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_14",
+      "starwars:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_15"
     ]
   },
   "bt_x42_flamethrower_fire": {
@@ -471,6 +586,26 @@
       "starwars:blaster/ca87/weapons_blaster_ca_87_fire_09"
     ]
   },
+  "ca87_repulse_fire": {
+    "subtitle": "sounds.starwars.ca87_repulse_fire",
+    "sounds": [
+      "starwars:blaster/ca87/weapons_blaster_ca_87_repulse_fire_01",
+      "starwars:blaster/ca87/weapons_blaster_ca_87_repulse_fire_02",
+      "starwars:blaster/ca87/weapons_blaster_ca_87_repulse_fire_03",
+      "starwars:blaster/ca87/weapons_blaster_ca_87_repulse_fire_04",
+      "starwars:blaster/ca87/weapons_blaster_ca_87_repulse_fire_05",
+      "starwars:blaster/ca87/weapons_blaster_ca_87_repulse_fire_06"
+    ]
+  },
+  "ca87_stun_fire": {
+    "subtitle": "sounds.starwars.ca87_stun_fire",
+    "sounds": [
+      "starwars:blaster/ca87/weapons_blaster_ca_87_stun_fire_01",
+      "starwars:blaster/ca87/weapons_blaster_ca_87_stun_fire_02",
+      "starwars:blaster/ca87/weapons_blaster_ca_87_stun_fire_03",
+      "starwars:blaster/ca87/weapons_blaster_ca_87_stun_fire_04"
+    ]
+  },
   "caij_vandas_blaster_pistol_fire": {
     "subtitle": "sounds.starwars.caij_vandas_blaster_pistol_fire",
     "sounds": [
@@ -480,6 +615,16 @@
       "starwars:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_04",
       "starwars:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_05",
       "starwars:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_06"
+    ]
+  },
+  "caij_vandas_blaster_pistol_charged_fire": {
+    "subtitle": "sounds.starwars.caij_vandas_blaster_pistol_charged_fire",
+    "sounds": [
+      "starwars:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_01",
+      "starwars:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_02",
+      "starwars:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_03",
+      "starwars:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_04",
+      "starwars:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_05"
     ]
   },
   "cc420_fire": {
@@ -499,7 +644,12 @@
   "cj9_bo_rifle_fire": {
     "subtitle": "sounds.starwars.cj9_bo_rifle_fire",
     "sounds": [
-
+      "starwars:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_01",
+      "starwars:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_02",
+      "starwars:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_03",
+      "starwars:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_04",
+      "starwars:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_05",
+      "starwars:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_06"
     ]
   },
   "corpo_rifle_fire": {
@@ -668,7 +818,38 @@
   "dc17m_fire": {
     "subtitle": "sounds.starwars.dc17m_fire",
     "sounds": [
-
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_01",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_02",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_03",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_04",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_05",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_06",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_07",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_08",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_fire_09"
+    ]
+  },
+  "dc17m_launcher_fire": {
+    "subtitle": "sounds.starwars.dc17m_launcher_fire",
+    "sounds": [
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_launcher_fire_01",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_launcher_fire_02",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_launcher_fire_03",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_launcher_fire_04",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_launcher_fire_05",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_launcher_fire_06",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_launcher_fire_07",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_launcher_fire_08"
+    ]
+  },
+  "dc17m_sniper_fire": {
+    "subtitle": "sounds.starwars.dc17m_sniper_fire",
+    "sounds": [
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_sniper_fire_01",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_sniper_fire_02",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_sniper_fire_03",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_sniper_fire_04",
+      "starwars:blaster/dc17m/weapons_blaster_dc17m_sniper_fire_05"
     ]
   },
   "dc19_fire": {
@@ -840,6 +1021,27 @@
       "starwars:blaster/dl44/weapons_blaster_dl44_fire_16"
     ]
   },
+  "dl44_sniper_fire": {
+    "subtitle": "sounds.starwars.dl44_sniper_fire",
+    "sounds": [
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_01",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_02",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_03",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_04",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_05",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_06",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_07",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_08",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_09",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_10",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_11",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_12",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_13",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_14",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_15",
+      "starwars:blaster/dl44/weapons_blaster_dl44_sniper_fire_16"
+    ]
+  },
   "dls12_fire": {
     "subtitle": "sounds.starwars.dls12_fire",
     "sounds": [
@@ -909,7 +1111,26 @@
   "dlt20a_fire": {
     "subtitle": "sounds.starwars.dlt20a_fire",
     "sounds": [
-
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_fire_01",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_fire_02",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_fire_03",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_fire_04",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_fire_05",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_fire_06"
+    ]
+  },
+  "dlt20a_sniper_fire": {
+    "subtitle": "sounds.starwars.dlt20a_sniper_fire",
+    "sounds": [
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_01",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_02",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_03",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_04",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_05",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_06",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_07",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_08",
+      "starwars:blaster/dlt20a/weapons_blaster_dlt20a_sniper_fire_09"
     ]
   },
   "dn_bolt_caster_fire": {
@@ -976,7 +1197,24 @@
   "dt29_fire": {
     "subtitle": "sounds.starwars.dt29_fire",
     "sounds": [
-
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_01",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_02",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_03",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_04",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_05",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_06",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_07",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_08",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_09",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_10",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_11",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_12",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_13",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_14",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_15",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_16",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_17",
+      "starwars:blaster/dt29/weapons_blaster_dt29_fire_18"
     ]
   },
   "dt57_fire": {
@@ -1003,7 +1241,12 @@
   "e5_fire": {
     "subtitle": "sounds.starwars.e5_fire",
     "sounds": [
-
+      "starwars:blaster/e5/weapons_blaster_e5_fire_01",
+      "starwars:blaster/e5/weapons_blaster_e5_fire_02",
+      "starwars:blaster/e5/weapons_blaster_e5_fire_03",
+      "starwars:blaster/e5/weapons_blaster_e5_fire_04",
+      "starwars:blaster/e5/weapons_blaster_e5_fire_05",
+      "starwars:blaster/e5/weapons_blaster_e5_fire_06"
     ]
   },
   "e5_bx_fire": {
@@ -1014,6 +1257,16 @@
       "starwars:blaster/e5_bx/weapons_blaster_e5_bx_fire_03",
       "starwars:blaster/e5_bx/weapons_blaster_e5_bx_fire_04",
       "starwars:blaster/e5_bx/weapons_blaster_e5_bx_fire_05"
+    ]
+  },
+  "e5_ce_fire": {
+    "subtitle": "sounds.starwars.e5_ce_fire",
+    "sounds": [
+      "starwars:blaster/e5_ce/weapons_blaster_e5_ce_fire_01",
+      "starwars:blaster/e5_ce/weapons_blaster_e5_ce_fire_02",
+      "starwars:blaster/e5_ce/weapons_blaster_e5_ce_fire_03",
+      "starwars:blaster/e5_ce/weapons_blaster_e5_ce_fire_04",
+      "starwars:blaster/e5_ce/weapons_blaster_e5_ce_fire_05"
     ]
   },
   "e5c_fire": {
@@ -1208,7 +1461,20 @@
   "ee4_fire": {
     "subtitle": "sounds.starwars.ee4_fire",
     "sounds": [
-
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_01",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_02",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_03",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_04",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_05",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_06",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_07",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_08",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_09",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_10",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_11",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_12",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_13",
+      "starwars:blaster/ee4/weapons_blaster_ee4_fire_14"
     ]
   },
   "elg3a_fire": {
@@ -1259,6 +1525,15 @@
       "starwars:blaster/ewhb12/weapons_blaster_ewhb12_fire_02",
       "starwars:blaster/ewhb12/weapons_blaster_ewhb12_fire_03",
       "starwars:blaster/ewhb12/weapons_blaster_ewhb12_fire_04"
+    ]
+  },
+  "ewhb12_auto_fire": {
+    "subtitle": "sounds.starwars.ewhb12_auto_fire",
+    "sounds": [
+      "starwars:blaster/ewhb12/weapons_blaster_ewhb12_auto_fire_01",
+      "starwars:blaster/ewhb12/weapons_blaster_ewhb12_auto_fire_02",
+      "starwars:blaster/ewhb12/weapons_blaster_ewhb12_auto_fire_03",
+      "starwars:blaster/ewhb12/weapons_blaster_ewhb12_auto_fire_04"
     ]
   },
   "fc1_flechette_launcher_fire": {
@@ -1444,6 +1719,16 @@
       "starwars:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_fire_04",
       "starwars:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_fire_05",
       "starwars:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_fire_06"
+    ]
+  },
+  "k16_bryar_pistol_charged_fire": {
+    "subtitle": "sounds.starwars.k16_bryar_pistol_charged_fire",
+    "sounds": [
+      "starwars:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_charged_fire_01",
+      "starwars:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_charged_fire_02",
+      "starwars:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_charged_fire_03",
+      "starwars:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_charged_fire_04",
+      "starwars:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_charged_fire_05"
     ]
   },
   "k21c_portable_ordanance_launcher_fire": {
@@ -1651,9 +1936,7 @@
       "starwars:blaster/m45/weapons_blaster_m45_fire_03",
       "starwars:blaster/m45/weapons_blaster_m45_fire_04",
       "starwars:blaster/m45/weapons_blaster_m45_fire_05",
-      "starwars:blaster/m45/weapons_blaster_m45_fire_06",
-      "starwars:blaster/m45/weapons_blaster_m45_fire_07",
-      "starwars:blaster/m45/weapons_blaster_m45_fire_08"
+      "starwars:blaster/m45/weapons_blaster_m45_fire_06"
     ]
   },
   "m55_fire": {
@@ -1704,6 +1987,14 @@
 
     ]
   },
+  "mk_ii_paladin_fire": {
+    "subtitle": "sounds.starwars.mk_ii_paladin_fire",
+    "sounds": [
+      "starwars:blaster/mk_ii_paladin/weapons_blaster_paladin_fire_01",
+      "starwars:blaster/mk_ii_paladin/weapons_blaster_paladin_fire_02",
+      "starwars:blaster/mk_ii_paladin/weapons_blaster_paladin_fire_03"
+    ]
+  },
   "model_57_fire": {
     "subtitle": "sounds.starwars.model_57_fire",
     "sounds": [
@@ -1733,6 +2024,17 @@
       "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_fire_05",
       "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_fire_06",
       "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_fire_07"
+    ]
+  },
+  "motto_mk_4_repulse_fire": {
+    "subtitle": "sounds.starwars.motto_mk_4_repulse_fire",
+    "sounds": [
+      "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_repulse_fire_01",
+      "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_repulse_fire_02",
+      "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_repulse_fire_03",
+      "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_repulse_fire_04",
+      "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_repulse_fire_05",
+      "starwars:blaster/motto_mk_4/weapons_blaster_motto_mk_4_repulse_fire_06"
     ]
   },
   "mw20_bryar_pistol_fire": {
@@ -1961,7 +2263,42 @@
   "relby_v10_fire": {
     "subtitle": "sounds.starwars.relby_v10_fire",
     "sounds": [
-
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_01",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_02",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_03",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_04",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_05",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_06",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_07",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_08",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_09",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_fire_10"
+    ]
+  },
+  "relby_v10_charged_fire": {
+    "subtitle": "sounds.starwars.relby_v10_charged_fire",
+    "sounds": [
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_01",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_02",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_03",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_04",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_05",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_06",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_07",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_08",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_09",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_charged_fire_10"
+    ]
+  },
+  "relby_v10_launcher_fire": {
+    "subtitle": "sounds.starwars.relby_v10_launcher_fire",
+    "sounds": [
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_launcher_fire_01",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_launcher_fire_02",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_launcher_fire_03",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_launcher_fire_04",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_launcher_fire_05",
+      "starwars:blaster/relby_v10/weapons_blaster_relby_v10_launcher_fire_06"
     ]
   },
   "renegade_fire": {
@@ -1989,6 +2326,17 @@
       "starwars:blaster/rg4d/weapons_blaster_rg4d_fire_10",
       "starwars:blaster/rg4d/weapons_blaster_rg4d_fire_11",
       "starwars:blaster/rg4d/weapons_blaster_rg4d_fire_12"
+    ]
+  },
+  "rig420_fire": {
+    "subtitle": "sounds.starwars.rig420_fire",
+    "sounds": [
+      "starwars:blaster/rig420/weapons_blaster_rig420_fire_01",
+      "starwars:blaster/rig420/weapons_blaster_rig420_fire_02",
+      "starwars:blaster/rig420/weapons_blaster_rig420_fire_03",
+      "starwars:blaster/rig420/weapons_blaster_rig420_fire_04",
+      "starwars:blaster/rig420/weapons_blaster_rig420_fire_05",
+      "starwars:blaster/rig420/weapons_blaster_rig420_fire_06"
     ]
   },
   "rk3_fire": {
@@ -2174,6 +2522,14 @@
       "starwars:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_fire_05"
     ]
   },
+  "shadow_trooper_blaster_charged_fire": {
+    "subtitle": "sounds.starwars.shadow_trooper_blaster_charged_fire",
+    "sounds": [
+      "starwars:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_charged_fire_01",
+      "starwars:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_charged_fire_02",
+      "starwars:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_charged_fire_03"
+    ]
+  },
   "shard3a_fire": {
     "subtitle": "sounds.starwars.shard3a_fire",
     "sounds": [
@@ -2309,7 +2665,21 @@
   "tl50_fire": {
     "subtitle": "sounds.starwars.tl50_fire",
     "sounds": [
-
+      "starwars:blaster/tl50/weapons_blaster_tl50_fire_01",
+      "starwars:blaster/tl50/weapons_blaster_tl50_fire_02",
+      "starwars:blaster/tl50/weapons_blaster_tl50_fire_03",
+      "starwars:blaster/tl50/weapons_blaster_tl50_fire_04",
+      "starwars:blaster/tl50/weapons_blaster_tl50_fire_05",
+      "starwars:blaster/tl50/weapons_blaster_tl50_fire_06"
+    ]
+  },
+  "tl50_launcher_fire": {
+    "subtitle": "sounds.starwars.tl50_launcher_fire",
+    "sounds": [
+      "starwars:blaster/tl50/weapons_blaster_tl50_launcher_fire_01",
+      "starwars:blaster/tl50/weapons_blaster_tl50_launcher_fire_02",
+      "starwars:blaster/tl50/weapons_blaster_tl50_launcher_fire_03",
+      "starwars:blaster/tl50/weapons_blaster_tl50_launcher_fire_04"
     ]
   },
   "tomsun97_fire": {
@@ -2363,7 +2733,10 @@
   "vanguard_scatter_fire": {
     "subtitle": "sounds.starwars.vanguard_scatter_fire",
     "sounds": [
-
+      "starwars:blaster/vanguard_scatter/weapons_blaster_vanguard_fire_01",
+      "starwars:blaster/vanguard_scatter/weapons_blaster_vanguard_fire_02",
+      "starwars:blaster/vanguard_scatter/weapons_blaster_vanguard_fire_03",
+      "starwars:blaster/vanguard_scatter/weapons_blaster_vanguard_fire_04"
     ]
   },
   "vect_uzi_fire": {
@@ -2390,7 +2763,10 @@
   "vulk_tau623_rotary_fire": {
     "subtitle": "sounds.starwars.vulk_tau623_rotary_fire",
     "sounds": [
-
+      "starwars:blaster/vulk_tau623_rotary/weapons_blaster_vulk_tau623_fire_01",
+      "starwars:blaster/vulk_tau623_rotary/weapons_blaster_vulk_tau623_fire_02",
+      "starwars:blaster/vulk_tau623_rotary/weapons_blaster_vulk_tau623_fire_03",
+      "starwars:blaster/vulk_tau623_rotary/weapons_blaster_vulk_tau623_fire_04"
     ]
   },
   "walther_blaster_fire": {
@@ -2525,7 +2901,12 @@
   "x8_night_sniper_fire": {
     "subtitle": "sounds.starwars.x8_night_sniper_fire",
     "sounds": [
-
+      "starwars:blaster/x8_night_sniper/weapons_blaster_x8_night_sniper_fire_01",
+      "starwars:blaster/x8_night_sniper/weapons_blaster_x8_night_sniper_fire_02",
+      "starwars:blaster/x8_night_sniper/weapons_blaster_x8_night_sniper_fire_03",
+      "starwars:blaster/x8_night_sniper/weapons_blaster_x8_night_sniper_fire_04",
+      "starwars:blaster/x8_night_sniper/weapons_blaster_x8_night_sniper_fire_05",
+      "starwars:blaster/x8_night_sniper/weapons_blaster_x8_night_sniper_fire_06"
     ]
   },
   "z6_rotary_fire": {
@@ -2779,6 +3160,61 @@
       "starwars:blaster/foley/weapons_blaster_foley_amban_disruptor_sniper_rifle_equip_03"
     ]
   },
+  "foley_a180_pistol_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_a180_pistol_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_a180_pistol_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_pistol_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_pistol_switch_fire_mode_03"
+    ]
+  },
+  "foley_a180_rifle_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_a180_rifle_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_a180_rifle_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_rifle_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_rifle_switch_fire_mode_03",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_rifle_switch_fire_mode_04",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_rifle_switch_fire_mode_05",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_rifle_switch_fire_mode_06"
+    ]
+  },
+  "foley_a180_sniper_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_a180_sniper_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_a180_sniper_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_sniper_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_a180_sniper_switch_fire_mode_03"
+    ]
+  },
+  "foley_a280cfe_pistol_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_a280cfe_pistol_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_pistol_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_pistol_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_pistol_switch_fire_mode_03"
+    ]
+  },
+  "foley_a280cfe_rifle_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_a280cfe_rifle_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_rifle_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_rifle_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_rifle_switch_fire_mode_03",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_rifle_switch_fire_mode_04",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_rifle_switch_fire_mode_05"
+    ]
+  },
+  "foley_a280cfe_sniper_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_a280cfe_sniper_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_sniper_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_sniper_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_sniper_switch_fire_mode_03",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_sniper_switch_fire_mode_04",
+      "starwars:blaster/foley/weapons_blaster_foley_a280cfe_sniper_switch_fire_mode_05"
+    ]
+  },
   "foley_amban_disruptor_sniper_rifle_switch_fire_mode": {
     "subtitle": "sounds.starwars.foley_amban_disruptor_sniper_rifle_switch_fire_mode",
     "sounds": [
@@ -2801,6 +3237,75 @@
       "starwars:blaster/foley/weapons_blaster_foley_b1na_switch_fire_mode_01"
     ]
   },
+  "foley_dc17m_rifle_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_dc17m_rifle_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_rifle_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_rifle_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_rifle_switch_fire_mode_03"
+    ]
+  },
+  "foley_dc17m_launcher_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_dc17m_launcher_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_switch_fire_mode_03",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_switch_fire_mode_04"
+    ]
+  },
+  "foley_dc17m_sniper_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_dc17m_sniper_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_sniper_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_sniper_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_sniper_switch_fire_mode_03",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_sniper_switch_fire_mode_04"
+    ]
+  },
+  "foley_dc17m_reload": {
+    "subtitle": "sounds.starwars.foley_dc17m_reload",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_reload_01",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_reload_02",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_reload_03",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_reload_04",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_reload_05"
+    ]
+  },
+  "foley_dc17m_launcher_reload": {
+    "subtitle": "sounds.starwars.foley_dc17m_launcher_reload",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_reload_01",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_reload_02",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_reload_03",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_reload_04",
+      "starwars:blaster/foley/weapons_blaster_foley_dc17m_launcher_reload_05"
+    ]
+  },
+  "foley_dl44_switch_fire_mode": {
+    "subtitle": "sounds.starwars.foley_dl44_switch_fire_mode",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_dl44_switch_fire_mode_01",
+      "starwars:blaster/foley/weapons_blaster_foley_dl44_switch_fire_mode_02",
+      "starwars:blaster/foley/weapons_blaster_foley_dl44_switch_fire_mode_03"
+    ]
+  },
+  "foley_dt29_reload": {
+    "subtitle": "sounds.starwars.foley_dt29_reload",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_01",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_02",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_03",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_04",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_05",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_06",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_07",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_08",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_09",
+      "starwars:blaster/foley/weapons_blaster_foley_dt29_reload_10"
+    ]
+  },
   "foley_ib94_equip": {
     "subtitle": "sounds.starwars.foley_ib94_equip",
     "sounds": [
@@ -2813,6 +3318,16 @@
     "subtitle": "sounds.starwars.foley_mw20_bryar_pistol_switch_fire_mode",
     "sounds": [
       "starwars:blaster/foley/weapons_blaster_foley_mw20_bryar_pistol_switch_fire_mode_01"
+    ]
+  },
+  "foley_relby_v10_launcher_reload": {
+    "subtitle": "sounds.starwars.foley_relby_v10_launcher_reload",
+    "sounds": [
+      "starwars:blaster/foley/weapons_blaster_foley_relby_v10_launcher_reload_01",
+      "starwars:blaster/foley/weapons_blaster_foley_relby_v10_launcher_reload_02",
+      "starwars:blaster/foley/weapons_blaster_foley_relby_v10_launcher_reload_03",
+      "starwars:blaster/foley/weapons_blaster_foley_relby_v10_launcher_reload_04",
+      "starwars:blaster/foley/weapons_blaster_foley_relby_v10_launcher_reload_05"
     ]
   }
 }

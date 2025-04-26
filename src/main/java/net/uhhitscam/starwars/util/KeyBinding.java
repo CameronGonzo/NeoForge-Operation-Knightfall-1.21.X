@@ -11,8 +11,12 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.common.NeoForge;
+import net.uhhitscam.starwars.component.ModDataComponentTypes;
+import net.uhhitscam.starwars.component.ReloadNSwitchCoolDownData;
 import net.uhhitscam.starwars.event.ModClientEvents;
 import net.uhhitscam.starwars.item.custom.BlasterItem;
+import net.uhhitscam.starwars.network.PayloadRegister;
+import net.uhhitscam.starwars.network.SSCooldownPacket;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyBinding {
@@ -56,11 +60,37 @@ public class KeyBinding {
 
             // Check if the main hand item is a BlasterItem and reload it
             if (mainHandItem.getItem() instanceof BlasterItem blasterMain) {
+                ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = mainHandItem.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
+
+                if (ReloadNSwitchCoolDownData == null) {
+                    ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
+                    mainHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+                }
+
+                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+
+                    return;
+                }
+
+                PayloadRegister.sendToServer(new SSCooldownPacket(true, true));
                 blasterMain.reload(player, mainHandItem, true);
             }
 
             // Check if the offhand item is a BlasterItem and reload it
             if (offHandItem.getItem() instanceof BlasterItem blasterOff) {
+                ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = offHandItem.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
+
+                if (ReloadNSwitchCoolDownData == null) {
+                    ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
+                    offHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+                }
+
+                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+
+                    return;
+                }
+
+                PayloadRegister.sendToServer(new SSCooldownPacket(false, true));
                 blasterOff.reload(player, offHandItem, false);
             }
         }
@@ -76,6 +106,19 @@ public class KeyBinding {
 
             // Check if the main hand item is a BlasterItem and reload it
             if (mainHandItem.getItem() instanceof BlasterItem blasterMain) {
+                ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = offHandItem.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
+
+                if (ReloadNSwitchCoolDownData == null) {
+                    ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
+                    offHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+                }
+
+                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+
+                    return;
+                }
+
+                PayloadRegister.sendToServer(new SSCooldownPacket(false, true));
                 // Now it's safe to switch the firing mode of the Blasteritem
                 blasterMain.switchFiringMode(player, mainHandItem, true);
                 ModClientEvents.firing = false;
@@ -83,6 +126,19 @@ public class KeyBinding {
 
             // Check if the offhand item is a BlasterItem and reload it
             if (offHandItem.getItem() instanceof BlasterItem blasterOff) {
+                ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = offHandItem.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
+
+                if (ReloadNSwitchCoolDownData == null) {
+                    ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
+                    offHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+                }
+
+                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+
+                    return;
+                }
+
+                PayloadRegister.sendToServer(new SSCooldownPacket(false, true));
                 // Now it's safe to switch the firing mode of the Blasteritem
                 blasterOff.switchFiringMode(player, offHandItem, false);
                 ModClientEvents.firing = false;

@@ -19,6 +19,7 @@ public class PayloadRegister {
         server(SSGasAmmoPacket.TYPE, SSGasAmmoPacket.STREAM_CODEC);
         server(SSFireBlasterPacket.TYPE, SSFireBlasterPacket.STREAM_CODEC);
         server(SSFiringModePacket.TYPE, SSFiringModePacket.STREAM_CODEC);
+        server(SSCooldownPacket.TYPE, SSCooldownPacket.STREAM_CODEC);
     }
 
     private static <T extends Packet> void server(CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> reader) {

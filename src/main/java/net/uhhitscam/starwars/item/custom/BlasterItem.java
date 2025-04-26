@@ -32,19 +32,21 @@ import net.uhhitscam.starwars.network.SSGasAmmoPacket;
 import net.uhhitscam.starwars.network.SSReloadPacket;
 import net.uhhitscam.starwars.sound.ModSounds;
 import net.uhhitscam.starwars.util.BlasterSoundsUtil;
+import net.uhhitscam.starwars.util.BlasterTimingUtil;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class BlasterItem extends Item {
-    private final float inaccuracy;
     private final float bolt_speed;
     private final int max_ammo;
-    private final int blasterDamage;
+    private final int burstRate;
     private final int semiFireRate;
     private final int burstFireRate;
     private final int fullFireRate;
     private final int chargedFireRate;
     private final int repulseFireRate;
+    private final int sniperFireRate;
     private final int stunFireRate = 15;
     private final List<String> firingModes;
     private final float semiRecoil;
@@ -52,35 +54,61 @@ public class BlasterItem extends Item {
     private final float fullRecoil;
     private final float chargedRecoil;
     private final float repulseRecoil;
-    private final int stunRecoil = 2;
+    private final float sniperRecoil;
+    private final int stunRecoil = 10;
     private final String typFiringMode;
+    private final float semiInaccuracy;
+    private final float burstInaccuracy;
+    private final float fullInaccuracy;
+    private final float chargedInaccuracy;
+    private final float repulseInaccuracy;
+    private final float sniperInaccuracy;
     private final String typGasType;
+    private final int semiDamage;
+    private final int burstDamage;
+    private final int fullDamage;
+    private final int chargedDamage;
+    private final int repulseDamage;
+    private final int sniperDamage;
     private final String classification;
 
     private final Map<UUID, Float> recoilMap = new HashMap<>();
-//    private static final ThreadLocal<Random> THREAD_LOCAL_RANDOM = ThreadLocal.withInitial(Random::new);
 
-    public BlasterItem(Properties properties, float bolt_speed, float inaccuracy, int max_ammo, int blasterDamage,
-                       int semiFireRate, int burstFireRate, int fullFireRate, int chargedFireRate, int repulseFireRate, List<String> firingModes,
-                       float semiRecoil, float burstRecoil, float fullRecoil, float chargedRecoil, float repulseRecoil, String typFiringMode, String typGasType,
-                       String classification) {
+    public BlasterItem(Properties properties, float bolt_speed, int max_ammo, int burstRate,
+                       int semiFireRate, int burstFireRate, int fullFireRate, int chargedFireRate, int repulseFireRate, int sniperFireRate, List<String> firingModes,
+                       float semiRecoil, float burstRecoil, float fullRecoil, float chargedRecoil, float repulseRecoil, float sniperRecoil, String typFiringMode,
+                       float semiInaccuracy, float burstInaccuracy, float fullInaccuracy, float chargedInaccuracy, float repulseInaccuracy, float sniperInaccuracay, String typGasType,
+                       int semiDamage, int burstDamage, int fullDamage, int chargedDamage, int repulseDamage, int sniperDamage, String classification) {
         super(properties);
         this.bolt_speed = bolt_speed;
-        this.inaccuracy = inaccuracy;
         this.max_ammo = max_ammo;
-        this.blasterDamage = blasterDamage;
+        this.burstRate = burstRate;
         this.semiFireRate = semiFireRate;
         this.burstFireRate = burstFireRate;
         this.fullFireRate = fullFireRate;
         this.chargedFireRate = chargedFireRate;
         this.repulseFireRate = repulseFireRate;
+        this.sniperFireRate = sniperFireRate;
         this.firingModes = firingModes;
         this.semiRecoil = semiRecoil * 10;
         this.burstRecoil = burstRecoil * 10;
         this.fullRecoil = fullRecoil * 10;
         this.chargedRecoil = chargedRecoil * 10;
         this.repulseRecoil = repulseRecoil * 10;
+        this.sniperRecoil = sniperRecoil * 10;
         this.typFiringMode = typFiringMode;
+        this.semiInaccuracy = semiInaccuracy;
+        this.burstInaccuracy = burstInaccuracy;
+        this.fullInaccuracy = fullInaccuracy;
+        this.chargedInaccuracy = chargedInaccuracy;
+        this.repulseInaccuracy = repulseInaccuracy;
+        this.sniperInaccuracy = sniperInaccuracay;
+        this.semiDamage = semiDamage;
+        this.burstDamage = burstDamage;
+        this.fullDamage = fullDamage;
+        this.chargedDamage = chargedDamage;
+        this.repulseDamage = repulseDamage;
+        this.sniperDamage = sniperDamage;
         this.typGasType = typGasType;
         this.classification = classification;
     }
@@ -106,10 +134,27 @@ public class BlasterItem extends Item {
         ItemStack itemstack = mainHand ? player.getMainHandItem() : player.getOffhandItem();
         int currentAmmo = getAmmo(itemstack);
 
-        CoolDownData cooldownData = itemstack.get(ModDataComponentTypes.COOLDOWN);
-        if (cooldownData == null) {
-            cooldownData = new CoolDownData(0);
-            itemstack.set(ModDataComponentTypes.COOLDOWN, cooldownData);
+        ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = itemstack.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
+
+        if (ReloadNSwitchCoolDownData == null) {
+            ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
+            itemstack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+        }
+
+        if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+
+            return;
+        }
+
+        FireCoolDownData FireCoolDownData = itemstack.get(ModDataComponentTypes.FIRE_COOLDOWN);
+        if (currentAmmo <= 0) {
+            level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), ModSounds.FOLEY_NO_AMMO.get(), SoundSource.NEUTRAL, 0.5F, 1.0F);
+            return;
+        }
+
+        if (FireCoolDownData == null) {
+            FireCoolDownData = new FireCoolDownData(0);
+            itemstack.set(ModDataComponentTypes.FIRE_COOLDOWN, FireCoolDownData);
         }
 
         ExtraFiringRateData extraFiringRateData = itemstack.get(ModDataComponentTypes.EXTRA_FIRING_RATE);
@@ -118,17 +163,8 @@ public class BlasterItem extends Item {
             itemstack.set(ModDataComponentTypes.EXTRA_FIRING_RATE, extraFiringRateData);
         }
 
-        if (cooldownData.isOnCooldown(level)) {
+        if (FireCoolDownData.isOnCooldown(level)) {
             //The item is still on cooldown
-            return;
-        }
-
-        if (currentAmmo <= 0) {
-            level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), ModSounds.FOLEY_NO_AMMO.get(), SoundSource.NEUTRAL, 0.5F, 1.0F);
-
-            String firingMode = getFiringMode(itemstack);
-            long cooldownEndTime = level.getGameTime() + getCoolDown(firingMode);
-            itemstack.set(ModDataComponentTypes.COOLDOWN, cooldownData.withCooldownEndTime(cooldownEndTime));
             return;
         }
 
@@ -147,7 +183,7 @@ public class BlasterItem extends Item {
             if (extraFiringRateData.shotsFired() == 0) {
                 // First shot fires immediately when player presses fire
                 fireBolt(level, player, itemstack, currentAmmo, currentGasType, mainHand);
-                extraFiringRateData = new ExtraFiringRateData(level.getGameTime() + 2, 1, mainHand);
+                extraFiringRateData = new ExtraFiringRateData(level.getGameTime() + burstRate, 1, mainHand);
             } else {
                 // Preserve the correct hand when modifying shots fired
                 extraFiringRateData = new ExtraFiringRateData(
@@ -164,7 +200,7 @@ public class BlasterItem extends Item {
 
         //Set the new cooldown time
         long cooldownEndTime = level.getGameTime() + getCoolDown(firingMode);
-        itemstack.set(ModDataComponentTypes.COOLDOWN, cooldownData.withCooldownEndTime(cooldownEndTime));
+        itemstack.set(ModDataComponentTypes.FIRE_COOLDOWN, FireCoolDownData.withFireCoolDownEndTime(cooldownEndTime));
     }
 
     public int getCoolDown(String firingMode) {
@@ -174,6 +210,7 @@ public class BlasterItem extends Item {
             case "FULL_AUTO" -> fullFireRate;
             case "CHARGED" -> chargedFireRate;
             case "REPULSE" -> repulseFireRate;
+            case "SNIPER" -> sniperFireRate;
             case "STUN" -> stunFireRate;
             default -> 50; //fallback just incase
         };
@@ -212,6 +249,8 @@ public class BlasterItem extends Item {
 
     private void fireBolt(Level level, Player player, ItemStack itemstack, int currentAmmo, String currentGasType, boolean mainHand) {
         float recoil;
+        int blasterDamage;
+        float blasterInaccuracy;
 
         //Retrieve the firing mode from the FiringModeData component
         FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
@@ -221,6 +260,16 @@ public class BlasterItem extends Item {
         }
         String firingMode = firingModeData.firingMode();
 
+        switch (firingMode) {
+            case "SEMI_AUTO", "SCATTER" -> blasterDamage = semiDamage;
+            case "BURST" -> blasterDamage = burstDamage;
+            case "FULL_AUTO" -> blasterDamage = fullDamage;
+            case "CHARGED" -> blasterDamage = chargedDamage;
+            case "REPULSE" -> blasterDamage = repulseDamage;
+            case "SNIPER" -> blasterDamage = sniperDamage;
+            default -> blasterDamage = 0;
+        }
+
         if (currentAmmo > 0) {
             Snowball bolt;
             Snowball specific_bolt;
@@ -229,21 +278,21 @@ public class BlasterItem extends Item {
             } else {
                 specific_bolt = switch (currentGasType) {
                     case "TIBANNA_GAS" ->
-                            new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, this.bolt_speed, this.blasterDamage, currentGasType, this.classification);
+                            new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, this.bolt_speed, blasterDamage, currentGasType, this.classification);
                     case "IONIZED_TIBANNA_GAS" ->
-                            new IonizedTibannaBlasterBoltEntity(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), level, player, this.bolt_speed, this.blasterDamage, currentGasType, this.classification);
+                            new IonizedTibannaBlasterBoltEntity(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), level, player, this.bolt_speed, blasterDamage, currentGasType, this.classification);
                     case "SPIN_SEALED_TIBANNA_GAS" ->
-                            new SpinSealedTibannaBlasterBoltEntity(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), level, player, this.bolt_speed, this.blasterDamage, currentGasType, this.classification);
+                            new SpinSealedTibannaBlasterBoltEntity(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), level, player, this.bolt_speed, blasterDamage, currentGasType, this.classification);
                     case "TIBANNAX_GAS" ->
-                            new TibannaXBlasterBoltEntity(ModEntities.TIBANNAX_BLASTER_BOLT.get(), level, player, this.bolt_speed, this.blasterDamage, currentGasType, this.classification);
+                            new TibannaXBlasterBoltEntity(ModEntities.TIBANNAX_BLASTER_BOLT.get(), level, player, this.bolt_speed, blasterDamage, currentGasType, this.classification);
                     case "SIG_GAS" ->
-                            new SigBlasterBoltEntity(ModEntities.SIG_BLASTER_BOLT.get(), level, player, this.bolt_speed, this.blasterDamage, currentGasType, this.classification);
+                            new SigBlasterBoltEntity(ModEntities.SIG_BLASTER_BOLT.get(), level, player, this.bolt_speed, blasterDamage, currentGasType, this.classification);
                     case "MAGNETIZED_SIG_GAS" ->
-                            new MagnetizedSigBlasterBoltEntity(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), level, player, this.bolt_speed, this.blasterDamage, currentGasType, this.classification);
+                            new MagnetizedSigBlasterBoltEntity(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), level, player, this.bolt_speed, blasterDamage, currentGasType, this.classification);
                     case "SKEVON_GAS" ->
-                            new SkevonBlasterBoltEntity(ModEntities.SKEVON_BLASTER_BOLT.get(), level, player, this.bolt_speed, this.blasterDamage, currentGasType, this.classification);
+                            new SkevonBlasterBoltEntity(ModEntities.SKEVON_BLASTER_BOLT.get(), level, player, this.bolt_speed, blasterDamage, currentGasType, this.classification);
                     default ->
-                            new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, this.bolt_speed, this.blasterDamage, currentGasType, this.classification); //Fallback if all fails
+                            new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, this.bolt_speed, blasterDamage, currentGasType, this.classification); //Fallback if all fails
                 };
             }
             bolt = specific_bolt;
@@ -270,7 +319,17 @@ public class BlasterItem extends Item {
             double yVelocity = Math.sin(pitch);
             double zVelocity = Math.cos(pitch) * Math.cos(yaw);
 
-            double accuracyFactor = this.inaccuracy / 100; //Lower value = more accurate
+            switch (firingMode) {
+                case "SEMI_AUTO", "SCATTER" -> blasterInaccuracy = semiInaccuracy;
+                case "BURST" -> blasterInaccuracy = burstInaccuracy;
+                case "FULL_AUTO" -> blasterInaccuracy = fullInaccuracy;
+                case "CHARGED" -> blasterInaccuracy = chargedInaccuracy;
+                case "REPULSE" -> blasterInaccuracy = repulseInaccuracy;
+                case "SNIPER" -> blasterInaccuracy = sniperInaccuracy;
+                default -> blasterInaccuracy = 1F;
+            }
+
+            double accuracyFactor = blasterInaccuracy / 100; //Lower value = more accurate
             Random random = new Random();
             xVelocity += (random.nextDouble() - 0.5) * accuracyFactor;
             yVelocity += (random.nextDouble() - 0.5) * accuracyFactor;
@@ -283,9 +342,9 @@ public class BlasterItem extends Item {
             SoundEvent blasterFireSound;
 
             if (firingMode.equals("STUN")) {
-                blasterFireSound = BlasterSoundsUtil.getBlasterFireSound((String) BuiltInRegistries.ITEM.getKey(itemstack.getItem()).getPath(), true);
+                blasterFireSound = BlasterSoundsUtil.getBlasterFireSound((String) BuiltInRegistries.ITEM.getKey(itemstack.getItem()).getPath(), firingMode);
             } else {
-                blasterFireSound = BlasterSoundsUtil.getBlasterFireSound((String) BuiltInRegistries.ITEM.getKey(itemstack.getItem()).getPath(), false);
+                blasterFireSound = BlasterSoundsUtil.getBlasterFireSound((String) BuiltInRegistries.ITEM.getKey(itemstack.getItem()).getPath(), firingMode);
             }
 
             level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), blasterFireSound, SoundSource.NEUTRAL, 0.5F, 1.0F);
@@ -301,6 +360,7 @@ public class BlasterItem extends Item {
                 case "FULL_AUTO" -> recoil = fullRecoil;
                 case "CHARGED" -> recoil = chargedRecoil;
                 case "REPULSE" -> recoil = repulseRecoil;
+                case "SNIPER" -> recoil = sniperRecoil;
                 case "STUN" -> recoil = stunRecoil;
                 default -> recoil = 1;
             }
@@ -397,9 +457,22 @@ public class BlasterItem extends Item {
         int currentAmmo = getAmmo(blasterStack);
         GasTypeData blasterGasTypeData = blasterStack.get(ModDataComponentTypes.GAS_TYPE.get());
         String currentGasType = (blasterGasTypeData != null) ? blasterGasTypeData.gasType() : null;
+        String blasterFireMode = getFiringMode(blasterStack);
 
         if (currentAmmo >= max_ammo) {
             player.displayClientMessage(Component.translatable("item.starwars.blaster.full_ammo"), true);
+            return;
+        }
+
+        ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = blasterStack.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
+
+        if (ReloadNSwitchCoolDownData == null) {
+            ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
+            blasterStack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+        }
+
+        if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+
             return;
         }
 
@@ -438,7 +511,7 @@ public class BlasterItem extends Item {
                         //Sync inventory changes
                         player.inventoryMenu.broadcastChanges();
 
-                        SoundEvent blasterReloadSound = BlasterSoundsUtil.getBlasterReloadSound((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath());
+                        SoundEvent blasterReloadSound = BlasterSoundsUtil.getBlasterReloadSound((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), blasterFireMode);
                         player.playSound(blasterReloadSound, 0.5F, 1.0F);
                     }
                 }
@@ -449,7 +522,7 @@ public class BlasterItem extends Item {
             setAmmo(blasterStack, max_ammo);
             PayloadRegister.sendToServer(new SSReloadPacket(blasterStack, max_ammo, typGasType, mainHand));
             player.inventoryMenu.broadcastChanges();
-            SoundEvent blasterReloadSound = BlasterSoundsUtil.getBlasterReloadSound((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath());
+            SoundEvent blasterReloadSound = BlasterSoundsUtil.getBlasterReloadSound((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), blasterFireMode);
             player.playSound(blasterReloadSound, 0.5F, 1.0F);
         } else if (player.isCreative() && currentAmmo != max_ammo) {
             int ammoNeeded = max_ammo - currentAmmo;
@@ -457,7 +530,7 @@ public class BlasterItem extends Item {
             setAmmo(blasterStack, currentAmmo);
             PayloadRegister.sendToServer(new SSReloadPacket(blasterStack, currentAmmo, currentGasType, mainHand));
             player.inventoryMenu.broadcastChanges();
-            SoundEvent blasterReloadSound = BlasterSoundsUtil.getBlasterReloadSound((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath());
+            SoundEvent blasterReloadSound = BlasterSoundsUtil.getBlasterReloadSound((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), blasterFireMode);
             player.playSound(blasterReloadSound, 0.2F, 1.0F);
         } else if (!foundGasItem) {
             player.displayClientMessage(Component.translatable("item.starwars.blaster.no_gas_items"), true);
@@ -466,7 +539,40 @@ public class BlasterItem extends Item {
         }
     }
 
+    public void startCooldown(Player player, ItemStack blasterStack, boolean reloading) {
+        Level level = player.level();
+        int currentAmmo = getAmmo(blasterStack);
+
+        if (reloading & currentAmmo >= max_ammo) {
+            return;
+        }
+
+        ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = blasterStack.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
+
+        // Initialize cooldown data if it's missing
+        if (ReloadNSwitchCoolDownData == null) {
+            ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
+            blasterStack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+        }
+
+        // Apply new cooldown
+        long ReloadNSwitchCoolDownEndTime = level.getGameTime() + BlasterTimingUtil.getBlasterReloadTime((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), getFiringMode(blasterStack));
+        blasterStack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData.withReloadNSwitchCoolDownEndTime(ReloadNSwitchCoolDownEndTime));
+    }
+
     public void switchFiringMode(Player player, ItemStack blasterStack, boolean mainHand) {
+        ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = blasterStack.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
+
+        if (ReloadNSwitchCoolDownData == null) {
+            ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
+            blasterStack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+        }
+
+        if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+
+            return;
+        }
+
         //Retrieve the FiringModeData component from the blaster stack.
         FiringModeData firingModeData = blasterStack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (firingModeData == null) {
@@ -493,7 +599,7 @@ public class BlasterItem extends Item {
         blasterStack.set(ModDataComponentTypes.FIRING_MODE.get(), updatedFiringModeData);
         PayloadRegister.sendToServer(new SSFiringModePacket(blasterStack, nextFiringMode, mainHand));
 
-        SoundEvent blasterSwitchFireModeSound = BlasterSoundsUtil.getBlasterSwitchFireMode((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath());
+        SoundEvent blasterSwitchFireModeSound = BlasterSoundsUtil.getBlasterSwitchFireMode((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), currentFiringMode);
         player.playSound(blasterSwitchFireModeSound, 0.5F, 1.0F);
     }
 
