@@ -555,8 +555,13 @@ public class BlasterItem extends Item {
             blasterStack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
         }
 
+        if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+
+            return;
+        }
+
         // Apply new cooldown
-        long ReloadNSwitchCoolDownEndTime = level.getGameTime() + BlasterTimingUtil.getBlasterReloadTime((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), getFiringMode(blasterStack));
+        long ReloadNSwitchCoolDownEndTime = level.getGameTime() + BlasterTimingUtil.getBlasterSwitchTime((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), getFiringMode(blasterStack));
         blasterStack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData.withReloadNSwitchCoolDownEndTime(ReloadNSwitchCoolDownEndTime));
     }
 

@@ -42,7 +42,42 @@ public class BlasterTimingUtil {
         }
     }
 
-//    public static long getBlasterSwitchTime(String blasterName, String blasterFireMode) {
-//
-//    }
+    public static long getBlasterSwitchTime(String blasterName, String blasterFireMode) {
+        switch (blasterName) {
+            case "a180":
+                if (blasterFireMode.equals("SEMI_AUTO")) {
+                    return 18;
+                } else if (blasterFireMode.equals("FULL_AUTO")) {
+                    return 13;
+                } else {
+                    return 17;
+                }
+            case "a280cfe":
+                if (blasterFireMode.equals("SEMI_AUTO")) {
+                    return 18;
+                } else if (blasterFireMode.equals("BURST")) {
+                    return 25;
+                } else {
+                    return 19;
+                }
+            case "amban_disruptor":
+                return 18;
+            case "b1na":
+                return 12;
+            case "dc17m":
+                if (blasterFireMode.equals("SEMI_AUTO")) {
+                    return 15;
+                } else if (blasterFireMode.equals("LAUNCHER")) {
+                    return 45;
+                } else {
+                    return 22;
+                }
+            case "dl44":
+                return 29;
+            case "mw20_bryar_pistol":
+                return 16;
+            default:
+                return 4;
+        }
+    }
 }

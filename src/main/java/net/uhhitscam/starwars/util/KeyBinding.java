@@ -118,7 +118,7 @@ public class KeyBinding {
                     return;
                 }
 
-                PayloadRegister.sendToServer(new SSCooldownPacket(false, true));
+                PayloadRegister.sendToServer(new SSCooldownPacket(true, false));
                 // Now it's safe to switch the firing mode of the Blasteritem
                 blasterMain.switchFiringMode(player, mainHandItem, true);
                 ModClientEvents.firing = false;
@@ -138,7 +138,7 @@ public class KeyBinding {
                     return;
                 }
 
-                PayloadRegister.sendToServer(new SSCooldownPacket(false, true));
+                PayloadRegister.sendToServer(new SSCooldownPacket(false, false));
                 // Now it's safe to switch the firing mode of the Blasteritem
                 blasterOff.switchFiringMode(player, offHandItem, false);
                 ModClientEvents.firing = false;

@@ -308,18 +308,18 @@ public class ModItems {
     public static final DeferredItem<Item> DC15A = ITEMS.register("dc15a",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.6F, 500, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "FULL_AUTO", "STUN"), 5F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "IONIZED_TIBANNA_GAS", 17, 0, 5, 0, 0, 0, "RIFLE"));
+                    7, 0, 3, 0, 0, 0, List.of("SEMI_AUTO", "FULL_AUTO", "STUN"), 1.6F, 0F, 1F, 0F, 0F, 0F, "SEMI_AUTO",
+                    1F, 0F, 3F, 0F, 0F, 0F, "IONIZED_TIBANNA_GAS", 17, 0, 5, 0, 0, 0, "RIFLE"));
     public static final DeferredItem<Item> DC15LE = ITEMS.register("dc15le",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.5F, 500, 0,
-                    0, 0, 0, 0, 0, 0, List.of("FULL_AUTO"), 0F, 0F, 0F, 0F, 0F, 0F, "FULL_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "IONIZED_TIBANNA_GAS", 0, 0, 6, 0, 0, 0, "RIFLE"));
+                    0, 0, 3, 0, 0, 0, List.of("FULL_AUTO"), 0F, 0F, 1.7F, 0F, 0F, 0F, "FULL_AUTO",
+                    0F, 0F, 4.7F, 0F, 0F, 0F, "IONIZED_TIBANNA_GAS", 0, 0, 6, 0, 0, 0, "RIFLE"));
     public static final DeferredItem<Item> DC15S_CARBINE = ITEMS.register("dc15s_carbine",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.4F, 500, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "FULL_AUTO", "STUN"), 5F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "IONIZED_TIBANNA_GAS", 15, 0, 5, 0, 0, 0, "CARBINE"));
+                    10, 0, 5, 0, 0, 0, List.of("SEMI_AUTO", "FULL_AUTO", "STUN"), 1.7F, 0F, 1.3F, 0F, 0F, 0F, "SEMI_AUTO",
+                    3.5F, 0F, 4.4F, 0F, 0F, 0F, "IONIZED_TIBANNA_GAS", 12, 0, 5, 0, 0, 0, "CARBINE"));
     public static final DeferredItem<Item> DC15S_SIDEARM = ITEMS.register("dc15s_sidearm",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.4F, 15, 0,
@@ -453,8 +453,8 @@ public class ModItems {
     public static final DeferredItem<Item> DT12 = ITEMS.register("dt12",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.2F, 300, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0.7F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 9, 0, 0, 0, 0, 0, "PISTOL"));
+                    7, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 1.1F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    4.9F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 9, 0, 0, 0, 0, 0, "PISTOL"));
     public static final DeferredItem<Item> DT15 = ITEMS.register("dt15",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.1F, 200, 0,
@@ -478,23 +478,23 @@ public class ModItems {
     public static final DeferredItem<Item> E5 = ITEMS.register("e5",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.1F, 500, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 0.7F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 6, 0, 0, 0, 0, 0, "RIFLE"));
+                    6, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 1.9F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    4F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 6, 0, 0, 0, 0, 0, "RIFLE"));
     public static final DeferredItem<Item> E5_BX = ITEMS.register("e5_bx",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.3F, 500, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 0.7F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 12, 0, 0, 0, 0, 0, "RIFLE"));
+                    9, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 2F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    3.7F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 12, 0, 0, 0, 0, 0, "RIFLE"));
     public static final DeferredItem<Item> E5_CE = ITEMS.register("e5_ce",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.2F, 500, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "FULL_AUTO"), 0.7F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 13, 0, 5, 0, 0, 0, "RIFLE"));
+                    8, 0, 3, 0, 0, 0, List.of("SEMI_AUTO", "FULL_AUTO"), 2.7F, 0F, 1.5F, 0F, 0F, 0F, "SEMI_AUTO",
+                    3.4F, 0F, 5F, 0F, 0F, 0F, "TIBANNA_GAS", 13, 0, 5, 0, 0, 0, "RIFLE"));
     public static final DeferredItem<Item> E5C = ITEMS.register("e5c",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.0F, 500, 0,
-                    25, 0, 0, 0, 0, 0, List.of("FULL_AUTO"), 0.7F, 0F, 0F, 0F, 0F, 0F, "FULL_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 4, 0, 0, 0, 0, 0, "RIFLE"));
+                    0, 0, 2, 0, 0, 0, List.of("FULL_AUTO"), 0F, 0F, 0.6F, 0F, 0F, 0F, "FULL_AUTO",
+                    0F, 0F, 5.6F, 0F, 0F, 0F, "TIBANNA_GAS", 0, 0, 4, 0, 0, 0, "RIFLE"));
     public static final DeferredItem<Item> E5S = ITEMS.register("e5s",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.8F, 4, 0,
@@ -523,8 +523,8 @@ public class ModItems {
     public static final DeferredItem<Item> E11_RIFLE = ITEMS.register("e11_rifle",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.7F, 500, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 0.7F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 9, 0, 0, 0, 0, 0, "RIFLE"));
+                    10, 0, 5, 0, 0, 0, List.of("SEMI_AUTO", "FULL_AUTO", "STUN"), 1F, 0F, 0.8F, 0F, 0F, 0F, "SEMI_AUTO",
+                    5F, 0F, 7.8F, 0F, 0F, 0F, "TIBANNA_GAS", 13, 0, 6, 0, 0, 0, "RIFLE"));
     public static final DeferredItem<Item> E11B = ITEMS.register("e11b",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.7F, 500, 0,
@@ -568,8 +568,8 @@ public class ModItems {
     public static final DeferredItem<Item> ELG3A = ITEMS.register("elg3a",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.5F, 500, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "SPIN_SEALED_TIBANNA_GAS", 13, 0, 0, 0, 0, 0, "PISTOL"));
+                    5, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "STUN"), 1.8F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    4F, 0F, 0F, 0F, 0F, 0F, "SPIN_SEALED_TIBANNA_GAS", 13, 0, 0, 0, 0, 0, "PISTOL"));
 //    public static final DeferredItem<Item> EWEB = ITEMS.register("eweb",
 //            () -> new BlasterItem(new Item.Properties().stacksTo(1),
 //                    4.0F, 500, 0,
@@ -783,7 +783,7 @@ public class ModItems {
     public static final DeferredItem<Item> MW20_BRYAR_PISTOL = ITEMS.register("mw20_bryar_pistol",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.5F, 100, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "CHARGED"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
                     0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 15, 0, 0, 0, 0, 0, "PISTOL"));
     public static final DeferredItem<Item> MWC35C = ITEMS.register("mwc35c",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
@@ -858,8 +858,8 @@ public class ModItems {
     public static final DeferredItem<Item> Q2 = ITEMS.register("q2",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.0F, 50, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 12, 0, 0, 0, 0, 0, "PISTOL"));
+                    11, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 1.3F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    6F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 11, 0, 0, 0, 0, 0, "PISTOL"));
     public static final DeferredItem<Item> QUARREN_RIFLE = ITEMS.register("quarren_rifle",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.5F, 300, 0,
@@ -943,13 +943,13 @@ public class ModItems {
     public static final DeferredItem<Item> SE14C = ITEMS.register("se14c",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.6F, 400, 2,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "BURST", "STUN"), 0F, 0.5F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 9, 6, 0, 0, 0, 0, "PISTOL"));
+                    8, 16, 0, 0, 0, 0, List.of("SEMI_AUTO", "BURST", "STUN"), 1.5F, 0.7F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    4F, 6.4F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 9, 6, 0, 0, 0, 0, "PISTOL"));
     public static final DeferredItem<Item> SE14R = ITEMS.register("se14r",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.4F, 200, 0,
-                    0, 0, 0, 0, 0, 0, List.of("FULL_AUTO"), 0F, 0F, 0F, 0F, 0F, 0F, "FULL_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 0, 0, 7, 0, 0, 0, "REPEATER"));
+                    0, 0, 3, 0, 0, 0, List.of("FULL_AUTO"), 0F, 0F, 0.6F, 0F, 0F, 0F, "FULL_AUTO",
+                    0F, 0F, 5.1F, 0F, 0F, 0F, "TIBANNA_GAS", 0, 0, 7, 0, 0, 0, "REPEATER"));
     public static final DeferredItem<Item> SEDGLEYS_MK_5 = ITEMS.register("sedgleys_mk_5",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.4F, 250, 0,
@@ -1002,14 +1002,14 @@ public class ModItems {
                     0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 0, 0, 0, 25, 0, 0, "DISRUPTOR"));
     public static final DeferredItem<Item> T21 = ITEMS.register("t21",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
-                    2.4F, 150, 2,
-                    0, 0, 0, 0, 0, 0, List.of("BURST"), 0F, 0.5F, 0F, 0F, 0F, 0F, "BURST",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 0, 13, 0, 0, 0, 0, "REPEATER"));
+                    2.4F, 150, 3,
+                    0, 14, 0, 0, 0, 0, List.of("BURST"), 0F, 1F, 0F, 0F, 0F, 0F, "BURST",
+                    0F, 2F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 0, 13, 0, 0, 0, 0, "REPEATER"));
     public static final DeferredItem<Item> T21B = ITEMS.register("t21b",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.6F, 150, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 16, 0, 0, 0, 0, 0, "RIFLE"));
+                    10, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 2.3F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    1.4F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 16, 0, 0, 0, 0, 0, "RIFLE"));
     public static final DeferredItem<Item> TCA_PRO = ITEMS.register("tca_pro",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.2F, 200, 0,
@@ -1103,8 +1103,8 @@ public class ModItems {
     public static final DeferredItem<Item> WESTAR_34 = ITEMS.register("westar_34",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.5F, 100, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 17, 0, 0, 0, 0, 0, "PISTOL"));
+                    13, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 2.4F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    4F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 17, 0, 0, 0, 0, 0, "PISTOL"));
     public static final DeferredItem<Item> WESTAR_35 = ITEMS.register("westar_35",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.5F, 100, 0,

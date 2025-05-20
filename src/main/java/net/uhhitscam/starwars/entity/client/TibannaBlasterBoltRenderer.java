@@ -38,11 +38,12 @@ public class TibannaBlasterBoltRenderer extends EntityRenderer<TibannaBlasterBol
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw)); // Rotate around Y-axis (horizontal)
         poseStack.mulPose(Axis.XP.rotationDegrees(pitch)); // Rotate around X-axis (vertical)
 
-        VertexConsumer mainVertexConsumer = bufferSource.getBuffer(this.model.renderType(this.getTextureLocation(pEntity)));
-        this.model.renderToBuffer(poseStack, mainVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        int fullBright = 0xF000F0;
+        VertexConsumer coreConsumer = bufferSource.getBuffer(RenderType.entitySolid(this.getTETextureLocation(pEntity)));
+        model.renderCore(poseStack, coreConsumer, fullBright, OverlayTexture.NO_OVERLAY);
 
-        VertexConsumer emissiveVertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(getTextureLocation(pEntity)));
-        this.model.renderToBuffer(poseStack, emissiveVertexConsumer, 0xF000F0, OverlayTexture.NO_OVERLAY);
+        VertexConsumer glowConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(pEntity)));
+        model.renderGlow(poseStack, glowConsumer, packedLight, OverlayTexture.NO_OVERLAY);
 
         poseStack.popPose();
         super.render(pEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
@@ -50,6 +51,10 @@ public class TibannaBlasterBoltRenderer extends EntityRenderer<TibannaBlasterBol
 
     @Override
     public ResourceLocation getTextureLocation(TibannaBlasterBoltEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/tibanna_blaster_bolt.png");
+        return ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/tibanna_blaster_entity.png");
+    }
+
+    public ResourceLocation getTETextureLocation(TibannaBlasterBoltEntity entity) {
+        return ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/tetibanna_blaster_entity.png");
     }
 }
