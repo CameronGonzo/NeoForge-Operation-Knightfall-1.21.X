@@ -1668,11 +1668,11 @@
 			"scale": [0.7, 0.7, 0.7]
 		},
 		"firstperson_righthand": {
-			"translation": [-0.5, 6, 1.75],
+			"translation": [-1.5, 6, 1.75],
 			"scale": [0.8, 0.8, 0.8]
 		},
 		"firstperson_lefthand": {
-			"translation": [-0.5, 6, 1.75],
+			"translation": [-1.5, 6, 1.75],
 			"scale": [0.8, 0.8, 0.8]
 		},
 		"ground": {

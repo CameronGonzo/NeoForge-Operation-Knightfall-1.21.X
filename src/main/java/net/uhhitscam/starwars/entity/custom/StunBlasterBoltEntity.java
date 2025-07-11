@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -14,6 +15,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.starwars.effect.ModEffects;
+import net.uhhitscam.starwars.effect.client.StunEffectRenderer;
+import net.uhhitscam.starwars.effect.client.StunnedEffectRenderer;
 import net.uhhitscam.starwars.entity.ModEntities;
 import net.uhhitscam.starwars.item.ModItems;
 import net.uhhitscam.starwars.particle.ModParticles;
@@ -45,7 +48,12 @@ public class StunBlasterBoltEntity extends Snowball {
 
         //Stun Effect
         if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.addEffect(new MobEffectInstance(ModEffects.STUN_EFFECT, 150, 0)); //Apply the Stun effect for 5 seconds
+            livingEntity.addEffect(new MobEffectInstance(ModEffects.STUN_EFFECT, 240, 0)); //Apply the Stun effect for 5 seconds
+
+            if (livingEntity instanceof Player player && player.level().isClientSide) {
+                StunEffectRenderer.triggerStunAnimation(player);
+                StunnedEffectRenderer.triggerBlueTint(player);
+            }
         }
     }
 

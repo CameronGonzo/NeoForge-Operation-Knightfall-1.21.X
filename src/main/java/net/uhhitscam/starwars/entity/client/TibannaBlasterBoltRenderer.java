@@ -16,45 +16,48 @@ import net.uhhitscam.starwars.entity.custom.TibannaBlasterBoltEntity;
 public class TibannaBlasterBoltRenderer extends EntityRenderer<TibannaBlasterBoltEntity> {
     private TibannaBlasterBoltModel model;
 
+    private static final ResourceLocation CORE_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/bolt_core.png");
+    private static final ResourceLocation GLOW_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/tibanna_bolt_exterior.png");
+
+
     public TibannaBlasterBoltRenderer(EntityRendererProvider.Context context) {
         super(context);
         this.model = new TibannaBlasterBoltModel(context.bakeLayer(ModModelLayers.TIBANNA_BLASTER_BOLT));
     }
 
     @Override
-    public void render(TibannaBlasterBoltEntity pEntity, float entityYaw, float partialTicks, PoseStack poseStack,
+    public void render(TibannaBlasterBoltEntity entity, float entityYaw, float partialTicks, PoseStack poseStack,
                        MultiBufferSource bufferSource, int packedLight) {
+
         poseStack.pushPose();
 
-        float scale = 0.5f;  // Scale factor of bolt size
-        poseStack.scale(scale, scale, scale);  // Apply uniform scaling
+        float scale = 0.4f;
+        poseStack.scale(scale, scale, scale);
+        poseStack.translate(0.0F, 0.1F, 0.0F);
 
-        poseStack.translate(0.0F, 0.2F, 0.0F); //adjust spawn position of blaster bolt to gun height
-
-        float yaw = pEntity.getYRot();  // Horizontal rotation (yaw)
-        float pitch = -pEntity.getXRot();  // Vertical rotation (pitch)
-
-        // Apply the rotations to the blaster bolt
-        poseStack.mulPose(Axis.YP.rotationDegrees(yaw)); // Rotate around Y-axis (horizontal)
-        poseStack.mulPose(Axis.XP.rotationDegrees(pitch)); // Rotate around X-axis (vertical)
+        float yaw = entity.getYRot();
+        float pitch = -entity.getXRot();
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+        poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
 
         int fullBright = 0xF000F0;
-        VertexConsumer coreConsumer = bufferSource.getBuffer(RenderType.entitySolid(this.getTETextureLocation(pEntity)));
-        model.renderCore(poseStack, coreConsumer, fullBright, OverlayTexture.NO_OVERLAY);
 
-        VertexConsumer glowConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(pEntity)));
-        model.renderGlow(poseStack, glowConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        VertexConsumer glowConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(GLOW_TEXTURE));
+        model.renderGlow(poseStack, glowConsumer, fullBright, OverlayTexture.NO_OVERLAY);
+
+        poseStack.pushPose();
+        VertexConsumer coreConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(CORE_TEXTURE));
+        model.renderCore(poseStack, coreConsumer, fullBright, OverlayTexture.NO_OVERLAY);
+        poseStack.popPose();
 
         poseStack.popPose();
-        super.render(pEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
+        super.render(entity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
     }
 
     @Override
     public ResourceLocation getTextureLocation(TibannaBlasterBoltEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/tibanna_blaster_entity.png");
-    }
-
-    public ResourceLocation getTETextureLocation(TibannaBlasterBoltEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/tetibanna_blaster_entity.png");
+        return GLOW_TEXTURE;
     }
 }

@@ -2151,10 +2151,10 @@
 			"scale": [0.75, 0.75, 0.75]
 		},
 		"firstperson_righthand": {
-			"translation": [-2, 4.5, 2.75]
+			"translation": [-1, 4.75, 2.75]
 		},
 		"firstperson_lefthand": {
-			"translation": [-2, 4.5, 2.75]
+			"translation": [-1, 4.75, 2.75]
 		},
 		"ground": {
 			"translation": [0, 2.25, 0],

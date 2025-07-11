@@ -284,7 +284,6 @@ public class BlasterSoundsUtil {
             case "s195" -> ModSounds.S195_FIRE.get();
             case "sacros_k11" -> ModSounds.SACROS_K11_FIRE.get();
             case "satines_lament" -> ModSounds.SATINES_LAMENT_FIRE.get();
-            case "sc_x30" -> ModSounds.SC_X30_FIRE.get();
             case "se14c" -> ModSounds.SE14C_FIRE.get();
             case "se14r" -> ModSounds.SE14R_FIRE.get();
             case "sedgleys_mk_5" -> ModSounds.SEDGLEYS_MK_5_FIRE.get();
@@ -323,6 +322,7 @@ public class BlasterSoundsUtil {
             case "westarm5" -> ModSounds.WESTARM5_FIRE.get();
             case "winchester87" -> ModSounds.WINCHESTER87_FIRE.get();
             case "x8_night_sniper" -> ModSounds.X8_NIGHT_SNIPER_FIRE.get();
+            case "x30" -> ModSounds.X30_FIRE.get();
             case "z6_rotary" -> ModSounds.Z6_ROTARY_FIRE.get();
             default -> ModSounds.E11_RIFLE_FIRE.get();
         };
@@ -357,10 +357,10 @@ public class BlasterSoundsUtil {
                  "ec17", "elg3a", "flintloq_pistol", "fn57", "fp45", "gl77", "hf94", "ib94", "k16_bryar_pistol", "koch9s",
                  "krie4", "kueget_ln21", "kyd21", "leucht42", "ll30", "lug_po8", "lw896", "m19a1", "marg_mcm", "model_57",
                  "nambu14", "p38", "pcc_projector", "premier", "q2", "relby_k23", "renegade", "rg4d", "rig420", "rk3",
-                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "sc_x30", "se14c", "serexim_mk_5",
+                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "se14c", "serexim_mk_5",
                  "sedgleys_mk_5", "shard3a", "sk32", "snubble", "steyr43", "t6", "tca_pro", "type14", "umbaran_pistol",
                  "walther_blaster", "walther_lpm_blaster", "webly_s4", "webtemp", "weequay_pistol", "westar_20",
-                 "x8_night_sniper", "panic_pistol", "verpine_shatter":
+                 "x8_night_sniper", "x30", "panic_pistol", "verpine_shatter":
                 return ModSounds.FOLEY_SMALL_RELOAD_GAS.get();
             default:
                 return ModSounds.FOLEY_MEDIUM_RELOAD_GAS.get();
@@ -412,10 +412,10 @@ public class BlasterSoundsUtil {
                  "ec17", "elg3a", "flintloq_pistol", "fn57", "fp45", "gl77", "hf94", "ib94", "k16_bryar_pistol", "koch9s",
                  "krie4", "kueget_ln21", "kyd21", "leucht42", "ll30", "lug_po8", "lw896", "m19a1", "marg_mcm", "model_57",
                  "nambu14", "p38", "pcc_projector", "power_5", "premier", "q2", "relby_k23", "renegade", "rg4d", "rig420", "rk3",
-                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "sc_x30", "se14c", "serexim_mk_5",
+                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "se14c", "serexim_mk_5",
                  "sedgleys_mk_5", "shard3a", "sk32", "snubble", "steyr43", "t6", "tca_pro", "type14", "umbaran_pistol",
                  "walther_blaster", "walther_lpm_blaster", "webly_s4", "webtemp", "weequay_pistol", "westar_20", "westar_34",
-                 "westar_35", "x8_night_sniper", "panic_pistol", "verpine_shatter":
+                 "westar_35", "x8_night_sniper", "x30", "panic_pistol", "verpine_shatter":
                 return ModSounds.FOLEY_SMALL_SWITCH_FIRE_MODE.get();
             default:
                 return ModSounds.FOLEY_MEDIUM_SWITCH_FIRE_MODE.get();
@@ -440,10 +440,10 @@ public class BlasterSoundsUtil {
                  "ec17", "elg3a", "flintloq_pistol", "fn57", "fp45", "gl77", "hf94", "k16_bryar_pistol", "koch9s",
                  "krie4", "kueget_ln21", "kyd21", "leucht42", "ll30", "lug_po8", "lw896", "m19a1", "marg_mcm", "model_57",
                  "nambu14", "p38", "pcc_projector", "power_5", "premier", "q2", "relby_k23", "renegade", "rg4d", "rig420", "rk3",
-                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "sc_x30", "se14c", "serexim_mk_5",
+                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "se14c", "serexim_mk_5",
                  "sedgleys_mk_5", "shard3a", "sk32", "snubble", "steyr43", "t6", "tca_pro", "type14", "umbaran_pistol",
                  "walther_blaster", "walther_lpm_blaster", "webly_s4", "webtemp", "weequay_pistol", "westar_20", "westar_34",
-                 "westar_35", "x8_night_sniper", "panic_pistol", "verpine_shatter", "mw20_bryar_pistol", "b1na":
+                 "westar_35", "x8_night_sniper", "x30", "panic_pistol", "verpine_shatter", "mw20_bryar_pistol", "b1na":
                 if (random.nextInt(60) == 0) {
                     return ModSounds.FOLEY_SMALL_FLORISH_EQUIP.get();
                 } else if (random.nextInt(20) == 0){
@@ -472,10 +472,10 @@ public class BlasterSoundsUtil {
                  "ec17", "elg3a", "flintloq_pistol", "fn57", "fp45", "gl77", "hf94", "k16_bryar_pistol", "koch9s",
                  "krie4", "kueget_ln21", "kyd21", "leucht42", "ll30", "lug_po8", "lw896", "m19a1", "marg_mcm", "model_57",
                  "nambu14", "p38", "pcc_projector", "power_5", "premier", "q2", "relby_k23", "renegade", "rg4d", "rig420", "rk3",
-                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "sc_x30", "se14c", "serexim_mk_5",
+                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "se14c", "serexim_mk_5",
                  "sedgleys_mk_5", "shard3a", "sk32", "snubble", "steyr43", "t6", "tca_pro", "type14", "umbaran_pistol",
                  "walther_blaster", "walther_lpm_blaster", "webly_s4", "webtemp", "weequay_pistol", "westar_20", "westar_34",
-                 "westar_35", "x8_night_sniper", "panic_pistol", "verpine_shatter", "mw20_bryar_pistol", "b1na":
+                 "westar_35", "x8_night_sniper", "x30", "panic_pistol", "verpine_shatter", "mw20_bryar_pistol", "b1na":
                 if (random.nextInt(60) == 0) {
                     return ModSounds.FOLEY_SMALL_FLORISH_UNEQUIP.get();
                 } else {

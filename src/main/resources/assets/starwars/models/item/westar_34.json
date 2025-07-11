@@ -2513,10 +2513,10 @@
 			"scale": [0.37, 0.37, 0.37]
 		},
 		"firstperson_righthand": {
-			"translation": [0, 3.25, 0.25]
+			"translation": [-1.25, 3.25, 0.25]
 		},
 		"firstperson_lefthand": {
-			"translation": [0, 3.25, 0.25]
+			"translation": [-1.25, 3.25, 0.25]
 		},
 		"ground": {
 			"rotation": [0, 0, 90],

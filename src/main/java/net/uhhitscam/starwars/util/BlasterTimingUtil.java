@@ -1,7 +1,5 @@
 package net.uhhitscam.starwars.util;
 
-import net.uhhitscam.starwars.sound.ModSounds;
-
 public class BlasterTimingUtil {
     public static long getBlasterReloadTime(String blasterName, String blasterFireMode) {
         switch (blasterName) {
@@ -32,10 +30,10 @@ public class BlasterTimingUtil {
                  "ec17", "elg3a", "flintloq_pistol", "fn57", "fp45", "gl77", "hf94", "ib94", "k16_bryar_pistol", "koch9s",
                  "krie4", "kueget_ln21", "kyd21", "leucht42", "ll30", "lug_po8", "lw896", "m19a1", "marg_mcm", "model_57",
                  "nambu14", "p38", "pcc_projector", "premier", "q2", "relby_k23", "renegade", "rg4d", "rig420", "rk3",
-                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "sc_x30", "se14c", "serexim_mk_5",
+                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "se14c", "serexim_mk_5",
                  "sedgleys_mk_5", "shard3a", "sk32", "snubble", "steyr43", "t6", "tca_pro", "type14", "umbaran_pistol",
                  "walther_blaster", "walther_lpm_blaster", "webly_s4", "webtemp", "weequay_pistol", "westar_20",
-                 "x8_night_sniper", "panic_pistol", "verpine_shatter":
+                 "x8_night_sniper", "x30", "panic_pistol", "verpine_shatter":
                 return 15;
             default:
                 return 19;

@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:directory",
+      "source": "atlas"
+    }
+  ]
+}

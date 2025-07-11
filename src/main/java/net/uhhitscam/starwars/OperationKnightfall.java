@@ -18,8 +18,11 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.starwars.component.ModDataComponentTypes;
 import net.uhhitscam.starwars.effect.ModEffects;
+import net.uhhitscam.starwars.effect.client.StunEffectRenderer;
+import net.uhhitscam.starwars.effect.client.StunnedEffectRenderer;
 import net.uhhitscam.starwars.entity.ModEntities;
 import net.uhhitscam.starwars.entity.client.*;
+import net.uhhitscam.starwars.event.BlasterZoomEventHandler;
 import net.uhhitscam.starwars.item.ModCreativeModeTabs;
 import net.uhhitscam.starwars.item.ModItems;
 import net.uhhitscam.starwars.network.PayloadRegister;
@@ -83,6 +86,12 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), MagnetizedSigBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.SKEVON_BLASTER_BOLT.get(), SkevonBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.STUN_BLASTER_BOLT.get(), StunBlasterBoltRenderer::new);
+
+            event.enqueueWork(() -> {
+                StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
+                StunnedEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
+                BlasterZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
+            });
         }
 
         @SubscribeEvent

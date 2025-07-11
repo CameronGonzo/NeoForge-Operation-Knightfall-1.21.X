@@ -219,7 +219,6 @@ public class ModSounds {
     public static final Supplier<SoundEvent> S195_FIRE = registerSoundEvent("s195_fire");
     public static final Supplier<SoundEvent> SACROS_K11_FIRE = registerSoundEvent("sacros_k11_fire");
     public static final Supplier<SoundEvent> SATINES_LAMENT_FIRE = registerSoundEvent("satines_lament_fire");
-    public static final Supplier<SoundEvent> SC_X30_FIRE = registerSoundEvent("sc_x30_fire");
     public static final Supplier<SoundEvent> SE14C_FIRE = registerSoundEvent("se14c_fire");
     public static final Supplier<SoundEvent> SE14R_FIRE = registerSoundEvent("se14r_fire");
     public static final Supplier<SoundEvent> SEDGLEYS_MK_5_FIRE = registerSoundEvent("sedgleys_mk_5_fire");
@@ -262,6 +261,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> WESTARM5_FIRE = registerSoundEvent("westarm5_fire");
     public static final Supplier<SoundEvent> WINCHESTER87_FIRE = registerSoundEvent("winchester87_fire");
     public static final Supplier<SoundEvent> X8_NIGHT_SNIPER_FIRE = registerSoundEvent("x8_night_sniper_fire");
+    public static final Supplier<SoundEvent> X30_FIRE = registerSoundEvent("x30_fire");
     public static final Supplier<SoundEvent> Z6_ROTARY_FIRE = registerSoundEvent("z6_rotary_fire");
 
     public static final Supplier<SoundEvent> EC17_STUN_FIRE = registerSoundEvent("ec17_stun_fire");

@@ -6,51 +6,31 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.uhhitscam.starwars.entity.custom.IonizedTibannaBlasterBoltEntity;
 import net.uhhitscam.starwars.entity.custom.SigBlasterBoltEntity;
 
 public class SigBlasterBoltModel extends HierarchicalModel<SigBlasterBoltEntity> {
-    private final ModelPart sigblasterbolt;
+    private final ModelPart bolt;
+    private final ModelPart bolt_exterior;
+    private final ModelPart bolt_core;
 
     public SigBlasterBoltModel(ModelPart root) {
-        this.sigblasterbolt = root.getChild("sig_blaster_bolt");
+        this.bolt = root.getChild("bolt");
+        this.bolt_exterior = this.bolt.getChild("bolt_exterior");
+        this.bolt_core = this.bolt.getChild("bolt_core");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition sig_blaster_bolt = partdefinition.addOrReplaceChild("sig_blaster_bolt", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-15.0F, 1.0F, 0.0F, 30.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 30).addBox(-6.5F, 1.0F, 1.25F, 20.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 2).addBox(-10.75F, 1.0F, 0.5F, 25.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 8).addBox(-10.75F, 1.0F, -0.5F, 25.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 4).addBox(-10.75F, 0.5F, 0.0F, 25.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 6).addBox(-10.75F, 1.5F, 0.0F, 25.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 32).addBox(-6.5F, 1.0F, -1.25F, 20.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(46, 12).addBox(-2.0F, 1.0F, -1.75F, 13.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(46, 14).addBox(-2.0F, 1.0F, 1.75F, 13.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(38, 34).addBox(-4.25F, 1.25F, -1.25F, 17.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(38, 38).addBox(-4.25F, 1.25F, 0.25F, 17.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 28).addBox(-6.5F, 2.25F, 0.0F, 20.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 26).addBox(-6.5F, -0.25F, 0.0F, 20.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 10).addBox(-7.5F, 0.25F, -0.25F, 21.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 14).addBox(-7.5F, 0.25F, -0.75F, 21.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 18).addBox(-7.5F, 0.75F, -0.75F, 21.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 22).addBox(-7.5F, 0.75F, -0.25F, 21.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 46).addBox(-2.0F, -0.75F, 0.0F, 13.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(46, 10).addBox(-2.0F, 2.75F, 0.0F, 13.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 38).addBox(-4.25F, -0.25F, 0.25F, 17.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 34).addBox(-4.25F, -0.25F, -1.25F, 17.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 42).addBox(-3.0F, 0.5F, -1.5F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 42).addBox(-3.0F, -0.5F, -0.5F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(42, 32).addBox(-3.0F, -0.5F, 0.5F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 44).addBox(-3.0F, 2.5F, 0.5F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 44).addBox(-3.0F, 2.5F, -0.5F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(42, 26).addBox(-3.0F, 1.5F, -1.5F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(42, 28).addBox(-3.0F, 1.5F, 1.5F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(42, 30).addBox(-3.0F, 0.5F, 1.5F, 15.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -10.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition bolt = partdefinition.addOrReplaceChild("bolt", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        return LayerDefinition.create(meshdefinition, 128, 128);
+        PartDefinition bolt_exterior = bolt.addOrReplaceChild("bolt_exterior", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -2.0F, -8.0F, 3.0F, 3.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.0F, 0.0F));
+
+        PartDefinition bolt_core = bolt.addOrReplaceChild("bolt_core", CubeListBuilder.create().texOffs(0, 19).addBox(-1.0F, -1.0F, -7.0F, 1.0F, 1.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.0F, 0.0F));
+
+        return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
     @Override
@@ -58,13 +38,16 @@ public class SigBlasterBoltModel extends HierarchicalModel<SigBlasterBoltEntity>
 
     }
 
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        sigblasterbolt.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+    public void renderCore(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay) {
+        bolt_core.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+    }
+
+    public void renderGlow(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay) {
+        bolt_exterior.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 
     @Override
     public ModelPart root() {
-        return sigblasterbolt;
+        return bolt;
     }
 }

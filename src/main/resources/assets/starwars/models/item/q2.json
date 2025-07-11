@@ -1590,10 +1590,10 @@
 			"scale": [0.37, 0.37, 0.37]
 		},
 		"firstperson_righthand": {
-			"translation": [0, 4.5, 0]
+			"translation": [-1.5, 4.5, 0]
 		},
 		"firstperson_lefthand": {
-			"translation": [0, 4.5, 0]
+			"translation": [-1.5, 4.5, 0]
 		},
 		"ground": {
 			"rotation": [0, 0, 90],

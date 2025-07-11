@@ -1,0 +1,17 @@
+{
+  "targets": ["swap"],
+  "passes": [
+    {
+      "name": "blue_tint",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [],
+      "uniforms": [
+        {
+          "name": "Opacity",
+          "values": [0.0]
+        }
+      ]
+    }
+  ]
+}

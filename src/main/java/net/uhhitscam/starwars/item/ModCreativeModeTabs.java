@@ -93,7 +93,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.S5);
                         pOutput.accept(ModItems.SACROS_K11);
                         pOutput.accept(ModItems.SATINES_LAMENT);
-                        pOutput.accept(ModItems.SC_X30);
+                        pOutput.accept(ModItems.X30);
                         pOutput.accept(ModItems.SE14C);
                         pOutput.accept(ModItems.SEREXIM_MK_5);
                         pOutput.accept(ModItems.SEDGLEYS_MK_5);

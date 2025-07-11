@@ -1,4 +1,8 @@
 {
+  "key.categories.starwars": "Operation Knightfall",
+  "key.starwars.reload": "Reload Blaster",
+  "key.starwars.switch": "Switch Firing Mode",
+
   "item.starwars.gas_cartridge": "Cartridge",
   "item.starwars.tibanna_gas": "Cartridge of Tibanna Gas",
   "item.starwars.ionized_tibanna_gas": "Cartridge of Ionized Tibanna Gas",
@@ -16,6 +20,8 @@
   "item.starwars.magnetized_sig_blaster_bolt": "Magnetized Sig Blaster Bolt",
   "item.starwars.skevon_blaster_bolt": "Skevon Blaster Bolt",
   "item.starwars.stun_blaster_bolt": "Stun Blaster Bolt",
+
+  "tooltip.starwars.blaster.shift": "Press §eShift",
 
   "item.starwars._62aug2_hunting_rifle": "6-2Aug2 Hunting Rifle",
   "item.starwars._84u_hunting_rifle": "84-U Hunting Rifle",
@@ -205,7 +211,6 @@
   "item.starwars.s195": "S-195 Blaster Pistol",
   "item.starwars.sacros_k11": "Sacros K-11 \"The Disintegrator\"",
   "item.starwars.satines_lament": "Satine's Lament",
-  "item.starwars.sc_x30": "SC X-30 Blaster Pistol",
   "item.starwars.se14c": "SE-14c Blaster Pistol",
   "item.starwars.se14r": "SE-14r Light Repeating Blaster",
   "item.starwars.sedgleys_mk_5": "SE-Rexim MK 5 Blaster",
@@ -246,6 +251,7 @@
   "item.starwars.westarm5": "Westar-M5 Blaster Rifle",
   "item.starwars.winchester87": "Winchester-87 Scatter Blaster",
   "item.starwars.x8_night_sniper": "X-8 Night Sniper Blaster Pistol",
+  "item.starwars.x30": "X-30 Blaster Pistol",
   "item.starwars.z6_rotary": "Z-6 Rotary Blast Cannon",
 
   "itemGroup.starwars.hand_blasters": "Hand Blasters",
@@ -465,7 +471,6 @@
   "sounds.starwars.s195_fire": "S-195 Blaster Pistol Fires",
   "sounds.starwars.sacros_k11_fire": "Sacros K-11 \"The Disintegrator\" Fires",
   "sounds.starwars.satines_lament_fire": "Satine's Lament Fires",
-  "sounds.starwars.sc_x30_fire": "SC X-30 Blaster Pistol Fires",
   "sounds.starwars.se14c_fire": "SE-14c Blaster Pistol Fires",
   "sounds.starwars.se14r_fire": "SE-14r Light Repeating Blaster Fires",
   "sounds.starwars.sedgleys_mk_5_fire": "Sedgley's MK 5 Fires",
@@ -508,6 +513,7 @@
   "sounds.starwars.westarm5_fire": "Westar-M5 Blaster Rifle Fires",
   "sounds.starwars.winchester87_fire": "Winchester-87 Scatter Blaster Fires",
   "sounds.starwars.x8_night_sniper_fire": "X-8 Night Sniper Blaster Pistol Fires",
+  "sounds.starwars.x30_fire": "X-30 Blaster Pistol Fires",
   "sounds.starwars.z6_rotary_fire": "Z-6 Rotary Blast Cannon Fires",
   "sounds.starwars.stun_fire": "Stun Shot Fires",
 

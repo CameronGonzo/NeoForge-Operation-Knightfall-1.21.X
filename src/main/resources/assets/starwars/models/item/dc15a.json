@@ -3333,10 +3333,10 @@
 			"scale": [0.6, 0.6, 0.6]
 		},
 		"firstperson_righthand": {
-			"translation": [0, 5.25, 0]
+			"translation": [0, 4.5, 0]
 		},
 		"firstperson_lefthand": {
-			"translation": [0, 5.25, 0]
+			"translation": [0, 4.5, 0]
 		},
 		"ground": {
 			"rotation": [0, 0, 90],

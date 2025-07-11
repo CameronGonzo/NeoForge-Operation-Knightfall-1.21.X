@@ -2188,10 +2188,10 @@
 			"scale": [0.67, 0.67, 0.67]
 		},
 		"firstperson_righthand": {
-			"translation": [-2.5, 5.5, 3]
+			"translation": [-2.75, 5.5, 3]
 		},
 		"firstperson_lefthand": {
-			"translation": [-2.5, 5.5, 3]
+			"translation": [-2.75, 5.5, 3]
 		},
 		"ground": {
 			"rotation": [0, 0, 90],

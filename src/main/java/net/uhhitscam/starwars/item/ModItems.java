@@ -49,7 +49,7 @@ public class ModItems {
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.8F, 10, 0,
                     0, 0, 0, 0, 0, 30, List.of("SNIPER"), 0F, 0F, 0F, 0F, 0F, 5F, "SNIPER",
-                    0F, 0F, 0F, 0F, 0F, 1F, "TIBANNA_GAS", 0, 0, 0, 0, 0, 10, "SNIPER"));
+                    0F, 0F, 0F, 0F, 0F, 1F, "TIBANNA_GAS", 0, 0, 0, 0, 0, 10, "SLUGTHROWER"));
     public static final DeferredItem<Item> _84U_HUNTING_RIFLE = ITEMS.register("_84u_hunting_rifle",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.9F, 30, 0,
@@ -935,11 +935,6 @@ public class ModItems {
                     2.6F, 100, 2,
                     25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO", "BURST", "CHARGED", "STUN"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
                     0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 17, 7, 0, 20, 0, 0, "PISTOL"));
-    public static final DeferredItem<Item> SC_X30 = ITEMS.register("sc_x30",
-            () -> new BlasterItem(new Item.Properties().stacksTo(1),
-                    2.3F, 300, 0,
-                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
-                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 17, 0, 0, 0, 0, 0, "PISTOL"));
     public static final DeferredItem<Item> SE14C = ITEMS.register("se14c",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.6F, 400, 2,
@@ -1120,6 +1115,11 @@ public class ModItems {
                     2.3F, 250, 0,
                     25, 0, 0, 0, 0, 0, List.of("SCATTER", "STUN"), 0.6F, 0F, 0F, 0F, 0F, 0F, "SCATTER",
                     0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 14, 0, 0, 0, 0, 0, "SCATTER"));
+    public static final DeferredItem<Item> X30 = ITEMS.register("x30",
+            () -> new BlasterItem(new Item.Properties().stacksTo(1),
+                    2.3F, 300, 0,
+                    25, 0, 0, 0, 0, 0, List.of("SEMI_AUTO"), 0F, 0F, 0F, 0F, 0F, 0F, "SEMI_AUTO",
+                    0F, 0F, 0F, 0F, 0F, 0F, "TIBANNA_GAS", 17, 0, 0, 0, 0, 0, "PISTOL"));
     public static final DeferredItem<Item> X8_NIGHT_SNIPER = ITEMS.register("x8_night_sniper",
             () -> new BlasterItem(new Item.Properties().stacksTo(1),
                     2.6F, 100, 0,

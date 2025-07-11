@@ -2,16 +2,24 @@ package net.uhhitscam.starwars.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.decoration.GlowItemFrame;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -19,12 +27,14 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
 import net.uhhitscam.starwars.OperationKnightfall;
 import net.uhhitscam.starwars.effect.ModEffects;
 import net.uhhitscam.starwars.gui.HudClient;
 import net.uhhitscam.starwars.item.custom.BlasterItem;
 import net.uhhitscam.starwars.network.PayloadRegister;
 import net.uhhitscam.starwars.network.SSFireBlasterPacket;
+import net.uhhitscam.starwars.util.ModTags;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
@@ -65,12 +75,24 @@ public class ModClientEvents {
                 return; //Exit if the player is in a GUI
             }
 
+            boolean interacting = false;
+
             // Check if the player is interacting with an entity or block
             HitResult hitResult = minecraft.hitResult;
+            if (hitResult.getType() == HitResult.Type.BLOCK && !player.isShiftKeyDown()) {
+                BlockHitResult blockHitResult = (BlockHitResult) hitResult;
+                BlockPos blockPos = blockHitResult.getBlockPos();
+                BlockState blockState = player.level().getBlockState(blockPos);
+                Vec3 blockCenter = Vec3.atCenterOf(blockPos);
+                if (player.distanceToSqr(blockCenter) <= 27 && !player.isShiftKeyDown() && blockState.is(ModTags.Blocks.INTERACTABLE_BLOCKS)) {
+                    interacting = true;
+                }
+            }
+
             if (hitResult.getType() == HitResult.Type.ENTITY && !player.isShiftKeyDown()) {
                 EntityHitResult entityHitResult = (EntityHitResult) hitResult;
                 Entity entity = entityHitResult.getEntity();
-                if (entity instanceof Villager || entity instanceof WanderingTrader) {
+                if (entity instanceof Villager || entity instanceof WanderingTrader || entity instanceof ItemFrame || entity instanceof GlowItemFrame || entity instanceof ArmorStand) {
                     return; // Exit if interacting with a villager
                 }
             }
@@ -78,7 +100,7 @@ public class ModClientEvents {
             ItemStack mainHandItem = player.getMainHandItem();
             firing = true;
 
-            if (mainHandItem.getItem() instanceof BlasterItem) {
+            if (!interacting && mainHandItem.getItem() instanceof BlasterItem) {
                 BlasterItem blasterItem = (BlasterItem) mainHandItem.getItem();
                 if ("FULL_AUTO".equals(blasterItem.getFiringMode(mainHandItem))) {
                     scheduleFullAutoFiring(player, mainHandItem, true);

@@ -1,12 +1,10 @@
 package net.uhhitscam.starwars.item.custom;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -15,17 +13,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.starwars.component.*;
 import net.uhhitscam.starwars.entity.ModEntities;
 import net.uhhitscam.starwars.entity.custom.*;
-import net.uhhitscam.starwars.item.ModItems;
 import net.uhhitscam.starwars.network.PayloadRegister;
 import net.uhhitscam.starwars.network.SSFiringModePacket;
 import net.uhhitscam.starwars.network.SSGasAmmoPacket;
@@ -33,7 +26,7 @@ import net.uhhitscam.starwars.network.SSReloadPacket;
 import net.uhhitscam.starwars.sound.ModSounds;
 import net.uhhitscam.starwars.util.BlasterSoundsUtil;
 import net.uhhitscam.starwars.util.BlasterTimingUtil;
-import org.jetbrains.annotations.Nullable;
+import net.uhhitscam.starwars.util.BlasterZoomUtil;
 
 import java.util.*;
 
@@ -251,6 +244,9 @@ public class BlasterItem extends Item {
         float recoil;
         int blasterDamage;
         float blasterInaccuracy;
+        float blasterSpread = 0.5f;
+        double closeness = 0.27;
+        double height = -0.1;
 
         //Retrieve the firing mode from the FiringModeData component
         FiringModeData firingModeData = itemstack.get(ModDataComponentTypes.FIRING_MODE.get());
@@ -298,17 +294,39 @@ public class BlasterItem extends Item {
             bolt = specific_bolt;
 
             bolt.setOwner(player);
+            Item mainItem = player.getMainHandItem().getItem();
+            Item offItem = player.getOffhandItem().getItem();
+
+            boolean isMainBlaster = mainItem instanceof BlasterItem;
+            boolean isOffBlaster = offItem instanceof BlasterItem;
+
+            if ((isMainBlaster ^ isOffBlaster) && player.isShiftKeyDown()) {
+                if (mainHand && isMainBlaster) {
+                    BlasterItem blasterMain = (BlasterItem) mainItem;
+                    if (BlasterZoomUtil.getScopeTexture(blasterMain, player.getMainHandItem()) != null) {   //main hand only has scope
+                        closeness = 0;
+                        height = 0;
+                    }
+                } else if (!mainHand && isOffBlaster) {
+                    BlasterItem blasterOff = (BlasterItem) offItem;
+                    if (BlasterZoomUtil.getScopeTexture(blasterOff, player.getOffhandItem()) != null) {   //off hand only has scope
+                        closeness = 0;
+                        height = 0;
+                    }
+                }
+            }
+
             if (mainHand) {
                 bolt.setPos(
-                        player.getX() - (Math.cos(Math.toRadians(player.getYRot())) * 0.4),
-                        player.getEyeY(),
-                        player.getZ() - (Math.sin(Math.toRadians(player.getYRot())) * 0.4)
+                        player.getX() - (Math.cos(Math.toRadians(player.getYRot())) * closeness),
+                        player.getEyeY() + height,
+                        player.getZ() - (Math.sin(Math.toRadians(player.getYRot())) * closeness)
                 );
             } else {
                 bolt.setPos(
-                        player.getX() - (Math.cos(Math.toRadians(player.getYRot())) * -0.4),
-                        player.getEyeY(),
-                        player.getZ() - (Math.sin(Math.toRadians(player.getYRot())) * -0.4)
+                        player.getX() + (Math.cos(Math.toRadians(player.getYRot())) * closeness),
+                        player.getEyeY() + height,
+                        player.getZ() + (Math.sin(Math.toRadians(player.getYRot())) * closeness)
                 );
             }
 
@@ -326,14 +344,18 @@ public class BlasterItem extends Item {
                 case "CHARGED" -> blasterInaccuracy = chargedInaccuracy;
                 case "REPULSE" -> blasterInaccuracy = repulseInaccuracy;
                 case "SNIPER" -> blasterInaccuracy = sniperInaccuracy;
-                default -> blasterInaccuracy = 1F;
+                default -> blasterInaccuracy = 2f;
+            }
+
+            if (player.isShiftKeyDown()) {
+                blasterInaccuracy *= 0.8f;
             }
 
             double accuracyFactor = blasterInaccuracy / 100; //Lower value = more accurate
             Random random = new Random();
-            xVelocity += (random.nextDouble() - 0.5) * accuracyFactor;
-            yVelocity += (random.nextDouble() - 0.5) * accuracyFactor;
-            zVelocity += (random.nextDouble() - 0.5) * accuracyFactor;
+            xVelocity += (random.nextDouble() - blasterSpread) * accuracyFactor;
+            yVelocity += (random.nextDouble() - blasterSpread) * accuracyFactor;
+            zVelocity += (random.nextDouble() - blasterSpread) * accuracyFactor;
 
             Vec3 velocity = new Vec3(xVelocity, yVelocity, zVelocity).normalize().scale(this.bolt_speed); //Use custom velocity
             bolt.setDeltaMovement(velocity);
@@ -363,6 +385,10 @@ public class BlasterItem extends Item {
                 case "SNIPER" -> recoil = sniperRecoil;
                 case "STUN" -> recoil = stunRecoil;
                 default -> recoil = 1;
+            }
+
+            if (player.isShiftKeyDown() && (isOffBlaster ^ isMainBlaster)) {
+                recoil *= 0.4f;
             }
 
             applyRecoil(player, recoil / 5);
@@ -451,6 +477,10 @@ public class BlasterItem extends Item {
 
     private String getGasType(ItemStack stack) {
         return stack.get(ModDataComponentTypes.GAS_TYPE.get()).gasType();
+    }
+
+    public String getClassification() {
+        return classification;
     }
 
     public void reload(Player player, ItemStack blasterStack, boolean mainHand) {
@@ -556,12 +586,17 @@ public class BlasterItem extends Item {
         }
 
         if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
-
             return;
         }
 
+        long ReloadNSwitchCoolDownEndTime;
+
         // Apply new cooldown
-        long ReloadNSwitchCoolDownEndTime = level.getGameTime() + BlasterTimingUtil.getBlasterSwitchTime((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), getFiringMode(blasterStack));
+        if (reloading) {
+            ReloadNSwitchCoolDownEndTime = level.getGameTime() + BlasterTimingUtil.getBlasterReloadTime((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), getFiringMode(blasterStack));
+        } else {
+            ReloadNSwitchCoolDownEndTime = level.getGameTime() + BlasterTimingUtil.getBlasterSwitchTime((String) BuiltInRegistries.ITEM.getKey(blasterStack.getItem()).getPath(), getFiringMode(blasterStack));
+        }
         blasterStack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData.withReloadNSwitchCoolDownEndTime(ReloadNSwitchCoolDownEndTime));
     }
 
@@ -643,9 +678,14 @@ public class BlasterItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltip, TooltipFlag pFlag) {
-        pTooltip.add(Component.literal("Ammo: " + getAmmo(pStack) + "/" + max_ammo));
-        super.appendHoverText(pStack, pContext, pTooltip, pFlag);
+    public void appendHoverText(ItemStack blasterStack, TooltipContext pContext, List<Component> pTooltip, TooltipFlag pFlag) {
+        pTooltip.add(Component.literal("Ammo: " + getAmmo(blasterStack) + "/" + max_ammo));
+        if(Screen.hasShiftDown()){
+            //nothing yet
+        } else {
+            pTooltip.add(Component.translatable("tooltip.starwars.blaster.shift"));
+        }
+        super.appendHoverText(blasterStack, pContext, pTooltip, pFlag);
     }
 
     public int getMaxAmmo() {
