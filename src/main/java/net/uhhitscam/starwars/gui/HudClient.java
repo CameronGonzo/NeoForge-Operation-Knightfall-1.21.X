@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.uhhitscam.starwars.OperationKnightfall;
 import net.uhhitscam.starwars.item.custom.BlasterItem;
+import net.uhhitscam.starwars.item.custom.FiringMode;
 import net.uhhitscam.starwars.util.KeyBinding;
 
 public class HudClient {
@@ -62,16 +63,16 @@ public class HudClient {
             Component offhandAmmoComponent = Component.literal(String.format("Ammo: %d%%", offhandBlasterAmmoPercent));
             text(guiGraphics, textRenderer, offhandAmmoComponent, guiMidWidth - 180, guiHeight - 14, WHITE, OUTLINE_COLOR);
 
-            String offhandFiringMode = offhandBlasterItem.getFiringMode(player.getOffhandItem());
+            FiringMode offhandFiringMode = offhandBlasterItem.getFiringMode(player.getOffhandItem());
             ResourceLocation texture = switch (offhandFiringMode) {
-                case "BURST" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
-                case "STUN" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
-                case "SCATTER" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
-                case "FULL_AUTO" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
-                case "LAUNCHER" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/launcher_icon.png");
-                case "CHARGED" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
-                case "SNIPER" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/sniper_icon.png");
-                case "REPULSE" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
+                case FiringMode.BURST -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
+                case FiringMode.STUN -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
+                case FiringMode.SCATTER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
+                case FiringMode.FULL_AUTO -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
+                case FiringMode.LAUNCHER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/launcher_icon.png");
+                case FiringMode.CHARGED -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
+                case FiringMode.SNIPER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/sniper_icon.png");
+                case FiringMode.REPULSE -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
                 default -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/semi_auto_icon.png");
             };
             guiGraphics.blit(texture, guiMidWidth - 195, guiHeight - 17, 0, 0, 12, 12, 12, 12);
@@ -85,16 +86,16 @@ public class HudClient {
             Component mainHandAmmoComponent = Component.literal(String.format("Ammo: %d%%", mainHandBlasterAmmoPercent));
             text(guiGraphics, textRenderer, mainHandAmmoComponent, guiMidWidth + 115, guiHeight - 14, WHITE, OUTLINE_COLOR);
 
-            String mainHandFiringMode = mainHandBlasterItem.getFiringMode(player.getMainHandItem());
+            FiringMode mainHandFiringMode = mainHandBlasterItem.getFiringMode(player.getMainHandItem());
             ResourceLocation texture = switch (mainHandFiringMode) {
-                case "BURST" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
-                case "STUN" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
-                case "SCATTER" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
-                case "FULL_AUTO" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
-                case "LAUNCHER" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/launcher_icon.png");
-                case "CHARGED" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
-                case "SNIPER" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/sniper_icon.png");
-                case "REPULSE" -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
+                case FiringMode.BURST -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
+                case FiringMode.STUN -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
+                case FiringMode.SCATTER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
+                case FiringMode.FULL_AUTO -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
+                case FiringMode.LAUNCHER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/launcher_icon.png");
+                case FiringMode.CHARGED -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
+                case FiringMode.SNIPER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/sniper_icon.png");
+                case FiringMode.REPULSE -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
                 default -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/semi_auto_icon.png");
             };
             guiGraphics.blit(texture, guiMidWidth + 100, guiHeight - 17, 0, 0, 12, 12, 12, 12);

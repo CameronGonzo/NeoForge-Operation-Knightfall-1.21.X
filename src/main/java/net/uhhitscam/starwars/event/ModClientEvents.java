@@ -2,9 +2,7 @@ package net.uhhitscam.starwars.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.GlowItemFrame;
@@ -14,10 +12,6 @@ import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.neoforged.api.distmarker.Dist;
@@ -27,11 +21,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
-import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
 import net.uhhitscam.starwars.OperationKnightfall;
 import net.uhhitscam.starwars.effect.ModEffects;
 import net.uhhitscam.starwars.gui.HudClient;
 import net.uhhitscam.starwars.item.custom.BlasterItem;
+import net.uhhitscam.starwars.item.custom.FiringMode;
 import net.uhhitscam.starwars.network.PayloadRegister;
 import net.uhhitscam.starwars.network.SSFireBlasterPacket;
 import net.uhhitscam.starwars.util.ModTags;
@@ -102,10 +96,10 @@ public class ModClientEvents {
 
             if (!interacting && mainHandItem.getItem() instanceof BlasterItem) {
                 BlasterItem blasterItem = (BlasterItem) mainHandItem.getItem();
-                if ("FULL_AUTO".equals(blasterItem.getFiringMode(mainHandItem))) {
+                if (FiringMode.FULL_AUTO.equals(blasterItem.getFiringMode(mainHandItem))) {
                     scheduleFullAutoFiring(player, mainHandItem, true);
                 } else {
-                    PayloadRegister.sendToServer(new SSFireBlasterPacket(mainHandItem, "blasterGasType", false, true));
+                    PayloadRegister.sendToServer(new SSFireBlasterPacket(mainHandItem, false, true));
                 }
             }
         }
@@ -116,7 +110,7 @@ public class ModClientEvents {
 
             if (mainHandItem.getItem() instanceof BlasterItem) {
                 BlasterItem blasterItem = (BlasterItem) mainHandItem.getItem();
-                if ("FULL_AUTO".equals(blasterItem.getFiringMode(mainHandItem))) {
+                if (FiringMode.FULL_AUTO.equals(blasterItem.getFiringMode(mainHandItem))) {
                     firing = false;
                     fullAutoTimer.cancel();
                     fullAutoTimer = new Timer(); // Reset the timer
@@ -148,10 +142,10 @@ public class ModClientEvents {
 
             if (!punching && offHandItem.getItem() instanceof BlasterItem) {
                 BlasterItem blasterItem = (BlasterItem) offHandItem.getItem();
-                if ("FULL_AUTO".equals(blasterItem.getFiringMode(offHandItem))) {
+                if (FiringMode.FULL_AUTO.equals(blasterItem.getFiringMode(offHandItem))) {
                     scheduleFullAutoFiring(player, offHandItem, false);
                 } else {
-                    PayloadRegister.sendToServer(new SSFireBlasterPacket(offHandItem, "blasterGasType", false, false));
+                    PayloadRegister.sendToServer(new SSFireBlasterPacket(offHandItem, false, false));
                 }
                 event.setCanceled(true); // Prevent default swinging action
             }
@@ -163,7 +157,7 @@ public class ModClientEvents {
 
             if (offHandItem.getItem() instanceof BlasterItem) {
                 BlasterItem blasterItem = (BlasterItem) offHandItem.getItem();
-                if ("FULL_AUTO".equals(blasterItem.getFiringMode(offHandItem))) {
+                if (FiringMode.FULL_AUTO.equals(blasterItem.getFiringMode(offHandItem))) {
                     firing = false;
                     fullAutoTimer.cancel();
                     fullAutoTimer = new Timer(); // Reset the timer
@@ -177,7 +171,7 @@ public class ModClientEvents {
             @Override
             public void run() {
                 if (firing) {
-                    PayloadRegister.sendToServer(new SSFireBlasterPacket(heldItem, "blasterGasType", true, mainHand));
+                    PayloadRegister.sendToServer(new SSFireBlasterPacket(heldItem, true, mainHand));
                     scheduleFullAutoFiring(player, heldItem, mainHand); // Schedule the next firing
                 }
             }

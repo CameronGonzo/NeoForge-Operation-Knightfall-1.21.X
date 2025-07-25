@@ -1,17 +1,11 @@
 package net.uhhitscam.starwars.event;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
-import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
-import net.uhhitscam.starwars.OperationKnightfall;
 import net.uhhitscam.starwars.item.custom.BlasterItem;
 import net.uhhitscam.starwars.util.BlasterZoomUtil;
 

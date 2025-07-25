@@ -25,7 +25,6 @@ public class GasItem extends Item {
         this.maxAmmo = maxAmmo;
     }
 
-    //Getter for the gas type
     public String getGasType() {
         return gasType;
     }
@@ -43,7 +42,6 @@ public class GasItem extends Item {
     public void setAmmo(ItemStack stack, int ammo) {
         stack.set(ModDataComponentTypes.GAS_AMMO.get(), new GasAmmoData(ammo));
 
-        //Sync to ensure the state is updated client-side
         if (stack.getEntityRepresentation() instanceof Player player) {
             player.inventoryMenu.broadcastChanges();
         }

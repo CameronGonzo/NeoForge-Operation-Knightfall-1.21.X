@@ -1,78 +1,81 @@
 package net.uhhitscam.starwars.util;
 
+import net.uhhitscam.starwars.item.custom.BlasterName;
+import net.uhhitscam.starwars.item.custom.FiringMode;
+
 public class BlasterTimingUtil {
-    public static long getBlasterReloadTime(String blasterName, String blasterFireMode) {
+    public static long getBlasterReloadTime(BlasterName blasterName, FiringMode blasterFireMode) {
         switch (blasterName) {
-            case "amban_disruptor":
+            case BlasterName.AMBAN_DISRUPTOR:
                 return 20;
-            case "dc17m":
-                if (blasterFireMode.equals("LAUNCHER")) {
+            case BlasterName.DC17M:
+                if (blasterFireMode.equals(FiringMode.LAUNCHER)) {
                     return 18;
                 } else {
                     return 19;
                 }
-            case "dt29":
+            case BlasterName.DT29:
                 return 100;
-            case "relby_v10":
-                if (blasterFireMode.equals("LAUNCHER")) {
+            case BlasterName.RELBY_V10:
+                if (blasterFireMode.equals(FiringMode.LAUNCHER)) {
                     return 18;
                 } else {
                     return 16;
                 }
-            case "v6d_mortar_launcher", "mortar", "k21c_portable_ordanance_launcher":
+            case /*BlasterName.V6D_MORTAR_LAUNCHER, BlasterName.MORTAR,*/ BlasterName.K21C_PORTABLE_ORDANANCE_LAUNCHER:
                 return 18;
-            case "lightbow", "vulk_tau623_rotary", "z6_rotary", "eweb", "ewhb12", "m32", "m45", "m55", "m61", "mwc35c", "t21", "t21b",
-                 "bm107", "galar90", "nt242", "ge36", "neo_crusader_rifle", "boiler_rifle", "bowcaster", "t7_ion_diruptor":
+            case BlasterName.LIGHTBOW, BlasterName.VULK_TAU623_ROTARY, BlasterName.Z6_ROTARY, BlasterName.EWEB, /*BlasterName.EWHB12,*/ BlasterName.M32, BlasterName.M45, BlasterName.M55, BlasterName.M61, BlasterName.MWC35C, BlasterName.T21, BlasterName.T21B,
+                 BlasterName.BM107, BlasterName.GALAR90, BlasterName.NT242, BlasterName.GE36, BlasterName.NEO_CRUSADER_RIFLE, BlasterName.BOILER_RIFLE, BlasterName.BOWCASTER, BlasterName.T7_ION_DISRUPTOR:
                 return 25;
-            case "a140", "a180", "ac177", "apache", "astra40", "b22", "be09", "bh4", "blurrg1120",
-                 "boonta_blaster", "br14", "c10", "c96", "caij_vandas_blaster_pistol", "cc420", "cr2", "cs14", "dc15s_sidearm",
-                 "dc17", "de10", "dg29", "dh16", "dh17", "dh23", "dl18", "dl21", "dt12", "dt15", "dx13",
-                 "ec17", "elg3a", "flintloq_pistol", "fn57", "fp45", "gl77", "hf94", "ib94", "k16_bryar_pistol", "koch9s",
-                 "krie4", "kueget_ln21", "kyd21", "leucht42", "ll30", "lug_po8", "lw896", "m19a1", "marg_mcm", "model_57",
-                 "nambu14", "p38", "pcc_projector", "premier", "q2", "relby_k23", "renegade", "rg4d", "rig420", "rk3",
-                 "rskf44", "ruger", "s195", "s5", "sacros_k11", "satines_lament", "se14c", "serexim_mk_5",
-                 "sedgleys_mk_5", "shard3a", "sk32", "snubble", "steyr43", "t6", "tca_pro", "type14", "umbaran_pistol",
-                 "walther_blaster", "walther_lpm_blaster", "webly_s4", "webtemp", "weequay_pistol", "westar_20",
-                 "x8_night_sniper", "x30", "panic_pistol", "verpine_shatter":
+            case BlasterName.A140, BlasterName.A180, BlasterName.AC177, BlasterName.APACHE, BlasterName.ASTRA40, BlasterName.B22, BlasterName.BE09, BlasterName.BH4, BlasterName.BLURRG1120,
+                 BlasterName.BOONTA_BLASTER, BlasterName.BR14, BlasterName.C10, BlasterName.C96, BlasterName.CAIJ_VANDAS_BLASTER_PISTOL, BlasterName.CC420, BlasterName.CR2, BlasterName.CS14, BlasterName.DC15S_SIDEARM,
+                 BlasterName.DC17, BlasterName.DE10, BlasterName.DG29, BlasterName.DH16, BlasterName.DH17, BlasterName.DH23, BlasterName.DL18, BlasterName.DL21, BlasterName.DT12, BlasterName.DT15, BlasterName.DX13,
+                 BlasterName.EC17, BlasterName.ELG3A, BlasterName.FLINTLOQ_PISTOL, BlasterName.FN57, BlasterName.FP45, BlasterName.GL77, BlasterName.HF94, BlasterName.IB94, BlasterName.K16_BRYAR_PISTOL, BlasterName.KOCH9S,
+                 BlasterName.KRIE4, BlasterName.KUEGET_LN21, BlasterName.KYD21, BlasterName.LEUCHT42, BlasterName.LL30, BlasterName.LUG_PO8, BlasterName.LW896, BlasterName.M19A1, BlasterName.MARG_MCM, BlasterName.MODEL_57,
+                 BlasterName.NAMBU14, BlasterName.P38, BlasterName.PCC_PROJECTOR, BlasterName.PREMIER, BlasterName.Q2, BlasterName.RELBY_K23, BlasterName.RENEGADE, BlasterName.RG4D, BlasterName.RIG420, BlasterName.RK3,
+                 BlasterName.RSKF44, BlasterName.RUGER_BLASTER, BlasterName.S195, BlasterName.S5, BlasterName.SACROS_K11, BlasterName.SATINES_LAMENT, BlasterName.SE14C, BlasterName.SEREXIM_MK_5,
+                 BlasterName.SEDGLEYS_MK_5, BlasterName.SHARD3A, BlasterName.SK32, BlasterName.SNUBBLE, BlasterName.STEYR43, BlasterName.T6, BlasterName.TCA_PRO, BlasterName.TYPE14, BlasterName.UMBARAN_PISTOL,
+                 BlasterName.WALTHER_BLASTER, BlasterName.WALTHER_LPM_BLASTER, BlasterName.WEBLY_S4, BlasterName.WEBTEMP, BlasterName.WEEQUAY_PISTOL, BlasterName.WESTAR_20,
+                 BlasterName.X8_NIGHT_SNIPER, BlasterName.X30, BlasterName.PANIC_PISTOL, BlasterName.VERPINE_SHATTER:
                 return 15;
             default:
                 return 19;
         }
     }
 
-    public static long getBlasterSwitchTime(String blasterName, String blasterFireMode) {
+    public static long getBlasterSwitchTime(BlasterName blasterName, FiringMode blasterFireMode) {
         switch (blasterName) {
-            case "a180":
-                if (blasterFireMode.equals("SEMI_AUTO")) {
+            case BlasterName.A180:
+                if (blasterFireMode.equals(FiringMode.SEMI_AUTO)) {
                     return 18;
-                } else if (blasterFireMode.equals("FULL_AUTO")) {
+                } else if (blasterFireMode.equals(FiringMode.FULL_AUTO)) {
                     return 13;
                 } else {
                     return 17;
                 }
-            case "a280cfe":
-                if (blasterFireMode.equals("SEMI_AUTO")) {
+            case BlasterName.A280CFE:
+                if (blasterFireMode.equals(FiringMode.SEMI_AUTO)) {
                     return 18;
-                } else if (blasterFireMode.equals("BURST")) {
+                } else if (blasterFireMode.equals(FiringMode.BURST)) {
                     return 25;
                 } else {
                     return 19;
                 }
-            case "amban_disruptor":
+            case BlasterName.AMBAN_DISRUPTOR:
                 return 18;
-            case "b1na":
+            case BlasterName.B1NA:
                 return 12;
-            case "dc17m":
-                if (blasterFireMode.equals("SEMI_AUTO")) {
+            case BlasterName.DC17M:
+                if (blasterFireMode.equals(FiringMode.SEMI_AUTO)) {
                     return 15;
-                } else if (blasterFireMode.equals("LAUNCHER")) {
+                } else if (blasterFireMode.equals(FiringMode.LAUNCHER)) {
                     return 45;
                 } else {
                     return 22;
                 }
-            case "dl44":
+            case BlasterName.DL44:
                 return 29;
-            case "mw20_bryar_pistol":
+            case BlasterName.MW20_BRYAR_PISTOL:
                 return 16;
             default:
                 return 4;

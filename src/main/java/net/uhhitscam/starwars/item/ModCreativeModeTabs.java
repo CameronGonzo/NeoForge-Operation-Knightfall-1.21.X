@@ -94,7 +94,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SACROS_K11);
                         pOutput.accept(ModItems.SATINES_LAMENT);
                         pOutput.accept(ModItems.X30);
-                        pOutput.accept(ModItems.SE14C);
+                        pOutput.accept(ModItems.SE14R);
                         pOutput.accept(ModItems.SEREXIM_MK_5);
                         pOutput.accept(ModItems.SEDGLEYS_MK_5);
                         pOutput.accept(ModItems.SHARD3A);
@@ -207,7 +207,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.MWC35C);
                         pOutput.accept(ModItems.RECIPROCATING_QUAD_BLASTER_CANNON);
                         pOutput.accept(ModItems.RT97C);
-                        pOutput.accept(ModItems.SE14R);
+                        pOutput.accept(ModItems.SE14C);
                         pOutput.accept(ModItems.T21);
                         pOutput.accept(ModItems.TL50);
                         pOutput.accept(ModItems.TOMSUN97);

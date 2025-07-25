@@ -14,35 +14,37 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.starwars.entity.ModEntities;
 import net.uhhitscam.starwars.item.ModItems;
+import net.uhhitscam.starwars.item.custom.Classification;
+import net.uhhitscam.starwars.item.custom.GasType;
 import net.uhhitscam.starwars.particle.ModParticles;
 
 public class SigBlasterBoltEntity extends Snowball {
     private final float bolt_speed;
     private final int blasterDamage;
-    private final String currentGasType;
-    private final String classification;
+    private final GasType currentGasType;
+    private final Classification classification;
 
     public SigBlasterBoltEntity(EntityType<? extends SigBlasterBoltEntity> entityType, Level level) {
         super(entityType, level);
         //base values just in case something goes wrong
         this.bolt_speed = 2.0F;
         this.blasterDamage = 0;
-        this.currentGasType = "SIG_GAS";
-        this.classification = "PISTOL";
+        this.currentGasType = GasType.SIG;
+        this.classification = Classification.PISTOL;
     }
 
-    public SigBlasterBoltEntity(EntityType<? extends SigBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, String currentGasType, String classification) {
-        super(ModEntities.SIG_BLASTER_BOLT.get(), level); // Directly reference the EntityType
+    public SigBlasterBoltEntity(EntityType<? extends SigBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, GasType currentGasType, Classification classification) {
+        super(entityType, level); // Directly reference the EntityType
         this.bolt_speed = bolt_speed;
         this.blasterDamage = blasterDamage;
         this.currentGasType = currentGasType;
-        this.classification = "PISTOL";
+        this.classification = classification;
 
         Vec3 direction = shooter.getLookAngle().normalize().scale(bolt_speed);
         this.setDeltaMovement(direction);
     }
 
-    public String getGasType() {
+    public GasType getGasType() {
         return currentGasType;
     }
 
@@ -71,15 +73,14 @@ public class SigBlasterBoltEntity extends Snowball {
 
         if (!this.level().isClientSide) {
             numParticles = switch (classification) {
-                case "PISTOL" -> 5 + level().random.nextInt(5);
-                case "CARBINE" -> 5 + level().random.nextInt(8);
-                case "RIFLE" -> 8 + level().random.nextInt(10);
-                case "REPEATING" -> 6 + level().random.nextInt(3);
-                case "SCATTER" -> 10 + level().random.nextInt(5);
-                case "SNIPER" -> 10 + level().random.nextInt(20);
-                case "SLUGTHROWER" -> 10 + level().random.nextInt(15);
-                case "DISRUPTOR" -> 15 + level().random.nextInt(20);
-                default -> 5 + level().random.nextInt(10);
+                case Classification.PISTOL -> 5 + level().random.nextInt(5);
+                case Classification.CARBINE -> 5 + level().random.nextInt(8);
+                case Classification.RIFLE -> 8 + level().random.nextInt(10);
+                case Classification.REPEATER -> 6 + level().random.nextInt(3);
+                case Classification.SCATTER -> 10 + level().random.nextInt(5);
+                case Classification.SNIPER -> 10 + level().random.nextInt(20);
+                case Classification.SLUGTHROWER -> 10 + level().random.nextInt(15);
+                case Classification.DISRUPTOR -> 15 + level().random.nextInt(20);
             };
 
             if (this.level() instanceof ServerLevel serverLevel && level().random.nextInt(2) == 1) {

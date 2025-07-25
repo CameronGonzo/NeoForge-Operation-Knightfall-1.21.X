@@ -31,7 +31,7 @@ public class StunBlasterBoltEntity extends Snowball {
     }
 
     public StunBlasterBoltEntity(EntityType<? extends StunBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed) {
-        super(ModEntities.STUN_BLASTER_BOLT.get(), level); //Directly reference the EntityType
+        super(entityType, level); //Directly reference the EntityType
         this.bolt_speed = bolt_speed;
 
         Vec3 direction = shooter.getLookAngle().normalize().scale(bolt_speed);

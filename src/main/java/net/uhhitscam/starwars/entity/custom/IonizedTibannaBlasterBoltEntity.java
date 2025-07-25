@@ -17,27 +17,30 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.starwars.entity.ModEntities;
 import net.uhhitscam.starwars.item.ModItems;
+import net.uhhitscam.starwars.item.custom.Classification;
+import net.uhhitscam.starwars.item.custom.GasType;
 import net.uhhitscam.starwars.particle.ModParticles;
+import org.jetbrains.annotations.NotNull;
 
 
 public class IonizedTibannaBlasterBoltEntity extends Snowball {
     private final float bolt_speed;
     private final int blasterDamage;
-    private final String currentGasType;
-    private final String classification;
+    private final GasType currentGasType;
+    private final Classification classification;
 //    private BlockPos lastLightBlockPos;
 
     public IonizedTibannaBlasterBoltEntity(EntityType<? extends IonizedTibannaBlasterBoltEntity> entityType, Level level) {
         super(entityType, level);
         this.bolt_speed = 2.0F;
         this.blasterDamage = 0;
-        this.currentGasType = "IONIZED_TIBANNA_GAS";
-        this.classification = "PISTOL";
+        this.currentGasType = GasType.IONIZED_TIBANNA;
+        this.classification = Classification.PISTOL;
 //        this.lastLightBlockPos = null; // Initialize last position as null
     }
 
-    public IonizedTibannaBlasterBoltEntity(EntityType<? extends IonizedTibannaBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, String currentGasType, String classification) {
-        super(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), level); // Directly reference the EntityType
+    public IonizedTibannaBlasterBoltEntity(EntityType<? extends IonizedTibannaBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, GasType currentGasType, Classification classification) {
+        super(entityType, level); // Directly reference the EntityType
         this.bolt_speed = bolt_speed;
         this.blasterDamage = blasterDamage;
         this.currentGasType = currentGasType;
@@ -48,7 +51,7 @@ public class IonizedTibannaBlasterBoltEntity extends Snowball {
         this.setDeltaMovement(direction);
     }
 
-    public String getGasType() {
+    public GasType getGasType() {
         return currentGasType;
     }
 
@@ -72,21 +75,20 @@ public class IonizedTibannaBlasterBoltEntity extends Snowball {
         }
     }
 
-    protected void onHit(HitResult result) {
+    protected void onHit(@NotNull HitResult result) {
         super.onHit(result);
         int numParticles;
 
         if (!this.level().isClientSide) {
             numParticles = switch (classification) {
-                case "PISTOL" -> 5 + level().random.nextInt(5);
-                case "CARBINE" -> 5 + level().random.nextInt(8);
-                case "RIFLE" -> 8 + level().random.nextInt(10);
-                case "REPEATING" -> 6 + level().random.nextInt(3);
-                case "SCATTER" -> 10 + level().random.nextInt(5);
-                case "SNIPER" -> 10 + level().random.nextInt(20);
-                case "SLUGTHROWER" -> 10 + level().random.nextInt(15);
-                case "DISRUPTOR" -> 15 + level().random.nextInt(20);
-                default -> 5 + level().random.nextInt(10);
+                case Classification.PISTOL -> 5 + level().random.nextInt(5);
+                case Classification.CARBINE -> 5 + level().random.nextInt(8);
+                case Classification.RIFLE -> 8 + level().random.nextInt(10);
+                case Classification.REPEATER -> 6 + level().random.nextInt(3);
+                case Classification.SCATTER -> 10 + level().random.nextInt(5);
+                case Classification.SNIPER -> 10 + level().random.nextInt(20);
+                case Classification.SLUGTHROWER -> 10 + level().random.nextInt(15);
+                case Classification.DISRUPTOR -> 15 + level().random.nextInt(20);
             };
 
             if (this.level() instanceof ServerLevel serverLevel && level().random.nextInt(2) == 1) {
