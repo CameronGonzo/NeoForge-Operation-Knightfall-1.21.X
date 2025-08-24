@@ -6,7 +6,7 @@ license="MIT"
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
 
 [[mods]] #mandatory
-modId="starwars"
+modId="knightfall"
 version="${mod_version}"
 displayName="${mod_name}"
 
@@ -26,14 +26,14 @@ authors="${mod_authors}"
 description='''${mod_description}'''
 
 [[mixins]]
-config="starwars.mixins.json"
+config="knightfall.mixins.json"
 
 # The [[accessTransformers]] block allows you to declare where your AT file is.
 # If this block is omitted, a fallback attempt will be made to load an AT from META-INF/accesstransformer.cfg
 #[[accessTransformers]]
 #file="META-INF/accesstransformer.cfg"
 
-[[dependencies.starwars]]
+[[dependencies.knightfall]]
     modId="neoforge"
     type="required"
 
@@ -44,7 +44,7 @@ config="starwars.mixins.json"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.starwars]]
+[[dependencies.knightfall]]
     modId="minecraft"
     type="required"
     versionRange="${minecraft_version_range}"

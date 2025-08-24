@@ -1,0 +1,124 @@
+package net.uhhitscam.knightfall.entity.custom;
+
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.uhhitscam.knightfall.effect.ModEffects;
+import net.uhhitscam.knightfall.effect.client.StunEffectRenderer;
+import net.uhhitscam.knightfall.effect.client.StunnedEffectRenderer;
+import net.uhhitscam.knightfall.particle.ModParticles;
+
+public class StunBlasterBoltEntity extends Snowball {
+    private final float bolt_speed;
+
+    public StunBlasterBoltEntity(EntityType<? extends StunBlasterBoltEntity> entityType, Level level) {
+        super(entityType, level);
+        //base value just in case something goes wrong
+        this.bolt_speed = 1.5F;
+    }
+
+    public StunBlasterBoltEntity(EntityType<? extends StunBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed) {
+        super(entityType, level); //Directly reference the EntityType
+        this.bolt_speed = bolt_speed;
+
+        Vec3 direction = shooter.getLookAngle().normalize().scale(bolt_speed);
+        this.setDeltaMovement(direction);
+    }
+
+    protected void onHitEntity(EntityHitResult result) {
+        super.onHitEntity(result);
+        Entity entity = result.getEntity();
+
+        //Stun Effect
+        if (entity instanceof LivingEntity livingEntity) {
+            livingEntity.addEffect(new MobEffectInstance(ModEffects.STUN_EFFECT, 240, 0)); //Apply the Stun effect for 5 seconds
+
+            if (livingEntity instanceof Player player && player.level().isClientSide) {
+                StunEffectRenderer.triggerStunAnimation(player);
+                StunnedEffectRenderer.triggerBlueTint(player);
+            }
+        }
+    }
+
+    protected void onHit(HitResult result) {
+        super.onHit(result);
+        if (!this.level().isClientSide) {
+            if (this.level() instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ModParticles.STUN_SPARK_PARTICLES.get(),
+                        this.getX(), this.getY(), this.getZ(),
+                        15 + level().random.nextInt(5), 0, 0, 0, 0.08);
+            }
+
+            this.level().broadcastEntityEvent(this, (byte)3);
+            this.discard();
+        }
+
+    }
+
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id == 3) {
+
+        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        Vec3 velocity = this.getDeltaMovement();
+        double speed = velocity.length(); // Magnitude of the velocity vector
+
+        if (speed > 0.0001) { //Only update direction if the entity is moving
+            //Calculate yaw (horizontal rotation, rotation around Y-axis)
+            double yaw = Math.toDegrees(Math.atan2(velocity.x, velocity.z)); // atan2 gives us the correct direction in the horizontal plane
+
+            //Calculate pitch (vertical rotation, rotation around X-axis)
+            double pitch = Math.toDegrees(Math.atan2(velocity.y, Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z)));
+
+            //Prevent pitch from being too extreme when moving directly up or down
+//            if (Math.abs(pitch) > 90) {
+//                pitch = pitch > 0 ? 90 : -90;
+//            }
+
+            //Negate the yaw and pitch to rotate in the opposite direction
+            this.setYRot((float) yaw);  // Update yaw (Y rotation)
+            this.setXRot((float) pitch); // Update pitch (X rotation)
+            this.yRotO = this.getYRot(); // Synchronize previous Y rotation
+            this.xRotO = this.getXRot(); // Synchronize previous X rotation
+        }
+
+        // Keep the movement constant
+        this.setDeltaMovement(velocity.normalize().scale(this.bolt_speed));
+
+        if (!this.level().isClientSide && this.tickCount > 17) {
+            this.discard();
+        }
+    }
+
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
+
+    @Override
+    protected double getDefaultGravity() {
+        return 0.002F;
+    }
+
+
+    @Override
+    public AABB getBoundingBoxForCulling() {
+        return this.getBoundingBox().inflate(0.5);
+    }
+}
