@@ -58,6 +58,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.HOPPER)
                 .add(Blocks.TRAPPED_CHEST)
                 .add(Blocks.CAKE)
-                .add(Blocks.DECORATED_POT);
+                .add(Blocks.DECORATED_POT)
+                .add(Blocks.CHEST)
+                .add(Blocks.TRAPPED_CHEST);
     }
 }

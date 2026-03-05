@@ -13,15 +13,15 @@ import net.uhhitscam.knightfall.component.AmmoTypeData;
 import net.uhhitscam.knightfall.component.AmmoData;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 
-public record SSReloadPacket(ItemStack blaster, int ammo, String gasType, boolean mainHand) implements Packet {
+public record SSReloadPacket(ItemStack blaster, int ammo, String ammoType, boolean mainHand) implements Packet {
     public static final Type<SSReloadPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("knightfall", "reload"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SSReloadPacket> STREAM_CODEC = StreamCodec.composite(
-            ItemStack.STREAM_CODEC,  // Correctly use the ItemStack codec from the example
+            ItemStack.STREAM_CODEC,
             SSReloadPacket::blaster,
-            ByteBufCodecs.INT,      // For the ammo count
+            ByteBufCodecs.INT,
             SSReloadPacket::ammo,
             ByteBufCodecs.STRING_UTF8,
-            SSReloadPacket::gasType,
+            SSReloadPacket::ammoType,
             ByteBufCodecs.BOOL,
             SSReloadPacket::mainHand,
             SSReloadPacket::new
@@ -37,15 +37,15 @@ public record SSReloadPacket(ItemStack blaster, int ammo, String gasType, boolea
                 ItemStack serverBlasterStack = player.getMainHandItem();
                 serverBlasterStack.set(ModDataComponentTypes.AMMO.get(), new AmmoData(ammo));
 
-                if (gasType != null) {
-                    serverBlasterStack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(gasType));
+                if (ammoType != null) {
+                    serverBlasterStack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(ammoType));
                 }
             } else {
                 ItemStack serverBlasterStack = player.getOffhandItem();
                 serverBlasterStack.set(ModDataComponentTypes.AMMO.get(), new AmmoData(ammo));
 
-                if (gasType != null) {
-                    serverBlasterStack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(gasType));
+                if (ammoType != null) {
+                    serverBlasterStack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(ammoType));
                 }
             }
 

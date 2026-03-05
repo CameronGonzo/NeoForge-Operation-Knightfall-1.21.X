@@ -1,0 +1,16 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
+  },
+  "vertex": "knightfall:thermal_vision",
+  "fragment": "knightfall:thermal_vision",
+  "samplers": [
+    { "name": "DiffuseSampler" }
+  ],
+  "attributes": [ "Position" ],
+  "uniforms": [
+    { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [] }
+  ]
+}

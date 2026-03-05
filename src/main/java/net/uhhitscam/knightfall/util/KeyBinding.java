@@ -95,7 +95,7 @@ public class KeyBinding {
                     mainHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
                 }
 
-                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level()) || mainProjectileItem.getProjectileWeaponName().equals(WeaponName.DC15S_SIDEARM)) {
                     return;
                 }
 
@@ -112,7 +112,7 @@ public class KeyBinding {
                     offHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
                 }
 
-                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level()) || offProjectileItem.getProjectileWeaponName().equals(WeaponName.DC15S_SIDEARM)) {
                     return;
                 }
 
@@ -190,12 +190,12 @@ public class KeyBinding {
             ItemStack mainHandItem = player.getMainHandItem();
             ItemStack offHandItem = player.getOffhandItem();
 
-            if (mainHandItem.getItem() instanceof ProjectileItem projectileWeaponMain) {
-                projectileWeaponMain.unload(player, mainHandItem, true);
+            if (mainHandItem.getItem() instanceof ProjectileItem mainProjectileItem) {
+                mainProjectileItem.unload(player, mainHandItem, true);
             }
 
-            if (offHandItem.getItem() instanceof ProjectileItem projectileWeaponOff) {
-                projectileWeaponOff.unload(player, offHandItem, false);
+            if (offHandItem.getItem() instanceof ProjectileItem offProjectileItem) {
+                offProjectileItem.unload(player, offHandItem, false);
             }
         }
     }
@@ -208,25 +208,24 @@ public class KeyBinding {
             ItemStack mainHandItem = player.getMainHandItem();
             ItemStack offHandItem = player.getOffhandItem();
 
-            if (mainHandItem.getItem() instanceof ProjectileItem blasterMain) {
+            if (mainHandItem.getItem() instanceof ProjectileItem mainProjectileItem) {
                 ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = offHandItem.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
 
                 if (ReloadNSwitchCoolDownData == null) {
                     ReloadNSwitchCoolDownData = new ReloadNSwitchCoolDownData(0);
-                    offHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
+                    mainHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
                 }
 
-                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
-
+                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level()) || mainProjectileItem.getFiringModes().size() <= 1) {
                     return;
                 }
 
                 PayloadRegister.sendToServer(new SSCooldownPacket(true, false));
-                blasterMain.switchFiringMode(player, mainHandItem, true);
+                mainProjectileItem.switchFiringMode(player, mainHandItem, true);
                 ModClientEvents.mainFiring = false;
             }
 
-            if (offHandItem.getItem() instanceof ProjectileItem blasterOff) {
+            if (offHandItem.getItem() instanceof ProjectileItem offProjectileItem) {
                 ReloadNSwitchCoolDownData ReloadNSwitchCoolDownData = offHandItem.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
 
                 if (ReloadNSwitchCoolDownData == null) {
@@ -234,13 +233,13 @@ public class KeyBinding {
                     offHandItem.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, ReloadNSwitchCoolDownData);
                 }
 
-                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level())) {
+                if (ReloadNSwitchCoolDownData.isOnCooldown(player.level()) || offProjectileItem.getFiringModes().size() <= 1) {
 
                     return;
                 }
 
                 PayloadRegister.sendToServer(new SSCooldownPacket(false, false));
-                blasterOff.switchFiringMode(player, offHandItem, false);
+                offProjectileItem.switchFiringMode(player, offHandItem, false);
                 ModClientEvents.offFiring = false;
             }
         }

@@ -11,8 +11,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.uhhitscam.knightfall.item.custom.WeaponClassification;
+import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
 import net.uhhitscam.knightfall.particle.ModParticles;
+import net.uhhitscam.knightfall.util.CustomExplosion;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -21,6 +25,7 @@ public class SigBlasterBoltEntity extends Snowball {
     private final int blasterDamage;
     private final WeaponClassification classification;
     private boolean explosiveShot;
+    private boolean concussiveShot;
 
     public SigBlasterBoltEntity(EntityType<? extends SigBlasterBoltEntity> entityType, Level level) {
         super(entityType, level);
@@ -29,14 +34,16 @@ public class SigBlasterBoltEntity extends Snowball {
         this.blasterDamage = 0;
         this.classification = WeaponClassification.PISTOL;
         this.explosiveShot = false;
+        this.concussiveShot = false;
     }
 
-    public SigBlasterBoltEntity(EntityType<? extends SigBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, WeaponClassification classification, boolean explosiveShot) {
+    public SigBlasterBoltEntity(EntityType<? extends SigBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, WeaponClassification classification, boolean explosiveShot, boolean concussiveShot) {
         super(entityType, level); // Directly reference the EntityType
         this.bolt_speed = bolt_speed;
         this.blasterDamage = blasterDamage;
         this.classification = classification;
         this.explosiveShot = explosiveShot;
+        this.concussiveShot = concussiveShot;
 
         Vec3 direction = shooter.getLookAngle().normalize().scale(bolt_speed);
         this.setDeltaMovement(direction);
@@ -59,9 +66,36 @@ public class SigBlasterBoltEntity extends Snowball {
 
     protected void onHit(HitResult result) {
         super.onHit(result);
+
+        if (this.level().isClientSide) {
+            return;
+        }
+
         int numParticles;
+        this.level().broadcastEntityEvent(this, (byte) 3);
         if (explosiveShot) {
-            explode(result.getLocation());
+            CustomExplosion.create(this, result.getLocation(), 1.5, 3.5F, 0.25);
+        } else if (concussiveShot) {
+            CustomExplosion.create(this, result.getLocation(), 1.5, 1.5F, 0.15);
+
+            ServerLevel serverLevel = (ServerLevel) this.level();
+            serverLevel.sendParticles(ModParticles.CONCUSSIVE_SHOT_EXPLOSION_PARTICLES.get(),
+                    this.getX(), this.getY(), this.getZ(),
+                    1, 0, 0, 0, 0);
+
+            PacketDistributor.sendToPlayersNear(
+                    (ServerLevel) this.level(),
+                    null,
+                    result.getLocation().x, result.getLocation().y, result.getLocation().z,
+                    5.0f,
+                    new CSConcussionBlurPacket(
+                            new Vector3f((float) result.getLocation().x, (float) result.getLocation().y, (float) result.getLocation().z),
+                            5.0f,
+                            40,
+                            40,
+                            30.0f
+                    )
+            );
         }
 
         if (!this.level().isClientSide) {
@@ -95,31 +129,6 @@ public class SigBlasterBoltEntity extends Snowball {
 
             this.level().broadcastEntityEvent(this, (byte) 3);
             this.discard();
-        }
-    }
-
-    private void explode(Vec3 hitPos) {
-        if (!level().isClientSide) {
-            double radius = 1.0D; // explosion radius
-            double knockbackStrength = 0.05D;
-            float damageAmount = 3F;
-
-            List<Entity> entities = level().getEntities(this, new AABB(
-                    hitPos.x - radius, hitPos.y - radius, hitPos.z - radius,
-                    hitPos.x + radius, hitPos.y + radius, hitPos.z + radius
-            ));
-
-            for (Entity e : entities) {
-                if (e instanceof LivingEntity living) {
-                    Vec3 knockbackDir = living.position().subtract(hitPos).normalize();
-                    living.push(knockbackDir.x * knockbackStrength, knockbackDir.y * knockbackStrength, knockbackDir.z * knockbackStrength);
-
-                    living.hurt(damageSources().generic(), damageAmount);
-                    living.invulnerableTime = 0;
-                }
-            }
-
-            discard();
         }
     }
 

@@ -37,6 +37,8 @@ public class ModParticles {
             PARTICLE_TYPES.register("repulse_shot_medium_particles", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> REPULSE_SHOT_SMALL_PARTICLES =
             PARTICLE_TYPES.register("repulse_shot_small_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> CONCUSSIVE_SHOT_EXPLOSION_PARTICLES =
+            PARTICLE_TYPES.register("concussive_shot_explosion_particles", () -> new SimpleParticleType(true));
 
     public static void register(IEventBus eventBus) {
         PARTICLE_TYPES.register(eventBus);

@@ -27,8 +27,8 @@ public class TibannaBlasterBoltRenderer extends EntityRenderer<TibannaBlasterBol
     }
 
     @Override
-    public void render(TibannaBlasterBoltEntity entity, float entityYaw, float partialTicks, PoseStack poseStack,
-                       MultiBufferSource bufferSource, int packedLight) {
+    public void render(TibannaBlasterBoltEntity entity, float entityYaw, float partialTicks,
+                       PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.pushPose();
 
@@ -36,24 +36,27 @@ public class TibannaBlasterBoltRenderer extends EntityRenderer<TibannaBlasterBol
         poseStack.scale(scale, scale, scale);
         poseStack.translate(0.0F, 0.1F, 0.0F);
 
-        float yaw = entity.getYRot();
-        float pitch = -entity.getXRot();
+        // Better: use interpolated rotations (optional but recommended)
+        float yaw = entityYaw;
+        float pitch = -net.minecraft.util.Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
         poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
 
         int fullBright = 0xF000F0;
 
+        VertexConsumer depthConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(CORE_TEXTURE));
+        model.renderCore(poseStack, depthConsumer, fullBright, OverlayTexture.NO_OVERLAY);
+
         VertexConsumer glowConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(GLOW_TEXTURE));
         model.renderGlow(poseStack, glowConsumer, fullBright, OverlayTexture.NO_OVERLAY);
 
-        poseStack.pushPose();
         VertexConsumer coreConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(CORE_TEXTURE));
         model.renderCore(poseStack, coreConsumer, fullBright, OverlayTexture.NO_OVERLAY);
-        poseStack.popPose();
 
         poseStack.popPose();
         super.render(entity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
     }
+
 
     @Override
     public ResourceLocation getTextureLocation(TibannaBlasterBoltEntity entity) {

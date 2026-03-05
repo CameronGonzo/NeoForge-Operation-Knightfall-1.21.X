@@ -1,4 +1,12 @@
 {
+  "22t4_fire": {
+    "subtitle": "sounds.knightfall.22t4_fire",
+    "sounds": [
+      "knightfall:blaster/22t4/weapons_blaster_22t4_fire_01",
+      "knightfall:blaster/22t4/weapons_blaster_22t4_fire_02",
+      "knightfall:blaster/22t4/weapons_blaster_22t4_fire_03"
+    ]
+  },
   "62aug2_hunting_rifle_fire": {
     "subtitle": "sounds.knightfall.62aug2_hunting_rifle_fire",
     "sounds": [
@@ -100,6 +108,14 @@
       "knightfall:blaster/a180/weapons_blaster_a180_sniper_fire_05",
       "knightfall:blaster/a180/weapons_blaster_a180_sniper_fire_06",
       "knightfall:blaster/a180/weapons_blaster_a180_sniper_fire_07"
+    ]
+  },
+  "a240_fire": {
+    "subtitle": "sounds.knightfall.a240_fire",
+    "sounds": [
+      "knightfall:blaster/a240/weapons_blaster_a240_fire_01",
+      "knightfall:blaster/a240/weapons_blaster_a240_fire_02",
+      "knightfall:blaster/a240/weapons_blaster_a240_fire_03"
     ]
   },
   "a280_fire": {
@@ -208,6 +224,25 @@
       "knightfall:blaster/a350/weapons_blaster_a350_fire_05"
     ]
   },
+  "ab75_bo_rifle_fire": {
+    "subtitle": "sounds.knightfall.ab75_bo_rifle_fire",
+    "sounds": [
+      "knightfall:blaster/ab75_bo_rifle/weapons_blaster_ab75_bo_rifle_fire_01",
+      "knightfall:blaster/ab75_bo_rifle/weapons_blaster_ab75_bo_rifle_fire_02",
+      "knightfall:blaster/ab75_bo_rifle/weapons_blaster_ab75_bo_rifle_fire_03",
+      "knightfall:blaster/ab75_bo_rifle/weapons_blaster_ab75_bo_rifle_fire_04",
+      "knightfall:blaster/ab75_bo_rifle/weapons_blaster_ab75_bo_rifle_fire_05",
+      "knightfall:blaster/ab75_bo_rifle/weapons_blaster_ab75_bo_rifle_fire_06"
+    ]
+  },
+  "abr2_zato_fire": {
+    "subtitle": "sounds.knightfall.abr2_zato_fire",
+    "sounds": [
+      "knightfall:blaster/abr2_zato/weapons_blaster_abr2_zato_fire_01",
+      "knightfall:blaster/abr2_zato/weapons_blaster_abr2_zato_fire_02",
+      "knightfall:blaster/abr2_zato/weapons_blaster_abr2_zato_fire_03"
+    ]
+  },
   "ac177_fire": {
     "subtitle": "sounds.knightfall.ac177_fire",
     "sounds": [
@@ -217,6 +252,14 @@
       "knightfall:blaster/ac177/weapons_blaster_ac177_fire_04",
       "knightfall:blaster/ac177/weapons_blaster_ac177_fire_05",
       "knightfall:blaster/ac177/weapons_blaster_ac177_fire_05"
+    ]
+  },
+  "acp_array_fire": {
+    "subtitle": "sounds.knightfall.acp_array_fire",
+    "sounds": [
+      "knightfall:blaster/acp_array/weapons_blaster_acp_array_fire_01",
+      "knightfall:blaster/acp_array/weapons_blaster_acp_array_fire_02",
+      "knightfall:blaster/acp_array/weapons_blaster_acp_array_fire_03"
     ]
   },
   "acp_repeater_fire": {
@@ -232,15 +275,15 @@
       "knightfall:blaster/acp_repeater/weapons_blaster_acp_fire_08"
     ]
   },
-  "akbarc_fire": {
-    "subtitle": "sounds.knightfall.akbarc_fire",
+  "bk43_fire": {
+    "subtitle": "sounds.knightfall.bk43_fire",
     "sounds": [
-      "knightfall:blaster/akbarc/weapons_blaster_ak_barc_fire_01",
-      "knightfall:blaster/akbarc/weapons_blaster_ak_barc_fire_02",
-      "knightfall:blaster/akbarc/weapons_blaster_ak_barc_fire_03",
-      "knightfall:blaster/akbarc/weapons_blaster_ak_barc_fire_04",
-      "knightfall:blaster/akbarc/weapons_blaster_ak_barc_fire_05",
-      "knightfall:blaster/akbarc/weapons_blaster_ak_barc_fire_06"
+      "knightfall:blaster/bk43/weapons_blaster_bk43_fire_01",
+      "knightfall:blaster/bk43/weapons_blaster_bk43_fire_02",
+      "knightfall:blaster/bk43/weapons_blaster_bk43_fire_03",
+      "knightfall:blaster/bk43/weapons_blaster_bk43_fire_04",
+      "knightfall:blaster/bk43/weapons_blaster_bk43_fire_05",
+      "knightfall:blaster/bk43/weapons_blaster_bk43_fire_06"
     ]
   },
   "amban_disruptor_fire": {
@@ -281,10 +324,15 @@
     "sounds": [
       "knightfall:blaster/avarik/weapons_blaster_avarik_fire_01",
       "knightfall:blaster/avarik/weapons_blaster_avarik_fire_02",
-      "knightfall:blaster/avarik/weapons_blaster_avarik_fire_03",
-      "knightfall:blaster/avarik/weapons_blaster_avarik_fire_04",
-      "knightfall:blaster/avarik/weapons_blaster_avarik_fire_05",
-      "knightfall:blaster/avarik/weapons_blaster_avarik_fire_06"
+      "knightfall:blaster/avarik/weapons_blaster_avarik_fire_03"
+    ]
+  },
+  "az6_fire": {
+    "subtitle": "sounds.knightfall.az6_fire",
+    "sounds": [
+      "knightfall:blaster/az6/weapons_blaster_az6_fire_01",
+      "knightfall:blaster/az6/weapons_blaster_az6_fire_02",
+      "knightfall:blaster/az6/weapons_blaster_az6_fire_03"
     ]
   },
   "b1na_fire": {
@@ -296,6 +344,14 @@
       "knightfall:blaster/b1na/weapons_blaster_b1na_fire_04",
       "knightfall:blaster/b1na/weapons_blaster_b1na_fire_05",
       "knightfall:blaster/b1na/weapons_blaster_b1na_fire_06"
+    ]
+  },
+  "b1x_fire": {
+    "subtitle": "sounds.knightfall.b1x_fire",
+    "sounds": [
+      "knightfall:blaster/b1x/weapons_blaster_b1x_fire_01",
+      "knightfall:blaster/b1x/weapons_blaster_b1x_fire_02",
+      "knightfall:blaster/b1x/weapons_blaster_b1x_fire_03"
     ]
   },
   "b22_fire": {
@@ -310,6 +366,14 @@
       "knightfall:blaster/b22/weapons_blaster_b22_fire_07"
     ]
   },
+  "b33_fire": {
+    "subtitle": "sounds.knightfall.b33_fire",
+    "sounds": [
+      "knightfall:blaster/b33/weapons_blaster_b33_fire_01",
+      "knightfall:blaster/b33/weapons_blaster_b33_fire_02",
+      "knightfall:blaster/b33/weapons_blaster_b33_fire_03"
+    ]
+  },
   "balnab_fire": {
     "subtitle": "sounds.knightfall.balnab_fire",
     "sounds": [
@@ -319,6 +383,14 @@
       "knightfall:blaster/balnab/weapons_blaster_balnab_fire_04",
       "knightfall:blaster/balnab/weapons_blaster_balnab_fire_05",
       "knightfall:blaster/balnab/weapons_blaster_balnab_fire_06"
+    ]
+  },
+  "balnab_sidearm_fire": {
+    "subtitle": "sounds.knightfall.balnab_sidearm_fire",
+    "sounds": [
+      "knightfall:blaster/balnab_sidearm/weapons_blaster_balnab_sidearm_fire_01",
+      "knightfall:blaster/balnab_sidearm/weapons_blaster_balnab_sidearm_fire_02",
+      "knightfall:blaster/balnab_sidearm/weapons_blaster_balnab_sidearm_fire_03"
     ]
   },
   "barmst12_fire": {
@@ -386,6 +458,22 @@
       "knightfall:blaster/bh4/weapons_blaster_bh4_fire_04",
       "knightfall:blaster/bh4/weapons_blaster_bh4_fire_05",
       "knightfall:blaster/bh4/weapons_blaster_bh4_fire_06"
+    ]
+  },
+  "bk28_fire": {
+    "subtitle": "sounds.knightfall.bk28_fire",
+    "sounds": [
+      "knightfall:blaster/bk28/weapons_blaster_bk28_fire_01",
+      "knightfall:blaster/bk28/weapons_blaster_bk28_fire_02",
+      "knightfall:blaster/bk28/weapons_blaster_bk28_fire_03"
+    ]
+  },
+  "bk28_charged_fire": {
+    "subtitle": "sounds.knightfall.bk28_charged_fire",
+    "sounds": [
+      "knightfall:blaster/bk28/weapons_blaster_bk28_charged_fire_01",
+      "knightfall:blaster/bk28/weapons_blaster_bk28_charged_fire_02",
+      "knightfall:blaster/bk28/weapons_blaster_bk28_charged_fire_03"
     ]
   },
   "blaster_spear_fire": {
@@ -550,10 +638,56 @@
       "knightfall:blaster/bryar_rifle/weapons_blaster_bryar_rifle_charged_fire_15"
     ]
   },
+  "bsr7_fire": {
+    "subtitle": "sounds.knightfall.bsr7_fire",
+    "sounds": [
+      "knightfall:blaster/bsr7/weapons_blaster_bsr7_fire_01",
+      "knightfall:blaster/bsr7/weapons_blaster_bsr7_fire_02",
+      "knightfall:blaster/bsr7/weapons_blaster_bsr7_fire_03"
+    ]
+  },
+  "bt06_fire": {
+    "subtitle": "sounds.knightfall.bt06_fire",
+    "sounds": [
+      "knightfall:blaster/bt06/weapons_blaster_bt06_fire_01",
+      "knightfall:blaster/bt06/weapons_blaster_bt06_fire_02",
+      "knightfall:blaster/bt06/weapons_blaster_bt06_fire_03"
+    ]
+  },
   "bt_x42_flamethrower_fire": {
     "subtitle": "sounds.knightfall.bt_x42_flamethrower_fire",
     "sounds": [
 
+    ]
+  },
+  "bx33_fire": {
+    "subtitle": "sounds.knightfall.bx33_fire",
+    "sounds": [
+      "knightfall:blaster/bx33/weapons_blaster_bx33_fire_01",
+      "knightfall:blaster/bx33/weapons_blaster_bx33_fire_02",
+      "knightfall:blaster/bx33/weapons_blaster_bx33_fire_03",
+      "knightfall:blaster/bx33/weapons_blaster_bx33_fire_04",
+      "knightfall:blaster/bx33/weapons_blaster_bx33_fire_05",
+      "knightfall:blaster/bx33/weapons_blaster_bx33_fire_06"
+    ]
+  },
+  "bx49_fire": {
+    "subtitle": "sounds.knightfall.bx49_fire",
+    "sounds": [
+      "knightfall:blaster/bx49/weapons_blaster_bx49_fire_01",
+      "knightfall:blaster/bx49/weapons_blaster_bx49_fire_02",
+      "knightfall:blaster/bx49/weapons_blaster_bx49_fire_03"
+    ]
+  },
+  "bx49_launcher_fire": {
+    "subtitle": "sounds.knightfall.bx49_launcher_fire",
+    "sounds": [
+      "knightfall:blaster/bx49/weapons_blaster_bx49_launcher_fire_01",
+      "knightfall:blaster/bx49/weapons_blaster_bx49_launcher_fire_02",
+      "knightfall:blaster/bx49/weapons_blaster_bx49_launcher_fire_03",
+      "knightfall:blaster/bx49/weapons_blaster_bx49_launcher_fire_04",
+      "knightfall:blaster/bx49/weapons_blaster_bx49_launcher_fire_05",
+      "knightfall:blaster/bx49/weapons_blaster_bx49_launcher_fire_06"
     ]
   },
   "c10_fire": {
@@ -586,14 +720,14 @@
       "knightfall:blaster/c10/weapons_blaster_c10_charged_fire_10"
     ]
   },
-  "c96_fire": {
-    "subtitle": "sounds.knightfall.c96_fire",
+  "ht9_fire": {
+    "subtitle": "sounds.knightfall.ht9_fire",
     "sounds": [
-      "knightfall:blaster/c96/weapons_blaster_c96_fire_01",
-      "knightfall:blaster/c96/weapons_blaster_c96_fire_02",
-      "knightfall:blaster/c96/weapons_blaster_c96_fire_03",
-      "knightfall:blaster/c96/weapons_blaster_c96_fire_04",
-      "knightfall:blaster/c96/weapons_blaster_c96_fire_05"
+      "knightfall:blaster/ht9/weapons_blaster_ht9_fire_01",
+      "knightfall:blaster/ht9/weapons_blaster_ht9_fire_02",
+      "knightfall:blaster/ht9/weapons_blaster_ht9_fire_03",
+      "knightfall:blaster/ht9/weapons_blaster_ht9_fire_04",
+      "knightfall:blaster/ht9/weapons_blaster_ht9_fire_05"
     ]
   },
   "ca87_fire": {
@@ -630,25 +764,14 @@
       "knightfall:blaster/ca87/weapons_blaster_ca_87_stun_fire_04"
     ]
   },
-  "caij_vandas_blaster_pistol_fire": {
-    "subtitle": "sounds.knightfall.caij_vandas_blaster_pistol_fire",
+  "cc19_fire": {
+    "subtitle": "sounds.knightfall.cc19_fire",
     "sounds": [
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_01",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_02",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_03",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_04",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_05",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_fire_06"
-    ]
-  },
-  "caij_vandas_blaster_pistol_charged_fire": {
-    "subtitle": "sounds.knightfall.caij_vandas_blaster_pistol_charged_fire",
-    "sounds": [
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_01",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_02",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_03",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_04",
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charged_fire_05"
+      "knightfall:blaster/cc19/weapons_blaster_cc19_fire_01",
+      "knightfall:blaster/cc19/weapons_blaster_cc19_fire_02",
+      "knightfall:blaster/cc19/weapons_blaster_cc19_fire_03",
+      "knightfall:blaster/cc19/weapons_blaster_cc19_fire_04",
+      "knightfall:blaster/cc19/weapons_blaster_cc19_fire_05"
     ]
   },
   "cc420_fire": {
@@ -665,6 +788,26 @@
       "knightfall:blaster/cc420/weapons_blaster_cc420_fire_09"
     ]
   },
+  "charric_fire": {
+    "subtitle": "sounds.knightfall.charric_fire",
+    "sounds": [
+      "knightfall:blaster/charric/weapons_blaster_charric_fire_01",
+      "knightfall:blaster/charric/weapons_blaster_charric_fire_02",
+      "knightfall:blaster/charric/weapons_blaster_charric_fire_03",
+      "knightfall:blaster/charric/weapons_blaster_charric_fire_04",
+      "knightfall:blaster/charric/weapons_blaster_charric_fire_05"
+    ]
+  },
+  "charric_charged_fire": {
+    "subtitle": "sounds.knightfall.charric_charged_fire",
+    "sounds": [
+      "knightfall:blaster/charric/weapons_blaster_charric_charged_fire_01",
+      "knightfall:blaster/charric/weapons_blaster_charric_charged_fire_02",
+      "knightfall:blaster/charric/weapons_blaster_charric_charged_fire_03",
+      "knightfall:blaster/charric/weapons_blaster_charric_charged_fire_04",
+      "knightfall:blaster/charric/weapons_blaster_charric_charged_fire_05"
+    ]
+  },
   "cj9_bo_rifle_fire": {
     "subtitle": "sounds.knightfall.cj9_bo_rifle_fire",
     "sounds": [
@@ -674,6 +817,36 @@
       "knightfall:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_04",
       "knightfall:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_05",
       "knightfall:blaster/cj9_bo_rifle/weapons_blaster_cj9_bo_rifle_fire_06"
+    ]
+  },
+  "core_j3_fire": {
+    "subtitle": "sounds.knightfall.core_j3_fire",
+    "sounds": [
+      "knightfall:blaster/core_j3/weapons_blaster_core_j3_fire_01",
+      "knightfall:blaster/core_j3/weapons_blaster_core_j3_fire_02",
+      "knightfall:blaster/core_j3/weapons_blaster_core_j3_fire_03",
+      "knightfall:blaster/core_j3/weapons_blaster_core_j3_fire_04",
+      "knightfall:blaster/core_j3/weapons_blaster_core_j3_fire_05"
+    ]
+  },
+  "core_r5_fire": {
+    "subtitle": "sounds.knightfall.core_r5_fire",
+    "sounds": [
+      "knightfall:blaster/core_r5/weapons_blaster_core_r5_fire_01",
+      "knightfall:blaster/core_r5/weapons_blaster_core_r5_fire_02",
+      "knightfall:blaster/core_r5/weapons_blaster_core_r5_fire_03",
+      "knightfall:blaster/core_r5/weapons_blaster_core_r5_fire_04",
+      "knightfall:blaster/core_r5/weapons_blaster_core_r5_fire_05"
+    ]
+  },
+  "core_u12_fire": {
+    "subtitle": "sounds.knightfall.core_u12_fire",
+    "sounds": [
+      "knightfall:blaster/core_u12/weapons_blaster_core_u12_fire_01",
+      "knightfall:blaster/core_u12/weapons_blaster_core_u12_fire_02",
+      "knightfall:blaster/core_u12/weapons_blaster_core_u12_fire_03",
+      "knightfall:blaster/core_u12/weapons_blaster_core_u12_fire_04",
+      "knightfall:blaster/core_u12/weapons_blaster_core_u12_fire_05"
     ]
   },
   "corpo_rifle_fire": {
@@ -715,6 +888,29 @@
       "knightfall:blaster/cs14/weapons_blaster_cs14_fire_07"
     ]
   },
+  "cw24_fire": {
+    "subtitle": "sounds.knightfall.cw24_fire",
+    "sounds": [
+      "knightfall:blaster/cw24/weapons_blaster_cw24_fire_01",
+      "knightfall:blaster/cw24/weapons_blaster_cw24_fire_02",
+      "knightfall:blaster/cw24/weapons_blaster_cw24_fire_03",
+      "knightfall:blaster/cw24/weapons_blaster_cw24_fire_04",
+      "knightfall:blaster/cw24/weapons_blaster_cw24_fire_05",
+      "knightfall:blaster/cw24/weapons_blaster_cw24_fire_06"
+    ]
+  },
+  "cw76_fire": {
+    "subtitle": "sounds.knightfall.cw76_fire",
+    "sounds": [
+      "knightfall:blaster/cw76/weapons_blaster_cw76_fire_01",
+      "knightfall:blaster/cw76/weapons_blaster_cw76_fire_02",
+      "knightfall:blaster/cw76/weapons_blaster_cw76_fire_03",
+      "knightfall:blaster/cw76/weapons_blaster_cw76_fire_04",
+      "knightfall:blaster/cw76/weapons_blaster_cw76_fire_05",
+      "knightfall:blaster/cw76/weapons_blaster_cw76_fire_06",
+      "knightfall:blaster/cw76/weapons_blaster_cw76_fire_07"
+    ]
+  },
   "cycler_rifle_fire": {
     "subtitle": "sounds.knightfall.cycler_rifle_fire",
     "sounds": [
@@ -724,6 +920,14 @@
       "knightfall:blaster/cycler_rifle/weapons_blaster_cycler_rifle_laser_fire_04",
       "knightfall:blaster/cycler_rifle/weapons_blaster_cycler_rifle_laser_fire_05",
       "knightfall:blaster/cycler_rifle/weapons_blaster_cycler_rifle_laser_fire_06"
+    ]
+  },
+  "czerka_19_fire": {
+    "subtitle": "sounds.knightfall.czerka_19_fire",
+    "sounds": [
+      "knightfall:blaster/czerka_19/weapons_blaster_czerka_19_fire_01",
+      "knightfall:blaster/czerka_19/weapons_blaster_czerka_19_fire_02",
+      "knightfall:blaster/czerka_19/weapons_blaster_czerka_19_fire_03"
     ]
   },
   "czerka_adventurer_fire": {
@@ -746,14 +950,14 @@
       "knightfall:blaster/czerka_adventurer/weapons_blaster_czerka_adventurer_rifle_fire_15"
     ]
   },
-  "dark_trooper_rifle_fire": {
-    "subtitle": "sounds.knightfall.dark_trooper_rifle_fire",
+  "e44_fire": {
+    "subtitle": "sounds.knightfall.e44_fire",
     "sounds": [
-      "knightfall:blaster/dark_trooper_rifle/weapons_blaster_dark_trooper_rifle_fire_01",
-      "knightfall:blaster/dark_trooper_rifle/weapons_blaster_dark_trooper_rifle_fire_02",
-      "knightfall:blaster/dark_trooper_rifle/weapons_blaster_dark_trooper_rifle_fire_03",
-      "knightfall:blaster/dark_trooper_rifle/weapons_blaster_dark_trooper_rifle_fire_04",
-      "knightfall:blaster/dark_trooper_rifle/weapons_blaster_dark_trooper_rifle_fire_05"
+      "knightfall:blaster/e44/weapons_blaster_e44_fire_01",
+      "knightfall:blaster/e44/weapons_blaster_e44_fire_02",
+      "knightfall:blaster/e44/weapons_blaster_e44_fire_03",
+      "knightfall:blaster/e44/weapons_blaster_e44_fire_04",
+      "knightfall:blaster/e44/weapons_blaster_e44_fire_05"
     ]
   },
   "dc12u_fire": {
@@ -931,6 +1135,14 @@
       "knightfall:blaster/de10/weapons_blaster_de10_fire_10"
     ]
   },
+  "deactivator_fire": {
+    "subtitle": "sounds.knightfall.deactivator_fire",
+    "sounds": [
+      "knightfall:blaster/deactivator/weapons_blaster_deactivator_fire_01",
+      "knightfall:blaster/deactivator/weapons_blaster_deactivator_fire_02",
+      "knightfall:blaster/deactivator/weapons_blaster_deactivator_fire_03"
+    ]
+  },
   "deftech_fire": {
     "subtitle": "sounds.knightfall.deftech_fire",
     "sounds": [
@@ -942,6 +1154,20 @@
       "knightfall:blaster/deftech/weapons_blaster_deftech_fire_06"
     ]
   },
+  "der4_fire": {
+    "subtitle": "sounds.knightfall.der4_fire",
+    "sounds": [
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_01",
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_02",
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_03",
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_04",
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_05",
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_06",
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_07",
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_08",
+      "knightfall:blaster/der4/weapons_blaster_der4_fire_09"
+    ]
+  },
   "dfd1_fire": {
     "subtitle": "sounds.knightfall.dfd1_fire",
     "sounds": [
@@ -950,6 +1176,19 @@
       "knightfall:blaster/dfd1_duo_flechette_rifle/weapons_blaster_dfd1_fire_03",
       "knightfall:blaster/dfd1_duo_flechette_rifle/weapons_blaster_dfd1_fire_04",
       "knightfall:blaster/dfd1_duo_flechette_rifle/weapons_blaster_dfd1_fire_05"
+    ]
+  },
+  "dfq91_fire": {
+    "subtitle": "sounds.knightfall.dfq91_fire",
+    "sounds": [
+      "knightfall:blaster/dfq91/weapons_blaster_dfq91_fire_01",
+      "knightfall:blaster/dfq91/weapons_blaster_dfq91_fire_02",
+      "knightfall:blaster/dfq91/weapons_blaster_dfq91_fire_03",
+      "knightfall:blaster/dfq91/weapons_blaster_dfq91_fire_04",
+      "knightfall:blaster/dfq91/weapons_blaster_dfq91_fire_05",
+      "knightfall:blaster/dfq91/weapons_blaster_dfq91_fire_06",
+      "knightfall:blaster/dfq91/weapons_blaster_dfq91_fire_07",
+      "knightfall:blaster/dfq91/weapons_blaster_dfq91_fire_08"
     ]
   },
   "dg29_fire": {
@@ -1009,6 +1248,19 @@
       "knightfall:blaster/dh23/weapons_blaster_dh23_fire_08"
     ]
   },
+  "dh42_fire": {
+    "subtitle": "sounds.knightfall.dh42_fire",
+    "sounds": [
+      "knightfall:blaster/dh42/weapons_blaster_dh42_fire_01",
+      "knightfall:blaster/dh42/weapons_blaster_dh42_fire_02",
+      "knightfall:blaster/dh42/weapons_blaster_dh42_fire_03",
+      "knightfall:blaster/dh42/weapons_blaster_dh42_fire_04",
+      "knightfall:blaster/dh42/weapons_blaster_dh42_fire_05",
+      "knightfall:blaster/dh42/weapons_blaster_dh42_fire_06",
+      "knightfall:blaster/dh42/weapons_blaster_dh42_fire_07",
+      "knightfall:blaster/dh42/weapons_blaster_dh42_fire_08"
+    ]
+  },
   "dh447_fire": {
     "subtitle": "sounds.knightfall.dh447_fire",
     "sounds": [
@@ -1018,6 +1270,14 @@
       "knightfall:blaster/dh447/weapons_blaster_dh447_fire_04",
       "knightfall:blaster/dh447/weapons_blaster_dh447_fire_05",
       "knightfall:blaster/dh447/weapons_blaster_dh447_fire_06"
+    ]
+  },
+  "dl11_fire": {
+    "subtitle": "sounds.knightfall.dl11_fire",
+    "sounds": [
+      "knightfall:blaster/dl11/weapons_blaster_dl11_fire_01",
+      "knightfall:blaster/dl11/weapons_blaster_dl11_fire_02",
+      "knightfall:blaster/dl11/weapons_blaster_dl11_fire_03"
     ]
   },
   "dl18_fire": {
@@ -1052,6 +1312,14 @@
       "knightfall:blaster/dl21/weapons_blaster_dl21_fire_06",
       "knightfall:blaster/dl21/weapons_blaster_dl21_fire_07",
       "knightfall:blaster/dl21/weapons_blaster_dl21_fire_08"
+    ]
+  },
+  "dl23_fire": {
+    "subtitle": "sounds.knightfall.dl23_fire",
+    "sounds": [
+      "knightfall:blaster/dl23/weapons_blaster_dl23_fire_01",
+      "knightfall:blaster/dl23/weapons_blaster_dl23_fire_02",
+      "knightfall:blaster/dl23/weapons_blaster_dl23_fire_03"
     ]
   },
   "dl44_fire": {
@@ -1105,6 +1373,14 @@
       "knightfall:blaster/dls12/weapons_blaster_dls12_fire_04",
       "knightfall:blaster/dls12/weapons_blaster_dls12_fire_05",
       "knightfall:blaster/dls12/weapons_blaster_dls12_fire_06"
+    ]
+  },
+  "dlt15_fire": {
+    "subtitle": "sounds.knightfall.dlt15_fire",
+    "sounds": [
+      "knightfall:blaster/dlt15/weapons_blaster_dlt15_fire_01",
+      "knightfall:blaster/dlt15/weapons_blaster_dlt15_fire_02",
+      "knightfall:blaster/dlt15/weapons_blaster_dlt15_fire_03"
     ]
   },
   "dlt18_fire": {
@@ -1290,6 +1566,30 @@
       "knightfall:blaster/dt57/weapons_blaster_dt57_fire_03"
     ]
   },
+  "duj3_fire": {
+    "subtitle": "sounds.knightfall.duj3_fire",
+    "sounds": [
+      "knightfall:blaster/duj3/weapons_blaster_duj3_fire_01",
+      "knightfall:blaster/duj3/weapons_blaster_duj3_fire_02",
+      "knightfall:blaster/duj3/weapons_blaster_duj3_fire_03"
+    ]
+  },
+  "dul4_fire": {
+    "subtitle": "sounds.knightfall.dul4_fire",
+    "sounds": [
+      "knightfall:blaster/dul4/weapons_blaster_dul4_fire_01",
+      "knightfall:blaster/dul4/weapons_blaster_dul4_fire_02",
+      "knightfall:blaster/dul4/weapons_blaster_dul4_fire_03"
+    ]
+  },
+  "dx2_charged_fire": {
+    "subtitle": "sounds.knightfall.dx2_charged_fire",
+    "sounds": [
+      "knightfall:blaster/dx2/weapons_blaster_dx2_charged_fire_01",
+      "knightfall:blaster/dx2/weapons_blaster_dx2_charged_fire_02",
+      "knightfall:blaster/dx2/weapons_blaster_dx2_charged_fire_03"
+    ]
+  },
   "dx13_fire": {
     "subtitle": "sounds.knightfall.dx13_fire",
     "sounds": [
@@ -1301,6 +1601,14 @@
       "knightfall:blaster/dx13/weapons_blaster_dx13_fire_06",
       "knightfall:blaster/dx13/weapons_blaster_dx13_fire_07",
       "knightfall:blaster/dx13/weapons_blaster_dx13_fire_08"
+    ]
+  },
+  "dxr6_charged_fire": {
+    "subtitle": "sounds.knightfall.dxr6_charged_fire",
+    "sounds": [
+      "knightfall:blaster/dxr6/weapons_blaster_dxr6_charged_fire_01",
+      "knightfall:blaster/dxr6/weapons_blaster_dxr6_charged_fire_02",
+      "knightfall:blaster/dxr6/weapons_blaster_dxr6_charged_fire_03"
     ]
   },
   "e5_fire": {
@@ -1322,6 +1630,14 @@
       "knightfall:blaster/e5_bx/weapons_blaster_e5_bx_fire_03",
       "knightfall:blaster/e5_bx/weapons_blaster_e5_bx_fire_04",
       "knightfall:blaster/e5_bx/weapons_blaster_e5_bx_fire_05"
+    ]
+  },
+  "e5_carbine_fire": {
+    "subtitle": "sounds.knightfall.e5_carbine_fire",
+    "sounds": [
+      "knightfall:blaster/e5_carbine/weapons_blaster_e5_carbine_fire_01",
+      "knightfall:blaster/e5_carbine/weapons_blaster_e5_carbine_fire_02",
+      "knightfall:blaster/e5_carbine/weapons_blaster_e5_carbine_fire_03"
     ]
   },
   "e5_ce_fire": {
@@ -1451,6 +1767,14 @@
       "knightfall:blaster/e11d/weapons_blaster_e11d_fire_09"
     ]
   },
+  "e11p_fire": {
+    "subtitle": "sounds.knightfall.e11p_fire",
+    "sounds": [
+      "knightfall:blaster/e11p/weapons_blaster_e11p_fire_01",
+      "knightfall:blaster/e11p/weapons_blaster_e11p_fire_02",
+      "knightfall:blaster/e11p/weapons_blaster_e11p_fire_03"
+    ]
+  },
   "e11s_fire": {
     "subtitle": "sounds.knightfall.e11s_fire",
     "sounds": [
@@ -1462,6 +1786,17 @@
       "knightfall:blaster/e11s/weapons_blaster_e11s_fire_06",
       "knightfall:blaster/e11s/weapons_blaster_e11s_fire_07",
       "knightfall:blaster/e11s/weapons_blaster_e11s_fire_08"
+    ]
+  },
+  "e11t_fire": {
+    "subtitle": "sounds.knightfall.e11t_fire",
+    "sounds": [
+      "knightfall:blaster/e11t/weapons_blaster_e11t_fire_01",
+      "knightfall:blaster/e11t/weapons_blaster_e11t_fire_02",
+      "knightfall:blaster/e11t/weapons_blaster_e11t_fire_03",
+      "knightfall:blaster/e11t/weapons_blaster_e11t_fire_04",
+      "knightfall:blaster/e11t/weapons_blaster_e11t_fire_05",
+      "knightfall:blaster/e11t/weapons_blaster_e11t_fire_06"
     ]
   },
   "e17d_fire": {
@@ -1538,6 +1873,26 @@
       "knightfall:blaster/ee4/weapons_blaster_ee4_fire_14"
     ]
   },
+  "el5_fire": {
+    "subtitle": "sounds.knightfall.el5_fire",
+    "sounds": [
+      "knightfall:blaster/el5/weapons_blaster_el5_fire_01",
+      "knightfall:blaster/el5/weapons_blaster_el5_fire_02",
+      "knightfall:blaster/el5/weapons_blaster_el5_fire_03",
+      "knightfall:blaster/el5/weapons_blaster_el5_fire_04",
+      "knightfall:blaster/el5/weapons_blaster_el5_fire_05"
+    ]
+  },
+  "el244_fire": {
+    "subtitle": "sounds.knightfall.el244_fire",
+    "sounds": [
+      "knightfall:blaster/el244/weapons_blaster_el244_fire_01",
+      "knightfall:blaster/el244/weapons_blaster_el244_fire_02",
+      "knightfall:blaster/el244/weapons_blaster_el244_fire_03",
+      "knightfall:blaster/el244/weapons_blaster_el244_fire_04",
+      "knightfall:blaster/el244/weapons_blaster_el244_fire_05"
+    ]
+  },
   "elg3a_fire": {
     "subtitle": "sounds.knightfall.elg3a_fire",
     "sounds": [
@@ -1546,6 +1901,15 @@
       "knightfall:blaster/elg3a/weapons_blaster_elg3a_fire_03",
       "knightfall:blaster/elg3a/weapons_blaster_elg3a_fire_04",
       "knightfall:blaster/elg3a/weapons_blaster_elg3a_fire_05"
+    ]
+  },
+  "emg2_fire": {
+    "subtitle": "sounds.knightfall.emg2_fire",
+    "sounds": [
+      "knightfall:blaster/emg2/weapons_blaster_emg2_fire_01",
+      "knightfall:blaster/emg2/weapons_blaster_emg2_fire_02",
+      "knightfall:blaster/emg2/weapons_blaster_emg2_fire_03",
+      "knightfall:blaster/emg2/weapons_blaster_emg2_fire_04"
     ]
   },
   "energy_bow_fire": {
@@ -1563,6 +1927,14 @@
       "knightfall:blaster/energy_crossbow/weapons_blaster_energy_crossbow_fire_01",
       "knightfall:blaster/energy_crossbow/weapons_blaster_energy_crossbow_fire_02",
       "knightfall:blaster/energy_crossbow/weapons_blaster_energy_crossbow_fire_03"
+    ]
+  },
+  "esb3_fire": {
+    "subtitle": "sounds.knightfall.esb3_fire",
+    "sounds": [
+      "knightfall:blaster/esb3/weapons_blaster_esb3_fire_01",
+      "knightfall:blaster/esb3/weapons_blaster_esb3_fire_02",
+      "knightfall:blaster/esb3/weapons_blaster_esb3_fire_03"
     ]
   },
   "eweb_fire": {
@@ -1597,6 +1969,32 @@
       "knightfall:blaster/ewhb12/weapons_blaster_ewhb12_auto_fire_04"
     ]
   },
+  "f2l_fire": {
+    "subtitle": "sounds.knightfall.f2l_fire",
+    "sounds": [
+      "knightfall:blaster/f2l/weapons_blaster_f2l_fire_01",
+      "knightfall:blaster/f2l/weapons_blaster_f2l_fire_02",
+      "knightfall:blaster/f2l/weapons_blaster_f2l_fire_03"
+    ]
+  },
+  "f4l_fire": {
+    "subtitle": "sounds.knightfall.f4l_fire",
+    "sounds": [
+      "knightfall:blaster/f4l/weapons_blaster_f4l_fire_01",
+      "knightfall:blaster/f4l/weapons_blaster_f4l_fire_02"
+    ]
+  },
+  "f38g_fire": {
+    "subtitle": "sounds.knightfall.f38g_fire",
+    "sounds": [
+      "knightfall:blaster/f38g/weapons_blaster_f38g_fire_01",
+      "knightfall:blaster/f38g/weapons_blaster_f38g_fire_02",
+      "knightfall:blaster/f38g/weapons_blaster_f38g_fire_03",
+      "knightfall:blaster/f38g/weapons_blaster_f38g_fire_04",
+      "knightfall:blaster/f38g/weapons_blaster_f38g_fire_05",
+      "knightfall:blaster/f38g/weapons_blaster_f38g_fire_06"
+    ]
+  },
   "fc1_flechette_launcher_fire": {
     "subtitle": "sounds.knightfall.fc1_flechette_launcher_fire",
     "sounds": [
@@ -1605,21 +2003,6 @@
       "knightfall:blaster/fc1_flechette_launcher/weapons_blaster_fc1_fire_03",
       "knightfall:blaster/fc1_flechette_launcher/weapons_blaster_fc1_fire_04",
       "knightfall:blaster/fc1_flechette_launcher/weapons_blaster_fc1_fire_05"
-    ]
-  },
-  "flintloq_pistol_fire": {
-    "subtitle": "sounds.knightfall.flintloq_pistol_fire",
-    "sounds": [
-      "knightfall:blaster/flintloq_pistol/weapons_blaster_flint_loq_blaster_pistol_fire_01",
-      "knightfall:blaster/flintloq_pistol/weapons_blaster_flint_loq_blaster_pistol_fire_02",
-      "knightfall:blaster/flintloq_pistol/weapons_blaster_flint_loq_blaster_pistol_fire_03"
-    ]
-  },
-  "flintloq_rifle_fire": {
-    "subtitle": "sounds.knightfall.flintloq_rifle_fire",
-    "sounds": [
-      "knightfall:blaster/flintloq_rifle/weapons_blaster_flint_loq_blaster_rifle_fire_01",
-      "knightfall:blaster/flintloq_rifle/weapons_blaster_flint_loq_blaster_rifle_fire_02"
     ]
   },
   "flite37_fire": {
@@ -1659,6 +2042,39 @@
       "knightfall:blaster/fp45/weapons_blaster_fp45_fire_05",
       "knightfall:blaster/fp45/weapons_blaster_fp45_fire_06",
       "knightfall:blaster/fp45/weapons_blaster_fp45_fire_07"
+    ]
+  },
+  "fweb_fire": {
+    "subtitle": "sounds.knightfall.fweb_fire",
+    "sounds": [
+
+    ]
+  },
+  "fwg5_fire": {
+    "subtitle": "sounds.knightfall.fwg5_fire",
+    "sounds": [
+      "knightfall:blaster/fwg5/weapons_blaster_fwg5_fire_01",
+      "knightfall:blaster/fwg5/weapons_blaster_fwg5_fire_02",
+      "knightfall:blaster/fwg5/weapons_blaster_fwg5_fire_03"
+    ]
+  },
+  "fwg7_fire": {
+    "subtitle": "sounds.knightfall.fwg7_fire",
+    "sounds": [
+      "knightfall:blaster/fwg7/weapons_blaster_fwg7_fire_01",
+      "knightfall:blaster/fwg7/weapons_blaster_fwg7_fire_02",
+      "knightfall:blaster/fwg7/weapons_blaster_fwg7_fire_03"
+    ]
+  },
+  "ga3r_fire": {
+    "subtitle": "sounds.knightfall.ga3r_fire",
+    "sounds": [
+      "knightfall:blaster/ga3r/weapons_blaster_ga3r_fire_01",
+      "knightfall:blaster/ga3r/weapons_blaster_ga3r_fire_02",
+      "knightfall:blaster/ga3r/weapons_blaster_ga3r_fire_03",
+      "knightfall:blaster/ga3r/weapons_blaster_ga3r_fire_04",
+      "knightfall:blaster/ga3r/weapons_blaster_ga3r_fire_05",
+      "knightfall:blaster/ga3r/weapons_blaster_ga3r_fire_06"
     ]
   },
   "galaar15_fire": {
@@ -1705,6 +2121,81 @@
       "knightfall:blaster/gl77/weapons_blaster_gl77_fire_06"
     ]
   },
+  "glx_firelance_fire": {
+    "subtitle": "sounds.knightfall.glx_firelance_fire",
+    "sounds": [
+      "knightfall:blaster/glx_firelance/weapons_blaster_glx_firelance_fire_01",
+      "knightfall:blaster/glx_firelance/weapons_blaster_glx_firelance_fire_02",
+      "knightfall:blaster/glx_firelance/weapons_blaster_glx_firelance_fire_03"
+    ]
+  },
+  "gm46_fire": {
+    "subtitle": "sounds.knightfall.gm46_fire",
+    "sounds": [
+      "knightfall:blaster/gm46/weapons_blaster_gm46_fire_01",
+      "knightfall:blaster/gm46/weapons_blaster_gm46_fire_02",
+      "knightfall:blaster/gm46/weapons_blaster_gm46_fire_03"
+    ]
+  },
+  "gm46_charged_fire": {
+    "subtitle": "sounds.knightfall.gm46_charged_fire",
+    "sounds": [
+      "knightfall:blaster/gm46/weapons_blaster_gm46_charged_fire_01",
+      "knightfall:blaster/gm46/weapons_blaster_gm46_charged_fire_02",
+      "knightfall:blaster/gm46/weapons_blaster_gm46_charged_fire_03"
+    ]
+  },
+  "gr4_st_fire": {
+    "subtitle": "sounds.knightfall.gr4_st_fire",
+    "sounds": [
+      "knightfall:blaster/gr4_st/weapons_blaster_gr4_st_fire_01",
+      "knightfall:blaster/gr4_st/weapons_blaster_gr4_st_fire_02",
+      "knightfall:blaster/gr4_st/weapons_blaster_gr4_st_fire_03"
+    ]
+  },
+  "gr13_fire": {
+    "subtitle": "sounds.knightfall.gr13_fire",
+    "sounds": [
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_01",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_02",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_03",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_04",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_05",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_06",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_07",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_08",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_09",
+      "knightfall:blaster/gr13/weapons_blaster_gr13_fire_10"
+    ]
+  },
+  "grn4_fire": {
+    "subtitle": "sounds.knightfall.grn4_fire",
+    "sounds": [
+      "knightfall:blaster/grn4/weapons_blaster_grn4_fire_01",
+      "knightfall:blaster/grn4/weapons_blaster_grn4_fire_02",
+      "knightfall:blaster/grn4/weapons_blaster_grn4_fire_03"
+    ]
+  },
+  "grs1_fire": {
+    "subtitle": "sounds.knightfall.grs1_fire",
+    "sounds": [
+      "knightfall:blaster/grs1/weapons_blaster_grs1_fire_01",
+      "knightfall:blaster/grs1/weapons_blaster_grs1_fire_02",
+      "knightfall:blaster/grs1/weapons_blaster_grs1_fire_03",
+      "knightfall:blaster/grs1/weapons_blaster_grs1_fire_04"
+    ]
+  },
+  "hb9_fire": {
+    "subtitle": "sounds.knightfall.hb9_fire",
+    "sounds": [
+      "knightfall:blaster/hb9/weapons_blaster_hb9_fire_01",
+      "knightfall:blaster/hb9/weapons_blaster_hb9_fire_02",
+      "knightfall:blaster/hb9/weapons_blaster_hb9_fire_03",
+      "knightfall:blaster/hb9/weapons_blaster_hb9_fire_04",
+      "knightfall:blaster/hb9/weapons_blaster_hb9_fire_05",
+      "knightfall:blaster/hb9/weapons_blaster_hb9_fire_06"
+    ]
+  },
   "hf94_fire": {
     "subtitle": "sounds.knightfall.hf94_fire",
     "sounds": [
@@ -1727,13 +2218,12 @@
       "knightfall:blaster/ib94/weapons_blaster_ib94_fire_06"
     ]
   },
-  "imperial_supercommando_blaster_fire": {
-    "subtitle": "sounds.knightfall.imperial_supercommando_blaster_fire",
+  "ion_stunner_fire": {
+    "subtitle": "sounds.knightfall.ion_stunner_fire",
     "sounds": [
-      "knightfall:blaster/imperial_supercommando_blaster/weapons_blaster_imperial_supercommando_blaster_fire_01",
-      "knightfall:blaster/imperial_supercommando_blaster/weapons_blaster_imperial_supercommando_blaster_fire_02",
-      "knightfall:blaster/imperial_supercommando_blaster/weapons_blaster_imperial_supercommando_blaster_fire_03",
-      "knightfall:blaster/imperial_supercommando_blaster/weapons_blaster_imperial_supercommando_blaster_fire_04"
+      "knightfall:blaster/ion_stunner/weapons_blaster_ion_stunner_fire_01",
+      "knightfall:blaster/ion_stunner/weapons_blaster_ion_stunner_fire_02",
+      "knightfall:blaster/ion_stunner/weapons_blaster_ion_stunner_fire_03"
     ]
   },
   "iqa11_fire": {
@@ -1747,6 +2237,17 @@
       "knightfall:blaster/iqa11/weapons_blaster_iqa11_fire_06",
       "knightfall:blaster/iqa11/weapons_blaster_iqa11_fire_07",
       "knightfall:blaster/iqa11/weapons_blaster_iqa11_fire_08"
+    ]
+  },
+  "j19_bo_rifle_fire": {
+    "subtitle": "sounds.knightfall.j19_bo_rifle_fire",
+    "sounds": [
+      "knightfall:blaster/j19_bo_rifle/weapons_blaster_j19_bo_rifle_fire_01",
+      "knightfall:blaster/j19_bo_rifle/weapons_blaster_j19_bo_rifle_fire_02",
+      "knightfall:blaster/j19_bo_rifle/weapons_blaster_j19_bo_rifle_fire_03",
+      "knightfall:blaster/j19_bo_rifle/weapons_blaster_j19_bo_rifle_fire_04",
+      "knightfall:blaster/j19_bo_rifle/weapons_blaster_j19_bo_rifle_fire_05",
+      "knightfall:blaster/j19_bo_rifle/weapons_blaster_j19_bo_rifle_fire_06"
     ]
   },
   "jezali_cycler_rifle_fire": {
@@ -1780,6 +2281,14 @@
       "knightfall:blaster/jnd41/weapons_blaster_jnd41_charged_fire_04",
       "knightfall:blaster/jnd41/weapons_blaster_jnd41_charged_fire_05",
       "knightfall:blaster/jnd41/weapons_blaster_jnd41_charged_fire_06"
+    ]
+  },
+  "k13_fire": {
+    "subtitle": "sounds.knightfall.k13_fire",
+    "sounds": [
+      "knightfall:blaster/k13/weapons_blaster_k13_fire_01",
+      "knightfall:blaster/k13/weapons_blaster_k13_fire_02",
+      "knightfall:blaster/k13/weapons_blaster_k13_fire_03"
     ]
   },
   "k16_bryar_pistol_fire": {
@@ -1822,6 +2331,21 @@
       "knightfall:blaster/ka74/weapons_blaster_ka74_fire_06"
     ]
   },
+  "kineticblast_fire": {
+    "subtitle": "sounds.knightfall.kineticblast_fire",
+    "sounds": [
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_01",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_02",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_03",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_04",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_05",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_06",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_07",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_08",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_09",
+      "knightfall:blaster/kineticblast/weapons_blaster_kineticblast_fire_10"
+    ]
+  },
   "kisteer_1284_fire": {
     "subtitle": "sounds.knightfall.kisteer_1284_fire",
     "sounds": [
@@ -1832,28 +2356,25 @@
       "knightfall:blaster/kisteer_1284/weapons_blaster_kisteer_1284_fire_05"
     ]
   },
-  "koch9s_fire": {
-    "subtitle": "sounds.knightfall.koch9s_fire",
+  "kl9_fire": {
+    "subtitle": "sounds.knightfall.kl9_fire",
     "sounds": [
-      "knightfall:blaster/koch9s/weapons_blaster_koch9s_fire_01",
-      "knightfall:blaster/koch9s/weapons_blaster_koch9s_fire_02",
-      "knightfall:blaster/koch9s/weapons_blaster_koch9s_fire_03",
-      "knightfall:blaster/koch9s/weapons_blaster_koch9s_fire_04",
-      "knightfall:blaster/koch9s/weapons_blaster_koch9s_fire_05",
-      "knightfall:blaster/koch9s/weapons_blaster_koch9s_fire_06",
-      "knightfall:blaster/koch9s/weapons_blaster_koch9s_fire_07",
-      "knightfall:blaster/koch9s/weapons_blaster_koch9s_fire_08"
+      "knightfall:blaster/kl9/weapons_blaster_kl9_fire_01",
+      "knightfall:blaster/kl9/weapons_blaster_kl9_fire_02",
+      "knightfall:blaster/kl9/weapons_blaster_kl9_fire_03",
+      "knightfall:blaster/kl9/weapons_blaster_kl9_fire_04",
+      "knightfall:blaster/kl9/weapons_blaster_kl9_fire_05",
+      "knightfall:blaster/kl9/weapons_blaster_kl9_fire_06",
+      "knightfall:blaster/kl9/weapons_blaster_kl9_fire_07",
+      "knightfall:blaster/kl9/weapons_blaster_kl9_fire_08"
     ]
   },
-  "krie4_fire": {
-    "subtitle": "sounds.knightfall.krie4_fire",
+  "km9_fire": {
+    "subtitle": "sounds.knightfall.km9_fire",
     "sounds": [
-      "knightfall:blaster/krie4/weapons_blaster_krie4_fire_01",
-      "knightfall:blaster/krie4/weapons_blaster_krie4_fire_02",
-      "knightfall:blaster/krie4/weapons_blaster_krie4_fire_03",
-      "knightfall:blaster/krie4/weapons_blaster_krie4_fire_04",
-      "knightfall:blaster/krie4/weapons_blaster_krie4_fire_05",
-      "knightfall:blaster/krie4/weapons_blaster_krie4_fire_06"
+      "knightfall:blaster/km9/weapons_blaster_km9_fire_01",
+      "knightfall:blaster/km9/weapons_blaster_km9_fire_02",
+      "knightfall:blaster/km9/weapons_blaster_km9_fire_03"
     ]
   },
   "kueget_ln21_fire": {
@@ -1899,15 +2420,20 @@
       "knightfall:blaster/l60/weapons_blaster_l60_fire_06"
     ]
   },
-  "leucht42_fire": {
-    "subtitle": "sounds.knightfall.leucht42_fire",
+  "lj40_fire": {
+    "subtitle": "sounds.knightfall.lj40_fire",
     "sounds": [
-      "knightfall:blaster/leucht42/weapons_blaster_leucht42_fire_01",
-      "knightfall:blaster/leucht42/weapons_blaster_leucht42_fire_02",
-      "knightfall:blaster/leucht42/weapons_blaster_leucht42_fire_03",
-      "knightfall:blaster/leucht42/weapons_blaster_leucht42_fire_04",
-      "knightfall:blaster/leucht42/weapons_blaster_leucht42_fire_05",
-      "knightfall:blaster/leucht42/weapons_blaster_leucht42_fire_06"
+      "knightfall:blaster/lj40/weapons_blaster_lj40_fire_01",
+      "knightfall:blaster/lj40/weapons_blaster_lj40_fire_02",
+      "knightfall:blaster/lj40/weapons_blaster_lj40_fire_03"
+    ]
+  },
+  "lj50_fire": {
+    "subtitle": "sounds.knightfall.lj50_fire",
+    "sounds": [
+      "knightfall:blaster/lj50/weapons_blaster_lj50_fire_01",
+      "knightfall:blaster/lj50/weapons_blaster_lj50_fire_02",
+      "knightfall:blaster/lj50/weapons_blaster_lj50_fire_03"
     ]
   },
   "lightbow_fire": {
@@ -1932,18 +2458,33 @@
       "knightfall:blaster/ll30/weapons_blaster_ll30_fire_06"
     ]
   },
-  "lug_po8_fire": {
-    "subtitle": "sounds.knightfall.lug_po8_fire",
+  "ls150_fire": {
+    "subtitle": "sounds.knightfall.ls150_fire",
     "sounds": [
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_01",
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_02",
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_03",
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_04",
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_05",
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_06",
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_07",
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_08",
-      "knightfall:blaster/lug_po8/weapons_blaster_lug_po8_fire_09"
+      "knightfall:blaster/ls150/weapons_blaster_ls150_fire_01",
+      "knightfall:blaster/ls150/weapons_blaster_ls150_fire_02",
+      "knightfall:blaster/ls150/weapons_blaster_ls150_fire_03"
+    ]
+  },
+  "lv7c_fire": {
+    "subtitle": "sounds.knightfall.lv7c_fire",
+    "sounds": [
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_fire_01",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_fire_02",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_fire_03",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_fire_04",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_fire_05",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_fire_06"
+    ]
+  },
+  "lv7c_charged_fire": {
+    "subtitle": "sounds.knightfall.lv7c_charged_fire",
+    "sounds": [
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_charged_fire_01",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_charged_fire_02",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_charged_fire_03",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_charged_fire_04",
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_charged_fire_05"
     ]
   },
   "lw896_fire": {
@@ -1966,16 +2507,6 @@
       "knightfall:blaster/m12/weapons_blaster_m12_fire_04",
       "knightfall:blaster/m12/weapons_blaster_m12_fire_05",
       "knightfall:blaster/m12/weapons_blaster_m12_fire_06"
-    ]
-  },
-  "m19a1_fire": {
-    "subtitle": "sounds.knightfall.m19a1_fire",
-    "sounds": [
-      "knightfall:blaster/m19a1/weapons_blaster_m19a1_fire_01",
-      "knightfall:blaster/m19a1/weapons_blaster_m19a1_fire_02",
-      "knightfall:blaster/m19a1/weapons_blaster_m19a1_fire_03",
-      "knightfall:blaster/m19a1/weapons_blaster_m19a1_fire_04",
-      "knightfall:blaster/m19a1/weapons_blaster_m19a1_fire_05"
     ]
   },
   "m32_fire": {
@@ -2109,6 +2640,25 @@
       "knightfall:blaster/motto_mk_4/weapons_blaster_motto_mk_4_repulse_fire_06"
     ]
   },
+  "msd32_fire": {
+    "subtitle": "sounds.knightfall.msd32_fire",
+    "sounds": [
+      "knightfall:blaster/msd32/weapons_blaster_msd32_fire_01",
+      "knightfall:blaster/msd32/weapons_blaster_msd32_fire_02",
+      "knightfall:blaster/msd32/weapons_blaster_msd32_fire_03",
+      "knightfall:blaster/msd32/weapons_blaster_msd32_fire_04",
+      "knightfall:blaster/msd32/weapons_blaster_msd32_fire_05",
+      "knightfall:blaster/msd32/weapons_blaster_msd32_fire_06"
+    ]
+  },
+  "msd32_charged_fire": {
+    "subtitle": "sounds.knightfall.msd32_charged_fire",
+    "sounds": [
+      "knightfall:blaster/msd32/weapons_blaster_msd32_charged_fire_01",
+      "knightfall:blaster/msd32/weapons_blaster_msd32_charged_fire_02",
+      "knightfall:blaster/msd32/weapons_blaster_msd32_charged_fire_03"
+    ]
+  },
   "mw20_bryar_pistol_fire": {
     "subtitle": "sounds.knightfall.mw20_bryar_pistol_fire",
     "sounds": [
@@ -2161,14 +2711,6 @@
       "knightfall:blaster/mwc35c/weapons_blaster_mwc35c_fire_14",
       "knightfall:blaster/mwc35c/weapons_blaster_mwc35c_fire_15",
       "knightfall:blaster/mwc35c/weapons_blaster_mwc35c_fire_16"
-    ]
-  },
-  "nambu14_fire": {
-    "subtitle": "sounds.knightfall.nambu14_fire",
-    "sounds": [
-      "knightfall:blaster/nambu14/weapons_blaster_nambu14_fire_01",
-      "knightfall:blaster/nambu14/weapons_blaster_nambu14_fire_02",
-      "knightfall:blaster/nambu14/weapons_blaster_nambu14_fire_03"
     ]
   },
   "neo_crusader_rifle_fire": {
@@ -2231,13 +2773,12 @@
       "knightfall:blaster/night_stinger/weapons_blaster_night_stinger_charged_fire_05"
     ]
   },
-  "night_wind_rifle_fire": {
-    "subtitle": "sounds.knightfall.night_wind_rifle_fire",
+  "noslo19_fire": {
+    "subtitle": "sounds.knightfall.noslo19_fire",
     "sounds": [
-      "knightfall:blaster/night_wind_rifle/weapons_blaster_night_wind_rifle_fire_01",
-      "knightfall:blaster/night_wind_rifle/weapons_blaster_night_wind_rifle_fire_02",
-      "knightfall:blaster/night_wind_rifle/weapons_blaster_night_wind_rifle_fire_03",
-      "knightfall:blaster/night_wind_rifle/weapons_blaster_night_wind_rifle_fire_04"
+      "knightfall:blaster/noslo19/weapons_blaster_noslo19_fire_01",
+      "knightfall:blaster/noslo19/weapons_blaster_noslo19_fire_02",
+      "knightfall:blaster/noslo19/weapons_blaster_noslo19_fire_03"
     ]
   },
   "nt242_fire": {
@@ -2287,15 +2828,14 @@
       "knightfall:blaster/outland_rifle/weapons_blaster_outland_rifle_fire_10"
     ]
   },
-  "p38_fire": {
-    "subtitle": "sounds.knightfall.p38_fire",
+  "p224_fire": {
+    "subtitle": "sounds.knightfall.p224_fire",
     "sounds": [
-      "knightfall:blaster/p38/weapons_blaster_p38_fire_01",
-      "knightfall:blaster/p38/weapons_blaster_p38_fire_02",
-      "knightfall:blaster/p38/weapons_blaster_p38_fire_03",
-      "knightfall:blaster/p38/weapons_blaster_p38_fire_04",
-      "knightfall:blaster/p38/weapons_blaster_p38_fire_05",
-      "knightfall:blaster/p38/weapons_blaster_p38_fire_06"
+      "knightfall:blaster/p224/weapons_blaster_p224_fire_01",
+      "knightfall:blaster/p224/weapons_blaster_p224_fire_02",
+      "knightfall:blaster/p224/weapons_blaster_p224_fire_03",
+      "knightfall:blaster/p224/weapons_blaster_p224_fire_04",
+      "knightfall:blaster/p224/weapons_blaster_p224_fire_05"
     ]
   },
   "panic_pistol_fire": {
@@ -2305,15 +2845,6 @@
       "knightfall:blaster/panic_pistol/weapons_blaster_panic_pistol_fire_02",
       "knightfall:blaster/panic_pistol/weapons_blaster_panic_pistol_fire_03",
       "knightfall:blaster/panic_pistol/weapons_blaster_panic_pistol_fire_04"
-    ]
-  },
-  "pcc_projector_fire": {
-    "subtitle": "sounds.knightfall.pcc_projector_fire",
-    "sounds": [
-      "knightfall:blaster/pcc_projector/weapons_blaster_pcc_projector_fire_01",
-      "knightfall:blaster/pcc_projector/weapons_blaster_pcc_projector_fire_02",
-      "knightfall:blaster/pcc_projector/weapons_blaster_pcc_projector_fire_03",
-      "knightfall:blaster/pcc_projector/weapons_blaster_pcc_projector_fire_04"
     ]
   },
   "pk23_fire": {
@@ -2355,14 +2886,20 @@
       "knightfall:blaster/power_5/weapons_blaster_power5_charged_fire_06"
     ]
   },
-  "premier_fire": {
-    "subtitle": "sounds.knightfall.premier_fire",
+  "pr9_fire": {
+    "subtitle": "sounds.knightfall.pr9_fire",
     "sounds": [
-      "knightfall:blaster/premier/weapons_blaster_premier_blaster_pistol_fire_01",
-      "knightfall:blaster/premier/weapons_blaster_premier_blaster_pistol_fire_02",
-      "knightfall:blaster/premier/weapons_blaster_premier_blaster_pistol_fire_03",
-      "knightfall:blaster/premier/weapons_blaster_premier_blaster_pistol_fire_04",
-      "knightfall:blaster/premier/weapons_blaster_premier_blaster_pistol_fire_05"
+      "knightfall:blaster/pr9/weapons_blaster_pr9_fire_01",
+      "knightfall:blaster/pr9/weapons_blaster_pr9_fire_02",
+      "knightfall:blaster/pr9/weapons_blaster_pr9_fire_03"
+    ]
+  },
+  "precisionx_fire": {
+    "subtitle": "sounds.knightfall.precisionx_fire",
+    "sounds": [
+      "knightfall:blaster/precisionx/weapons_blaster_precisionx_fire_01",
+      "knightfall:blaster/precisionx/weapons_blaster_precisionx_fire_02",
+      "knightfall:blaster/precisionx/weapons_blaster_precisionx_fire_03"
     ]
   },
   "q2_fire": {
@@ -2383,6 +2920,37 @@
       "knightfall:blaster/quarren_rifle/weapons_blaster_quarren_rifle_fire_04"
     ]
   },
+  "r88_fire": {
+    "subtitle": "sounds.knightfall.r88_fire",
+    "sounds": [
+      "knightfall:blaster/r88/weapons_blaster_r88_fire_01",
+      "knightfall:blaster/r88/weapons_blaster_r88_fire_02",
+      "knightfall:blaster/r88/weapons_blaster_r88_fire_03",
+      "knightfall:blaster/r88/weapons_blaster_r88_fire_04"
+    ]
+  },
+  "r88_repulse_fire": {
+    "subtitle": "sounds.knightfall.r88_fire",
+    "sounds": [
+      "knightfall:blaster/r88/weapons_blaster_r88_repulse_fire_01",
+      "knightfall:blaster/r88/weapons_blaster_r88_repulse_fire_02",
+      "knightfall:blaster/r88/weapons_blaster_r88_repulse_fire_03",
+      "knightfall:blaster/r88/weapons_blaster_r88_repulse_fire_04",
+      "knightfall:blaster/r88/weapons_blaster_r88_repulse_fire_05",
+      "knightfall:blaster/r88/weapons_blaster_r88_repulse_fire_06"
+    ]
+  },
+  "r88_launcher_fire": {
+    "subtitle": "sounds.knightfall.r88_launcher_fire",
+    "sounds": [
+      "knightfall:blaster/r88/weapons_blaster_r88_launcher_fire_01",
+      "knightfall:blaster/r88/weapons_blaster_r88_launcher_fire_02",
+      "knightfall:blaster/r88/weapons_blaster_r88_launcher_fire_03",
+      "knightfall:blaster/r88/weapons_blaster_r88_launcher_fire_04",
+      "knightfall:blaster/r88/weapons_blaster_r88_launcher_fire_05",
+      "knightfall:blaster/r88/weapons_blaster_r88_launcher_fire_06"
+    ]
+  },
   "relby_k23_fire": {
     "subtitle": "sounds.knightfall.relby_k23_fire",
     "sounds": [
@@ -2391,6 +2959,30 @@
       "knightfall:blaster/relby_k23/weapons_blaster_relby_k23_fire_03",
       "knightfall:blaster/relby_k23/weapons_blaster_relby_k23_fire_04",
       "knightfall:blaster/relby_k23/weapons_blaster_relby_k23_fire_05"
+    ]
+  },
+  "relby_k25_pistol_fire": {
+    "subtitle": "sounds.knightfall.relby_k25_pistol_fire",
+    "sounds": [
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_pistol_fire_01",
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_pistol_fire_02",
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_pistol_fire_03"
+    ]
+  },
+  "relby_k25_charged_fire": {
+    "subtitle": "sounds.knightfall.relby_k25_charged_fire",
+    "sounds": [
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_charged_fire_01",
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_charged_fire_02",
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_charged_fire_03"
+    ]
+  },
+  "relby_k25_rifle_fire": {
+    "subtitle": "sounds.knightfall.relby_k25_rifle_fire",
+    "sounds": [
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_rifle_fire_01",
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_rifle_fire_02",
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_rifle_fire_03"
     ]
   },
   "relby_v10_fire": {
@@ -2472,6 +3064,20 @@
       "knightfall:blaster/rig420/weapons_blaster_rig420_fire_06"
     ]
   },
+  "rk2p_fire": {
+    "subtitle": "sounds.knightfall.rk2p_fire",
+    "sounds": [
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_01",
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_02",
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_03",
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_04",
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_05",
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_06",
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_07",
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_08",
+      "knightfall:blaster/rk2p/weapons_blaster_rk2p_fire_09"
+    ]
+  },
   "rk3_fire": {
     "subtitle": "sounds.knightfall.rk3_fire",
     "sounds": [
@@ -2481,6 +3087,24 @@
       "knightfall:blaster/rk3/weapons_blaster_rk3_fire_04",
       "knightfall:blaster/rk3/weapons_blaster_rk3_fire_05",
       "knightfall:blaster/rk3/weapons_blaster_rk3_fire_06"
+    ]
+  },
+  "rm7_fire": {
+    "subtitle": "sounds.knightfall.rm7_fire",
+    "sounds": [
+      "knightfall:blaster/rm7/weapons_blaster_rm7_fire_01",
+      "knightfall:blaster/rm7/weapons_blaster_rm7_fire_02",
+      "knightfall:blaster/rm7/weapons_blaster_rm7_fire_03",
+      "knightfall:blaster/rm7/weapons_blaster_rm7_fire_04",
+      "knightfall:blaster/rm7/weapons_blaster_rm7_fire_05"
+    ]
+  },
+  "rm_1p_fire": {
+    "subtitle": "sounds.knightfall.rm_1p_fire",
+    "sounds": [
+      "knightfall:blaster/rm_1p/weapons_blaster_rm_1p_fire_01",
+      "knightfall:blaster/rm_1p/weapons_blaster_rm_1p_fire_02",
+      "knightfall:blaster/rm_1p/weapons_blaster_rm_1p_fire_03"
     ]
   },
   "rps6_rocket_launcher_fire": {
@@ -2526,15 +3150,34 @@
       "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_10"
     ]
   },
-  "ruger_blaster_fire": {
-    "subtitle": "sounds.knightfall.ruger_blaster_fire",
+  "rlr_mk_ii_fire": {
+    "subtitle": "sounds.knightfall.rlr_mk_ii_fire",
     "sounds": [
-      "knightfall:blaster/ruger_blaster/weapons_blaster_ruger_fire_01",
-      "knightfall:blaster/ruger_blaster/weapons_blaster_ruger_fire_02",
-      "knightfall:blaster/ruger_blaster/weapons_blaster_ruger_fire_03",
-      "knightfall:blaster/ruger_blaster/weapons_blaster_ruger_fire_04",
-      "knightfall:blaster/ruger_blaster/weapons_blaster_ruger_fire_05",
-      "knightfall:blaster/ruger_blaster/weapons_blaster_ruger_fire_06"
+      "knightfall:blaster/rlr_mk_ii/weapons_blaster_rlr_mk_ii_fire_01",
+      "knightfall:blaster/rlr_mk_ii/weapons_blaster_rlr_mk_ii_fire_02",
+      "knightfall:blaster/rlr_mk_ii/weapons_blaster_rlr_mk_ii_fire_03",
+      "knightfall:blaster/rlr_mk_ii/weapons_blaster_rlr_mk_ii_fire_04",
+      "knightfall:blaster/rlr_mk_ii/weapons_blaster_rlr_mk_ii_fire_05",
+      "knightfall:blaster/rlr_mk_ii/weapons_blaster_rlr_mk_ii_fire_06"
+    ]
+  },
+  "s2s_fire": {
+    "subtitle": "sounds.knightfall.s2s_fire",
+    "sounds": [
+      "knightfall:blaster/s2s/weapons_blaster_s2s_fire_01",
+      "knightfall:blaster/s2s/weapons_blaster_s2s_fire_02",
+      "knightfall:blaster/s2s/weapons_blaster_s2s_fire_03"
+    ]
+  },
+  "s3_mk_5_fire": {
+    "subtitle": "sounds.knightfall.s3_mk_5_fire",
+    "sounds": [
+      "knightfall:blaster/s3_mk_5/weapons_blaster_s3_mk_5_fire_01",
+      "knightfall:blaster/s3_mk_5/weapons_blaster_s3_mk_5_fire_02",
+      "knightfall:blaster/s3_mk_5/weapons_blaster_s3_mk_5_fire_03",
+      "knightfall:blaster/s3_mk_5/weapons_blaster_s3_mk_5_fire_04",
+      "knightfall:blaster/s3_mk_5/weapons_blaster_s3_mk_5_fire_05",
+      "knightfall:blaster/s3_mk_5/weapons_blaster_s3_mk_5_fire_06"
     ]
   },
   "s5_fire": {
@@ -2602,6 +3245,17 @@
       "knightfall:blaster/satines_lament/weapons_blaster_satines_lament_charged_fire_06"
     ]
   },
+  "se9v_fire": {
+    "subtitle": "sounds.knightfall.se9v_fire",
+    "sounds": [
+      "knightfall:blaster/se9v/weapons_blaster_se9v_fire_01",
+      "knightfall:blaster/se9v/weapons_blaster_se9v_fire_02",
+      "knightfall:blaster/se9v/weapons_blaster_se9v_fire_03",
+      "knightfall:blaster/se9v/weapons_blaster_se9v_fire_04",
+      "knightfall:blaster/se9v/weapons_blaster_se9v_fire_05",
+      "knightfall:blaster/se9v/weapons_blaster_se9v_fire_06"
+    ]
+  },
   "se14c_fire": {
     "subtitle": "sounds.knightfall.se14c_fire",
     "sounds": [
@@ -2634,33 +3288,30 @@
       "knightfall:blaster/sedgleys_mk_5/weapons_blaster_sedgley_mk_5_fire_06"
     ]
   },
-  "serexim_mk_5_fire": {
-    "subtitle": "sounds.knightfall.serexim_mk_5_fire",
+  "ser5_fire": {
+    "subtitle": "sounds.knightfall.ser5_fire",
     "sounds": [
-      "knightfall:blaster/serexim_mk_5/weapons_blaster_se_rexim_mk_5_fire_01",
-      "knightfall:blaster/serexim_mk_5/weapons_blaster_se_rexim_mk_5_fire_02",
-      "knightfall:blaster/serexim_mk_5/weapons_blaster_se_rexim_mk_5_fire_03",
-      "knightfall:blaster/serexim_mk_5/weapons_blaster_se_rexim_mk_5_fire_04",
-      "knightfall:blaster/serexim_mk_5/weapons_blaster_se_rexim_mk_5_fire_05",
-      "knightfall:blaster/serexim_mk_5/weapons_blaster_se_rexim_mk_5_fire_06"
+      "knightfall:blaster/ser5/weapons_blaster_ser5_fire_01",
+      "knightfall:blaster/ser5/weapons_blaster_ser5_fire_02",
+      "knightfall:blaster/ser5/weapons_blaster_ser5_fire_03"
     ]
   },
-  "shadow_trooper_blaster_fire": {
-    "subtitle": "sounds.knightfall.shadow_trooper_blaster_fire",
+  "e9v_fire": {
+    "subtitle": "sounds.knightfall.e9v_fire",
     "sounds": [
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_fire_01",
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_fire_02",
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_fire_03",
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_fire_04",
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_fire_05"
+      "knightfall:blaster/e9v/weapons_blaster_e9v_fire_01",
+      "knightfall:blaster/e9v/weapons_blaster_e9v_fire_02",
+      "knightfall:blaster/e9v/weapons_blaster_e9v_fire_03",
+      "knightfall:blaster/e9v/weapons_blaster_e9v_fire_04",
+      "knightfall:blaster/e9v/weapons_blaster_e9v_fire_05"
     ]
   },
-  "shadow_trooper_blaster_charged_fire": {
-    "subtitle": "sounds.knightfall.shadow_trooper_blaster_charged_fire",
+  "e9v_charged_fire": {
+    "subtitle": "sounds.knightfall.e9v_charged_fire",
     "sounds": [
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_charged_fire_01",
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_charged_fire_02",
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_charged_fire_03"
+      "knightfall:blaster/e9v/weapons_blaster_e9v_charged_fire_01",
+      "knightfall:blaster/e9v/weapons_blaster_e9v_charged_fire_02",
+      "knightfall:blaster/e9v/weapons_blaster_e9v_charged_fire_03"
     ]
   },
   "shard3a_fire": {
@@ -2703,6 +3354,22 @@
 
     ]
   },
+  "snub_blaster_fire": {
+    "subtitle": "sounds.knightfall.snub_blaster_fire",
+    "sounds": [
+      "knightfall:blaster/snub_blaster/weapons_blaster_snub_blaster_fire_01",
+      "knightfall:blaster/snub_blaster/weapons_blaster_snub_blaster_fire_02",
+      "knightfall:blaster/snub_blaster/weapons_blaster_snub_blaster_fire_03"
+    ]
+  },
+  "snub_scatter_fire": {
+    "subtitle": "sounds.knightfall.snub_scatter_fire",
+    "sounds": [
+      "knightfall:blaster/snub_scatter/weapons_blaster_snub_scatter_fire_01",
+      "knightfall:blaster/snub_scatter/weapons_blaster_snub_scatter_fire_02",
+      "knightfall:blaster/snub_scatter/weapons_blaster_snub_scatter_fire_03"
+    ]
+  },
   "snubble_fire": {
     "subtitle": "sounds.knightfall.snubble_fire",
     "sounds": [
@@ -2725,16 +3392,21 @@
       "knightfall:blaster/sonic_blaster/weapons_blaster_sonic_blaster_fire_06"
     ]
   },
-  "steyr43_fire": {
-    "subtitle": "sounds.knightfall.steyr43_fire",
+  "sonic_stunner_fire": {
+    "subtitle": "sounds.knightfall.sonic_stunner_fire",
     "sounds": [
-      "knightfall:blaster/steyr43/weapons_blaster_steyr43_fire_01",
-      "knightfall:blaster/steyr43/weapons_blaster_steyr43_fire_02",
-      "knightfall:blaster/steyr43/weapons_blaster_steyr43_fire_03",
-      "knightfall:blaster/steyr43/weapons_blaster_steyr43_fire_04",
-      "knightfall:blaster/steyr43/weapons_blaster_steyr43_fire_05",
-      "knightfall:blaster/steyr43/weapons_blaster_steyr43_fire_06",
-      "knightfall:blaster/steyr43/weapons_blaster_steyr43_fire_07"
+      "knightfall:blaster/sonic_stunner/weapons_blaster_sonic_stunner_fire_01",
+      "knightfall:blaster/sonic_stunner/weapons_blaster_sonic_stunner_fire_02",
+      "knightfall:blaster/sonic_stunner/weapons_blaster_sonic_stunner_fire_03"
+    ]
+  },
+  "ss410_fire": {
+    "subtitle": "sounds.knightfall.ss410_fire",
+    "sounds": [
+      "knightfall:blaster/ss410/weapons_blaster_ss410_fire_01",
+      "knightfall:blaster/ss410/weapons_blaster_ss410_fire_02",
+      "knightfall:blaster/ss410/weapons_blaster_ss410_fire_03",
+      "knightfall:blaster/ss410/weapons_blaster_ss410_fire_04"
     ]
   },
   "sx21_fire": {
@@ -2773,6 +3445,16 @@
       "knightfall:blaster/t7_ion_disruptor/weapons_blaster_t7_ion_disruptor_fire_06"
     ]
   },
+  "t9k7_fire": {
+    "subtitle": "sounds.knightfall.t9k7_fire",
+    "sounds": [
+      "knightfall:blaster/t9k7/weapons_blaster_t9k7_fire_01",
+      "knightfall:blaster/t9k7/weapons_blaster_t9k7_fire_02",
+      "knightfall:blaster/t9k7/weapons_blaster_t9k7_fire_03",
+      "knightfall:blaster/t9k7/weapons_blaster_t9k7_fire_04",
+      "knightfall:blaster/t9k7/weapons_blaster_t9k7_fire_05"
+    ]
+  },
   "t21_fire": {
     "subtitle": "sounds.knightfall.t21_fire",
     "sounds": [
@@ -2795,15 +3477,31 @@
       "knightfall:blaster/t21b/weapons_blaster_t21b_fire_06"
     ]
   },
-  "tca_pro_fire": {
-    "subtitle": "sounds.knightfall.tca_pro_fire",
+  "tg446_fire": {
+    "subtitle": "sounds.knightfall.tg446_fire",
     "sounds": [
-      "knightfall:blaster/tca_pro/weapons_blaster_tca_pro_fire_01",
-      "knightfall:blaster/tca_pro/weapons_blaster_tca_pro_fire_02",
-      "knightfall:blaster/tca_pro/weapons_blaster_tca_pro_fire_03",
-      "knightfall:blaster/tca_pro/weapons_blaster_tca_pro_fire_04",
-      "knightfall:blaster/tca_pro/weapons_blaster_tca_pro_fire_05",
-      "knightfall:blaster/tca_pro/weapons_blaster_tca_pro_fire_06"
+      "knightfall:blaster/tg446/weapons_blaster_tg446_fire_01",
+      "knightfall:blaster/tg446/weapons_blaster_tg446_fire_02",
+      "knightfall:blaster/tg446/weapons_blaster_tg446_fire_03",
+      "knightfall:blaster/tg446/weapons_blaster_tg446_fire_04",
+      "knightfall:blaster/tg446/weapons_blaster_tg446_fire_05",
+      "knightfall:blaster/tg446/weapons_blaster_tg446_fire_06"
+    ]
+  },
+  "thunderblaster_fire": {
+    "subtitle": "sounds.knightfall.thunderblaster_fire",
+    "sounds": [
+      "knightfall:blaster/thunderblaster/weapons_blaster_thunderblaster_fire_01",
+      "knightfall:blaster/thunderblaster/weapons_blaster_thunderblaster_fire_02",
+      "knightfall:blaster/thunderblaster/weapons_blaster_thunderblaster_fire_03"
+    ]
+  },
+  "tl40_fire": {
+    "subtitle": "sounds.knightfall.tl40_fire",
+    "sounds": [
+      "knightfall:blaster/tl40/weapons_blaster_tl40_fire_01",
+      "knightfall:blaster/tl40/weapons_blaster_tl40_fire_02",
+      "knightfall:blaster/tl40/weapons_blaster_tl40_fire_03"
     ]
   },
   "tl50_fire": {
@@ -2826,42 +3524,37 @@
       "knightfall:blaster/tl50/weapons_blaster_tl50_launcher_fire_04"
     ]
   },
-  "tomsun97_fire": {
-    "subtitle": "sounds.knightfall.tomsun97_fire",
+  "umbaran_blaster_fire": {
+    "subtitle": "sounds.knightfall.umbaran_blaster_fire",
     "sounds": [
-      "knightfall:blaster/tomsun97/weapons_blaster_tomsun97_fire_01",
-      "knightfall:blaster/tomsun97/weapons_blaster_tomsun97_fire_02",
-      "knightfall:blaster/tomsun97/weapons_blaster_tomsun97_fire_03",
-      "knightfall:blaster/tomsun97/weapons_blaster_tomsun97_fire_04",
-      "knightfall:blaster/tomsun97/weapons_blaster_tomsun97_fire_05"
+      "knightfall:blaster/umbaran_blaster/weapons_blaster_umbaran_blaster_fire_01",
+      "knightfall:blaster/umbaran_blaster/weapons_blaster_umbaran_blaster_fire_02",
+      "knightfall:blaster/umbaran_blaster/weapons_blaster_umbaran_blaster_fire_03",
+      "knightfall:blaster/umbaran_blaster/weapons_blaster_umbaran_blaster_fire_04",
+      "knightfall:blaster/umbaran_blaster/weapons_blaster_umbaran_blaster_fire_05",
+      "knightfall:blaster/umbaran_blaster/weapons_blaster_umbaran_blaster_fire_06"
     ]
   },
-  "type14_fire": {
-    "subtitle": "sounds.knightfall.type14_fire",
+  "utk3_fire": {
+    "subtitle": "sounds.knightfall.utk3_fire",
     "sounds": [
-      "knightfall:blaster/type14/weapons_blaster_type14_fire_01",
-      "knightfall:blaster/type14/weapons_blaster_type14_fire_02",
-      "knightfall:blaster/type14/weapons_blaster_type14_fire_03",
-      "knightfall:blaster/type14/weapons_blaster_type14_fire_04",
-      "knightfall:blaster/type14/weapons_blaster_type14_fire_05",
-      "knightfall:blaster/type14/weapons_blaster_type14_fire_06"
-    ]
-  },
-  "umbaran_pistol_fire": {
-    "subtitle": "sounds.knightfall.umbaran_pistol_fire",
-    "sounds": [
-      "knightfall:blaster/umbaran_pistol/weapons_blaster_umbaran_blaster_fire_01",
-      "knightfall:blaster/umbaran_pistol/weapons_blaster_umbaran_blaster_fire_02",
-      "knightfall:blaster/umbaran_pistol/weapons_blaster_umbaran_blaster_fire_03",
-      "knightfall:blaster/umbaran_pistol/weapons_blaster_umbaran_blaster_fire_04",
-      "knightfall:blaster/umbaran_pistol/weapons_blaster_umbaran_blaster_fire_05",
-      "knightfall:blaster/umbaran_pistol/weapons_blaster_umbaran_blaster_fire_06"
+      "knightfall:blaster/utk3/weapons_blaster_utk3_fire_01",
+      "knightfall:blaster/utk3/weapons_blaster_utk3_fire_02",
+      "knightfall:blaster/utk3/weapons_blaster_utk3_fire_03"
     ]
   },
   "v6d_mortar_launcher_fire": {
     "subtitle": "sounds.knightfall.v6d_mortar_launcher_fire",
     "sounds": [
 
+    ]
+  },
+  "v850_mk_fire": {
+    "subtitle": "sounds.knightfall.v850_mk_fire",
+    "sounds": [
+      "knightfall:blaster/v850_mk/weapons_blaster_v850_mk_fire_01",
+      "knightfall:blaster/v850_mk/weapons_blaster_v850_mk_fire_02",
+      "knightfall:blaster/v850_mk/weapons_blaster_v850_mk_fire_03"
     ]
   },
   "valken38x_fire": {
@@ -2883,25 +3576,58 @@
       "knightfall:blaster/vanguard_scatter/weapons_blaster_vanguard_fire_04"
     ]
   },
-  "vect_uzi_fire": {
-    "subtitle": "sounds.knightfall.vect_uzi_fire",
+  "v13_fire": {
+    "subtitle": "sounds.knightfall.v13_fire",
     "sounds": [
-      "knightfall:blaster/vect_uzi/weapons_blaster_vect_uzi_fire_01",
-      "knightfall:blaster/vect_uzi/weapons_blaster_vect_uzi_fire_02",
-      "knightfall:blaster/vect_uzi/weapons_blaster_vect_uzi_fire_03",
-      "knightfall:blaster/vect_uzi/weapons_blaster_vect_uzi_fire_04",
-      "knightfall:blaster/vect_uzi/weapons_blaster_vect_uzi_fire_05",
-      "knightfall:blaster/vect_uzi/weapons_blaster_vect_uzi_fire_06",
-      "knightfall:blaster/vect_uzi/weapons_blaster_vect_uzi_fire_07"
+      "knightfall:blaster/v13/weapons_blaster_v13_fire_01",
+      "knightfall:blaster/v13/weapons_blaster_v13_fire_02",
+      "knightfall:blaster/v13/weapons_blaster_v13_fire_03",
+      "knightfall:blaster/v13/weapons_blaster_v13_fire_04",
+      "knightfall:blaster/v13/weapons_blaster_v13_fire_05",
+      "knightfall:blaster/v13/weapons_blaster_v13_fire_06",
+      "knightfall:blaster/v13/weapons_blaster_v13_fire_07"
     ]
   },
-  "verpine_shatter_fire": {
-    "subtitle": "sounds.knightfall.verpine_shatter_fire",
+  "verpine_shatter_rifle_fire": {
+    "subtitle": "sounds.knightfall.verpine_shatter_rifle_fire",
     "sounds": [
-      "knightfall:blaster/verpine_shatter/weapons_blaster_verpine_fire_01",
-      "knightfall:blaster/verpine_shatter/weapons_blaster_verpine_fire_02",
-      "knightfall:blaster/verpine_shatter/weapons_blaster_verpine_fire_03",
-      "knightfall:blaster/verpine_shatter/weapons_blaster_verpine_fire_04"
+      "knightfall:blaster/verpine_shatter_rifle/weapons_blaster_verpine_shatter_rifle_fire_01",
+      "knightfall:blaster/verpine_shatter_rifle/weapons_blaster_verpine_shatter_rifle_fire_02",
+      "knightfall:blaster/verpine_shatter_rifle/weapons_blaster_verpine_shatter_rifle_fire_03"
+    ]
+  },
+  "verpine_sidearm_fire": {
+    "subtitle": "sounds.knightfall.verpine_sidearm_fire",
+    "sounds": [
+      "knightfall:blaster/verpine_sidearm/weapons_blaster_verpine_sidearm_fire_01",
+      "knightfall:blaster/verpine_sidearm/weapons_blaster_verpine_sidearm_fire_02",
+      "knightfall:blaster/verpine_sidearm/weapons_blaster_verpine_sidearm_fire_03",
+      "knightfall:blaster/verpine_sidearm/weapons_blaster_verpine_sidearm_fire_04"
+    ]
+  },
+  "vilmarhs_revenge_fire": {
+    "subtitle": "sounds.knightfall.vilmarhs_revenge_fire",
+    "sounds": [
+      "knightfall:blaster/vilmarhs_revenge/weapons_blaster_vilmarhs_revenge_fire_01",
+      "knightfall:blaster/vilmarhs_revenge/weapons_blaster_vilmarhs_revenge_fire_02",
+      "knightfall:blaster/vilmarhs_revenge/weapons_blaster_vilmarhs_revenge_fire_03"
+    ]
+  },
+  "vm19_fire": {
+    "subtitle": "sounds.knightfall.vm19_fire",
+    "sounds": [
+      "knightfall:blaster/vm19/weapons_blaster_vm19_fire_01",
+      "knightfall:blaster/vm19/weapons_blaster_vm19_fire_02",
+      "knightfall:blaster/vm19/weapons_blaster_vm19_fire_03",
+      "knightfall:blaster/vm19/weapons_blaster_vm19_fire_04"
+    ]
+  },
+  "vt20_fire": {
+    "subtitle": "sounds.knightfall.vt20_fire",
+    "sounds": [
+      "knightfall:blaster/vt20/weapons_blaster_vt20_fire_01",
+      "knightfall:blaster/vt20/weapons_blaster_vt20_fire_02",
+      "knightfall:blaster/vt20/weapons_blaster_vt20_fire_03"
     ]
   },
   "vulk_tau623_rotary_fire": {
@@ -2913,48 +3639,54 @@
       "knightfall:blaster/vulk_tau623_rotary/weapons_blaster_vulk_tau623_fire_04"
     ]
   },
-  "walther_blaster_fire": {
-    "subtitle": "sounds.knightfall.walther_blaster_fire",
+  "w50s_fire": {
+    "subtitle": "sounds.knightfall.w50s_fire",
     "sounds": [
-      "knightfall:blaster/walther_blaster/weapons_blaster_walther_fire_01",
-      "knightfall:blaster/walther_blaster/weapons_blaster_walther_fire_02",
-      "knightfall:blaster/walther_blaster/weapons_blaster_walther_fire_03",
-      "knightfall:blaster/walther_blaster/weapons_blaster_walther_fire_04",
-      "knightfall:blaster/walther_blaster/weapons_blaster_walther_fire_05",
-      "knightfall:blaster/walther_blaster/weapons_blaster_walther_fire_06",
-      "knightfall:blaster/walther_blaster/weapons_blaster_walther_fire_07"
+      "knightfall:blaster/w50s/weapons_blaster_w50s_fire_01",
+      "knightfall:blaster/w50s/weapons_blaster_w50s_fire_02",
+      "knightfall:blaster/w50s/weapons_blaster_w50s_fire_03"
     ]
   },
-  "walther_lpm_blaster_fire": {
-    "subtitle": "sounds.knightfall.walther_lpm_blaster_fire",
+  "w90_fire": {
+    "subtitle": "sounds.knightfall.w90_fire",
     "sounds": [
-      "knightfall:blaster/walther_lpm_blaster/weapons_blaster_walther_lpm_fire_01",
-      "knightfall:blaster/walther_lpm_blaster/weapons_blaster_walther_lpm_fire_02",
-      "knightfall:blaster/walther_lpm_blaster/weapons_blaster_walther_lpm_fire_03",
-      "knightfall:blaster/walther_lpm_blaster/weapons_blaster_walther_lpm_fire_04",
-      "knightfall:blaster/walther_lpm_blaster/weapons_blaster_walther_lpm_fire_05",
-      "knightfall:blaster/walther_lpm_blaster/weapons_blaster_walther_lpm_fire_06"
+      "knightfall:blaster/w90/weapons_blaster_w90_fire_01",
+      "knightfall:blaster/w90/weapons_blaster_w90_fire_02",
+      "knightfall:blaster/w90/weapons_blaster_w90_fire_03"
     ]
   },
-  "webly_s4_fire": {
-    "subtitle": "sounds.knightfall.webly_s4_fire",
+  "w310_fire": {
+    "subtitle": "sounds.knightfall.w310_fire",
     "sounds": [
-      "knightfall:blaster/webly_s4/weapons_blaster_webly_s4_fire_01",
-      "knightfall:blaster/webly_s4/weapons_blaster_webly_s4_fire_02",
-      "knightfall:blaster/webly_s4/weapons_blaster_webly_s4_fire_03",
-      "knightfall:blaster/webly_s4/weapons_blaster_webly_s4_fire_04",
-      "knightfall:blaster/webly_s4/weapons_blaster_webly_s4_fire_05",
-      "knightfall:blaster/webly_s4/weapons_blaster_webly_s4_fire_06"
+      "knightfall:blaster/w310/weapons_blaster_w310_fire_01",
+      "knightfall:blaster/w310/weapons_blaster_w310_fire_02",
+      "knightfall:blaster/w310/weapons_blaster_w310_fire_03",
+      "knightfall:blaster/w310/weapons_blaster_w310_fire_04",
+      "knightfall:blaster/w310/weapons_blaster_w310_fire_05",
+      "knightfall:blaster/w310/weapons_blaster_w310_fire_06",
+      "knightfall:blaster/w310/weapons_blaster_w310_fire_07"
     ]
   },
-  "webtemp_fire": {
-    "subtitle": "sounds.knightfall.webtemp_fire",
+  "w340lm_fire": {
+    "subtitle": "sounds.knightfall.w340lm_fire",
     "sounds": [
-      "knightfall:blaster/webtemp/weapons_blaster_webtemp_fire_01",
-      "knightfall:blaster/webtemp/weapons_blaster_webtemp_fire_02",
-      "knightfall:blaster/webtemp/weapons_blaster_webtemp_fire_03",
-      "knightfall:blaster/webtemp/weapons_blaster_webtemp_fire_04",
-      "knightfall:blaster/webtemp/weapons_blaster_webtemp_fire_05"
+      "knightfall:blaster/w340lm/weapons_blaster_w340lm_fire_01",
+      "knightfall:blaster/w340lm/weapons_blaster_w340lm_fire_02",
+      "knightfall:blaster/w340lm/weapons_blaster_w340lm_fire_03",
+      "knightfall:blaster/w340lm/weapons_blaster_w340lm_fire_04",
+      "knightfall:blaster/w340lm/weapons_blaster_w340lm_fire_05",
+      "knightfall:blaster/w340lm/weapons_blaster_w340lm_fire_06"
+    ]
+  },
+  "ws4_fire": {
+    "subtitle": "sounds.knightfall.ws4_fire",
+    "sounds": [
+      "knightfall:blaster/ws4/weapons_blaster_ws4_fire_01",
+      "knightfall:blaster/ws4/weapons_blaster_ws4_fire_02",
+      "knightfall:blaster/ws4/weapons_blaster_ws4_fire_03",
+      "knightfall:blaster/ws4/weapons_blaster_ws4_fire_04",
+      "knightfall:blaster/ws4/weapons_blaster_ws4_fire_05",
+      "knightfall:blaster/ws4/weapons_blaster_ws4_fire_06"
     ]
   },
   "weequay_lance_fire": {
@@ -2990,6 +3722,26 @@
       "knightfall:blaster/weequay_rifle/weapons_blaster_weequay_rifle_fire_06"
     ]
   },
+  "westar2l_fire": {
+    "subtitle": "sounds.knightfall.westar2l_fire",
+    "sounds": [
+      "knightfall:blaster/westar2l/weapons_blaster_westar2l_fire_01",
+      "knightfall:blaster/westar2l/weapons_blaster_westar2l_fire_02",
+      "knightfall:blaster/westar2l/weapons_blaster_westar2l_fire_03",
+      "knightfall:blaster/westar2l/weapons_blaster_westar2l_fire_04",
+      "knightfall:blaster/westar2l/weapons_blaster_westar2l_fire_05",
+      "knightfall:blaster/westar2l/weapons_blaster_westar2l_fire_06"
+    ]
+  },
+  "westare9_fire": {
+    "subtitle": "sounds.knightfall.westare9_fire",
+    "sounds": [
+      "knightfall:blaster/westare9/weapons_blaster_westare9_fire_01",
+      "knightfall:blaster/westare9/weapons_blaster_westare9_fire_02",
+      "knightfall:blaster/westare9/weapons_blaster_westare9_fire_03",
+      "knightfall:blaster/westare9/weapons_blaster_westare9_fire_04"
+    ]
+  },
   "westar_20_fire": {
     "subtitle": "sounds.knightfall.westar_20_fire",
     "sounds": [
@@ -3003,6 +3755,14 @@
       "knightfall:blaster/westar_20/weapons_blaster_westar_20_fire_08",
       "knightfall:blaster/westar_20/weapons_blaster_westar_20_fire_09",
       "knightfall:blaster/westar_20/weapons_blaster_westar_20_fire_10"
+    ]
+  },
+  "westar_33_fire": {
+    "subtitle": "sounds.knightfall.westar_33_fire",
+    "sounds": [
+      "knightfall:blaster/westar_33/weapons_blaster_westar_33_fire_01",
+      "knightfall:blaster/westar_33/weapons_blaster_westar_33_fire_02",
+      "knightfall:blaster/westar_33/weapons_blaster_westar_33_fire_03"
     ]
   },
   "westar_34_fire": {
@@ -3019,6 +3779,22 @@
       "knightfall:blaster/westar_35/weapons_blaster_westar_35_fire_01",
       "knightfall:blaster/westar_35/weapons_blaster_westar_35_fire_02",
       "knightfall:blaster/westar_35/weapons_blaster_westar_35_fire_03"
+    ]
+  },
+  "westarl4_fire": {
+    "subtitle": "sounds.knightfall.westarl4_fire",
+    "sounds": [
+      "knightfall:blaster/westarl4/weapons_blaster_westarl4_fire_01",
+      "knightfall:blaster/westarl4/weapons_blaster_westarl4_fire_02",
+      "knightfall:blaster/westarl4/weapons_blaster_westarl4_fire_03"
+    ]
+  },
+  "westarlvn_fire": {
+    "subtitle": "sounds.knightfall.westarlvn_fire",
+    "sounds": [
+      "knightfall:blaster/westarlvn/weapons_blaster_westarlvn_fire_01",
+      "knightfall:blaster/westarlvn/weapons_blaster_westarlvn_fire_02",
+      "knightfall:blaster/westarlvn/weapons_blaster_westarlvn_fire_03"
     ]
   },
   "westarm5_fire": {
@@ -3042,15 +3818,36 @@
       "knightfall:blaster/winchester87/weapons_blaster_winchester87_fire_06"
     ]
   },
-  "x30_fire": {
-    "subtitle": "sounds.knightfall.x30_fire",
+  "wookie_rifle_fire": {
+    "subtitle": "sounds.knightfall.wookie_rifle_fire",
     "sounds": [
-      "knightfall:blaster/x30/weapons_blaster_x30_fire_01",
-      "knightfall:blaster/x30/weapons_blaster_x30_fire_02",
-      "knightfall:blaster/x30/weapons_blaster_x30_fire_03",
-      "knightfall:blaster/x30/weapons_blaster_x30_fire_04",
-      "knightfall:blaster/x30/weapons_blaster_x30_fire_05",
-      "knightfall:blaster/x30/weapons_blaster_x30_fire_06"
+      "knightfall:blaster/wookie_rifle/weapons_blaster_wookie_rifle_fire_01",
+      "knightfall:blaster/wookie_rifle/weapons_blaster_wookie_rifle_fire_02",
+      "knightfall:blaster/wookie_rifle/weapons_blaster_wookie_rifle_fire_03"
+    ]
+  },
+  "wookie_rifle_charged_fire": {
+    "subtitle": "sounds.knightfall.wookie_rifle_charged_fire",
+    "sounds": [
+      "knightfall:blaster/wookie_rifle/weapons_blaster_wookie_rifle_charged_fire_01",
+      "knightfall:blaster/wookie_rifle/weapons_blaster_wookie_rifle_charged_fire_02",
+      "knightfall:blaster/wookie_rifle/weapons_blaster_wookie_rifle_charged_fire_03"
+    ]
+  },
+  "wookie_sidearm_fire": {
+    "subtitle": "sounds.knightfall.wookie_sidearm_fire",
+    "sounds": [
+      "knightfall:blaster/wookie_sidearm/weapons_blaster_wookie_sidearm_fire_01",
+      "knightfall:blaster/wookie_sidearm/weapons_blaster_wookie_sidearm_fire_02",
+      "knightfall:blaster/wookie_sidearm/weapons_blaster_wookie_sidearm_fire_03"
+    ]
+  },
+  "wookie_sidearm_charged_fire": {
+    "subtitle": "sounds.knightfall.wookie_sidearm_charged_fire",
+    "sounds": [
+      "knightfall:blaster/wookie_sidearm/weapons_blaster_wookie_sidearm_charged_fire_01",
+      "knightfall:blaster/wookie_sidearm/weapons_blaster_wookie_sidearm_charged_fire_02",
+      "knightfall:blaster/wookie_sidearm/weapons_blaster_wookie_sidearm_charged_fire_03"
     ]
   },
   "x8_night_sniper_fire": {
@@ -3064,6 +3861,47 @@
       "knightfall:blaster/x8_night_sniper/weapons_blaster_x8_night_sniper_fire_06"
     ]
   },
+  "x30_fire": {
+    "subtitle": "sounds.knightfall.x30_fire",
+    "sounds": [
+      "knightfall:blaster/x30/weapons_blaster_x30_fire_01",
+      "knightfall:blaster/x30/weapons_blaster_x30_fire_02",
+      "knightfall:blaster/x30/weapons_blaster_x30_fire_03",
+      "knightfall:blaster/x30/weapons_blaster_x30_fire_04",
+      "knightfall:blaster/x30/weapons_blaster_x30_fire_05",
+      "knightfall:blaster/x30/weapons_blaster_x30_fire_06"
+    ]
+  },
+  "x45_fire": {
+    "subtitle": "sounds.knightfall.x45_fire",
+    "sounds": [
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_01",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_02",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_03",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_04",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_05",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_06",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_07",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_08",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_09",
+      "knightfall:blaster/x45/weapons_blaster_x45_fire_10"
+    ]
+  },
+  "x47_fire": {
+    "subtitle": "sounds.knightfall.x47_fire",
+    "sounds": [
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_01",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_02",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_03",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_04",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_05",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_06",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_07",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_08",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_09",
+      "knightfall:blaster/x47/weapons_blaster_x47_fire_10"
+    ]
+  },
   "z6_rotary_fire": {
     "subtitle": "sounds.knightfall.z6_rotary_fire",
     "sounds": [
@@ -3075,6 +3913,42 @@
       "knightfall:blaster/z6_rotary/weapons_blaster_z6_rotary_fire_06",
       "knightfall:blaster/z6_rotary/weapons_blaster_z6_rotary_fire_07",
       "knightfall:blaster/z6_rotary/weapons_blaster_z6_rotary_fire_08"
+    ]
+  },
+  "zb3_fire": {
+    "subtitle": "sounds.knightfall.zb3_fire",
+    "sounds": [
+      "knightfall:blaster/zb3/weapons_blaster_zb3_fire_01",
+      "knightfall:blaster/zb3/weapons_blaster_zb3_fire_02",
+      "knightfall:blaster/zb3/weapons_blaster_zb3_fire_03"
+    ]
+  },
+  "zygerrian_blaster_fire": {
+    "subtitle": "sounds.knightfall.zygerrian_blaster_fire",
+    "sounds": [
+      "knightfall:blaster/zygerrian_blaster/weapons_blaster_zygerrian_blaster_fire_01",
+      "knightfall:blaster/zygerrian_blaster/weapons_blaster_zygerrian_blaster_fire_02",
+      "knightfall:blaster/zygerrian_blaster/weapons_blaster_zygerrian_blaster_fire_03"
+    ]
+  },
+  "zygerrian_blaster_charged_fire": {
+    "subtitle": "sounds.knightfall.zygerrian_blaster_charged_fire",
+    "sounds": [
+      "knightfall:blaster/zygerrian_blaster/weapons_blaster_zygerrian_blaster_charged_fire_01",
+      "knightfall:blaster/zygerrian_blaster/weapons_blaster_zygerrian_blaster_charged_fire_02",
+      "knightfall:blaster/zygerrian_blaster/weapons_blaster_zygerrian_blaster_charged_fire_03"
+    ]
+  },
+  "bk28_charge": {
+    "subtitle": "sounds.knightfall.bk28_charge",
+    "sounds": [
+      "knightfall:blaster/bk28/weapons_blaster_bk28_charge_01"
+    ]
+  },
+  "bk28_uncharge": {
+    "subtitle": "sounds.knightfall.bk28_uncharge",
+    "sounds": [
+      "knightfall:blaster/bk28/weapons_blaster_bk28_uncharge_01"
     ]
   },
   "bm107_charge": {
@@ -3117,16 +3991,32 @@
       "knightfall:blaster/bryar_rifle/weapons_blaster_bryar_rifle_uncharge_01"
     ]
   },
-  "caij_vandas_blaster_pistol_charge": {
-    "subtitle": "sounds.knightfall.caij_vandas_blaster_pistol_charge",
+  "c10_charge": {
+    "subtitle": "sounds.knightfall.c10_charge",
     "sounds": [
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_charge_01"
+      "knightfall:blaster/c10/weapons_blaster_c10_charge_01",
+      "knightfall:blaster/c10/weapons_blaster_c10_charge_02",
+      "knightfall:blaster/c10/weapons_blaster_c10_charge_03"
     ]
   },
-  "caij_vandas_blaster_pistol_uncharge": {
-    "subtitle": "sounds.knightfall.caij_vandas_blaster_pistol_uncharge",
+  "c10_uncharge": {
+    "subtitle": "sounds.knightfall.c10_uncharge",
     "sounds": [
-      "knightfall:blaster/caij_vandas_blaster_pistol/weapons_blaster_caij_vanda_uncharge_01"
+      "knightfall:blaster/c10/weapons_blaster_c10_uncharge_01",
+      "knightfall:blaster/c10/weapons_blaster_c10_uncharge_02",
+      "knightfall:blaster/c10/weapons_blaster_c10_uncharge_03"
+    ]
+  },
+  "charric_charge": {
+    "subtitle": "sounds.knightfall.charric_charge",
+    "sounds": [
+      "knightfall:blaster/charric/weapons_blaster_charric_charge_01"
+    ]
+  },
+  "charric_uncharge": {
+    "subtitle": "sounds.knightfall.charric_uncharge",
+    "sounds": [
+      "knightfall:blaster/charric/weapons_blaster_charric_uncharge_01"
     ]
   },
   "dc15x_charge": {
@@ -3183,6 +4073,42 @@
       "knightfall:blaster/dp23/weapons_blaster_dp23_uncharge_01"
     ]
   },
+  "dx2_charge": {
+    "subtitle": "sounds.knightfall.dx2_charge",
+    "sounds": [
+      "knightfall:blaster/dx2/weapons_blaster_dx2_charge_01"
+    ]
+  },
+  "dx2_uncharge": {
+    "subtitle": "sounds.knightfall.dx2_uncharge",
+    "sounds": [
+      "knightfall:blaster/dx2/weapons_blaster_dx2_uncharge_01"
+    ]
+  },
+  "dxr6_charge": {
+    "subtitle": "sounds.knightfall.dxr6_charge",
+    "sounds": [
+      "knightfall:blaster/dxr6/weapons_blaster_dxr6_charge_01"
+    ]
+  },
+  "dxr6_uncharge": {
+    "subtitle": "sounds.knightfall.dxr6_uncharge",
+    "sounds": [
+      "knightfall:blaster/dxr6/weapons_blaster_dxr6_uncharge_01"
+    ]
+  },
+  "e9v_charge": {
+    "subtitle": "sounds.knightfall.e9v_charge",
+    "sounds": [
+      "knightfall:blaster/e9v/weapons_blaster_e9v_charge_01"
+    ]
+  },
+  "e9v_uncharge": {
+    "subtitle": "sounds.knightfall.e9v_uncharge",
+    "sounds": [
+      "knightfall:blaster/e9v/weapons_blaster_e9v_uncharge_01"
+    ]
+  },
   "energy_crossbow_open": {
     "subtitle": "sounds.knightfall.energy_crossbow_open",
     "sounds": [
@@ -3193,6 +4119,18 @@
     "subtitle": "sounds.knightfall.energy_crossbow_close",
     "sounds": [
       "knightfall:blaster/energy_crossbow/weapons_blaster_energy_crossbow_close_01"
+    ]
+  },
+  "gm46_charge": {
+    "subtitle": "sounds.knightfall.gm46_charge",
+    "sounds": [
+      "knightfall:blaster/gm46/weapons_blaster_gm46_charge_01"
+    ]
+  },
+  "gm46_uncharge": {
+    "subtitle": "sounds.knightfall.gm46_uncharge",
+    "sounds": [
+      "knightfall:blaster/gm46/weapons_blaster_gm46_uncharge_01"
     ]
   },
   "jnd41_charge": {
@@ -3225,6 +4163,30 @@
       "knightfall:blaster/k16_bryar_pistol/weapons_blaster_k16_bryar_pistol_charge_loop_01"
     ]
   },
+  "lv7c_charge": {
+    "subtitle": "sounds.knightfall.lv7c_charge",
+    "sounds": [
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_charge_01"
+    ]
+  },
+  "lv7c_uncharge": {
+    "subtitle": "sounds.knightfall.lv7c_uncharge",
+    "sounds": [
+      "knightfall:blaster/lv7c/weapons_blaster_lv7c_uncharge_01"
+    ]
+  },
+  "msd32_charge": {
+    "subtitle": "sounds.knightfall.msd32_charge",
+    "sounds": [
+      "knightfall:blaster/msd32/weapons_blaster_msd32_charge_01"
+    ]
+  },
+  "msd32_uncharge": {
+    "subtitle": "sounds.knightfall.msd32_uncharge",
+    "sounds": [
+      "knightfall:blaster/msd32/weapons_blaster_msd32_uncharge_01"
+    ]
+  },
   "mw20_bryar_pistol_charge": {
     "subtitle": "sounds.knightfall.mw20_bryar_pistol_charge",
     "sounds": [
@@ -3235,12 +4197,6 @@
     "subtitle": "sounds.knightfall.mw20_bryar_pistol_uncharge",
     "sounds": [
       "knightfall:blaster/mw20_bryar_pistol/weapons_blaster_mw20_bryar_pistol_uncharge_01"
-    ]
-  },
-  "mw20_bryar_pistol_charge_loop": {
-    "subtitle": "sounds.knightfall.mw20_bryar_pistol_charge_loop",
-    "sounds": [
-      "knightfall:blaster/mw20_bryar_pistol/weapons_blaster_mw20_bryar_pistol_charge_loop_01"
     ]
   },
   "neo_crusader_rifle_charge": {
@@ -3285,6 +4241,18 @@
       "knightfall:blaster/power_5/weapons_blaster_power5_charge_loop_01"
     ]
   },
+  "relby_k25_charge": {
+    "subtitle": "sounds.knightfall.relby_k25_charge",
+    "sounds": [
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_charge_01"
+    ]
+  },
+  "relby_k25_uncharge": {
+    "subtitle": "sounds.knightfall.relby_k25_uncharge",
+    "sounds": [
+      "knightfall:blaster/relby_k25/weapons_blaster_relby_k25_uncharge_01"
+    ]
+  },
   "relby_v10_charge": {
     "subtitle": "sounds.knightfall.relby_v10_charge",
     "sounds": [
@@ -3311,18 +4279,6 @@
     "subtitle": "sounds.knightfall.satines_lament_uncharge",
     "sounds": [
       "knightfall:blaster/satines_lament/weapons_blaster_satines_lament_uncharge_01"
-    ]
-  },
-  "shadow_trooper_blaster_charge": {
-    "subtitle": "sounds.knightfall.shadow_trooper_blaster_charge",
-    "sounds": [
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_charge_01"
-    ]
-  },
-  "shadow_trooper_blaster_uncharge": {
-    "subtitle": "sounds.knightfall.shadow_trooper_blaster_uncharge",
-    "sounds": [
-      "knightfall:blaster/shadow_trooper_blaster/weapons_blaster_shadow_trooper_uncharge_01"
     ]
   },
   "sk32_charge": {
@@ -3361,6 +4317,30 @@
       "knightfall:blaster/tl50/weapons_blaster_tl50_uncharge_01"
     ]
   },
+  "wookie_rifle_charge": {
+    "subtitle": "sounds.knightfall.wookie_rifle_charge",
+    "sounds": [
+      "knightfall:blaster/wookie_rifle/weapons_blaster_wookie_rifle_charge_01"
+    ]
+  },
+  "wookie_rifle_uncharge": {
+    "subtitle": "sounds.knightfall.wookie_rifle_uncharge",
+    "sounds": [
+      "knightfall:blaster/wookie_rifle/weapons_blaster_wookie_rifle_uncharge_01"
+    ]
+  },
+  "wookie_sidearm_charge": {
+    "subtitle": "sounds.knightfall.wookie_sidearm_charge",
+    "sounds": [
+      "knightfall:blaster/wookie_sidearm/weapons_blaster_wookie_sidearm_charge_01"
+    ]
+  },
+  "wookie_sidearm_uncharge": {
+    "subtitle": "sounds.knightfall.wookie_sidearm_uncharge",
+    "sounds": [
+      "knightfall:blaster/wookie_sidearm/weapons_blaster_wookie_sidearm_uncharge_01"
+    ]
+  },
   "z6_rotary_charge": {
     "subtitle": "sounds.knightfall.z6_rotary_charge",
     "sounds": [
@@ -3371,6 +4351,18 @@
     "subtitle": "sounds.knightfall.z6_rotary_uncharge",
     "sounds": [
       "knightfall:blaster/z6_rotary/weapons_blaster_z6_rotary_uncharge_01"
+    ]
+  },
+  "zygerrian_blaster_charge": {
+    "subtitle": "sounds.knightfall.zygerrian_blaster_charge",
+    "sounds": [
+      "knightfall:blaster/zygerrian_blaster/weapons_blaster_zygerrian_blaster_charge_01"
+    ]
+  },
+  "zygerrian_blaster_uncharge": {
+    "subtitle": "sounds.knightfall.zygerrian_blaster_uncharge",
+    "sounds": [
+      "knightfall:blaster/zygerrian_blaster/weapons_blaster_zygerrian_blaster_uncharge_01"
     ]
   },
   "stun_fire": {
@@ -3688,6 +4680,16 @@
       "knightfall:blaster/foley/weapons_blaster_foley_b1na_switch_fire_mode_01"
     ]
   },
+  "foley_bx49_launcher_reload": {
+    "subtitle": "sounds.knightfall.foley_bx49_launcher_reload",
+    "sounds": [
+      "knightfall:blaster/foley/weapons_blaster_foley_bx49_launcher_reload_01",
+      "knightfall:blaster/foley/weapons_blaster_foley_bx49_launcher_reload_02",
+      "knightfall:blaster/foley/weapons_blaster_foley_bx49_launcher_reload_03",
+      "knightfall:blaster/foley/weapons_blaster_foley_bx49_launcher_reload_04",
+      "knightfall:blaster/foley/weapons_blaster_foley_bx49_launcher_reload_05"
+    ]
+  },
   "foley_dc17m_rifle_switch_fire_mode": {
     "subtitle": "sounds.knightfall.foley_dc17m_rifle_switch_fire_mode",
     "sounds": [
@@ -3769,6 +4771,34 @@
     "subtitle": "sounds.knightfall.foley_mw20_bryar_pistol_switch_fire_mode",
     "sounds": [
       "knightfall:blaster/foley/weapons_blaster_foley_mw20_bryar_pistol_switch_fire_mode_01"
+    ]
+  },
+  "foley_r88_launcher_reload": {
+    "subtitle": "sounds.knightfall.foley_r88_launcher_reload",
+    "sounds": [
+      "knightfall:blaster/foley/weapons_blaster_foley_r88_launcher_reload_01",
+      "knightfall:blaster/foley/weapons_blaster_foley_r88_launcher_reload_02",
+      "knightfall:blaster/foley/weapons_blaster_foley_r88_launcher_reload_03",
+      "knightfall:blaster/foley/weapons_blaster_foley_r88_launcher_reload_04",
+      "knightfall:blaster/foley/weapons_blaster_foley_r88_launcher_reload_05"
+    ]
+  },
+  "foley_relby_k25_pistol_switch_fire_mode": {
+    "subtitle": "sounds.knightfall.foley_relby_k25_pistol_switch_fire_mode",
+    "sounds": [
+      "knightfall:blaster/foley/weapons_blaster_foley_relby_k25_pistol_switch_fire_mode_01"
+    ]
+  },
+  "foley_relby_k25_charged_switch_fire_mode": {
+    "subtitle": "sounds.knightfall.foley_relby_k25_charged_switch_fire_mode",
+    "sounds": [
+      "knightfall:blaster/foley/weapons_blaster_foley_relby_k25_charged_switch_fire_mode_01"
+    ]
+  },
+  "foley_relby_k25_rifle_switch_fire_mode": {
+    "subtitle": "sounds.knightfall.foley_relby_k25_rifle_switch_fire_mode",
+    "sounds": [
+      "knightfall:blaster/foley/weapons_blaster_foley_relby_k25_rifle_switch_fire_mode_01"
     ]
   },
   "foley_relby_v10_launcher_reload": {

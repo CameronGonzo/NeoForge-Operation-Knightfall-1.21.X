@@ -43,13 +43,14 @@ public class IonizedTibannaBlasterBoltRenderer extends EntityRenderer<IonizedTib
 
         int fullBright = 0xF000F0;
 
+        VertexConsumer depthConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(CORE_TEXTURE));
+        model.renderCore(poseStack, depthConsumer, fullBright, OverlayTexture.NO_OVERLAY);
+
         VertexConsumer glowConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(GLOW_TEXTURE));
         model.renderGlow(poseStack, glowConsumer, fullBright, OverlayTexture.NO_OVERLAY);
 
-        poseStack.pushPose();
         VertexConsumer coreConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(CORE_TEXTURE));
         model.renderCore(poseStack, coreConsumer, fullBright, OverlayTexture.NO_OVERLAY);
-        poseStack.popPose();
 
         poseStack.popPose();
         super.render(entity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);

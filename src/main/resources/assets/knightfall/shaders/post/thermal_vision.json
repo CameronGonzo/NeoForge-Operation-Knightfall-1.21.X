@@ -1,0 +1,10 @@
+{
+  "targets": [ "swap" ],
+  "passes": [
+    {
+      "name": "knightfall:thermal_vision",
+      "intarget": "minecraft:main",
+      "outtarget": "swap"
+    }
+  ]
+}

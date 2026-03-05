@@ -23,8 +23,11 @@ public class PayloadRegister {
         server(SSDropItemPacket.TYPE, SSDropItemPacket.STREAM_CODEC);
         server(SSGiveItemPacket.TYPE, SSGiveItemPacket.STREAM_CODEC);
         server(SSConsumeItemPacket.TYPE, SSConsumeItemPacket.STREAM_CODEC);
+        server(SSBeamPacket.TYPE, SSBeamPacket.STREAM_CODEC);
+        server(SSSoundPacket.TYPE, SSSoundPacket.STREAM_CODEC);
 
         client(CSRepulseParticlesPacket.TYPE, CSRepulseParticlesPacket.STREAM_CODEC);
+        client(CSConcussionBlurPacket.TYPE, CSConcussionBlurPacket.STREAM_CODEC);
     }
 
     private static <T extends Packet> void server(CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> reader) {

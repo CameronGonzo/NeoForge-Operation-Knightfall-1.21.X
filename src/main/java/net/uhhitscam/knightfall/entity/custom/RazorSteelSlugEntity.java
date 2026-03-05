@@ -65,7 +65,7 @@ public class RazorSteelSlugEntity extends Snowball {
         }
         this.level().broadcastEntityEvent(this, (byte) 3);
 
-        if (entity instanceof Creeper creeper && level().random.nextInt(2) == 1) {
+        if (entity instanceof Creeper creeper && weaponName.equals(WeaponName.BERSERKER) && level().random.nextInt(2) == 1) {
             creeper.ignite();
         }
 
@@ -122,7 +122,7 @@ public class RazorSteelSlugEntity extends Snowball {
         BlockPos hitPos = result.getBlockPos();
         BlockState hitState = level.getBlockState(hitPos);
 
-        if (hitState.is(Blocks.TNT) && level().random.nextInt(2) == 1) {
+        if (hitState.is(Blocks.TNT) && weaponName.equals(WeaponName.BERSERKER) && level().random.nextInt(2) == 1) {
             level.removeBlock(hitPos, false);
 
             PrimedTnt primedTnt = new PrimedTnt(level, hitPos.getX() + 0.5, hitPos.getY(), hitPos.getZ() + 0.5, (LivingEntity) this.getOwner());

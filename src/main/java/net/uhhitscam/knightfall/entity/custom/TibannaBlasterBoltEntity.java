@@ -14,8 +14,13 @@ import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SimpleExplosionDamageCalculator;
 import net.minecraft.world.phys.*;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.uhhitscam.knightfall.event.BlurEffectEventHandler;
 import net.uhhitscam.knightfall.item.custom.WeaponClassification;
+import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
 import net.uhhitscam.knightfall.particle.ModParticles;
+import net.uhhitscam.knightfall.util.CustomExplosion;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +31,7 @@ public class TibannaBlasterBoltEntity extends Snowball {
     private final int blasterDamage;
     private final WeaponClassification classification;
     private boolean explosiveShot;
+    private boolean concussiveShot;
 
     public TibannaBlasterBoltEntity(EntityType<? extends TibannaBlasterBoltEntity> entityType, Level level) {
         super(entityType, level);
@@ -34,14 +40,17 @@ public class TibannaBlasterBoltEntity extends Snowball {
         this.blasterDamage = 0;
         this.classification = WeaponClassification.PISTOL;
         this.explosiveShot = false;
+        this.concussiveShot = true;
     }
 
-    public TibannaBlasterBoltEntity(EntityType<? extends TibannaBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, WeaponClassification classification, boolean explosiveShot) {
+    public TibannaBlasterBoltEntity(EntityType<? extends TibannaBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, WeaponClassification classification, boolean explosiveShot, boolean concussiveShot) {
         super(entityType, level); // Directly reference the EntityType
         this.bolt_speed = bolt_speed;
         this.blasterDamage = blasterDamage;
         this.classification = classification;
         this.explosiveShot = explosiveShot;
+        this.concussiveShot = concussiveShot;
+        this.setOwner(shooter);
 
         Vec3 direction = shooter.getLookAngle().normalize().scale(bolt_speed);
         this.setDeltaMovement(direction);
@@ -70,69 +79,67 @@ public class TibannaBlasterBoltEntity extends Snowball {
 
     protected void onHit(HitResult result) {
         super.onHit(result);
+
+        if (this.level().isClientSide) {
+            return;
+        }
+
         int numParticles;
         this.level().broadcastEntityEvent(this, (byte) 3);
         if (explosiveShot) {
-            explode(result.getLocation());
+            CustomExplosion.create(this, result.getLocation(), 1.5, 3.5F, 0.25);
+        } else if (concussiveShot) {
+            CustomExplosion.create(this, result.getLocation(), 1.5, 1.5F, 0.15);
+
+            ServerLevel serverLevel = (ServerLevel) this.level();
+            serverLevel.sendParticles(ModParticles.CONCUSSIVE_SHOT_EXPLOSION_PARTICLES.get(),
+                    this.getX(), this.getY(), this.getZ(),
+                    1, 0, 0, 0, 0);
+
+            PacketDistributor.sendToPlayersNear(
+                    (ServerLevel) this.level(),
+                    null,
+                    result.getLocation().x, result.getLocation().y, result.getLocation().z,
+                    5.0f,
+                    new CSConcussionBlurPacket(
+                            new Vector3f((float) result.getLocation().x, (float) result.getLocation().y, (float) result.getLocation().z),
+                            5.0f,
+                            40,
+                            40,
+                            30.0f
+                    )
+            );
         }
 
-        if (!this.level().isClientSide) {
+        numParticles = switch (classification) {
+            case WeaponClassification.PISTOL -> 5 + level().random.nextInt(5);
+            case WeaponClassification.CARBINE -> 5 + level().random.nextInt(8);
+            case WeaponClassification.RIFLE -> 8 + level().random.nextInt(10);
+            case WeaponClassification.REPEATER -> 6 + level().random.nextInt(3);
+            case WeaponClassification.SCATTER -> 10 + level().random.nextInt(5);
+            case WeaponClassification.SNIPER -> 10 + level().random.nextInt(20);
+            case WeaponClassification.SLUGTHROWER -> 10 + level().random.nextInt(15);
+            case WeaponClassification.DISRUPTOR -> 15 + level().random.nextInt(20);
+            default -> 7 + level().random.nextInt(7);
+        };
 
-            numParticles = switch (classification) {
-                case WeaponClassification.PISTOL -> 5 + level().random.nextInt(5);
-                case WeaponClassification.CARBINE -> 5 + level().random.nextInt(8);
-                case WeaponClassification.RIFLE -> 8 + level().random.nextInt(10);
-                case WeaponClassification.REPEATER -> 6 + level().random.nextInt(3);
-                case WeaponClassification.SCATTER -> 10 + level().random.nextInt(5);
-                case WeaponClassification.SNIPER -> 10 + level().random.nextInt(20);
-                case WeaponClassification.SLUGTHROWER -> 10 + level().random.nextInt(15);
-                case WeaponClassification.DISRUPTOR -> 15 + level().random.nextInt(20);
-                default -> 7 + level().random.nextInt(7);
-            };
+        if (this.level() instanceof ServerLevel serverLevel) {
+            if (explosiveShot) {
+                serverLevel.sendParticles(ModParticles.EXPLOSIVE_SHOT_TIBANNA_PARTICLES.get(),
+                        this.getX(), this.getY(), this.getZ(),
+                        1, 0, 0, 0, 0);
+            } else {
+                serverLevel.sendParticles(ModParticles.SPARK_PARTICLES.get(),
+                        this.getX(), this.getY(), this.getZ(),
+                        numParticles, 0, 0, 0, 0.08);
 
-            if (this.level() instanceof ServerLevel serverLevel) {
-                if (explosiveShot) {
-                    serverLevel.sendParticles(ModParticles.EXPLOSIVE_SHOT_TIBANNA_PARTICLES.get(),
-                            this.getX(), this.getY(), this.getZ(),
-                            1, 0, 0, 0, 0);
-                } else {
-                    serverLevel.sendParticles(ModParticles.SPARK_PARTICLES.get(),
-                            this.getX(), this.getY(), this.getZ(),
-                            numParticles, 0, 0, 0, 0.08);
-
-                    serverLevel.sendParticles(ParticleTypes.SMOKE,
-                            this.getX(), this.getY(), this.getZ(),
-                            3, 0, 0, 0, 0.02);
-                }
+                serverLevel.sendParticles(ParticleTypes.SMOKE,
+                        this.getX(), this.getY(), this.getZ(),
+                        3, 0, 0, 0, 0.02);
             }
-
-            this.discard();
         }
-    }
 
-    private void explode(Vec3 hitPos) {
-        if (!level().isClientSide) {
-            double radius = 1.0D; // explosion radius
-            double knockbackStrength = 0.05D;
-            float damageAmount = 2.5F;
-
-            List<Entity> entities = level().getEntities(this, new AABB(
-                    hitPos.x - radius, hitPos.y - radius, hitPos.z - radius,
-                    hitPos.x + radius, hitPos.y + radius, hitPos.z + radius
-            ));
-
-            for (Entity e : entities) {
-                if (e instanceof LivingEntity living) {
-                    Vec3 knockbackDir = living.position().subtract(hitPos).normalize();
-                    living.push(knockbackDir.x * knockbackStrength, knockbackDir.y * knockbackStrength, knockbackDir.z * knockbackStrength);
-
-                    living.hurt(damageSources().generic(), damageAmount);
-                    living.invulnerableTime = 0;
-                }
-            }
-
-            discard();
-        }
+        this.discard();
     }
 
     @Override

@@ -12,7 +12,6 @@ public final class Hud {
     public Hud() {
         OperationKnightfall.init();
 
-        // Initialize client-side setup only if running on the client
         if (FMLEnvironment.dist == Dist.CLIENT) {
             HudClient.init();
         }

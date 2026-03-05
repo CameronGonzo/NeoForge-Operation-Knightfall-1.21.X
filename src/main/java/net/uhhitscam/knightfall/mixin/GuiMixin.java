@@ -10,9 +10,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.item.custom.ProjectileItem;
+import net.uhhitscam.knightfall.util.ThermalVisionUtil;
 import net.uhhitscam.knightfall.util.WeaponZoomUtil;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -32,9 +35,11 @@ public class GuiMixin {
         ItemStack offHandItem = player.getOffhandItem();
         ResourceLocation customCrosshair = null;
         ResourceLocation customScope;
+        boolean isThermalScope  = false;
+        boolean isScoping  = false;
 
         if (mainHandItem.getItem() instanceof ProjectileItem blasterMain) {
-            if (mainHandItem.getItem() instanceof ProjectileItem && offHandItem.getItem() instanceof ProjectileItem blasterOff) {      //holding two blasters
+            if (mainHandItem.getItem() instanceof ProjectileItem && offHandItem.getItem() instanceof ProjectileItem blasterOff) {
                 ProjectileItem prioritizedBlaster;
                 if (WeaponZoomUtil.getZoomFactor(blasterMain, player.getMainHandItem()) >= WeaponZoomUtil.getZoomFactor(blasterOff, player.getOffhandItem())) {
                     prioritizedBlaster = blasterMain;
@@ -43,10 +48,15 @@ public class GuiMixin {
                 }
                 customCrosshair = WeaponZoomUtil.getCrosshairTexture(prioritizedBlaster);
                 ci.cancel();
-            } else {        //holding only in main hand
+            } else {
                 customCrosshair = WeaponZoomUtil.getCrosshairTexture(blasterMain);
                 customScope = WeaponZoomUtil.getScopeTexture(blasterMain, player.getMainHandItem());
                 if (player.isShiftKeyDown() && (customScope != null)) {
+                    isScoping = true;
+                    if (customScope.equals(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/oval_long_red_scope_thermal.png")) || customScope.equals(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/circle_red_bracket_scope_thermal.png"))) {
+                        isThermalScope = true;
+                    }
+
                     customCrosshair = null;
                     int width = mc.getWindow().getGuiScaledWidth();
                     int height = mc.getWindow().getGuiScaledHeight();
@@ -57,10 +67,15 @@ public class GuiMixin {
                     ci.cancel();
                 }
             }
-        } else if (offHandItem.getItem() instanceof ProjectileItem blasterOff) {       //holding only in off hand
+        } else if (offHandItem.getItem() instanceof ProjectileItem blasterOff) {
             customCrosshair = WeaponZoomUtil.getCrosshairTexture(blasterOff);
             customScope = WeaponZoomUtil.getScopeTexture(blasterOff, player.getOffhandItem());
             if (player.isShiftKeyDown() && (customScope != null)) {
+                isScoping = true;
+                if (customScope.equals(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/oval_long_red_scope_thermal.png")) || customScope.equals(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/circle_red_bracket_scope_thermal.png"))) {
+                    isThermalScope = true;
+                }
+
                 customCrosshair = null;
                 int width = mc.getWindow().getGuiScaledWidth();
                 int height = mc.getWindow().getGuiScaledHeight();
@@ -71,6 +86,13 @@ public class GuiMixin {
                 ci.cancel();
             }
         }
+
+        if (isScoping && isThermalScope) {
+            ThermalVisionUtil.setThermalActive(true);
+        } else {
+            ThermalVisionUtil.setThermalActive(false);
+        }
+
 
         if (customCrosshair != null) {
             int x = (guiGraphics.guiWidth() - 16) / 2;

@@ -6,7 +6,8 @@
   "mixins": [
     "LivingEntityMixin",
     "LivingEntityRendererMixin",
-    "GuiMixin"
+    "GuiMixin",
+    "GameRendererAccessorMixin"
   ],
   "client": [],
   "injectors": {

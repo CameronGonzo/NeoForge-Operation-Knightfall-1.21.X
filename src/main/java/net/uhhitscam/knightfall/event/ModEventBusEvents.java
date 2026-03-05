@@ -20,6 +20,9 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.STUN_BLASTER_BOLT, StunBlasterBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.STEEL_SLUG, SteelSlugModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.RAZOR_STEEL_SLUG, RazorSteelSlugModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.POISON_TIPPED_STEEL_SLUG, PoisonTippedSteelSlugModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.EXPLOSIVE_TIPPED_STEEL_SLUG, ExplosiveTippedSteelSlugModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.ION_TIPPED_STEEL_SLUG, IonTippedSteelSlugModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.PLASTIC_SLUG, PlasticSlugModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.CERAMIC_SLUG, CeramicSlugModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.FLECHETTE, FlechetteModel::createBodyLayer);

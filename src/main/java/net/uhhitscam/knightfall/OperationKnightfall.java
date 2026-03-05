@@ -71,7 +71,6 @@ public class OperationKnightfall {
         LOGGER.info("Where Am I?");
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
@@ -86,12 +85,16 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.STUN_BLASTER_BOLT.get(), StunBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.STEEL_SLUG.get(), SteelSlugRenderer::new);
             EntityRenderers.register(ModEntities.RAZOR_STEEL_SLUG.get(), RazorSteelSlugRenderer::new);
+            EntityRenderers.register(ModEntities.POISON_TIPPED_STEEL_SLUG.get(), PoisonTippedSteelSlugRenderer::new);
+            EntityRenderers.register(ModEntities.EXPLOSIVE_TIPPED_STEEL_SLUG.get(), ExplosiveTippedSteelSlugRenderer::new);
+            EntityRenderers.register(ModEntities.ION_TIPPED_STEEL_SLUG.get(), IonTippedSteelSlugRenderer::new);
             EntityRenderers.register(ModEntities.PLASTIC_SLUG.get(), PlasticSlugRenderer::new);
             EntityRenderers.register(ModEntities.CERAMIC_SLUG.get(), CeramicSlugRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE.get(), FlechetteRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE_TOXIC.get(), FlechetteToxicRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE_SPREAD_CAN.get(), FlechetteSpreadCanRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE_TOXIC_SPREAD_CAN.get(), FlechetteToxicSpreadCanRenderer::new);
+            EntityRenderers.register(ModEntities.BLASTER_BEAM.get(), BlasterBeamRenderer::new);
 
             event.enqueueWork(() -> {
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
@@ -114,6 +117,7 @@ public class OperationKnightfall {
             event.registerSpriteSet(ModParticles.REPULSE_SHOT_LARGE_PARTICLES.get(), RepulseShotLargeParticles.Provider::new);
             event.registerSpriteSet(ModParticles.REPULSE_SHOT_MEDIUM_PARTICLES.get(), RepulseShotMediumParticles.Provider::new);
             event.registerSpriteSet(ModParticles.REPULSE_SHOT_SMALL_PARTICLES.get(), RepulseShotSmallParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.CONCUSSIVE_SHOT_EXPLOSION_PARTICLES.get(), ConcussiveShotExplosionParticles.Provider::new);
         }
     }
 }

@@ -25,6 +25,12 @@ public class ModModelLayers {
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "steel_slug"), "main");
     public static final ModelLayerLocation RAZOR_STEEL_SLUG = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "razor_steel_slug"), "main");
+    public static final ModelLayerLocation POISON_TIPPED_STEEL_SLUG = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "poison_tipped_steel_slug"), "main");
+    public static final ModelLayerLocation EXPLOSIVE_TIPPED_STEEL_SLUG = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "explosive_tipped_steel_slug"), "main");
+    public static final ModelLayerLocation ION_TIPPED_STEEL_SLUG = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "ion_tipped_steel_slug"), "main");
     public static final ModelLayerLocation PLASTIC_SLUG = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "plastic_slug"), "main");
     public static final ModelLayerLocation CERAMIC_SLUG = new ModelLayerLocation(

@@ -6,6 +6,7 @@ public enum FiringMode {
     FULL_AUTO,
     CHARGENSHOOT,
     CHARGENSHOOTONRELEASE,
+    BEAM,
     REPULSE,
     SNIPER,
     STUN,

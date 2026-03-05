@@ -2,10 +2,13 @@ package net.uhhitscam.knightfall.item.custom;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -15,9 +18,11 @@ import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.uhhitscam.knightfall.component.*;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.custom.*;
+import net.uhhitscam.knightfall.event.ModClientEvents;
 import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.network.*;
 import net.uhhitscam.knightfall.sound.ModSounds;
@@ -34,16 +39,17 @@ public class ProjectileItem extends Item {
     private final int burstRate;
     private final int scatterShots;
     private final EnumMap<FiringMode, ProjectileWeaponStats> stats;
+    private final BeamWeaponStats beamStats;
     private final List<FiringMode> firingModes;
     private final FiringMode defaultFiringMode;
-    private final AmmoType typGasType;
+    private final AmmoType typAmmoType;
     private final WeaponClassification classification;
     private final WeaponName projectileWeaponName;
 
     private final Map<UUID, Float> recoilMap = new HashMap<>();
 
     public ProjectileItem(Properties properties, float projectileSpeed, int max_ammo, int burstRate, int scatterShots,
-                          EnumMap<FiringMode, ProjectileWeaponStats> stats, List<FiringMode> firingModes, FiringMode defaultFiringMode, AmmoType typGasType,
+                          EnumMap<FiringMode, ProjectileWeaponStats> stats, @org.jetbrains.annotations.Nullable BeamWeaponStats beamStats, List<FiringMode> firingModes, FiringMode defaultFiringMode, AmmoType typAmmoType,
                           WeaponClassification classification, WeaponName projectileWeaponName) {
         super(properties);
         this.projectileSpeed = projectileSpeed;
@@ -51,11 +57,21 @@ public class ProjectileItem extends Item {
         this.burstRate = burstRate;
         this.scatterShots = scatterShots;
         this.stats = stats;
+        this.beamStats = beamStats;
         this.firingModes = firingModes;
         this.defaultFiringMode = defaultFiringMode;
-        this.typGasType = typGasType;
+        this.typAmmoType = typAmmoType;
         this.classification = classification;
         this.projectileWeaponName = projectileWeaponName;
+    }
+
+    public ProjectileWeaponStats getStats(FiringMode firingMode) {
+        return this.stats.get(firingMode);
+    }
+
+    @org.jetbrains.annotations.Nullable
+    public BeamWeaponStats getBeamStats() {
+        return this.beamStats;
     }
 
     @Override
@@ -84,14 +100,22 @@ public class ProjectileItem extends Item {
             return;
         }
 
-        int currentAmmo = getAmmo(stack);
-        if (currentAmmo <= 0 && !firingMode.equals(FiringMode.REPULSE)) {
-            level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), ModSounds.FOLEY_NO_AMMO.get(), SoundSource.NEUTRAL, 0.5F, 1.0F);
-            return;
+        if (!firingMode.equals(FiringMode.BEAM)) {
+            FireCoolDownData FireCoolDownData = getFireCoolDownData(stack);
+            if (FireCoolDownData.isOnCooldown(player.level())) {
+                return;
+            }
         }
 
-        FireCoolDownData FireCoolDownData = getFireCoolDownData(stack);
-        if (FireCoolDownData.isOnCooldown(player.level())) {
+        int currentAmmo = getAmmo(stack);
+        if (currentAmmo <= 0 && !firingMode.equals(FiringMode.REPULSE)) {
+            stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.NONE.name()));
+            level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), ModSounds.FOLEY_NO_AMMO.get(), SoundSource.NEUTRAL, 0.5F, 1.0F);
+            if (mainHand) {
+                ModClientEvents.mainFiring = false;
+            } else {
+                ModClientEvents.offFiring = false;
+            }
             return;
         }
 
@@ -119,7 +143,7 @@ public class ProjectileItem extends Item {
             return;
         }
 
-        AmmoType currentAmmoType = getGasType(stack);
+        AmmoType currentAmmoType = getAmmoType(stack);
         ExtraFiringRateData extraFiringRateData = getExtraFiringRateData(stack, mainHand);
 
         if (firingMode.equals(FiringMode.BURST)) {
@@ -138,28 +162,27 @@ public class ProjectileItem extends Item {
                 fireBolt(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode, 0);
             }
 
-            SoundEvent blasterFireSound;
-            blasterFireSound = WeaponSoundsUtil.getWeaponFireSound(projectileWeaponName, firingMode);
+            SoundEvent blasterFireSound = WeaponSoundsUtil.getWeaponFireSound(projectileWeaponName, firingMode);
             level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), blasterFireSound, SoundSource.NEUTRAL, 0.5F, 1.0F);
         } else if (getProjectileWeaponName().equals(WeaponName.BOWCASTER) && firingMode.equals(FiringMode.CHARGENSHOOT)) {
-                for (int shots = 0; shots < 3; shots ++) {
-                    fireBolt(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode, shots);
-                }
+            for (int shots = 0; shots < 3; shots ++) {
+                fireBolt(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode, shots);
+            }
 
-            SoundEvent blasterFireSound;
-            blasterFireSound = WeaponSoundsUtil.getWeaponFireSound(projectileWeaponName, firingMode);
+            SoundEvent blasterFireSound = WeaponSoundsUtil.getWeaponFireSound(projectileWeaponName, firingMode);
             level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), blasterFireSound, SoundSource.NEUTRAL, 0.5F, 1.0F);
-        } else {
+        } else if (!firingMode.equals(FiringMode.BEAM)){
             fireBolt(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode, 0);
 
-            SoundEvent blasterFireSound;
-            blasterFireSound = WeaponSoundsUtil.getWeaponFireSound(projectileWeaponName, firingMode);
+            SoundEvent blasterFireSound = WeaponSoundsUtil.getWeaponFireSound(projectileWeaponName, firingMode);
             level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), blasterFireSound, SoundSource.NEUTRAL, 0.5F, 1.0F);
         }
 
-        ProjectileWeaponStats currentStats = stats.get(firingMode);
-        long cooldownEndTime = level.getGameTime() + currentStats.fireRate();
-        stack.set(ModDataComponentTypes.FIRE_COOLDOWN, getFireCoolDownData(stack).withFireCoolDownEndTime(cooldownEndTime));
+        if (!firingMode.equals(FiringMode.BEAM)) {
+            ProjectileWeaponStats currentStats = stats.get(firingMode);
+            long cooldownEndTime = level.getGameTime() + currentStats.fireRate();
+            stack.set(ModDataComponentTypes.FIRE_COOLDOWN, getFireCoolDownData(stack).withFireCoolDownEndTime(cooldownEndTime));
+        }
     }
 
     //Will be added later
@@ -187,6 +210,7 @@ public class ProjectileItem extends Item {
     private void fireBolt(Level level, Player player, ItemStack stack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode, int shot) {
         ProjectileWeaponStats currentStats = stats.get(firingMode);
         boolean explosiveShot = (firingMode.equals(FiringMode.CHARGENSHOOT) || firingMode.equals(FiringMode.CHARGENSHOOTONRELEASE) || getProjectileWeaponName().equals(WeaponName.DC15LE) || getProjectileWeaponName().equals(WeaponName.BOWCASTER)) && !getProjectileWeaponName().equals(WeaponName.Z6_ROTARY);
+        boolean concussiveShot = projectileWeaponName.equals(WeaponName.LJ40) || projectileWeaponName.equals(WeaponName.LJ50) || projectileWeaponName.equals(WeaponName.W90);
 
         if (currentAmmo > 0) {
             Snowball projectile;
@@ -198,23 +222,29 @@ public class ProjectileItem extends Item {
                 } else {
                     specificProjectile = switch (currentAmmoType) {
                         case AmmoType.IONIZED_TIBANNA ->
-                                new IonizedTibannaBlasterBoltEntity(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot);
+                                new IonizedTibannaBlasterBoltEntity(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot, concussiveShot);
                         case AmmoType.SPIN_SEALED_TIBANNA ->
-                                new SpinSealedTibannaBlasterBoltEntity(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot);
+                                new SpinSealedTibannaBlasterBoltEntity(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot, concussiveShot);
                         case AmmoType.TIBANNAX ->
-                                new TibannaXBlasterBoltEntity(ModEntities.TIBANNAX_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot);
+                                new TibannaXBlasterBoltEntity(ModEntities.TIBANNAX_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot, concussiveShot);
                         case AmmoType.SIG ->
-                                new SigBlasterBoltEntity(ModEntities.SIG_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot);
+                                new SigBlasterBoltEntity(ModEntities.SIG_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot, concussiveShot);
                         case AmmoType.MAGNETIZED_SIG ->
-                                new MagnetizedSigBlasterBoltEntity(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot);
+                                new MagnetizedSigBlasterBoltEntity(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot, concussiveShot);
                         case AmmoType.SKEVON ->
-                                new SkevonBlasterBoltEntity(ModEntities.SKEVON_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot);
+                                new SkevonBlasterBoltEntity(ModEntities.SKEVON_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot, concussiveShot);
                         default ->
-                                new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot);
+                                new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, explosiveShot, concussiveShot);
                     };
                 }
             } else if (AmmoType.getSlugTypes().contains(currentAmmoType)) {
                 specificProjectile = switch (currentAmmoType) {
+                    case AmmoType.EXPLOSIVE_TIPPED_STEEL_SLUG ->
+                            new ExplosiveTippedSteelSlugEntity(ModEntities.EXPLOSIVE_TIPPED_STEEL_SLUG.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, projectileWeaponName);
+                    case AmmoType.POISON_TIPPED_STEEL_SLUG ->
+                            new PoisonTippedSteelSlugEntity(ModEntities.POISON_TIPPED_STEEL_SLUG.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, projectileWeaponName);
+                    case AmmoType.ION_TIPPED_STEEL_SLUG ->
+                            new IonTippedSteelSlugEntity(ModEntities.ION_TIPPED_STEEL_SLUG.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, projectileWeaponName);
                     case AmmoType.RAZOR_STEEL_SLUG ->
                             new RazorSteelSlugEntity(ModEntities.RAZOR_STEEL_SLUG.get(), level, player, this.projectileSpeed, currentStats.damage(), this.classification, projectileWeaponName);
                     case AmmoType.PLASTIC_SLUG ->
@@ -274,34 +304,43 @@ public class ProjectileItem extends Item {
                 );
             }
 
-            double pitch = Math.toRadians(-player.getXRot());
-            double yaw = Math.toRadians(-player.getYRot());
             float accuracyFactor;
+
             if (currentAmmoType.equals(AmmoType.FLECHETTE_SPREAD_CAN) || currentAmmoType.equals(AmmoType.FLECHETTE_TOXIC_SPREAD_CAN)) {
                 accuracyFactor = player.isShiftKeyDown() ? 1.8f * 0.8f / 100 : 1.8f / 100;
             } else {
                 accuracyFactor = player.isShiftKeyDown() ? currentStats.inaccuracy() * 0.8f / 100 : currentStats.inaccuracy() / 100;
             }
-            Random random = new Random();
-            double xVelocity;
-            double yVelocity;
-            double zVelocity;
-            if (shot == 1) {
-                xVelocity = Math.cos(pitch) * Math.sin(yaw - 0.1) + (random.nextDouble() - 0.5f) * accuracyFactor;
-                yVelocity = Math.sin(pitch) + (random.nextDouble() - 0.5f) * accuracyFactor;
-                zVelocity = Math.cos(pitch) * Math.cos(yaw - 0.1) + (random.nextDouble() - 0.5f) * accuracyFactor;
-            } else if (shot == 2) {
-                xVelocity = Math.cos(pitch) * Math.sin(yaw + 0.1) + (random.nextDouble() - 0.5f) * accuracyFactor;
-                yVelocity = Math.sin(pitch) + (random.nextDouble() - 0.5f) * accuracyFactor;
-                zVelocity = Math.cos(pitch) * Math.cos(yaw + 0.1) + (random.nextDouble() - 0.5f) * accuracyFactor;
-            } else {
-                xVelocity = Math.cos(pitch) * Math.sin(yaw) + (random.nextDouble() - 0.5f) * accuracyFactor;
-                yVelocity = Math.sin(pitch) + (random.nextDouble() - 0.5f) * accuracyFactor;
-                zVelocity = Math.cos(pitch) * Math.cos(yaw) + (random.nextDouble() - 0.5f) * accuracyFactor;
+
+            if ((mainItem instanceof ProjectileItem mainPItem && !FiringMode.BEAM.equals(mainPItem.getFiringMode(stack))) || (offItem instanceof ProjectileItem offPItem && !FiringMode.BEAM.equals(offPItem.getFiringMode(stack)))) {
+                Vec3 forward = player.getLookAngle().normalize();
+                Vec3 worldUp = new Vec3(0, 1, 0);
+                Vec3 right = forward.cross(worldUp);
+
+                if (right.lengthSqr() < 1.0e-6) {
+                    float yawRad = (float) Math.toRadians(player.getYRot());
+                    Vec3 horizForward = new Vec3(-Mth.sin(yawRad), 0.0, Mth.cos(yawRad)).normalize();
+                    right = horizForward.cross(worldUp);
+                }
+
+                right = right.normalize();
+                Vec3 camUp = right.cross(forward).normalize();
+
+                double angle = (shot == 0) ? 0.0 : (shot == 2) ? -0.10 : 0.10;
+
+                double cos = Math.cos(angle);
+                double sin = Math.sin(angle);
+
+                Vec3 dir = forward.scale(cos).add(right.scale(sin));
+
+                Random random = new Random();
+
+                dir = dir.add(right.scale((random.nextDouble() - 0.5) * accuracyFactor)).add(camUp.scale((random.nextDouble() - 0.5) * accuracyFactor)).normalize();
+
+                Vec3 velocity = dir.scale(this.projectileSpeed);
+                projectile.setDeltaMovement(velocity);
+                level.addFreshEntity(projectile);
             }
-            Vec3 velocity = new Vec3(xVelocity, yVelocity, zVelocity).normalize().scale(this.projectileSpeed);
-            projectile.setDeltaMovement(velocity);
-            level.addFreshEntity(projectile);
 
             setAmmo(stack, currentAmmo - 1);
             player.awardStat(Stats.ITEM_USED.get(this));
@@ -349,12 +388,29 @@ public class ProjectileItem extends Item {
 
         if (level.isClientSide || !(entity instanceof Player player)) return;
 
+        if (this.projectileWeaponName.equals(WeaponName.DC15S_SIDEARM)) {
+            if ((level.getGameTime() % 20L) == 0L) {
+                int currentAmmo = getAmmo(stack);
+                if (currentAmmo < max_ammo) {
+                    int newAmmo = Math.min(max_ammo, currentAmmo + 1);
+                    setAmmo(stack, newAmmo);
+
+                    AmmoType curType = getAmmoType(stack);
+                    if (curType == AmmoType.NONE && typAmmoType != null && typAmmoType != AmmoType.NONE) {
+                        stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(typAmmoType.name()));
+                    }
+
+                    player.inventoryMenu.broadcastChanges();
+                }
+            }
+        }
+
         ExtraFiringRateData extraFiringRateData = stack.get(ModDataComponentTypes.EXTRA_FIRING_RATE);
         if (extraFiringRateData == null) return;
 
         if (getFiringMode(stack).equals(FiringMode.BURST) && extraFiringRateData.shotsFired() > 0 && extraFiringRateData.shotsFired() < 3) {
             if (level.getGameTime() >= extraFiringRateData.cooldownEndTime()) {
-                fireBolt(level, player, stack, getAmmo(stack), getGasType(stack), extraFiringRateData.mainHand(), getFiringMode(stack), 0);
+                fireBolt(level, player, stack, getAmmo(stack), getAmmoType(stack), extraFiringRateData.mainHand(), getFiringMode(stack), 0);
 
                 extraFiringRateData = extraFiringRateData.withCooldownEndTime(level.getGameTime() + 2).withShotsFired(extraFiringRateData.shotsFired() + 1);
 
@@ -417,9 +473,21 @@ public class ProjectileItem extends Item {
         }
     }
 
-    private AmmoType getGasType(ItemStack stack) {
-        return AmmoType.valueOf(stack.get(ModDataComponentTypes.AMMO_TYPE.get()).ammoType());
+    public static AmmoType getAmmoType(ItemStack stack) {
+        AmmoTypeData data = stack.get(ModDataComponentTypes.AMMO_TYPE.get());
+        if (data == null || data.ammoType() == null || data.ammoType().isBlank()) {
+            stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.NONE.name()));
+            return AmmoType.NONE;
+        }
+
+        try {
+            return AmmoType.valueOf(data.ammoType());
+        } catch (IllegalArgumentException e) {
+            stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.NONE.name()));
+            return AmmoType.NONE;
+        }
     }
+
 
     public FiringMode getFiringMode(ItemStack stack) {
         FiringModeData data = stack.get(ModDataComponentTypes.FIRING_MODE.get());
@@ -429,6 +497,11 @@ public class ProjectileItem extends Item {
         }
         return FiringMode.valueOf(data.firingMode());
     }
+
+    public List<FiringMode> getFiringModes() {
+        return firingModes;
+    }
+
 
     public WeaponClassification getClassification() {
         return classification;
@@ -444,8 +517,7 @@ public class ProjectileItem extends Item {
 
     public int reload(Player player, ItemStack stack, boolean mainHand, int additionalAmmoToConsume) {
         int currentAmmo = getAmmo(stack);
-        AmmoTypeData projectileWeaponAmmoTypeData = stack.get(ModDataComponentTypes.AMMO_TYPE.get());
-        AmmoType currentAmmoType = (projectileWeaponAmmoTypeData != null) ? AmmoType.valueOf(projectileWeaponAmmoTypeData.ammoType()) : null;
+        AmmoType currentAmmoType = getAmmoType(stack);
         FiringMode firingMode = getFiringMode(stack);
         int ammoToConsume = 0;
 
@@ -472,12 +544,14 @@ public class ProjectileItem extends Item {
 
              if (item instanceof SlugItem slugItem && classification.equals(WeaponClassification.SLUGTHROWER)) {
                 if (tryReloadSlug(player, stack, ammoStack, slugItem, currentAmmo, i, currentAmmoType, mainHand, firingMode, additionalAmmoToConsume)) {
+                    stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(slugItem.getAmmoType().name()));
                     reloaded = true;
                     ammoToConsume = (player.isCreative() ? (max_ammo - currentAmmo) : Math.min((max_ammo - currentAmmo), ((ammoStack.getCount() - additionalAmmoToConsume))));
                     break;
                 }
             } else if (item instanceof FlechetteCanisterItem flechetteItem && classification.equals(WeaponClassification.FLECHETTE)) {
                 if (tryReloadFlechette(player, stack, ammoStack, flechetteItem, currentAmmo, i, currentAmmoType, mainHand, firingMode, additionalAmmoToConsume)) {
+                    stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(flechetteItem.getAmmoType().name()));
                     reloaded = true;
                     ammoToConsume = (player.isCreative() ? (max_ammo - currentAmmo) : Math.min((max_ammo - currentAmmo), ((ammoStack.getCount() - additionalAmmoToConsume))));
                     break;
@@ -491,15 +565,29 @@ public class ProjectileItem extends Item {
         }
 
         if (!reloaded && player.isCreative()) {
+            AmmoType assumedType = (currentAmmoType != AmmoType.NONE) ? currentAmmoType : typAmmoType;
+
+            if (assumedType == null || assumedType == AmmoType.NONE) {
+                return 0;
+            }
+
+            boolean canAssumeType = switch (classification) {
+                case SLUGTHROWER -> AmmoType.getSlugTypes().contains(assumedType);
+                case FLECHETTE   -> AmmoType.getFlechetteTypes().contains(assumedType);
+                default          -> AmmoType.getGasTypes().contains(assumedType);
+            };
+
+            if (!canAssumeType) {
+                return 0;
+            }
+
             int ammoNeeded = max_ammo - currentAmmo;
             if (ammoNeeded > 0) {
-                currentAmmo += ammoNeeded;
-                setAmmo(stack, currentAmmo);
+                int newAmmo = currentAmmo + ammoNeeded;
 
-                String AmmoTypeToSend = (currentAmmoType != null) ? currentAmmoType.toString() : typGasType.toString();
-                PayloadRegister.sendToServer(new SSReloadPacket(stack, currentAmmo, AmmoTypeToSend, mainHand));
-
-                player.inventoryMenu.broadcastChanges();
+                setAmmo(stack, newAmmo);
+                stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(assumedType.name()));
+                PayloadRegister.sendToServer(new SSReloadPacket(stack, newAmmo, assumedType.name(), mainHand));
 
                 SoundEvent reloadSound = WeaponSoundsUtil.getWeaponReloadSound(projectileWeaponName, firingMode, classification);
                 player.playSound(reloadSound, 0.3F, 1.0F);
@@ -516,7 +604,7 @@ public class ProjectileItem extends Item {
         if (gasAmmo <= 0) return false;
 
         AmmoType gasType = gasItem.getAmmoType();
-        if (currentAmmoType != null && !currentAmmoType.equals(gasType)) return false;
+        if (currentAmmoType != AmmoType.NONE && currentAmmoType != gasType) return false;
 
         int ammoNeeded = max_ammo - currentAmmo;
         int ammoToReload = player.isCreative() ? ammoNeeded : Math.min(ammoNeeded, gasAmmo);
@@ -543,7 +631,7 @@ public class ProjectileItem extends Item {
         int slugAmmo = ammoStack.getCount() - additionalAmmoToReload;
 
         AmmoType slugType = slugItem.getAmmoType();
-        if (currentAmmoType != null && !currentAmmoType.equals(slugType)) return false;
+        if (currentAmmoType != AmmoType.NONE && !currentAmmoType.equals(slugType)) return false;
 
         int ammoNeeded = max_ammo - currentAmmo;
         int ammoToReload = player.isCreative() ? ammoNeeded : Math.min(ammoNeeded, slugAmmo);
@@ -562,7 +650,7 @@ public class ProjectileItem extends Item {
         int flechetteCanisterAmmo = ammoStack.getCount() - additionalAmmoToReload;
 
         AmmoType flechetteCanisterType = flechetteCanisterItem.getAmmoType();
-        if (currentAmmoType != null && !currentAmmoType.equals(flechetteCanisterType)) return false;
+        if (currentAmmoType != AmmoType.NONE && !currentAmmoType.equals(flechetteCanisterType)) return false;
 
         int ammoNeeded = max_ammo - currentAmmo;
         int ammoToReload = player.isCreative() ? ammoNeeded : Math.min(ammoNeeded, flechetteCanisterAmmo);
@@ -578,8 +666,7 @@ public class ProjectileItem extends Item {
 
     public void unload(Player player, ItemStack stack, boolean mainHand){
         int currentAmmo = getAmmo(stack);
-        AmmoTypeData projectileWeaponAmmoTypeData = stack.get(ModDataComponentTypes.AMMO_TYPE.get());
-        AmmoType currentAmmoType = (projectileWeaponAmmoTypeData != null) ? AmmoType.valueOf(projectileWeaponAmmoTypeData.ammoType()) : null;
+        AmmoType currentAmmoType = getAmmoType(stack);
 
         if (currentAmmo <= 0) {
             player.displayClientMessage(Component.translatable("item.knightfall.projectileWeapon.no_ammo_to_unload"), true);
@@ -608,6 +695,12 @@ public class ProjectileItem extends Item {
                 unloadedAmmo = new ItemStack(ModItems.CERAMIC_SLUG.get(), currentAmmo);
             } else if (currentAmmoType.equals(AmmoType.RAZOR_STEEL_SLUG)) {
                 unloadedAmmo = new ItemStack(ModItems.RAZOR_STEEL_SLUG.get(), currentAmmo);
+            } else if (currentAmmoType.equals(AmmoType.POISON_TIPPED_STEEL_SLUG)) {
+                unloadedAmmo = new ItemStack(ModItems.POISON_TIPPED_STEEL_SLUG.get(), currentAmmo);
+            } else if (currentAmmoType.equals(AmmoType.EXPLOSIVE_TIPPED_STEEL_SLUG)) {
+                unloadedAmmo = new ItemStack(ModItems.EXPLOSIVE_TIPPED_STEEL_SLUG.get(), currentAmmo);
+            } else if (currentAmmoType.equals(AmmoType.ION_TIPPED_STEEL_SLUG)) {
+                unloadedAmmo = new ItemStack(ModItems.ION_TIPPED_STEEL_SLUG.get(), currentAmmo);
             } else {
                 unloadedAmmo = new ItemStack(ModItems.STEEL_SLUG.get(), currentAmmo);
             }
@@ -616,6 +709,43 @@ public class ProjectileItem extends Item {
             SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(classification);
             player.playSound(unloadSound, 0.5F, 1.0F);
         } else {
+            Item mainItem = player.getMainHandItem().getItem();
+            Item offItem = player.getOffhandItem().getItem();
+            boolean isMainWeapon = mainItem instanceof ProjectileItem;
+            boolean isOffWeapon = offItem instanceof ProjectileItem;
+            double closeness = 0.27;
+            double height = -0.1;
+            double x;
+            double y;
+            double z;
+            if ((isMainWeapon ^ isOffWeapon) && player.isShiftKeyDown()) {
+                if (mainHand && isMainWeapon) {
+                    ProjectileItem weaponMain = (ProjectileItem) mainItem;
+                    if (WeaponZoomUtil.getScopeTexture(weaponMain, player.getMainHandItem()) != null) {
+                        closeness = 0;
+                        height = 0;
+                    }
+                } else if (!mainHand && isOffWeapon) {
+                    ProjectileItem weaponOff = (ProjectileItem) offItem;
+                    if (WeaponZoomUtil.getScopeTexture(weaponOff, player.getOffhandItem()) != null) {
+                        closeness = 0;
+                        height = 0;
+                    }
+                }
+            }
+            if (mainHand) {
+                x = player.getX() - (Math.cos(Math.toRadians(player.getYRot())) * closeness) - (Math.sin(Math.toRadians(player.getYRot())) * 1);
+                y = player.getEyeY() + height - (Math.sin(Math.toRadians(player.getXRot())) * 1.2);
+                z = player.getZ() - (Math.sin(Math.toRadians(player.getYRot())) * closeness) + (Math.cos(Math.toRadians(player.getYRot())) * 1);
+            } else {
+                x = player.getX() + (Math.cos(Math.toRadians(player.getYRot())) * closeness) - (Math.sin(Math.toRadians(player.getYRot())) * 1);
+                y = player.getEyeY() + height - (Math.sin(Math.toRadians(player.getXRot())) * 1.2);
+                z = player.getZ() + (Math.sin(Math.toRadians(player.getYRot())) * closeness) + (Math.cos(Math.toRadians(player.getYRot())) * 1);
+            }
+            player.level().addParticle(
+                    ParticleTypes.LARGE_SMOKE,
+                    x, y, z,
+                    0, 0.05 + player.level().random.nextDouble() * 0.05, 0);
             SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(classification);
             player.playSound(unloadSound, 0.5F, 1.0F);
         }
@@ -696,13 +826,24 @@ public class ProjectileItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack blasterStack, TooltipContext pContext, List<Component> pTooltip, TooltipFlag pFlag) {
-        pTooltip.add(Component.literal("Ammo: " + getAmmo(blasterStack) + "/" + max_ammo));
+    public void appendHoverText(ItemStack weaponStack, TooltipContext pContext, List<Component> pTooltip, TooltipFlag pFlag) {
+        pTooltip.add(Component.literal("Ammo: " + getAmmo(weaponStack) + "/" + max_ammo));
         if(Screen.hasShiftDown()){
-            //nothing yet: maybe add current ammo type, hold 'r' to unload weapon, acceptable ammo types
+            var ammoComp = weaponStack.get(ModDataComponentTypes.AMMO_TYPE.get());
+
+            if (ammoComp == null || ammoComp.ammoType() == null || ammoComp.ammoType().isBlank()) {
+                pTooltip.add(Component.literal("No Ammo"));
+            } else {
+                try {
+                    AmmoType type = AmmoType.valueOf(ammoComp.ammoType());
+                    pTooltip.add(Component.literal("Ammo Type: " + type.toString()));
+                } catch (IllegalArgumentException ex) {
+                    pTooltip.add(Component.literal("No Ammo"));
+                }
+            }
         } else {
             pTooltip.add(Component.translatable("tooltip.knightfall.blaster.shift"));
         }
-        super.appendHoverText(blasterStack, pContext, pTooltip, pFlag);
+        super.appendHoverText(weaponStack, pContext, pTooltip, pFlag);
     }
 }
