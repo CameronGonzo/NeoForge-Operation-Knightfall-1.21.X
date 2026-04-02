@@ -1,5 +1,6 @@
 package net.uhhitscam.knightfall.mixin;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -29,79 +30,104 @@ public class GuiMixin {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
-        if (player == null || mc.options.hideGui) return;
+        if (player == null || mc.options.hideGui) {
+            ThermalVisionUtil.setThermalActive(false);
+            return;
+        }
 
         ItemStack mainHandItem = player.getMainHandItem();
         ItemStack offHandItem = player.getOffhandItem();
+
         ResourceLocation customCrosshair = null;
-        ResourceLocation customScope;
-        boolean isThermalScope  = false;
-        boolean isScoping  = false;
+        ResourceLocation customScope = null;
+        boolean isThermalScope = false;
+        boolean isScoping = false;
 
         if (mainHandItem.getItem() instanceof ProjectileItem blasterMain) {
-            if (mainHandItem.getItem() instanceof ProjectileItem && offHandItem.getItem() instanceof ProjectileItem blasterOff) {
-                ProjectileItem prioritizedBlaster;
-                if (WeaponZoomUtil.getZoomFactor(blasterMain, player.getMainHandItem()) >= WeaponZoomUtil.getZoomFactor(blasterOff, player.getOffhandItem())) {
-                    prioritizedBlaster = blasterMain;
-                } else {
-                    prioritizedBlaster = blasterOff;
-                }
+            if (offHandItem.getItem() instanceof ProjectileItem blasterOff) {
+                ProjectileItem prioritizedBlaster =
+                        WeaponZoomUtil.getZoomFactor(blasterMain, mainHandItem) >= WeaponZoomUtil.getZoomFactor(blasterOff, offHandItem)
+                                ? blasterMain
+                                : blasterOff;
+
                 customCrosshair = WeaponZoomUtil.getCrosshairTexture(prioritizedBlaster);
                 ci.cancel();
             } else {
                 customCrosshair = WeaponZoomUtil.getCrosshairTexture(blasterMain);
-                customScope = WeaponZoomUtil.getScopeTexture(blasterMain, player.getMainHandItem());
-                if (player.isShiftKeyDown() && (customScope != null)) {
+                customScope = WeaponZoomUtil.getScopeTexture(blasterMain, mainHandItem);
+
+                if (player.isShiftKeyDown() && customScope != null) {
                     isScoping = true;
-                    if (customScope.equals(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/oval_long_red_scope_thermal.png")) || customScope.equals(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/circle_red_bracket_scope_thermal.png"))) {
-                        isThermalScope = true;
-                    }
+                    isThermalScope = isThermalScope(customScope);
 
+                    renderScopeOverlay(guiGraphics, mc, customScope);
                     customCrosshair = null;
-                    int width = mc.getWindow().getGuiScaledWidth();
-                    int height = mc.getWindow().getGuiScaledHeight();
-
-                    RenderSystem.enableBlend();
-                    guiGraphics.blit(customScope, 0, 0, 0, 0, width, height, width, height);
-                    RenderSystem.disableBlend();
                     ci.cancel();
                 }
             }
         } else if (offHandItem.getItem() instanceof ProjectileItem blasterOff) {
             customCrosshair = WeaponZoomUtil.getCrosshairTexture(blasterOff);
-            customScope = WeaponZoomUtil.getScopeTexture(blasterOff, player.getOffhandItem());
-            if (player.isShiftKeyDown() && (customScope != null)) {
+            customScope = WeaponZoomUtil.getScopeTexture(blasterOff, offHandItem);
+
+            if (player.isShiftKeyDown() && customScope != null) {
                 isScoping = true;
-                if (customScope.equals(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/oval_long_red_scope_thermal.png")) || customScope.equals(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/circle_red_bracket_scope_thermal.png"))) {
-                    isThermalScope = true;
-                }
+                isThermalScope = isThermalScope(customScope);
 
+                renderScopeOverlay(guiGraphics, mc, customScope);
                 customCrosshair = null;
-                int width = mc.getWindow().getGuiScaledWidth();
-                int height = mc.getWindow().getGuiScaledHeight();
-
-                RenderSystem.enableBlend();
-                guiGraphics.blit(customScope, 0, 0, 0, 0, width, height, width, height);
-                RenderSystem.disableBlend();
                 ci.cancel();
             }
         }
 
-        if (isScoping && isThermalScope) {
-            ThermalVisionUtil.setThermalActive(true);
-        } else {
-            ThermalVisionUtil.setThermalActive(false);
-        }
-
+        ThermalVisionUtil.setThermalActive(isScoping && isThermalScope);
 
         if (customCrosshair != null) {
-            int x = (guiGraphics.guiWidth() - 16) / 2;
-            int y = (guiGraphics.guiHeight() - 16) / 2;
+            int size = 18;
+            int x = (guiGraphics.guiWidth() - size) / 2;
+            int y = (guiGraphics.guiHeight() - size) / 2;
 
-            RenderSystem.enableBlend();
-            guiGraphics.blit(customCrosshair, x, y, 0, 0, 16, 16, 16, 16);
-            RenderSystem.disableBlend();
+            renderCustomCrosshair(guiGraphics, customCrosshair, x, y, size);
             ci.cancel();
         }
+    }
+
+    @Unique
+    private static boolean isThermalScope(ResourceLocation scopeTexture) {
+        return scopeTexture.equals(ResourceLocation.fromNamespaceAndPath(
+                OperationKnightfall.MODID,
+                "textures/gui/oval_long_red_scope_thermal.png"
+        )) || scopeTexture.equals(ResourceLocation.fromNamespaceAndPath(
+                OperationKnightfall.MODID,
+                "textures/gui/circle_red_bracket_scope_thermal.png"
+        ));
+    }
+
+    @Unique
+    private static void renderScopeOverlay(GuiGraphics guiGraphics, Minecraft mc, ResourceLocation scopeTexture) {
+        int width = mc.getWindow().getGuiScaledWidth();
+        int height = mc.getWindow().getGuiScaledHeight();
+
+        RenderSystem.enableBlend();
+        guiGraphics.blit(scopeTexture, 0, 0, 0, 0, width, height, width, height);
+        RenderSystem.disableBlend();
+    }
+
+    @Unique
+    private static void renderCustomCrosshair(GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, int size) {
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(
+                GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
+                GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO
+        );
+
+        guiGraphics.blit(texture, x, y, 0, 0, size, size, size, size);
+
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableBlend();
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

@@ -7,7 +7,7 @@ This mod expands Minecraft with new gameplay systems inspired by the Star Wars u
 
 ---
 
-# Project Overview
+## Project Overview
 
 Operation Knightfall introduces a fully custom progression system and gameplay mechanics inspired by the Star Wars universe.
 
@@ -24,7 +24,7 @@ Key design goals include:
 
 ---
 
-# Features
+## Features
 
 ### Blasters
 - 350+ unique blaster-like weapons
@@ -62,7 +62,7 @@ Key design goals include:
 
 ---
 
-# Roadmap
+## Roadmap
 
 Below is the current development roadmap for Operation Knightfall.
 
@@ -89,13 +89,13 @@ Below is the current development roadmap for Operation Knightfall.
 
 ---
 
-# Installation
+## Installation
 
 *(Instructions will be added once the mod reaches a public release state.)*
 
 ---
 
-# License
+## License
 
 This repository uses a split licensing model.
 
@@ -113,7 +113,13 @@ Modpacks **are permitted** to include the unmodified Operation Knightfall mod pr
 
 ---
 
-# Disclaimer
+## Acknowledgements
+
+This project was initially created using the NeoForge MDK and development templates inspired by Kaupenjoe's modding tutorials.
+
+---
+
+## **Disclaimer**
 
 This mod is a fan-made project inspired by the Star Wars franchise. All rights, trademarks, characters, sounds, and other intellectual property related to Star Wars are the exclusive property of Lucasfilm Ltd. and The Walt Disney Company.
 
