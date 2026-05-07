@@ -4381,6 +4381,12 @@
       "knightfall:blaster/ec17_stun/weapons_blaster_ec17_stun_fire_03"
     ]
   },
+  "foley_equipment_launch": {
+    "subtitle": "sounds.knightfall.foley_equipment_launch",
+    "sounds": [
+      "knightfall:blaster/foley/weapons_blaster_foley_equipment_launch_01"
+    ]
+  },
   "foley_no_ammo": {
     "subtitle": "sounds.knightfall.foley_no_ammo",
     "sounds": [
@@ -4583,16 +4589,6 @@
       "knightfall:blaster/foley/weapons_blaster_foley_scatter_shot_equip_03",
       "knightfall:blaster/foley/weapons_blaster_foley_scatter_shot_equip_04",
       "knightfall:blaster/foley/weapons_blaster_foley_scatter_shot_equip_05"
-    ]
-  },
-  "foley_scatter_shot_pump": {
-    "subtitle": "sounds.knightfall.foley_scatter_shot_pump",
-    "sounds": [
-      "knightfall:blaster/foley/weapons_blaster_foley_scatter_shot_pump_01",
-      "knightfall:blaster/foley/weapons_blaster_foley_scatter_shot_pump_02",
-      "knightfall:blaster/foley/weapons_blaster_foley_scatter_shot_pump_03",
-      "knightfall:blaster/foley/weapons_blaster_foley_scatter_shot_pump_04",
-      "knightfall:blaster/foley/weapons_blaster_foley_scatter_shot_pump_05"
     ]
   },
   "foley_amban_disruptor_sniper_rifle_equip": {

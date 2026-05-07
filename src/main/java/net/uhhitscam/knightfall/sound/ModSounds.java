@@ -446,6 +446,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> EC17_STUN_FIRE = registerSoundEvent("ec17_stun_fire");
     public static final Supplier<SoundEvent> STUN_FIRE = registerSoundEvent("stun_fire");
 
+    public static final Supplier<SoundEvent> FOLEY_EQUIPMENT_LAUNCH = registerSoundEvent("foley_equipment_launch");
     public static final Supplier<SoundEvent> FOLEY_NO_AMMO = registerSoundEvent("foley_no_ammo");
     public static final Supplier<SoundEvent> FOLEY_LARGE_LAUNCHER_RELOAD = registerSoundEvent("foley_large_launcher_reload");
     public static final Supplier<SoundEvent> FOLEY_LARGE_RELOAD_GAS = registerSoundEvent("foley_large_reload_gas");
@@ -464,7 +465,6 @@ public class ModSounds {
     public static final Supplier<SoundEvent> FOLEY_SMALL_UNEQUIP = registerSoundEvent("foley_small_unequip");
     public static final Supplier<SoundEvent> FOLEY_SMALL_FLORISH_UNEQUIP = registerSoundEvent("foley_small_florish_unequip");
     public static final Supplier<SoundEvent> FOLEY_SCATTER_SHOT_EQUIP = registerSoundEvent("foley_scatter_shot_equip");
-    public static final Supplier<SoundEvent> FOLEY_SCATTER_SHOT_PUMP = registerSoundEvent("foley_scatter_shot_pump");
     public static final Supplier<SoundEvent> FOLEY_A180_PISTOL_SWITCH_FIRE_MODE = registerSoundEvent("foley_a180_pistol_switch_fire_mode");
     public static final Supplier<SoundEvent> FOLEY_A180_RIFLE_SWITCH_FIRE_MODE = registerSoundEvent("foley_a180_rifle_switch_fire_mode");
     public static final Supplier<SoundEvent> FOLEY_A180_SNIPER_SWITCH_FIRE_MODE = registerSoundEvent("foley_a180_sniper_switch_fire_mode");

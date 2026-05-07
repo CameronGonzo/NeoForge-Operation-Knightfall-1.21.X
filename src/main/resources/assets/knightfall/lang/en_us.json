@@ -796,6 +796,7 @@
   "sounds.knightfall.zygerrian_blaster_charge": "Zygerrian Blaster Rifle Charging Up",
   "sounds.knightfall.zygerrian_blaster_uncharge": "Zygerrian Blaster Rifle Charging Down",
 
+  "sounds.knightfall.foley_equipment_launch": "Equipment Launches",
   "sounds.knightfall.foley_no_ammo": "No Ammo Click",
   "sounds.knightfall.foley_large_launcher_reload": "Launcher Reloads",
   "sounds.knightfall.foley_large_reload_gas": "Reloads Gas",
@@ -814,7 +815,6 @@
   "sounds.knightfall.foley_small_unequip": "Unequips Small Weapon",
   "sounds.knightfall.foley_small_florish_unequip": "Florishes and Unequips Small Weapon",
   "sounds.knightfall.foley_scatter_shot_equip": "Equips Scatter Weapon",
-  "sounds.knightfall.foley_scatter_shot_pump": "Pumps Scatter Weapon",
   "sounds.knightfall.foley_a180_pistol_switch_fire_mode": "Reconfigures A180 Pistol",
   "sounds.knightfall.foley_a180_rifle_switch_fire_mode": "Reconfigures A180 Rifle",
   "sounds.knightfall.foley_a180_sniper_switch_fire_mode": "Reconfigures A180 Sniper",

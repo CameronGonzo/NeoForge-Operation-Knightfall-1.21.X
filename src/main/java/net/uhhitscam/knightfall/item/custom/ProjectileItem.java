@@ -45,11 +45,12 @@ public class ProjectileItem extends Item {
     private final AmmoType typAmmoType;
     private final WeaponClassification classification;
     private final WeaponName projectileWeaponName;
+    private final ProjectileWeaponUI ui;
 
     private final Map<UUID, Float> recoilMap = new HashMap<>();
 
     public ProjectileItem(Properties properties, float projectileSpeed, int max_ammo, int burstRate, int scatterShots,
-                          EnumMap<FiringMode, ProjectileWeaponStats> stats, @org.jetbrains.annotations.Nullable BeamWeaponStats beamStats, List<FiringMode> firingModes, FiringMode defaultFiringMode, AmmoType typAmmoType,
+                          EnumMap<FiringMode, ProjectileWeaponStats> stats, @org.jetbrains.annotations.Nullable BeamWeaponStats beamStats, List<FiringMode> firingModes, ProjectileWeaponUI ui, FiringMode defaultFiringMode, AmmoType typAmmoType,
                           WeaponClassification classification, WeaponName projectileWeaponName) {
         super(properties);
         this.projectileSpeed = projectileSpeed;
@@ -59,6 +60,7 @@ public class ProjectileItem extends Item {
         this.stats = stats;
         this.beamStats = beamStats;
         this.firingModes = firingModes;
+        this.ui = ui;
         this.defaultFiringMode = defaultFiringMode;
         this.typAmmoType = typAmmoType;
         this.classification = classification;
@@ -67,6 +69,10 @@ public class ProjectileItem extends Item {
 
     public ProjectileWeaponStats getStats(FiringMode firingMode) {
         return this.stats.get(firingMode);
+    }
+
+    public ProjectileWeaponUI getUI() {
+        return ui;
     }
 
     @org.jetbrains.annotations.Nullable

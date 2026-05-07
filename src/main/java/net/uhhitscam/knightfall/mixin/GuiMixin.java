@@ -45,15 +45,21 @@ public class GuiMixin {
 
         if (mainHandItem.getItem() instanceof ProjectileItem blasterMain) {
             if (offHandItem.getItem() instanceof ProjectileItem blasterOff) {
-                ProjectileItem prioritizedBlaster =
-                        WeaponZoomUtil.getZoomFactor(blasterMain, mainHandItem) >= WeaponZoomUtil.getZoomFactor(blasterOff, offHandItem)
-                                ? blasterMain
-                                : blasterOff;
+                ProjectileItem prioritizedBlaster;
+                ItemStack prioritizedStack;
 
-                customCrosshair = WeaponZoomUtil.getCrosshairTexture(prioritizedBlaster);
+                if (WeaponZoomUtil.getZoomFactor(blasterMain, mainHandItem) >= WeaponZoomUtil.getZoomFactor(blasterOff, offHandItem)) {
+                    prioritizedBlaster = blasterMain;
+                    prioritizedStack = mainHandItem;
+                } else {
+                    prioritizedBlaster = blasterOff;
+                    prioritizedStack = offHandItem;
+                }
+
+                customCrosshair = WeaponZoomUtil.getCrosshairTexture(prioritizedBlaster, prioritizedStack);
                 ci.cancel();
             } else {
-                customCrosshair = WeaponZoomUtil.getCrosshairTexture(blasterMain);
+                customCrosshair = WeaponZoomUtil.getCrosshairTexture(blasterMain, mainHandItem);
                 customScope = WeaponZoomUtil.getScopeTexture(blasterMain, mainHandItem);
 
                 if (player.isShiftKeyDown() && customScope != null) {
@@ -66,7 +72,7 @@ public class GuiMixin {
                 }
             }
         } else if (offHandItem.getItem() instanceof ProjectileItem blasterOff) {
-            customCrosshair = WeaponZoomUtil.getCrosshairTexture(blasterOff);
+            customCrosshair = WeaponZoomUtil.getCrosshairTexture(blasterOff, offHandItem);
             customScope = WeaponZoomUtil.getScopeTexture(blasterOff, offHandItem);
 
             if (player.isShiftKeyDown() && customScope != null) {
@@ -82,7 +88,7 @@ public class GuiMixin {
         ThermalVisionUtil.setThermalActive(isScoping && isThermalScope);
 
         if (customCrosshair != null) {
-            int size = 18;
+            int size = 25;
             int x = (guiGraphics.guiWidth() - size) / 2;
             int y = (guiGraphics.guiHeight() - size) / 2;
 
