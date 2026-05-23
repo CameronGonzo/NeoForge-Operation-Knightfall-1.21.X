@@ -22,6 +22,7 @@ public class ModCreativeModeTabs {
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems._22T4);
                         pOutput.accept(ModItems._434_DEATHHAMMER);
+                        pOutput.accept(ModItems.A2H);
                         pOutput.accept(ModItems.A140);
                         pOutput.accept(ModItems.A180);
                         pOutput.accept(ModItems.A240);
@@ -52,6 +53,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.DC15S_SIDEARM);
                         pOutput.accept(ModItems.DC17);
                         pOutput.accept(ModItems.DC17S);
+                        pOutput.accept(ModItems.DCX);
                         pOutput.accept(ModItems.DE10);
                         pOutput.accept(ModItems.DEACTIVATOR);
                         pOutput.accept(ModItems.DER4);
@@ -76,6 +78,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.EMG2);
                         pOutput.accept(ModItems.F2L);
                         pOutput.accept(ModItems.F38G);
+                        pOutput.accept(ModItems.FC29);
                         pOutput.accept(ModItems.FN57);
                         pOutput.accept(ModItems.FP45);
                         pOutput.accept(ModItems.GA3R);
@@ -88,20 +91,26 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.IB94);
                         pOutput.accept(ModItems.ION_STUNNER);
                         pOutput.accept(ModItems.K16_BRYAR_PISTOL);
+                        pOutput.accept(ModItems.K63R);
                         pOutput.accept(ModItems.KL9);
                         pOutput.accept(ModItems.KM9);
                         pOutput.accept(ModItems.KUEGET_LN21);
                         pOutput.accept(ModItems.KYD21);
                         pOutput.accept(ModItems.LL30);
+                        pOutput.accept(ModItems.LP_LAW);
                         pOutput.accept(ModItems.LV7C);
                         pOutput.accept(ModItems.LW896);
                         pOutput.accept(ModItems.MARG_MCM);
                         pOutput.accept(ModItems.MODEL_57);
                         pOutput.accept(ModItems.MW20_BRYAR_PISTOL);
                         pOutput.accept(ModItems.P224);
+                        pOutput.accept(ModItems.PD44);
                         pOutput.accept(ModItems.POWER_5);
                         pOutput.accept(ModItems.PR9);
+                        pOutput.accept(ModItems.PRD8);
                         pOutput.accept(ModItems.Q2);
+                        pOutput.accept(ModItems.RD2B);
+                        pOutput.accept(ModItems.RD6);
                         pOutput.accept(ModItems.RELBY_K23);
                         pOutput.accept(ModItems.RENEGADE);
                         pOutput.accept(ModItems.RG4D);
@@ -121,6 +130,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SE9V);
                         pOutput.accept(ModItems.SE14R);
                         pOutput.accept(ModItems.SEDGLEYS_MK_5);
+                        pOutput.accept(ModItems.SEL3);
                         pOutput.accept(ModItems.SETTLERS_STUN);
                         pOutput.accept(ModItems.SHARD3A);
                         pOutput.accept(ModItems.SK32);
@@ -128,6 +138,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SNUBBLE);
                         pOutput.accept(ModItems.SONIC_STUNNER);
                         pOutput.accept(ModItems.SS410);
+                        pOutput.accept(ModItems.T4W1);
                         pOutput.accept(ModItems.T6);
                         pOutput.accept(ModItems.TG446);
                         pOutput.accept(ModItems.UMBARAN_BLASTER);
@@ -148,6 +159,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.WS4);
                         pOutput.accept(ModItems.X8_NIGHT_SNIPER);
                         pOutput.accept(ModItems.X30);
+                        pOutput.accept(ModItems.ZP20);
                     }).build());
 
     public static final Supplier<CreativeModeTab> CARBINE_BLASTERS =
@@ -156,6 +168,10 @@ public class ModCreativeModeTabs {
                     .icon(() -> new ItemStack(ModItems.EE3.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "hand_blasters"))
                     .displayItems((pParameters, pOutput) -> {
+                        pOutput.accept(ModItems.CH60);
+                        pOutput.accept(ModItems.CP5);
+                        pOutput.accept(ModItems.CQ29);
+                        pOutput.accept(ModItems.CT33);
                         pOutput.accept(ModItems.DC15S_CARBINE);
                         pOutput.accept(ModItems.DC19);
                         pOutput.accept(ModItems.DLS12);
@@ -165,9 +181,11 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.EE3);
                         pOutput.accept(ModItems.EE4);
                         pOutput.accept(ModItems.ESB3);
+                        pOutput.accept(ModItems.G433);
                         pOutput.accept(ModItems.GALAAR15);
                         pOutput.accept(ModItems.LJ40);
                         pOutput.accept(ModItems.OK98);
+                        pOutput.accept(ModItems.SWE1);
                     }).build());
 
     public static final Supplier<CreativeModeTab> RIFLE_BLASTERS =
@@ -187,6 +205,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ABR2_ZATO);
                         pOutput.accept(ModItems.AZ6);
                         pOutput.accept(ModItems.B1X);
+                        pOutput.accept(ModItems.BAC5);
                         pOutput.accept(ModItems.BK43);
                         pOutput.accept(ModItems.BLASTER_SPEAR);
                         pOutput.accept(ModItems.BM107);
@@ -210,8 +229,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.DUL4);
                         pOutput.accept(ModItems.E5);
                         pOutput.accept(ModItems.E5_BX);
-                        pOutput.accept(ModItems.E5C);
                         pOutput.accept(ModItems.E5_CE);
+                        pOutput.accept(ModItems.E5C);
+                        pOutput.accept(ModItems.E5T);
                         pOutput.accept(ModItems.E9V);
                         pOutput.accept(ModItems.E10);
                         pOutput.accept(ModItems.E10_5);
@@ -233,21 +253,27 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.L60);
                         pOutput.accept(ModItems.LJ50);
                         pOutput.accept(ModItems.M12);
+                        pOutput.accept(ModItems.MK3T);
                         pOutput.accept(ModItems.MK_II_PALADIN);
                         pOutput.accept(ModItems.MOTTO_MK_4);
                         pOutput.accept(ModItems.NEO_CRUSADER_RIFLE);
+                        pOutput.accept(ModItems.PRD58);
+                        pOutput.accept(ModItems.PRD62);
                         pOutput.accept(ModItems.QUARREN_RIFLE);
                         pOutput.accept(ModItems.R88);
                         pOutput.accept(ModItems.RELBY_K25);
                         pOutput.accept(ModItems.SONIC_BLASTER);
+                        pOutput.accept(ModItems.SWE2);
                         pOutput.accept(ModItems.T21B);
                         pOutput.accept(ModItems.THUNDERBLASTER);
                         pOutput.accept(ModItems.W90);
+                        pOutput.accept(ModItems.W210);
                         pOutput.accept(ModItems.WESTARE9);
                         pOutput.accept(ModItems.WESTARL4);
                         pOutput.accept(ModItems.WESTARLVN);
                         pOutput.accept(ModItems.WESTARM5);
                         pOutput.accept(ModItems.WOOKIE_RIFLE);
+                        pOutput.accept(ModItems.XT7);
                         pOutput.accept(ModItems.ZYGERRIAN_BLASTER);
                     }).build());
 
@@ -260,6 +286,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ACP_ARRAY);
                         pOutput.accept(ModItems.ACP_REPEATER);
                         pOutput.accept(ModItems.DC17M);
+                        pOutput.accept(ModItems.E5R);
                         pOutput.accept(ModItems.GR13);
                         pOutput.accept(ModItems.LS150);
                         pOutput.accept(ModItems.M32);
@@ -291,6 +318,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.BLNDRBUS);
                         pOutput.accept(ModItems.BX33);
                         pOutput.accept(ModItems.CA87);
+                        pOutput.accept(ModItems.CB88);
+                        pOutput.accept(ModItems.CL14);
+                        pOutput.accept(ModItems.CP6);
                         pOutput.accept(ModItems.FLITE37);
                         pOutput.accept(ModItems.SNUB_SCATTER);
                         pOutput.accept(ModItems.SX21);

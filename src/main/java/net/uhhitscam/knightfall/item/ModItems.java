@@ -117,6 +117,13 @@ public class ModItems {
                             Map.of(),
                             Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_RED)),
                     FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName._785MK_FIREPUNCHERX));
+    public static final DeferredItem<Item> A2H = ITEMS.register("a2h",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.MORSE,0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.A2H));
     public static final DeferredItem<Item> A140 = ITEMS.register("a140",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
                     new EnumMap<>(Map.of(
@@ -137,7 +144,7 @@ public class ModItems {
                         Map.of(FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_SOFT_FOCUS, FiringMode.SNIPER, ScopeTexture.OVAL_SMALL_X)),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.A180));
     public static final DeferredItem<Item> A240 = ITEMS.register("a240",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 10, 0, 1,
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 500, 0, 1,
                     new EnumMap<>(Map.of(
                             FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
                     List.of(FiringMode.SEMI_AUTO),
@@ -316,6 +323,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.8f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.B33));
+    public static final DeferredItem<Item> BAC5 = ITEMS.register("bac5",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 300, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.CARROT,0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.BAC5));
     public static final DeferredItem<Item> BALNAB = ITEMS.register("balnab",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
                     new EnumMap<>(Map.of(
@@ -515,6 +529,15 @@ public class ModItems {
                     List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
                     ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.85f),
                     FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.CA87));
+    public static final DeferredItem<Item> CB88 = ITEMS.register("cb88",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SCATTER, new ProjectileWeaponStats(25, 5f, 15f, 6),
+                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
+                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
+                    List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f),
+                    FiringMode.STUN, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.CB88));
     public static final DeferredItem<Item> CC19 = ITEMS.register("cc19",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 200, 0, 1,
                     new EnumMap<>(Map.of(
@@ -529,6 +552,14 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CC420));
+    public static final DeferredItem<Item> CH60 = ITEMS.register("ch60",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 2f, 1f, 9),
+                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
+                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.CH60));
     public static final DeferredItem<Item> CHARRIC = ITEMS.register("charric",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
                     new EnumMap<>(Map.of(
@@ -546,6 +577,15 @@ public class ModItems {
                             Map.of(),
                             Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN)),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.CJ9_BO_RIFLE));
+    public static final DeferredItem<Item> CL14 = ITEMS.register("cl14",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SCATTER, new ProjectileWeaponStats(25, 5f, 15f, 6),
+                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
+                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
+                    List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
+                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.8f),
+                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.CL14));
     public static final DeferredItem<Item> CORE_J3 = ITEMS.register("core_j3",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
                     new EnumMap<>(Map.of(
@@ -576,6 +616,32 @@ public class ModItems {
                             Map.of(),
                             Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT)),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.CORPO_RIFLE));
+    public static final DeferredItem<Item> CP5 = ITEMS.register("cp5",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 2f, 1f, 9),
+                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
+                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.CP5));
+    public static final DeferredItem<Item> CP6 = ITEMS.register("cp6",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 4,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SCATTER, new ProjectileWeaponStats(25, 5f, 15f, 6),
+                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
+                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
+                    List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.8f),
+                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.CP6));
+    public static final DeferredItem<Item> CQ29 = ITEMS.register("cq29",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 2f, 1f, 9),
+                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
+                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
+                    List.of(FiringMode.SEMI_AUTO, FiringMode.REPULSE, FiringMode.STUN),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.8f),
+                    FiringMode.STUN, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.CQ29));
     public static final DeferredItem<Item> CR2 = ITEMS.register("cr2",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 100, 0, 1,
                     new EnumMap<>(Map.of(
@@ -592,6 +658,14 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
                     ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.85f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CS14));
+    public static final DeferredItem<Item> CT33 = ITEMS.register("ct33",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 4,
+                    new EnumMap<>(Map.of(
+                            FiringMode.BURST, new ProjectileWeaponStats(6, 2f, 1f, 9),
+                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
+                    List.of(FiringMode.BURST, FiringMode.STUN),
+                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.8f),
+                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.CT33));
     public static final DeferredItem<Item> CW24 = ITEMS.register("cw24",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 150, 0, 1,
                     new EnumMap<>(Map.of(
@@ -722,6 +796,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.7f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNAX, WeaponClassification.CARBINE, WeaponName.DC19));
+    public static final DeferredItem<Item> DCX = ITEMS.register("dcx",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.7f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DCX));
     public static final DeferredItem<Item> DE10 = ITEMS.register("de10",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 100, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1043,6 +1124,15 @@ public class ModItems {
                     List.of(FiringMode.FULL_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.85f),
                     FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E5C));
+    public static final DeferredItem<Item> E5R = ITEMS.register("e5r",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(2, 0f, 2f, 4))), null,
+                    List.of(FiringMode.FULL_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.25f,
+                            Map.of(),
+                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_RED_ANGLED_BRACKET)),
+                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.E5R));
     public static final DeferredItem<Item> E5S = ITEMS.register("e5s",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 4, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1052,6 +1142,13 @@ public class ModItems {
                             Map.of(),
                             Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_YELLOW)),
                     FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.E5S));
+    public static final DeferredItem<Item> E5T = ITEMS.register("e5t",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.7f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E5T));
     public static final DeferredItem<Item> E10 = ITEMS.register("e10",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 3, 1,
                     new EnumMap<>(Map.of(
@@ -1268,6 +1365,14 @@ public class ModItems {
                     List.of(FiringMode.SCATTER),
                     ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.85f),
                     FiringMode.SCATTER, AmmoType.FLECHETTE_CAN, WeaponClassification.FLECHETTE, WeaponName.FC1_FLECHETTE_LAUNCHER));
+    public static final DeferredItem<Item> FC29 = ITEMS.register("fc29",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7),
+                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
+                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
+                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.85f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.FC29));
     public static final DeferredItem<Item> FLITE37 = ITEMS.register("flite37",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1309,6 +1414,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.85f),
                     FiringMode.SEMI_AUTO, AmmoType.FLECHETTE_CAN, WeaponClassification.FLECHETTE, WeaponName.FWG7));
+    public static final DeferredItem<Item> G433 = ITEMS.register("g433",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.G433));
     public static final DeferredItem<Item> GA3R = ITEMS.register("ga3r",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 15, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1489,6 +1601,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE),
                     ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.K16_BRYAR_PISTOL));
+    public static final DeferredItem<Item> K63R = ITEMS.register("k63r",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.K63R));
     public static final DeferredItem<Item> KA74 = ITEMS.register("ka74",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1580,6 +1699,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
                     ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.LL30));
+    public static final DeferredItem<Item> LP_LAW = ITEMS.register("lp_law",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(8, 0.8f, 2f, 6))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.LP_LAW));
     public static final DeferredItem<Item> LS150 = ITEMS.register("ls150",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 200, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1655,6 +1781,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.MARG_MCM));
+    public static final DeferredItem<Item> MK3T = ITEMS.register("mk3t",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 300, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 2f, 7))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.MK3T));
     public static final DeferredItem<Item> MK_II_PALADIN = ITEMS.register("mk_ii_paladin",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1779,6 +1912,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.9f),
                     FiringMode.SEMI_AUTO, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.PANIC_PISTOL));
+    public static final DeferredItem<Item> PD44 = ITEMS.register("pd44",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.85f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.PD44));
     public static final DeferredItem<Item> PK23 = ITEMS.register("pk23",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 40, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1803,6 +1943,27 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.4f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.PR9));
+    public static final DeferredItem<Item> PRD8 = ITEMS.register("prd8",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.PRD8));
+    public static final DeferredItem<Item> PRD58 = ITEMS.register("prd58",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.6f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.PRD58));
+    public static final DeferredItem<Item> PRD62 = ITEMS.register("prd62",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.7f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.PRD62));
     public static final DeferredItem<Item> PRECISIONX = ITEMS.register("precisionx",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
                     new EnumMap<>(Map.of(
@@ -1834,6 +1995,20 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO, FiringMode.REPULSE, FiringMode.STUN, FiringMode.LAUNCHER),
                     ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.R88));
+    public static final DeferredItem<Item> RD2B = ITEMS.register("rd2b",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.9f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RD2B));
+    public static final DeferredItem<Item> RD6 = ITEMS.register("rd6",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.9f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RD6));
     public static final DeferredItem<Item> RECIPROCATING_QUAD_BLASTER_CANNON = ITEMS.register("reciprocating_quad_blaster_cannon",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
                     new EnumMap<>(Map.of(
@@ -2023,6 +2198,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.75f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SEDGLEYS_MK_5));
+    public static final DeferredItem<Item> SEL3 = ITEMS.register("sel3",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.75f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SEL3));
     public static final DeferredItem<Item> SER5 = ITEMS.register("ser5",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
                     new EnumMap<>(Map.of(
@@ -2095,6 +2277,20 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SS410));
+    public static final DeferredItem<Item> SWE1 = ITEMS.register("swe1",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.CARBINE, WeaponName.SWE1));
+    public static final DeferredItem<Item> SWE2 = ITEMS.register("swe2",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.SWE2));
     public static final DeferredItem<Item> SX21 = ITEMS.register("sx21",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 150, 0, 5,
                     new EnumMap<>(Map.of(
@@ -2102,6 +2298,13 @@ public class ModItems {
                     List.of(FiringMode.SCATTER),
                     ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.85f),
                     FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.SX21));
+    public static final DeferredItem<Item> T4W1 = ITEMS.register("t4w1",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.T4W1));
     public static final DeferredItem<Item> T6 = ITEMS.register("t6",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 25, 0, 1,
                     new EnumMap<>(Map.of(
@@ -2271,6 +2474,13 @@ public class ModItems {
                     List.of(FiringMode.SEMI_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.75f),
                     FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.W90));
+    public static final DeferredItem<Item> W210 = ITEMS.register("w210",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.W210));
     public static final DeferredItem<Item> W310 = ITEMS.register("w310_blaster",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
                     new EnumMap<>(Map.of(
@@ -2445,6 +2655,14 @@ public class ModItems {
                     List.of(FiringMode.SNIPER),
                     ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.5f),
                     FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.X47));
+    public static final DeferredItem<Item> XT7 = ITEMS.register("xt7",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7),
+                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 3))), null,
+                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.XT7));
     public static final DeferredItem<Item> Z6_ROTARY = ITEMS.register("z6_rotary",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
                     new EnumMap<>(Map.of(
@@ -2459,6 +2677,13 @@ public class ModItems {
                     List.of(FiringMode.FULL_AUTO),
                     ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f),
                     FiringMode.FULL_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.REPEATER, WeaponName.ZB3));
+    public static final DeferredItem<Item> ZP20 = ITEMS.register("zp20",
+            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 0, 1,
+                    new EnumMap<>(Map.of(
+                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
+                    List.of(FiringMode.SEMI_AUTO),
+                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
+                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.ZP20));
     public static final DeferredItem<Item> ZYGERRIAN_BLASTER = ITEMS.register("zygerrian_blaster",
             () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
                     new EnumMap<>(Map.of(

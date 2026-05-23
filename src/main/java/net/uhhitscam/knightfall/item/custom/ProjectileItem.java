@@ -692,7 +692,7 @@ public class ProjectileItem extends Item {
             }
             PayloadRegister.sendToServer(new SSGiveItemPacket(unloadedAmmo));
             player.inventoryMenu.broadcastChanges();
-            SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(classification);
+            SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(getFiringMode(stack), classification);
             player.playSound(unloadSound, 0.5F, 1.0F);
         } else if (classification.equals(WeaponClassification.SLUGTHROWER)) {
             if (currentAmmoType.equals(AmmoType.PLASTIC_SLUG)) {
@@ -712,7 +712,7 @@ public class ProjectileItem extends Item {
             }
             PayloadRegister.sendToServer(new SSGiveItemPacket(unloadedAmmo));
             player.inventoryMenu.broadcastChanges();
-            SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(classification);
+            SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(getFiringMode(stack), classification);
             player.playSound(unloadSound, 0.5F, 1.0F);
         } else {
             Item mainItem = player.getMainHandItem().getItem();
@@ -752,7 +752,7 @@ public class ProjectileItem extends Item {
                     ParticleTypes.LARGE_SMOKE,
                     x, y, z,
                     0, 0.05 + player.level().random.nextDouble() * 0.05, 0);
-            SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(classification);
+            SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(getFiringMode(stack), classification);
             player.playSound(unloadSound, 0.5F, 1.0F);
         }
         setAmmo(stack, 0);
