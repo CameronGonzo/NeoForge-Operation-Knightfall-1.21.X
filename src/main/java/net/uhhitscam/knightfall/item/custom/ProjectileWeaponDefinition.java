@@ -45,10 +45,11 @@ public record ProjectileWeaponDefinition(
         private FiringMode defaultFiringMode;
         private AmmoType ammoType = AmmoType.TIBANNA;
         private WeaponClassification classification;
-        private ProjectileWeaponTiming timing = ProjectileWeaponTiming.defaults();
+        private ProjectileWeaponTiming timing;
 
         private Builder(WeaponName weaponName, String registryName) {
             this.weaponName = Objects.requireNonNull(weaponName, "weaponName cannot be null");
+            this.timing = ProjectileWeaponTiming.defaults(weaponName);
 
             if (registryName == null || registryName.isBlank()) {
                 throw new IllegalArgumentException("registryName cannot be blank for " + weaponName);
@@ -79,6 +80,11 @@ public record ProjectileWeaponDefinition(
 
         public Builder chargeThreshold(int ticks) {
             this.timing = this.timing.withChargeThresholdTicks(ticks);
+            return this;
+        }
+
+        public Builder equipTime(long ticks) {
+            this.timing = this.timing.withEquipTicks(ticks);
             return this;
         }
 

@@ -305,6 +305,7 @@ public class ModItems {
                     )
                     .defaultFiringMode(FiringMode.FULL_AUTO)
                     .classification(WeaponClassification.RIFLE)
+                    .equipTime(8)
                     .build()
     );
     public static final DeferredItem<Item> A310 = registerProjectile(
@@ -321,6 +322,7 @@ public class ModItems {
                     )
                     .defaultFiringMode(FiringMode.SEMI_AUTO)
                     .classification(WeaponClassification.RIFLE)
+                    .equipTime(8)
                     .build()
     );
     public static final DeferredItem<Item> A350 = registerProjectile(
@@ -422,6 +424,7 @@ public class ModItems {
                     .classification(WeaponClassification.DISRUPTOR)
                     .reloadTime(20)
                     .switchTime(18)
+                    .equipTime(16)
                     .build()
     );
     public static final DeferredItem<Item> APACHE = registerProjectile(

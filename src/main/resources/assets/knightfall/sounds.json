@@ -5002,6 +5002,22 @@
       "knightfall:blaster/foley/weapons_blaster_foley_a280cfe_sniper_switch_fire_mode_05"
     ]
   },
+  "foley_a300_equip": {
+    "subtitle": "sounds.knightfall.foley_a300_equip",
+    "sounds": [
+      "knightfall:blaster/foley/weapons_blaster_foley_a300_equip_01",
+      "knightfall:blaster/foley/weapons_blaster_foley_a300_equip_02",
+      "knightfall:blaster/foley/weapons_blaster_foley_a300_equip_03"
+    ]
+  },
+  "foley_a310_equip": {
+    "subtitle": "sounds.knightfall.foley_a310_equip",
+    "sounds": [
+      "knightfall:blaster/foley/weapons_blaster_foley_a310_equip_01",
+      "knightfall:blaster/foley/weapons_blaster_foley_a310_equip_02",
+      "knightfall:blaster/foley/weapons_blaster_foley_a310_equip_03"
+    ]
+  },
   "foley_amban_disruptor_sniper_rifle_switch_fire_mode": {
     "subtitle": "sounds.knightfall.foley_amban_disruptor_sniper_rifle_switch_fire_mode",
     "sounds": [

@@ -58,6 +58,18 @@ public final class WeaponSoundsUtil {
             WeaponName.VANGUARD_SCATTER, WeaponName.WINCHESTER87
     );
 
+    public static boolean isLargeWeapon(WeaponName weaponName) {
+        return LARGE_WEAPONS.contains(weaponName);
+    }
+
+    public static boolean isSmallWeapon(WeaponName weaponName) {
+        return SMALL_WEAPONS.contains(weaponName);
+    }
+
+    public static boolean usesScatterEquipProfile(WeaponName weaponName) {
+        return SCATTER_EQUIP_WEAPONS.contains(weaponName);
+    }
+
     static {
         registerFireDefaults();
         registerFireOverrides();
@@ -752,6 +764,12 @@ public final class WeaponSoundsUtil {
     }
 
     private static void registerEquipProfiles() {
+        profile(WeaponName.A300)
+                .equip(ModSounds.FOLEY_A300_EQUIP);
+
+        profile(WeaponName.A310)
+                .equip(ModSounds.FOLEY_A310_EQUIP);
+
         profile(WeaponName.AMBAN_DISRUPTOR)
                 .equip(ModSounds.FOLEY_AMBAN_DISRUPTOR_SNIPER_RIFLE_EQUIP);
 
@@ -889,7 +907,7 @@ public final class WeaponSoundsUtil {
     }
 
     private static SoundEvent getRandomSmallEquipSound() {
-        int roll = ThreadLocalRandom.current().nextInt(60);
+        int roll = ThreadLocalRandom.current().nextInt(10);
 
         if (roll == 0) {
             return ModSounds.FOLEY_SMALL_FLORISH_EQUIP.get();
@@ -903,7 +921,7 @@ public final class WeaponSoundsUtil {
     }
 
     private static SoundEvent getRandomSmallUnequipSound() {
-        int roll = ThreadLocalRandom.current().nextInt(60);
+        int roll = ThreadLocalRandom.current().nextInt(10);
 
         if (roll == 0) {
             return ModSounds.FOLEY_SMALL_FLORISH_UNEQUIP.get();

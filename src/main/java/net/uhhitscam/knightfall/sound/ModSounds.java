@@ -513,6 +513,8 @@ public class ModSounds {
     public static final Supplier<SoundEvent> FOLEY_A280CFE_PISTOL_SWITCH_FIRE_MODE = registerSoundEvent("foley_a280cfe_pistol_switch_fire_mode");
     public static final Supplier<SoundEvent> FOLEY_A280CFE_RIFLE_SWITCH_FIRE_MODE = registerSoundEvent("foley_a280cfe_rifle_switch_fire_mode");
     public static final Supplier<SoundEvent> FOLEY_A280CFE_SNIPER_SWITCH_FIRE_MODE = registerSoundEvent("foley_a280cfe_sniper_switch_fire_mode");
+    public static final Supplier<SoundEvent> FOLEY_A300_EQUIP = registerSoundEvent("foley_a300_equip");
+    public static final Supplier<SoundEvent> FOLEY_A310_EQUIP = registerSoundEvent("foley_a310_equip");
     public static final Supplier<SoundEvent> FOLEY_AMBAN_DISRUPTOR_SNIPER_RIFLE_EQUIP = registerSoundEvent("foley_amban_disruptor_sniper_rifle_equip");
     public static final Supplier<SoundEvent> FOLEY_AMBAN_DISRUPTOR_SNIPER_RIFLE_SWITCH_FIRE_MODE = registerSoundEvent("foley_amban_disruptor_sniper_rifle_switch_fire_mode");
     public static final Supplier<SoundEvent> FOLEY_AMBAN_DISRUPTOR_SNIPER_RIFLE_RELOAD = registerSoundEvent("foley_amban_disruptor_sniper_rifle_reload");

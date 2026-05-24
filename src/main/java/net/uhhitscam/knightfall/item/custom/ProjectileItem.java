@@ -16,7 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
@@ -115,6 +114,10 @@ public class ProjectileItem extends Item {
 
     public long getSwitchTime(FiringMode firingMode) {
         return timing.switchTicks(firingMode);
+    }
+
+    public long getEquipTime() {
+        return timing.equipTicks();
     }
 
     public int getChargeThreshold() {
@@ -893,26 +896,33 @@ public class ProjectileItem extends Item {
         player.playSound(unloadSound, 0.5F, 1.0F);
     }
 
-    public void startCooldown(Player player, ItemStack stack, boolean reloading) {
+    public void startCooldown(Player player, ItemStack stack, WeaponCooldownAction action) {
         Level level = player.level();
         int currentAmmo = getAmmo(stack);
 
-        if (reloading && currentAmmo >= maxAmmo) {
+        if (action == WeaponCooldownAction.RELOAD && currentAmmo >= maxAmmo) {
             return;
         }
 
-        ReloadNSwitchCoolDownData reloadNSwitchCoolDownData = getReloadNSwitchCooldownData(stack);
-        if (reloadNSwitchCoolDownData.isOnCooldown(level)) {
+        ReloadNSwitchCoolDownData cooldownData = getReloadNSwitchCooldownData(stack);
+
+        if (cooldownData.isOnCooldown(level)) {
             return;
         }
 
         FiringMode firingMode = getFiringMode(stack);
-        long cooldownDuration = reloading ? getReloadTime(firingMode) : getSwitchTime(firingMode);
+
+        long cooldownDuration = switch (action) {
+            case RELOAD -> getReloadTime(firingMode);
+            case SWITCH -> getSwitchTime(firingMode);
+            case EQUIP -> getEquipTime();
+        };
+
         long cooldownEndTime = level.getGameTime() + cooldownDuration;
 
         stack.set(
                 ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN,
-                reloadNSwitchCoolDownData.withReloadNSwitchCoolDownEndTime(cooldownEndTime)
+                cooldownData.withReloadNSwitchCoolDownEndTime(cooldownEndTime)
         );
     }
 

@@ -1,5 +1,7 @@
 package net.uhhitscam.knightfall.item.custom;
 
+import net.uhhitscam.knightfall.util.WeaponSoundsUtil;
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -8,16 +10,42 @@ public record ProjectileWeaponTiming(
         EnumMap<FiringMode, Long> reloadTicksByMode,
         long defaultSwitchTicks,
         EnumMap<FiringMode, Long> switchTicksByMode,
-        int chargeThresholdTicks
+        int chargeThresholdTicks,
+        long equipTicks
 ) {
-    public static ProjectileWeaponTiming defaults() {
+    public static ProjectileWeaponTiming defaults(WeaponName weaponName) {
         return new ProjectileWeaponTiming(
                 19,
                 new EnumMap<>(FiringMode.class),
                 4,
                 new EnumMap<>(FiringMode.class),
-                33
+                33,
+                defaultEquipTicks(weaponName)
         );
+    }
+
+    public static ProjectileWeaponTiming defaults() {
+        return defaults(null);
+    }
+
+    private static long defaultEquipTicks(WeaponName weaponName) {
+        if (weaponName == null) {
+            return 6;
+        }
+
+        if (WeaponSoundsUtil.usesScatterEquipProfile(weaponName)) {
+            return 7;
+        }
+
+        if (WeaponSoundsUtil.isLargeWeapon(weaponName)) {
+            return 10;
+        }
+
+        if (WeaponSoundsUtil.isSmallWeapon(weaponName)) {
+            return 4;
+        }
+
+        return 6;
     }
 
     public long reloadTicks(FiringMode firingMode) {
@@ -34,7 +62,8 @@ public record ProjectileWeaponTiming(
                 new EnumMap<>(reloadTicksByMode),
                 defaultSwitchTicks,
                 new EnumMap<>(switchTicksByMode),
-                chargeThresholdTicks
+                chargeThresholdTicks,
+                equipTicks
         );
     }
 
@@ -47,7 +76,8 @@ public record ProjectileWeaponTiming(
                 updated,
                 defaultSwitchTicks,
                 new EnumMap<>(switchTicksByMode),
-                chargeThresholdTicks
+                chargeThresholdTicks,
+                equipTicks
         );
     }
 
@@ -57,7 +87,8 @@ public record ProjectileWeaponTiming(
                 new EnumMap<>(reloadTicksByMode),
                 ticks,
                 new EnumMap<>(switchTicksByMode),
-                chargeThresholdTicks
+                chargeThresholdTicks,
+                equipTicks
         );
     }
 
@@ -70,7 +101,8 @@ public record ProjectileWeaponTiming(
                 new EnumMap<>(reloadTicksByMode),
                 defaultSwitchTicks,
                 updated,
-                chargeThresholdTicks
+                chargeThresholdTicks,
+                equipTicks
         );
     }
 
@@ -80,6 +112,18 @@ public record ProjectileWeaponTiming(
                 new EnumMap<>(reloadTicksByMode),
                 defaultSwitchTicks,
                 new EnumMap<>(switchTicksByMode),
+                ticks,
+                equipTicks
+        );
+    }
+
+    public ProjectileWeaponTiming withEquipTicks(long ticks) {
+        return new ProjectileWeaponTiming(
+                defaultReloadTicks,
+                new EnumMap<>(reloadTicksByMode),
+                defaultSwitchTicks,
+                new EnumMap<>(switchTicksByMode),
+                chargeThresholdTicks,
                 ticks
         );
     }
@@ -89,7 +133,8 @@ public record ProjectileWeaponTiming(
             Map<FiringMode, Long> reloadTicksByMode,
             long defaultSwitchTicks,
             Map<FiringMode, Long> switchTicksByMode,
-            int chargeThresholdTicks
+            int chargeThresholdTicks,
+            long equipTicks
     ) {
         EnumMap<FiringMode, Long> reloadMap = new EnumMap<>(FiringMode.class);
         reloadMap.putAll(reloadTicksByMode);
@@ -102,7 +147,8 @@ public record ProjectileWeaponTiming(
                 reloadMap,
                 defaultSwitchTicks,
                 switchMap,
-                chargeThresholdTicks
+                chargeThresholdTicks,
+                equipTicks
         );
     }
 }

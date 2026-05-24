@@ -27,9 +27,11 @@ import net.uhhitscam.knightfall.effect.ModEffects;
 import net.uhhitscam.knightfall.gui.HudClient;
 import net.uhhitscam.knightfall.item.custom.FiringMode;
 import net.uhhitscam.knightfall.item.custom.ProjectileItem;
+import net.uhhitscam.knightfall.item.custom.WeaponCooldownAction;
 import net.uhhitscam.knightfall.item.custom.WeaponName;
 import net.uhhitscam.knightfall.network.PayloadRegister;
 import net.uhhitscam.knightfall.network.SSBeamPacket;
+import net.uhhitscam.knightfall.network.SSCooldownPacket;
 import net.uhhitscam.knightfall.network.SSFireProjectileWeaponPacket;
 import net.uhhitscam.knightfall.sound.BeamSoundInstance;
 import net.uhhitscam.knightfall.sound.ChargingSoundInstance;
@@ -44,6 +46,10 @@ public class ModClientEvents {
     private static final WeaponInputState MAIN_STATE = new WeaponInputState(WeaponInputSide.MAIN);
     private static final WeaponInputState OFF_STATE = new WeaponInputState(WeaponInputSide.OFF);
 
+    private static HeldWeaponSnapshot previousMainHeldWeapon = HeldWeaponSnapshot.EMPTY;
+    private static HeldWeaponSnapshot previousOffHeldWeapon = HeldWeaponSnapshot.EMPTY;
+    private static boolean heldWeaponSoundTrackerInitialized = false;
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onRenderGui(RenderGuiEvent.Post event) {
         HudClient.onRenderHUD(event.getGuiGraphics());
@@ -55,9 +61,13 @@ public class ModClientEvents {
 
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
+
         if (player == null) {
+            resetHeldWeaponSoundTracker();
             return;
         }
+
+        tickHeldWeaponEquipSounds(player);
 
         tickWeaponState(player, MAIN_STATE);
         tickWeaponState(player, OFF_STATE);
@@ -119,6 +129,67 @@ public class ModClientEvents {
         }
     }
 
+    private static void tickHeldWeaponEquipSounds(LocalPlayer player) {
+        HeldWeaponSnapshot currentMainHeldWeapon = HeldWeaponSnapshot.fromMainHand(player);
+        HeldWeaponSnapshot currentOffHeldWeapon = HeldWeaponSnapshot.fromOffHand(player);
+
+        if (!heldWeaponSoundTrackerInitialized) {
+            previousMainHeldWeapon = currentMainHeldWeapon;
+            previousOffHeldWeapon = currentOffHeldWeapon;
+            heldWeaponSoundTrackerInitialized = true;
+            return;
+        }
+
+        handleHeldWeaponTransition(player, previousMainHeldWeapon, currentMainHeldWeapon, true);
+        handleHeldWeaponTransition(player, previousOffHeldWeapon, currentOffHeldWeapon, false);
+
+        previousMainHeldWeapon = currentMainHeldWeapon;
+        previousOffHeldWeapon = currentOffHeldWeapon;
+    }
+
+    private static void handleHeldWeaponTransition(
+            LocalPlayer player,
+            HeldWeaponSnapshot previousWeapon,
+            HeldWeaponSnapshot currentWeapon,
+            boolean mainHand
+    ) {
+        if (previousWeapon.equals(currentWeapon)) {
+            return;
+        }
+
+        if (previousWeapon.projectileWeapon()) {
+            playUnequipSound(player, previousWeapon.weaponName());
+        }
+
+        if (currentWeapon.projectileWeapon()) {
+            playEquipSound(player, currentWeapon.weaponName());
+            startLocalEquipCooldown(player, mainHand);
+            PayloadRegister.sendToServer(new SSCooldownPacket(mainHand, WeaponCooldownAction.EQUIP));
+        }
+    }
+
+    private static void startLocalEquipCooldown(LocalPlayer player, boolean mainHand) {
+        ItemStack stack = mainHand ? player.getMainHandItem() : player.getOffhandItem();
+
+        if (stack.getItem() instanceof ProjectileItem weapon) {
+            weapon.startCooldown(player, stack, WeaponCooldownAction.EQUIP);
+        }
+    }
+
+    private static void playEquipSound(LocalPlayer player, WeaponName weaponName) {
+        player.playSound(WeaponSoundsUtil.getWeaponEquip(weaponName), 0.5F, 1.0F);
+    }
+
+    private static void playUnequipSound(LocalPlayer player, WeaponName weaponName) {
+        player.playSound(WeaponSoundsUtil.getWeaponUnequip(weaponName), 0.5F, 1.0F);
+    }
+
+    private static void resetHeldWeaponSoundTracker() {
+        previousMainHeldWeapon = HeldWeaponSnapshot.EMPTY;
+        previousOffHeldWeapon = HeldWeaponSnapshot.EMPTY;
+        heldWeaponSoundTrackerInitialized = false;
+    }
+
     private static boolean tryBeginFiring(LocalPlayer player, WeaponInputState state) {
         ItemStack stack = state.side.getStack(player);
 
@@ -132,6 +203,10 @@ public class ModClientEvents {
 
         if (state.side == WeaponInputSide.OFF && shouldAllowVanillaLeftClick(player)) {
             return false;
+        }
+
+        if (weapon.getReloadNSwitchCooldownData(stack).isOnCooldown(player.level())) {
+            return true;
         }
 
         beginFiring(player, state, stack, weapon);
@@ -579,6 +654,42 @@ public class ModClientEvents {
 
         private ItemStack getStack(LocalPlayer player) {
             return mainHand ? player.getMainHandItem() : player.getOffhandItem();
+        }
+    }
+
+    private record HeldWeaponSnapshot(
+            boolean projectileWeapon,
+            WeaponName weaponName,
+            int slotIndex
+    ) {
+        private static final HeldWeaponSnapshot EMPTY = new HeldWeaponSnapshot(false, null, -1);
+
+        private static HeldWeaponSnapshot fromMainHand(LocalPlayer player) {
+            ItemStack stack = player.getMainHandItem();
+
+            if (stack.getItem() instanceof ProjectileItem weapon) {
+                return new HeldWeaponSnapshot(
+                        true,
+                        weapon.getProjectileWeaponName(),
+                        player.getInventory().selected
+                );
+            }
+
+            return EMPTY;
+        }
+
+        private static HeldWeaponSnapshot fromOffHand(LocalPlayer player) {
+            ItemStack stack = player.getOffhandItem();
+
+            if (stack.getItem() instanceof ProjectileItem weapon) {
+                return new HeldWeaponSnapshot(
+                        true,
+                        weapon.getProjectileWeaponName(),
+                        -2
+                );
+            }
+
+            return EMPTY;
         }
     }
 

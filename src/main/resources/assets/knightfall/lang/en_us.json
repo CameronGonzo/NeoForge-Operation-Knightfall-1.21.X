@@ -892,6 +892,8 @@
   "sounds.knightfall.foley_a280cfe_pistol_switch_fire_mode": "Reconfigures A280-CFE to Pistol",
   "sounds.knightfall.foley_a280cfe_rifle_switch_fire_mode": "Reconfigures A280-CFE to Rifle",
   "sounds.knightfall.foley_a280cfe_sniper_switch_fire_mode": "Reconfigures A280-CFE to Sniper",
+  "sounds.knightfall.foley_a300_equip": "Equips A300 Blaster Rifle",
+  "sounds.knightfall.foley_a310_equip": "Equips A310 Blaster Rifle",
   "sounds.knightfall.foley_amban_disruptor_sniper_rifle_equip": "Equips Amban Disruptor Sniper Rifle",
   "sounds.knightfall.foley_amban_disruptor_sniper_rifle_switch_fire_mode": "Switches Amban Disruptor Sniper Rifle Firing Mode",
   "sounds.knightfall.foley_amban_disruptor_sniper_rifle_reload": "Reloads Amban Disruptor Sniper Rifle",
