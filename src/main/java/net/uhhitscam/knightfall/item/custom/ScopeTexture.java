@@ -22,7 +22,7 @@ public enum ScopeTexture {
     CIRCLE_GREY("circle_grey_scope.png"),
     CIRCLE_GOLD_V("circle_gold_v_scope.png"),
     CIRCLE_RED_ANGLED_BRACKET("circle_red_angled_bracket_scope.png"),
-    CIRCLE_RED_BRACKET("circle_red_bracket_scope_thermal.png"),
+    CIRCLE_RED_BRACKET_THERMAL("circle_red_bracket_scope_thermal.png"),
     CIRCLE_RED_CROSS("circle_red_cross_scope.png"),
     CIRCLE_RED_DOT("circle_red_dot_scope.png"),
     CIRCLE_YELLOW("circle_yellow_scope.png"),

@@ -3,18 +3,18 @@ package net.uhhitscam.knightfall.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.GlowItemFrame;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,13 +23,10 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.component.AmmoTypeData;
-import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 import net.uhhitscam.knightfall.effect.ModEffects;
 import net.uhhitscam.knightfall.gui.HudClient;
-import net.uhhitscam.knightfall.item.custom.AmmoType;
-import net.uhhitscam.knightfall.item.custom.ProjectileItem;
 import net.uhhitscam.knightfall.item.custom.FiringMode;
+import net.uhhitscam.knightfall.item.custom.ProjectileItem;
 import net.uhhitscam.knightfall.item.custom.WeaponName;
 import net.uhhitscam.knightfall.network.PayloadRegister;
 import net.uhhitscam.knightfall.network.SSBeamPacket;
@@ -37,43 +34,15 @@ import net.uhhitscam.knightfall.network.SSFireProjectileWeaponPacket;
 import net.uhhitscam.knightfall.sound.BeamSoundInstance;
 import net.uhhitscam.knightfall.sound.ChargingSoundInstance;
 import net.uhhitscam.knightfall.sound.FullyChargedSoundInstance;
-import net.uhhitscam.knightfall.sound.ModSounds;
 import net.uhhitscam.knightfall.util.ModTags;
 import net.uhhitscam.knightfall.util.WeaponSoundsUtil;
-import net.uhhitscam.knightfall.util.WeaponTimingUtil;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 @EventBusSubscriber(modid = OperationKnightfall.MODID, value = Dist.CLIENT)
 public class ModClientEvents {
-    public static boolean mainFiring = false;
-    public static boolean offFiring = false;
-    public static boolean mainCharging = false;
-    public static boolean offCharging = false;
-    public static boolean mainChargeFired = false;
-    public static boolean offChargeFired = false;
-    public static boolean mainFullyCharged = false;
-    public static boolean offFullyCharged = false;
-    public static boolean mainBeamActive = false;
-    public static boolean offBeamActive = false;
-    public static int mainCharge = 0;
-    public static int offCharge = 0;
-    private static Timer mainFullAutoTimer = new Timer();
-    private static Timer offFullAutoTimer = new Timer();
-    private static Timer mainChargeNShootTimer = new Timer();
-    private static Timer offChargeNShootTimer = new Timer();
-    private static Timer mainChargeNShootOnReleaseTimer = new Timer();
-    private static Timer offChargeNShootOnReleaseTimer = new Timer();
-    private static Timer mainBeamTimer = new Timer();
-    private static Timer offBeamTimer = new Timer();
-    public static ChargingSoundInstance mainChargingSoundInstance;
-    public static ChargingSoundInstance offChargingSoundInstance;
-    public static BeamSoundInstance mainBeamSoundInstance;
-    public static BeamSoundInstance offBeamSoundInstance;
-    public static FullyChargedSoundInstance mainFullyChargedSoundInstance;
-    public static FullyChargedSoundInstance offFullyChargedSoundInstance;
+
+    private static final WeaponInputState MAIN_STATE = new WeaponInputState(WeaponInputSide.MAIN);
+    private static final WeaponInputState OFF_STATE = new WeaponInputState(WeaponInputSide.OFF);
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onRenderGui(RenderGuiEvent.Post event) {
@@ -84,41 +53,14 @@ public class ModClientEvents {
     public static void onClientTick(ClientTickEvent.Post event) {
         HudClient.onClientTick();
 
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
-        if (player == null) return;
-
-        if (mainBeamActive) {
-            ItemStack stack = player.getMainHandItem();
-            boolean stillValid =
-                    mc.screen == null &&
-                            !player.hasEffect(ModEffects.STUN_EFFECT) &&
-                            stack.getItem() instanceof ProjectileItem projectileItem &&
-                            FiringMode.BEAM.equals(projectileItem.getFiringMode(stack)) &&
-                            mainFiring;
-
-            if (!stillValid) {
-                PayloadRegister.sendToServer(new SSBeamPacket(true, false));
-                Minecraft.getInstance().getSoundManager().stop(mainBeamSoundInstance);
-                mainBeamActive = false;
-            }
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
+        if (player == null) {
+            return;
         }
 
-        if (offBeamActive) {
-            ItemStack stack = player.getOffhandItem();
-            boolean stillValid =
-                    mc.screen == null &&
-                            !player.hasEffect(ModEffects.STUN_EFFECT) &&
-                            stack.getItem() instanceof ProjectileItem projectileItem &&
-                            FiringMode.BEAM.equals(projectileItem.getFiringMode(stack)) &&
-                            offFiring;
-
-            if (!stillValid) {
-                PayloadRegister.sendToServer(new SSBeamPacket(false, false));
-                Minecraft.getInstance().getSoundManager().stop(offBeamSoundInstance);
-                offBeamActive = false;
-            }
-        }
+        tickWeaponState(player, MAIN_STATE);
+        tickWeaponState(player, OFF_STATE);
     }
 
     @SubscribeEvent
@@ -126,560 +68,540 @@ public class ModClientEvents {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
 
-        if (player == null) return;
-
-        if (minecraft.screen != null) {
+        if (player == null) {
             return;
         }
 
-        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && event.getAction() == GLFW.GLFW_PRESS) {
-            if (minecraft.screen != null || player.hasEffect(ModEffects.STUN_EFFECT)) {
+        int button = event.getButton();
+        int action = event.getAction();
+
+        if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+            if (action == GLFW.GLFW_PRESS) {
+                if (minecraft.screen != null || player.hasEffect(ModEffects.STUN_EFFECT)) {
+                    return;
+                }
+
+                if (tryBeginFiring(player, MAIN_STATE)) {
+                    event.setCanceled(true);
+                }
+            } else if (action == GLFW.GLFW_RELEASE) {
+                endFiring(player, MAIN_STATE);
+            }
+
+            return;
+        }
+
+        if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+            if (action == GLFW.GLFW_PRESS) {
+                if (minecraft.screen != null || player.hasEffect(ModEffects.STUN_EFFECT)) {
+                    return;
+                }
+
+                if (tryBeginFiring(player, OFF_STATE)) {
+                    event.setCanceled(true);
+                }
+            } else if (action == GLFW.GLFW_RELEASE) {
+                endFiring(player, OFF_STATE);
+            }
+        }
+    }
+
+
+    public static void stopFiring(boolean mainHand) {
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
+        WeaponInputState state = mainHand ? MAIN_STATE : OFF_STATE;
+
+        if (player != null) {
+            endFiring(player, state);
+        } else {
+            resetState(state, true);
+        }
+    }
+
+    private static boolean tryBeginFiring(LocalPlayer player, WeaponInputState state) {
+        ItemStack stack = state.side.getStack(player);
+
+        if (!(stack.getItem() instanceof ProjectileItem weapon)) {
+            return false;
+        }
+
+        if (state.side == WeaponInputSide.MAIN && shouldRespectRightClickInteraction(player)) {
+            return false;
+        }
+
+        if (state.side == WeaponInputSide.OFF && shouldAllowVanillaLeftClick(player)) {
+            return false;
+        }
+
+        beginFiring(player, state, stack, weapon);
+        return true;
+    }
+
+    private static void beginFiring(LocalPlayer player, WeaponInputState state, ItemStack stack, ProjectileItem weapon) {
+        if (state.beamActive) {
+            stopBeam(state);
+        }
+
+        resetState(state, true);
+
+        FiringMode firingMode = weapon.getFiringMode(stack);
+
+        if (shouldSendSingleNoAmmoAttempt(firingMode) && weapon.getAmmo(stack) <= 0) {
+            PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(state.side.isMainHand()));
+            resetState(state, true);
+            return;
+        }
+
+        state.firing = true;
+        state.heldStack = stack.copy();
+        state.activeMode = firingMode;
+        state.autoAfterCharge = false;
+
+        switch (firingMode) {
+            case FULL_AUTO -> {
+                // Full-auto fires from the client tick loop while the button is held.
+            }
+
+            case CHARGENSHOOT, CHARGENSHOOTONRELEASE -> {
+                state.charging = true;
+                state.chargeTicks = 0;
+                playChargeSound(player, state, weapon);
+            }
+
+            case BEAM -> {
+                if (weapon.getAmmo(stack) <= 0) {
+                    resetState(state, true);
+                    return;
+                }
+
+                startBeam(player, state, weapon);
+            }
+
+            default -> {
+                PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(state.side.isMainHand()));
+            }
+        }
+    }
+
+    private static boolean shouldSendSingleNoAmmoAttempt(FiringMode firingMode) {
+        return firingMode == FiringMode.FULL_AUTO
+                || firingMode == FiringMode.CHARGENSHOOT
+                || firingMode == FiringMode.CHARGENSHOOTONRELEASE;
+    }
+
+    private static void tickWeaponState(LocalPlayer player, WeaponInputState state) {
+
+        if (!state.firing) {
+            return;
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.screen != null || player.hasEffect(ModEffects.STUN_EFFECT)) {
+            endFiring(player, state);
+            return;
+        }
+
+        ItemStack currentStack = state.side.getStack(player);
+        if (!(currentStack.getItem() instanceof ProjectileItem weapon) || !ItemStack.isSameItem(currentStack, state.heldStack)) {
+            cancelFiringAfterStackChanged(player, state);
+            return;
+        }
+
+        FiringMode firingMode = weapon.getFiringMode(currentStack);
+
+        switch (firingMode) {
+            case FULL_AUTO -> tickFullAuto(state, currentStack, weapon);
+            case CHARGENSHOOT -> tickChargeAndShoot(state, currentStack, weapon);
+            case CHARGENSHOOTONRELEASE -> tickChargeUntilRelease(player, state, currentStack, weapon);
+            case BEAM -> tickBeam(state, currentStack, weapon);
+            default -> {
+                // Semi-auto, burst, scatter, sniper, launcher, stun, and repulse fire once on press.
+            }
+        }
+    }
+
+    private static void tickFullAuto(WeaponInputState state, ItemStack stack, ProjectileItem weapon) {
+        int currentAmmo = weapon.getAmmo(stack);
+
+        if (currentAmmo <= 0) {
+            PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(state.side.isMainHand()));
+            resetState(state, true);
+            return;
+        }
+
+        PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(state.side.isMainHand()));
+
+        if (currentAmmo <= 1) {
+            resetState(state, true);
+        }
+    }
+
+    private static void tickChargeAndShoot(WeaponInputState state, ItemStack stack, ProjectileItem weapon) {
+        if (weapon.getAmmo(stack) <= 0) {
+            sendSingleNoAmmoAttemptAndStop(state);
+            return;
+        }
+
+        if (state.autoAfterCharge) {
+            tickFullAuto(state, stack, weapon);
+            return;
+        }
+
+        WeaponName weaponName = weapon.getProjectileWeaponName();
+        int threshold = weapon.getChargeThreshold();
+
+        if (state.chargeTicks >= threshold) {
+            state.chargeFired = true;
+            state.charging = false;
+            state.chargeTicks = 0;
+
+            stopChargingSound(state);
+            stopFullyChargedSound(state);
+
+            if (weaponName == WeaponName.Z6_ROTARY) {
+                state.autoAfterCharge = true;
                 return;
             }
 
+            PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(state.side.isMainHand()));
 
-            HitResult hitResult = minecraft.hitResult;
-            if (hitResult.getType() == HitResult.Type.BLOCK && !player.isShiftKeyDown()) {
-                BlockHitResult blockHitResult = (BlockHitResult) hitResult;
-                BlockPos blockPos = blockHitResult.getBlockPos();
-                BlockState blockState = player.level().getBlockState(blockPos);
-                if (!player.isShiftKeyDown() && blockState.is(ModTags.Blocks.INTERACTABLE_BLOCKS)) {
-                    return;
-                }
-            }
-
-            if (hitResult.getType() == HitResult.Type.ENTITY && !player.isShiftKeyDown()) {
-                EntityHitResult entityHitResult = (EntityHitResult) hitResult;
-                Entity entity = entityHitResult.getEntity();
-                if (entity instanceof Villager || entity instanceof WanderingTrader || entity instanceof ItemFrame || entity instanceof GlowItemFrame || entity instanceof ArmorStand || entity instanceof ChestBoat || entity instanceof MinecartChest || entity instanceof MinecartFurnace || entity instanceof MinecartHopper || entity instanceof MinecartCommandBlock) {
-                    return;
-                }
-            }
-
-            ItemStack mainHandItem = player.getMainHandItem();
-            mainFiring = true;
-
-            if (mainHandItem.getItem() instanceof ProjectileItem projectileWeapon) {
-//                int currentAmmo = projectileWeapon.getAmmo(mainHandItem);
-//                FiringMode firingMode = projectileWeapon.getFiringMode(mainHandItem);
-//                if (currentAmmo <= 0 && !firingMode.equals(FiringMode.REPULSE)) {
-//                    mainHandItem.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.NONE.name()));
-//                    player.level().playSound((Player) null, player.getX(), player.getY(), player.getZ(), ModSounds.FOLEY_NO_AMMO.get(), SoundSource.NEUTRAL, 0.5F, 1.0F);
-//                    mainFiring = false;
-//                }
-                if (FiringMode.FULL_AUTO.equals(projectileWeapon.getFiringMode(mainHandItem))) {
-                    scheduleMainFullAutoFiring(player, mainHandItem, projectileWeapon);
-                } else if (FiringMode.CHARGENSHOOT.equals(projectileWeapon.getFiringMode(mainHandItem))) {
-                    scheduleMainChargeNShoot(player, mainHandItem, projectileWeapon);
-                    ChargingSoundInstance.stopAudio = false;
-                    mainChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponCharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(mainChargingSoundInstance);
-                } else if (FiringMode.CHARGENSHOOTONRELEASE.equals(projectileWeapon.getFiringMode(mainHandItem))) {
-                    scheduleMainChargeNShootOnRelease(player, mainHandItem, projectileWeapon);
-                    ChargingSoundInstance.stopAudio = false;
-                    mainChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponCharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(mainChargingSoundInstance);
-                } else if (FiringMode.BEAM.equals(projectileWeapon.getFiringMode(mainHandItem)) && projectileWeapon.getAmmo(mainHandItem) > 0) {
-                    if (!mainBeamActive) {
-                        mainBeamActive = true;
-                        PayloadRegister.sendToServer(new SSBeamPacket(true, true));
-                    }
-                    scheduleMainBeam(player, mainHandItem, projectileWeapon);
-                    BeamSoundInstance.stopAudio = false;
-                    mainBeamSoundInstance = new BeamSoundInstance(WeaponSoundsUtil.getWeaponBeam(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(mainBeamSoundInstance);
-                } else {
-                    PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(true));
-                }
-                event.setCanceled(true);
-            }
+            state.firing = false;
+            return;
         }
 
-        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && event.getAction() == GLFW.GLFW_RELEASE) {
-            ItemStack mainHandItem = player.getMainHandItem();
+        state.chargeTicks++;
+    }
 
-            if (mainHandItem.getItem() instanceof ProjectileItem projectileWeapon) {
-                if (mainCharge >= WeaponTimingUtil.getProjectileWeaponChargeThreshold(projectileWeapon.getProjectileWeaponName())) {
-                    PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(true));
-                    FullyChargedSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(mainFullyChargedSoundInstance);
-                } else {
-                    ChargingSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(mainChargingSoundInstance);
-
-                    if (FiringMode.BEAM.equals(projectileWeapon.getFiringMode(mainHandItem))) {
-                        Minecraft.getInstance().getSoundManager().stop(mainBeamSoundInstance);
-                    }
-
-                    if (projectileWeapon.getProjectileWeaponName().equals(WeaponName.Z6_ROTARY)) {
-                        ChargingSoundInstance.stopAudio = false;
-                        mainChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                        Minecraft.getInstance().getSoundManager().play(mainChargingSoundInstance);
-                    }
-
-                    if (FiringMode.CHARGENSHOOTONRELEASE.equals(projectileWeapon.getFiringMode(mainHandItem))) {
-                        ChargingSoundInstance.stopAudio = false;
-                        mainChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                        Minecraft.getInstance().getSoundManager().play(mainChargingSoundInstance);
-                    }
-                }
-            }
-            mainFiring = false;
-            mainFullyCharged = false;
-            mainFullAutoTimer.cancel();
-            mainFullAutoTimer = new Timer();
-            mainChargeNShootTimer.cancel();
-            mainChargeNShootTimer = new Timer();
-            mainChargeNShootOnReleaseTimer.cancel();
-            mainChargeNShootOnReleaseTimer = new Timer();
-            mainBeamTimer.cancel();
-            mainBeamTimer = new Timer();
-            mainCharge = 0;
-            mainCharging = false;
-            if (mainBeamActive) {
-                PayloadRegister.sendToServer(new SSBeamPacket(true, false));
-                mainBeamActive = false;
-            }
-
-            if (mainHandItem.getItem() instanceof ProjectileItem projectileWeapon && !mainChargeFired && !FiringMode.CHARGENSHOOTONRELEASE.equals(projectileWeapon.getFiringMode(mainHandItem))) {
-                if (FiringMode.CHARGENSHOOT.equals(projectileWeapon.getFiringMode(mainHandItem))) {
-                    ChargingSoundInstance.stopAudio = false;
-                    mainChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(mainChargingSoundInstance);
-                }
-            } else if (mainChargeFired) {
-                mainChargeFired = false;
-            }
-
-            if (mainHandItem.getItem() instanceof ProjectileItem projectileWeapon) {
-                if (FiringMode.FULL_AUTO.equals(projectileWeapon.getFiringMode(mainHandItem)) || FiringMode.CHARGENSHOOT.equals(projectileWeapon.getFiringMode(mainHandItem)) || FiringMode.CHARGENSHOOTONRELEASE.equals(projectileWeapon.getFiringMode(mainHandItem)) || FiringMode.BEAM.equals(projectileWeapon.getFiringMode(mainHandItem))) {
-                    mainFiring = false;
-                    mainFullyCharged = false;
-                    mainFullAutoTimer.cancel();
-                    mainFullAutoTimer = new Timer();
-                    mainChargeNShootTimer.cancel();
-                    mainChargeNShootTimer = new Timer();
-                    mainChargeNShootOnReleaseTimer.cancel();
-                    mainChargeNShootOnReleaseTimer = new Timer();
-                    mainBeamTimer.cancel();
-                    mainBeamTimer = new Timer();
-                    mainCharge = 0;
-                    mainCharging = false;
-                }
-            }
+    private static void tickChargeUntilRelease(LocalPlayer player, WeaponInputState state, ItemStack stack, ProjectileItem weapon) {
+        if (weapon.getAmmo(stack) <= 0) {
+            sendSingleNoAmmoAttemptAndStop(state);
+            return;
         }
 
-        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT && event.getAction() == GLFW.GLFW_PRESS) {
+        WeaponName weaponName = weapon.getProjectileWeaponName();
+        int threshold = weapon.getChargeThreshold();
 
-            if (minecraft.screen != null || player.hasEffect(ModEffects.STUN_EFFECT)) {
-                return;
+        if (state.chargeTicks >= threshold) {
+            if (!state.fullyCharged) {
+                playFullyChargedSound(player, state, weapon);
+                state.fullyCharged = true;
             }
 
-            boolean punching = false;
-            ItemStack offHandItem = player.getOffhandItem();
-
-            if (offHandItem.getItem() instanceof ProjectileItem) {
-                offFiring = true;
-                HitResult hitResult = minecraft.hitResult;
-                if (hitResult instanceof EntityHitResult entityHitResult) {
-                    Entity target = entityHitResult.getEntity();
-                    if (player.distanceTo(target) <= 3 && !player.isShiftKeyDown()) {
-                        punching = true;
-                    }
-                }
-            }
-
-            if (!punching && offHandItem.getItem() instanceof ProjectileItem projectileWeapon) {
-                if (FiringMode.FULL_AUTO.equals(projectileWeapon.getFiringMode(offHandItem))) {
-                    scheduleOffFullAutoFiring(player, offHandItem, projectileWeapon);
-                } else if (FiringMode.CHARGENSHOOT.equals(projectileWeapon.getFiringMode(offHandItem))) {
-                    scheduleOffChargeNShoot(player, offHandItem, projectileWeapon);
-                    ChargingSoundInstance.stopAudio = false;
-                    offChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponCharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(offChargingSoundInstance);
-                } else if (FiringMode.CHARGENSHOOTONRELEASE.equals(projectileWeapon.getFiringMode(offHandItem))) {
-                    scheduleOffChargeNShootOnRelease(player, offHandItem, projectileWeapon);
-                    ChargingSoundInstance.stopAudio = false;
-                    offChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponCharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(offChargingSoundInstance);
-                } else if (FiringMode.BEAM.equals(projectileWeapon.getFiringMode(offHandItem))) {
-                    if (!offBeamActive) {
-                        offBeamActive = true;
-                        PayloadRegister.sendToServer(new SSBeamPacket(false, true));
-                    }
-                    scheduleOffBeam(player, offHandItem, projectileWeapon);
-                    BeamSoundInstance.stopAudio = false;
-                    offBeamSoundInstance = new BeamSoundInstance(WeaponSoundsUtil.getWeaponBeam(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(offBeamSoundInstance);
-                } else {
-                    PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(false));
-                }
-                event.setCanceled(true);
-            }
+            return;
         }
 
-        if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT && event.getAction() == GLFW.GLFW_RELEASE) {
-            ItemStack offHandItem = player.getOffhandItem();
+        state.chargeTicks++;
+    }
 
-            if (offHandItem.getItem() instanceof ProjectileItem projectileWeapon) {
-                if (offCharge >= WeaponTimingUtil.getProjectileWeaponChargeThreshold(projectileWeapon.getProjectileWeaponName())) {
-                    PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(false));
-                    FullyChargedSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(offFullyChargedSoundInstance);
-                } else {
-                    ChargingSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(offChargingSoundInstance);
+    private static void sendSingleNoAmmoAttemptAndStop(WeaponInputState state) {
+        PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(state.side.isMainHand()));
+        resetState(state, true);
+    }
 
-                    if (FiringMode.BEAM.equals(projectileWeapon.getFiringMode(offHandItem)) && projectileWeapon.getAmmo(offHandItem) > 0) {
-                        Minecraft.getInstance().getSoundManager().stop(offBeamSoundInstance);
-                    }
+    private static void tickBeam(WeaponInputState state, ItemStack stack, ProjectileItem weapon) {
+        if (weapon.getAmmo(stack) <= 0) {
+            stopBeam(state);
+            resetState(state, true);
+            return;
+        }
 
-                    if (projectileWeapon.getProjectileWeaponName().equals(WeaponName.Z6_ROTARY)) {
-                        ChargingSoundInstance.stopAudio = false;
-                        offChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                        Minecraft.getInstance().getSoundManager().play(offChargingSoundInstance);
-                    }
-
-                    if (FiringMode.CHARGENSHOOTONRELEASE.equals(projectileWeapon.getFiringMode(offHandItem))) {
-                        ChargingSoundInstance.stopAudio = false;
-                        offChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                        Minecraft.getInstance().getSoundManager().play(offChargingSoundInstance);
-                    }
-                }
-            }
-            offFiring = false;
-            offFullyCharged = false;
-            offFullAutoTimer.cancel();
-            offFullAutoTimer = new Timer();
-            offChargeNShootTimer.cancel();
-            offChargeNShootTimer = new Timer();
-            offChargeNShootOnReleaseTimer.cancel();
-            offChargeNShootOnReleaseTimer = new Timer();
-            offBeamTimer.cancel();
-            offBeamTimer = new Timer();
-            offCharge = 0;
-            offCharging = false;
-            if (offBeamActive) {
-                PayloadRegister.sendToServer(new SSBeamPacket(false, false));
-                offBeamActive = false;
-            }
-
-            if (offHandItem.getItem() instanceof ProjectileItem projectileWeapon && !offChargeFired && !FiringMode.CHARGENSHOOTONRELEASE.equals(projectileWeapon.getFiringMode(offHandItem))) {
-                if (FiringMode.CHARGENSHOOT.equals(projectileWeapon.getFiringMode(offHandItem))) {
-                    ChargingSoundInstance.stopAudio = false;
-                    offChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(offChargingSoundInstance);
-                }
-            } else if (offChargeFired) {
-                offChargeFired = false;
-            }
-
-            if (offHandItem.getItem() instanceof ProjectileItem projectileWeapon) {
-                if (FiringMode.FULL_AUTO.equals(projectileWeapon.getFiringMode(offHandItem)) || FiringMode.CHARGENSHOOT.equals(projectileWeapon.getFiringMode(offHandItem)) || FiringMode.CHARGENSHOOTONRELEASE.equals(projectileWeapon.getFiringMode(offHandItem))) {
-                    offFiring = false;
-                    offFullyCharged = false;
-                    offFullAutoTimer.cancel();
-                    offFullAutoTimer = new Timer();
-                    offChargeNShootTimer.cancel();
-                    offChargeNShootTimer = new Timer();
-                    offChargeNShootOnReleaseTimer.cancel();
-                    offChargeNShootOnReleaseTimer = new Timer();
-                    offBeamTimer.cancel();
-                    offBeamTimer = new Timer();
-                    offCharge = 0;
-                    offCharging = false;
-                }
-            }
+        if (!state.beamActive) {
+            PayloadRegister.sendToServer(new SSBeamPacket(state.side.isMainHand(), true));
+            state.beamActive = true;
         }
     }
 
-    private static void scheduleMainFullAutoFiring(LocalPlayer player, ItemStack heldItem, ProjectileItem projectileWeapon) {
-        mainFullAutoTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!mainFiring) return;
+    private static void endFiring(LocalPlayer player, WeaponInputState state) {
+        if (!state.firing
+                && !state.charging
+                && !state.beamActive
+                && !state.fullyCharged
+                && !state.chargeFired
+                && !state.autoAfterCharge) {
+            return;
+        }
 
-                if (!ItemStack.isSameItem(player.getMainHandItem(), heldItem) || player.getMainHandItem().equals(ItemStack.EMPTY)) {
-                    mainFiring = false;
-                    mainFullAutoTimer.cancel();
-                    mainFullAutoTimer = new Timer();
-
-                    if (projectileWeapon.getProjectileWeaponName().equals(WeaponName.Z6_ROTARY)) {
-                        ChargingSoundInstance.stopAudio = true;
-                        Minecraft.getInstance().getSoundManager().stop(mainChargingSoundInstance);
-                        ChargingSoundInstance.stopAudio = false;
-                        mainChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                        Minecraft.getInstance().getSoundManager().play(mainChargingSoundInstance);
-                    }
-                    return;
-                }
-
-                PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(true));
-
-                scheduleMainFullAutoFiring(player, player.getMainHandItem(), projectileWeapon);
+        ItemStack stack = state.side.getStack(player);
+        if (!(stack.getItem() instanceof ProjectileItem weapon)) {
+            if (state.beamActive) {
+                stopBeam(state);
             }
-        }, 50);
+
+            stopChargingSound(state);
+            stopFullyChargedSound(state);
+            resetState(state, false);
+            return;
+        }
+
+        FiringMode firingMode = weapon.getFiringMode(stack);
+
+        if (firingMode == FiringMode.CHARGENSHOOTONRELEASE) {
+            finishChargeOnRelease(player, state, weapon);
+        } else if (firingMode == FiringMode.CHARGENSHOOT) {
+            stopChargingSound(state);
+            stopFullyChargedSound(state);
+
+            if (!state.chargeFired) {
+                playUnchargeSound(player, state, weapon);
+            }
+        }
+
+        if (firingMode == FiringMode.BEAM && state.beamActive) {
+            stopBeam(state);
+        }
+
+        resetState(state, false);
     }
 
-    private static void scheduleOffFullAutoFiring(LocalPlayer player, ItemStack heldItem, ProjectileItem projectileWeapon) {
-        offFullAutoTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!offFiring) return;
+    private static void cancelFiringAfterStackChanged(LocalPlayer player, WeaponInputState state) {
+        ProjectileItem oldWeapon = getTrackedWeapon(state);
+        FiringMode oldMode = state.activeMode;
 
-                if (!ItemStack.isSameItem(player.getOffhandItem(), heldItem) || player.getOffhandItem().equals(ItemStack.EMPTY)) {
-                    offFiring = false;
-                    offFullAutoTimer.cancel();
-                    offFullAutoTimer = new Timer();
+        if (state.beamActive) {
+            stopBeam(state);
+        }
 
-                    if (projectileWeapon.getProjectileWeaponName().equals(WeaponName.Z6_ROTARY)) {
-                        ChargingSoundInstance.stopAudio = true;
-                        Minecraft.getInstance().getSoundManager().stop(offChargingSoundInstance);
-                        ChargingSoundInstance.stopAudio = false;
-                        offChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                        Minecraft.getInstance().getSoundManager().play(offChargingSoundInstance);
-                    }
-                    return;
-                }
+        stopChargingSound(state);
+        stopFullyChargedSound(state);
+        stopBeamSound(state);
 
-                PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(false));
+        if (oldWeapon != null && shouldPlayUnchargeOnCancel(oldMode, state)) {
+            playUnchargeSound(player, state, oldWeapon);
+        }
 
-                scheduleOffFullAutoFiring(player, player.getOffhandItem(), projectileWeapon);
-            }
-        }, 50);
+        resetState(state, false);
     }
 
-    private static void scheduleMainChargeNShoot(LocalPlayer player, ItemStack heldItem, ProjectileItem projectileWeapon) {
-        mainChargeNShootTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!mainFiring) return;
+    private static ProjectileItem getTrackedWeapon(WeaponInputState state) {
+        if (state.heldStack.getItem() instanceof ProjectileItem projectileItem) {
+            return projectileItem;
+        }
 
-                if (!ItemStack.isSameItem(player.getMainHandItem(), heldItem) || player.getMainHandItem().equals(ItemStack.EMPTY)) {
-                    mainCharge = 0;
-                    mainCharging = false;
-                    mainFiring = false;
-                    mainChargeNShootTimer.cancel();
-                    mainChargeNShootTimer = new Timer();
-                    ChargingSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(mainChargingSoundInstance);
-                    ChargingSoundInstance.stopAudio = false;
-                    mainChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(mainChargingSoundInstance);
-                    return;
-                }
-
-                if (mainCharge >= WeaponTimingUtil.getProjectileWeaponChargeThreshold(projectileWeapon.getProjectileWeaponName())) {
-                    if(projectileWeapon.getProjectileWeaponName().equals(WeaponName.Z6_ROTARY)) {
-                        mainChargeFired = true;
-                        mainFiring = true;
-                        mainChargeNShootTimer.cancel();
-                        mainChargeNShootTimer = new Timer();
-                        mainCharge = 0;
-                        mainCharging = false;
-                        scheduleMainFullAutoFiring(player, heldItem, projectileWeapon);
-                    } else {
-                        PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(true));
-                        mainChargeFired = true;
-                        mainFiring = false;
-                        mainChargeNShootTimer.cancel();
-                        mainChargeNShootTimer = new Timer();
-                        mainCharge = 0;
-                        mainCharging = false;
-                    }
-                }
-
-                if (!mainCharging) {
-                    mainCharging = true;
-                } else {
-                    mainCharge++;
-                }
-
-                scheduleMainChargeNShoot(player, player.getMainHandItem(), projectileWeapon);
-            }
-        }, 50);
+        return null;
     }
 
-    private static void scheduleOffChargeNShoot(LocalPlayer player, ItemStack heldItem, ProjectileItem projectileWeapon) {
-        offChargeNShootTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!offFiring) return;
+    private static boolean shouldPlayUnchargeOnCancel(FiringMode firingMode, WeaponInputState state) {
+        if (firingMode == FiringMode.CHARGENSHOOT) {
+            return !state.chargeFired && !state.autoAfterCharge;
+        }
 
-                if (!ItemStack.isSameItem(player.getOffhandItem(), heldItem) || player.getOffhandItem().equals(ItemStack.EMPTY)) {
-                    offCharge = 0;
-                    offCharging = false;
-                    offFiring = false;
-                    offChargeNShootTimer.cancel();
-                    offChargeNShootTimer = new Timer();
-                    ChargingSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(offChargingSoundInstance);
-                    ChargingSoundInstance.stopAudio = false;
-                    offChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(offChargingSoundInstance);
-                    return;
-                }
+        if (firingMode == FiringMode.CHARGENSHOOTONRELEASE) {
+            return !state.chargeFired;
+        }
 
-                if (offCharge >= WeaponTimingUtil.getProjectileWeaponChargeThreshold(projectileWeapon.getProjectileWeaponName())) {
-                    if(projectileWeapon.getProjectileWeaponName().equals(WeaponName.Z6_ROTARY)) {
-                        offChargeFired = true;
-                        offFiring = true;
-                        offChargeNShootTimer.cancel();
-                        offChargeNShootTimer = new Timer();
-                        offCharge = 0;
-                        offCharging = false;
-                        scheduleOffFullAutoFiring(player, heldItem, projectileWeapon);
-                    } else {
-                        PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(false));
-                        offChargeFired = true;
-                        offFiring = false;
-                        offChargeNShootTimer.cancel();
-                        offChargeNShootTimer = new Timer();
-                        offCharge = 0;
-                        offCharging = false;
-                    }
-                }
-
-                if (!offCharging) {
-                    offCharging = true;
-                } else {
-                    offCharge++;
-                }
-
-                scheduleOffChargeNShoot(player, player.getOffhandItem(), projectileWeapon);
-            }
-        }, 50);
+        return false;
     }
 
-    private static void scheduleMainChargeNShootOnRelease(LocalPlayer player, ItemStack heldItem, ProjectileItem projectileWeapon) {
-        mainChargeNShootOnReleaseTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!mainFiring) return;
+    private static void finishChargeOnRelease(LocalPlayer player, WeaponInputState state, ProjectileItem weapon) {
+        int threshold = weapon.getChargeThreshold();
 
-                if (!ItemStack.isSameItem(player.getMainHandItem(), heldItem) || player.getMainHandItem().equals(ItemStack.EMPTY)) {
-                    mainCharge = 0;
-                    mainCharging = false;
-                    mainFiring = false;
-                    mainFullyCharged = false;
-                    mainChargeNShootOnReleaseTimer.cancel();
-                    mainChargeNShootOnReleaseTimer = new Timer();
-                    ChargingSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(mainChargingSoundInstance);
-                    ChargingSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(mainFullyChargedSoundInstance);
-                    ChargingSoundInstance.stopAudio = false;
-                    mainChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(mainChargingSoundInstance);
-                    return;
-                }
+        stopChargingSound(state);
+        stopFullyChargedSound(state);
 
-                if (mainCharge >= WeaponTimingUtil.getProjectileWeaponChargeThreshold(projectileWeapon.getProjectileWeaponName()) && !mainFullyCharged) {
-                    if (!(projectileWeapon.getProjectileWeaponName().equals(WeaponName.MW20_BRYAR_PISTOL) || projectileWeapon.getProjectileWeaponName().equals(WeaponName.RELBY_V10) || projectileWeapon.getProjectileWeaponName().equals(WeaponName.C10))) {
-                        FullyChargedSoundInstance.stopAudio = false;
-                        mainFullyChargedSoundInstance = new FullyChargedSoundInstance(WeaponSoundsUtil.getWeaponChargeLoop(projectileWeapon.getProjectileWeaponName()), player);
-                        Minecraft.getInstance().getSoundManager().play(mainFullyChargedSoundInstance);
-                    }
-                    mainFullyCharged = true;
-                }
-
-                if (!mainCharging) {
-                    mainCharging = true;
-                } else if (mainCharge < WeaponTimingUtil.getProjectileWeaponChargeThreshold(projectileWeapon.getProjectileWeaponName())){
-                    mainCharge++;
-                }
-
-                scheduleMainChargeNShootOnRelease(player, player.getMainHandItem(), projectileWeapon);
-            }
-        }, 50);
+        if (state.chargeTicks >= threshold) {
+            PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(state.side.isMainHand()));
+            state.chargeFired = true;
+        } else {
+            playUnchargeSound(player, state, weapon);
+        }
     }
 
-    private static void scheduleOffChargeNShootOnRelease(LocalPlayer player, ItemStack heldItem, ProjectileItem projectileWeapon) {
-        offChargeNShootOnReleaseTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!offFiring) return;
+    private static boolean shouldRespectRightClickInteraction(LocalPlayer player) {
+        Minecraft minecraft = Minecraft.getInstance();
+        HitResult hitResult = minecraft.hitResult;
 
-                if (!ItemStack.isSameItem(player.getOffhandItem(), heldItem) || player.getOffhandItem().equals(ItemStack.EMPTY)) {
-                    offCharge = 0;
-                    offCharging = false;
-                    offFiring = false;
-                    offFullyCharged = false;
-                    offChargeNShootOnReleaseTimer.cancel();
-                    offChargeNShootOnReleaseTimer = new Timer();
-                    ChargingSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(offChargingSoundInstance);
-                    ChargingSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(offFullyChargedSoundInstance);
-                    ChargingSoundInstance.stopAudio = false;
-                    offChargingSoundInstance = new ChargingSoundInstance(WeaponSoundsUtil.getWeaponUncharge(projectileWeapon.getProjectileWeaponName()), player);
-                    Minecraft.getInstance().getSoundManager().play(offChargingSoundInstance);
-                    return;
-                }
+        if (hitResult == null || player.isShiftKeyDown()) {
+            return false;
+        }
 
-                if (offCharge >= WeaponTimingUtil.getProjectileWeaponChargeThreshold(projectileWeapon.getProjectileWeaponName()) && !offFullyCharged) {
-                    if (!(projectileWeapon.getProjectileWeaponName().equals(WeaponName.MW20_BRYAR_PISTOL) || projectileWeapon.getProjectileWeaponName().equals(WeaponName.RELBY_V10) || projectileWeapon.getProjectileWeaponName().equals(WeaponName.C10))) {
-                        FullyChargedSoundInstance.stopAudio = false;
-                        mainFullyChargedSoundInstance = new FullyChargedSoundInstance(WeaponSoundsUtil.getWeaponChargeLoop(projectileWeapon.getProjectileWeaponName()), player);
-                        Minecraft.getInstance().getSoundManager().play(mainFullyChargedSoundInstance);
-                    }
-                    offFullyCharged = true;
-                }
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult blockHitResult = (BlockHitResult) hitResult;
+            BlockPos blockPos = blockHitResult.getBlockPos();
+            BlockState blockState = player.level().getBlockState(blockPos);
 
-                if (!offCharging) {
-                    offCharging = true;
-                } else if (offCharge < WeaponTimingUtil.getProjectileWeaponChargeThreshold(projectileWeapon.getProjectileWeaponName())){
-                    offCharge++;
-                }
+            return blockState.is(ModTags.Blocks.INTERACTABLE_BLOCKS);
+        }
 
-                scheduleOffChargeNShootOnRelease(player, player.getOffhandItem(), projectileWeapon);
-            }
-        }, 50);
+        if (hitResult.getType() == HitResult.Type.ENTITY) {
+            EntityHitResult entityHitResult = (EntityHitResult) hitResult;
+            Entity entity = entityHitResult.getEntity();
+
+            return entity instanceof Villager
+                    || entity instanceof WanderingTrader
+                    || entity instanceof ItemFrame
+                    || entity instanceof GlowItemFrame
+                    || entity instanceof ArmorStand
+                    || entity instanceof ChestBoat
+                    || entity instanceof MinecartChest
+                    || entity instanceof MinecartFurnace
+                    || entity instanceof MinecartHopper
+                    || entity instanceof MinecartCommandBlock;
+        }
+
+        return false;
     }
 
-    private static void scheduleMainBeam(LocalPlayer player, ItemStack heldItem, ProjectileItem projectileWeapon) {
-        mainBeamTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!mainFiring) return;
+    private static boolean shouldAllowVanillaLeftClick(LocalPlayer player) {
+        Minecraft minecraft = Minecraft.getInstance();
+        HitResult hitResult = minecraft.hitResult;
 
-                if (!ItemStack.isSameItem(player.getMainHandItem(), heldItem) || player.getMainHandItem().equals(ItemStack.EMPTY) || (projectileWeapon.getAmmo(heldItem) <= 0)) {
-                    mainFiring = false;
-                    mainBeamTimer.cancel();
-                    mainBeamTimer = new Timer();
-                    BeamSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(mainBeamSoundInstance);
-                    BeamSoundInstance.stopAudio = false;
-                    return;
-                }
+        if (hitResult instanceof EntityHitResult entityHitResult) {
+            Entity target = entityHitResult.getEntity();
+            return player.distanceTo(target) <= 3 && !player.isShiftKeyDown();
+        }
 
-//                PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(true));
-
-                scheduleMainBeam(player, player.getMainHandItem(), projectileWeapon);
-            }
-        }, 50);
+        return false;
     }
 
-    private static void scheduleOffBeam(LocalPlayer player, ItemStack heldItem, ProjectileItem projectileWeapon) {
-        offBeamTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!offFiring) return;
+    private static void playChargeSound(LocalPlayer player, WeaponInputState state, ProjectileItem weapon) {
+        ChargingSoundInstance.stopAudio = false;
+        state.chargingSound = new ChargingSoundInstance(
+                WeaponSoundsUtil.getWeaponCharge(weapon.getProjectileWeaponName()),
+                player
+        );
 
-                if (!ItemStack.isSameItem(player.getOffhandItem(), heldItem) || player.getOffhandItem().equals(ItemStack.EMPTY) || (projectileWeapon.getAmmo(heldItem) <= 0)) {
-                    offFiring = false;
-                    offBeamTimer.cancel();
-                    offBeamTimer = new Timer();
-                    BeamSoundInstance.stopAudio = true;
-                    Minecraft.getInstance().getSoundManager().stop(offBeamSoundInstance);
-                    BeamSoundInstance.stopAudio = false;
-                    return;
-                }
+        Minecraft.getInstance().getSoundManager().play(state.chargingSound);
+    }
 
-//                PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(false));
+    private static void playUnchargeSound(LocalPlayer player, WeaponInputState state, ProjectileItem weapon) {
+        ChargingSoundInstance.stopAudio = false;
+        ChargingSoundInstance unchargeSound = new ChargingSoundInstance(
+                WeaponSoundsUtil.getWeaponUncharge(weapon.getProjectileWeaponName()),
+                player
+        );
 
-                scheduleOffBeam(player, player.getOffhandItem(), projectileWeapon);
-            }
-        }, 50);
+        Minecraft.getInstance().getSoundManager().play(unchargeSound);
+    }
+
+    private static void playFullyChargedSound(LocalPlayer player, WeaponInputState state, ProjectileItem weapon) {
+        WeaponName weaponName = weapon.getProjectileWeaponName();
+
+        if (!shouldPlayFullyChargedLoop(weaponName)) {
+            return;
+        }
+
+        FullyChargedSoundInstance.stopAudio = false;
+        state.fullyChargedSound = new FullyChargedSoundInstance(
+                WeaponSoundsUtil.getWeaponChargeLoop(weaponName),
+                player
+        );
+
+        Minecraft.getInstance().getSoundManager().play(state.fullyChargedSound);
+    }
+
+    private static boolean shouldPlayFullyChargedLoop(WeaponName weaponName) {
+        return weaponName != WeaponName.MW20_BRYAR_PISTOL
+                && weaponName != WeaponName.RELBY_V10
+                && weaponName != WeaponName.C10;
+    }
+
+    private static void startBeam(LocalPlayer player, WeaponInputState state, ProjectileItem weapon) {
+        state.beamActive = true;
+        PayloadRegister.sendToServer(new SSBeamPacket(state.side.isMainHand(), true));
+
+        BeamSoundInstance.stopAudio = false;
+        state.beamSound = new BeamSoundInstance(
+                WeaponSoundsUtil.getWeaponBeam(weapon.getProjectileWeaponName()),
+                player
+        );
+
+        Minecraft.getInstance().getSoundManager().play(state.beamSound);
+    }
+
+    private static void stopChargingSound(WeaponInputState state) {
+        if (state.chargingSound == null) {
+            return;
+        }
+
+        ChargingSoundInstance.stopAudio = true;
+        Minecraft.getInstance().getSoundManager().stop(state.chargingSound);
+        state.chargingSound = null;
+    }
+
+    private static void stopFullyChargedSound(WeaponInputState state) {
+        if (state.fullyChargedSound == null) {
+            return;
+        }
+
+        FullyChargedSoundInstance.stopAudio = true;
+        Minecraft.getInstance().getSoundManager().stop(state.fullyChargedSound);
+        state.fullyChargedSound = null;
+    }
+
+    private static void stopBeamSound(WeaponInputState state) {
+        if (state.beamSound == null) {
+            return;
+        }
+
+        BeamSoundInstance.stopAudio = true;
+        Minecraft.getInstance().getSoundManager().stop(state.beamSound);
+        state.beamSound = null;
+    }
+
+    private static void stopBeam(WeaponInputState state) {
+        PayloadRegister.sendToServer(new SSBeamPacket(state.side.isMainHand(), false));
+        state.beamActive = false;
+        stopBeamSound(state);
+    }
+
+    private static void resetState(WeaponInputState state, boolean stopSounds) {
+        state.firing = false;
+        state.charging = false;
+        state.chargeFired = false;
+        state.fullyCharged = false;
+        state.beamActive = false;
+        state.autoAfterCharge = false;
+        state.chargeTicks = 0;
+        state.activeMode = null;
+        state.heldStack = ItemStack.EMPTY;
+
+        if (stopSounds) {
+            stopChargingSound(state);
+            stopFullyChargedSound(state);
+            stopBeamSound(state);
+        }
+    }
+
+    private enum WeaponInputSide {
+        MAIN(true),
+        OFF(false);
+
+        private final boolean mainHand;
+
+        WeaponInputSide(boolean mainHand) {
+            this.mainHand = mainHand;
+        }
+
+        private boolean isMainHand() {
+            return mainHand;
+        }
+
+        private ItemStack getStack(LocalPlayer player) {
+            return mainHand ? player.getMainHandItem() : player.getOffhandItem();
+        }
+    }
+
+    private static final class WeaponInputState {
+        private final WeaponInputSide side;
+
+        private boolean firing;
+        private boolean charging;
+        private boolean chargeFired;
+        private boolean fullyCharged;
+        private boolean beamActive;
+        private boolean autoAfterCharge;
+
+        private int chargeTicks;
+        private ItemStack heldStack = ItemStack.EMPTY;
+        private FiringMode activeMode;
+
+        private ChargingSoundInstance chargingSound;
+        private FullyChargedSoundInstance fullyChargedSound;
+        private BeamSoundInstance beamSound;
+
+        private WeaponInputState(WeaponInputSide side) {
+            this.side = side;
+        }
     }
 }

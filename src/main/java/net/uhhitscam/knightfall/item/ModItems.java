@@ -8,18 +8,21 @@ import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.item.custom.*;
 import net.uhhitscam.knightfall.item.custom.ProjectileItem;
 
-import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(OperationKnightfall.MODID);
 
+    private static DeferredItem<Item> registerProjectile(ProjectileWeaponDefinition definition) {
+        return ITEMS.register(definition.registryName(),
+                () -> new ProjectileItem(definition.itemProperties(), definition));
+    }
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
 
-    //gas items
+    // Gas items
     public static final DeferredItem<Item> GAS_CARTRIDGE = ITEMS.registerSimpleItem("gas_cartridge");
     public static final DeferredItem<Item> TIBANNA_GAS = ITEMS.registerItem("tibanna_gas",
             properties -> new GasItem(properties, 6400, 500, AmmoType.TIBANNA), new Item.Properties().stacksTo(1));
@@ -36,7 +39,7 @@ public class ModItems {
     public static final DeferredItem<Item> SKEVON = ITEMS.registerItem("skevon_gas",
             properties -> new GasItem(properties, 2000, 200, AmmoType.SKEVON), new Item.Properties().stacksTo(1));
 
-    //projectile items
+    // Projectile items
     public static final DeferredItem<Item> STEEL_SLUG = ITEMS.registerItem("steel_slug",
             properties -> new SlugItem(properties, AmmoType.STEEL_SLUG));
     public static final DeferredItem<Item> RAZOR_STEEL_SLUG = ITEMS.registerItem("razor_steel_slug",
@@ -63,2633 +66,4828 @@ public class ModItems {
     public static final DeferredItem<Item> FLECHETTE_TOXIC_SPREAD_CANISTER = ITEMS.registerItem("flechette_toxic_spread_canister",
             properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_TOXIC_SPREAD_CAN), new Item.Properties().stacksTo(16));
 
-    //projectile weapon items
-    public static final DeferredItem<Item> _22T4 = ITEMS.register("_22t4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 10, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT,0.4f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName._22T4));
-    public static final DeferredItem<Item> _62AUG2_HUNTING_RIFLE = ITEMS.register("_62aug2_hunting_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 10, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.25f,
+    // Projectile weapon items
+    public static final DeferredItem<Item> _22T4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName._22T4, "_22t4")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(10)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT,0.4f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> _62AUG2_HUNTING_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName._62AUG2_HUNTING_RIFLE, "_62aug2_hunting_rifle")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(10)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_YELLOW)),
-                    FiringMode.SNIPER, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName._62AUG2_HUNTING_RIFLE));
-    public static final DeferredItem<Item> _84U_HUNTING_RIFLE = ITEMS.register("_84u_hunting_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 30, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.15f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_YELLOW))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> _84U_HUNTING_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName._84U_HUNTING_RIFLE, "_84u_hunting_rifle")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(30)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName._84U_HUNTING_RIFLE));
-    public static final DeferredItem<Item> _434_DEATHHAMMER = ITEMS.register("_434_deathhammer",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName._434_DEATHHAMMER));
-    public static final DeferredItem<Item> _773_FIREPUNCHER = ITEMS.register("_773_firepuncher",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.1f, 10, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 17),
-                            FiringMode.LAUNCHER, new ProjectileWeaponStats(0, 0f, 0f, 2),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))),
-                    new BeamWeaponStats(6f),
-                    List.of(FiringMode.SNIPER, FiringMode.LAUNCHER, FiringMode.STUN, FiringMode.BEAM),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.45f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> _434_DEATHHAMMER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName._434_DEATHHAMMER, "_434_deathhammer")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> _773_FIREPUNCHER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName._773_FIREPUNCHER, "_773_firepuncher")
+                    .projectileSpeed(3.1f)
+                    .maxAmmo(10)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 17)
+                    .stat(FiringMode.LAUNCHER, 0, 0f, 0f, 2)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .beam(6f)
+                    .firingModes(FiringMode.SNIPER, FiringMode.LAUNCHER, FiringMode.STUN, FiringMode.BEAM)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.45f,
                             Map.of(FiringMode.SNIPER, 0.15f),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_BLUE_CROSS, FiringMode.LAUNCHER, ScopeTexture.CIRCLE_BLUE_CROSS, FiringMode.BEAM, ScopeTexture.CIRCLE_BLUE_CROSS)),
-                    FiringMode.SNIPER, AmmoType.IONIZED_TIBANNA, WeaponClassification.SNIPER, WeaponName._773_FIREPUNCHER));
-    public static final DeferredItem<Item> _785MK_FIREPUNCHERX = ITEMS.register("_785mk_firepuncherx",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.2f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.15f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_BLUE_CROSS, FiringMode.LAUNCHER, ScopeTexture.CIRCLE_BLUE_CROSS, FiringMode.BEAM, ScopeTexture.CIRCLE_BLUE_CROSS))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> _785MK_FIREPUNCHERX = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName._785MK_FIREPUNCHERX, "_785mk_firepuncherx")
+                    .projectileSpeed(3.2f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_RED)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName._785MK_FIREPUNCHERX));
-    public static final DeferredItem<Item> A2H = ITEMS.register("a2h",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE,0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.A2H));
-    public static final DeferredItem<Item> A140 = ITEMS.register("a140",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.A140));
-    public static final DeferredItem<Item> A180 = ITEMS.register("a180",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9),
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 9),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.SNIPER, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.85f,
-                        Map.of(FiringMode.FULL_AUTO, 0.55f, FiringMode.SNIPER, 0.2f),
-                        Map.of(FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_SOFT_FOCUS, FiringMode.SNIPER, ScopeTexture.OVAL_SMALL_X)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.A180));
-    public static final DeferredItem<Item> A240 = ITEMS.register("a240",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.A240));
-    public static final DeferredItem<Item> A280 = ITEMS.register("a280",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(3, 1.8f, 2.1f, 15),
-                            FiringMode.BURST, new ProjectileWeaponStats(11, 1.6f, 2.8f, 9))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f,
-                        Map.of(),
-                        Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CLASSIC, FiringMode.BURST, ScopeTexture.CLASSIC)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.A280));
-    public static final DeferredItem<Item> A280C = ITEMS.register("a280c",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.BURST, new ProjectileWeaponStats(10, 1.4f, 2f, 8),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(3, 1.4f, 3.4f, 8))), null,
-                    List.of(FiringMode.BURST, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.5f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_RED))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> A2H = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A2H, "a2h")
+                    .projectileSpeed(2.8f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE,0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> A140 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A140, "a140")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> A180 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A180, "a180")
+                    .projectileSpeed(2.2f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 9)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 9)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.SNIPER, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.85f,
+                            Map.of(FiringMode.FULL_AUTO, 0.55f, FiringMode.SNIPER, 0.2f),
+                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_SOFT_FOCUS, FiringMode.SNIPER, ScopeTexture.OVAL_SMALL_X))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .switchTime(17)
+                    .switchTime(FiringMode.FULL_AUTO, 13)
+                    .switchTime(FiringMode.SEMI_AUTO, 18)
+                    .build()
+    );
+    public static final DeferredItem<Item> A240 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A240, "a240")
+                    .projectileSpeed(2.8f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> A280 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A280, "a280")
+                    .projectileSpeed(2.6f)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 3, 1.8f, 2.1f, 15)
+                    .stat(FiringMode.BURST, 11, 1.6f, 2.8f, 9)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.BURST, ScopeTexture.CLASSIC, FiringMode.FULL_AUTO, ScopeTexture.CLASSIC)),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.A280C));
-    public static final DeferredItem<Item> A280CFE = ITEMS.register("a280cfe",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16),
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 7),
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CLASSIC, FiringMode.BURST, ScopeTexture.CLASSIC))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> A280C = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A280C, "a280c")
+                    .projectileSpeed(2.6f)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.BURST, 10, 1.4f, 2f, 8)
+                    .stat(FiringMode.FULL_AUTO, 3, 1.4f, 3.4f, 8)
+                    .firingModes(FiringMode.BURST, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.5f,
+                            Map.of(),
+                            Map.of(FiringMode.BURST, ScopeTexture.CLASSIC, FiringMode.FULL_AUTO, ScopeTexture.CLASSIC))
+                    )
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> A280CFE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A280CFE, "a280cfe")
+                    .projectileSpeed(2.7f)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 7)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f,
                             Map.of(FiringMode.BURST, 0.55f, FiringMode.SNIPER, 0.3f),
-                            Map.of(FiringMode.BURST, ScopeTexture.CIRCLE_GREEN_2, FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_2)),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.A280CFE));
-    public static final DeferredItem<Item> A295 = ITEMS.register("a295",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(5, 1.6f, 2.8f, 15),
-                            FiringMode.BURST, new ProjectileWeaponStats(6, 2.2f, 3.3f, 5))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.5f,
+                            Map.of(FiringMode.BURST, ScopeTexture.CIRCLE_GREEN_2, FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_2))
+                    )
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.RIFLE)
+                    .switchTime(19)
+                    .switchTime(FiringMode.BURST, 25)
+                    .switchTime(FiringMode.SEMI_AUTO, 18)
+                    .build()
+    );
+    public static final DeferredItem<Item> A295 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A295, "a295")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 5, 1.6f, 2.8f, 15)
+                    .stat(FiringMode.BURST, 6, 2.2f, 3.3f, 5)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CLASSIC, FiringMode.BURST, ScopeTexture.CLASSIC)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.A295));
-    public static final DeferredItem<Item> A300 = ITEMS.register("a300",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(3, 1.6f, 4f, 6))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.5f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CLASSIC, FiringMode.BURST, ScopeTexture.CLASSIC))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> A300 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A300, "a300")
+                    .projectileSpeed(2.7f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 3, 1.6f, 4f, 6)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_SOFT_FOCUS)),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.A300));
-    public static final DeferredItem<Item> A310 = ITEMS.register("a310",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(5, 1.9f, 2f, 17),
-                            FiringMode.BURST, new ProjectileWeaponStats(12, 1.7f, 2.9f, 9))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.5f,
+                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_SOFT_FOCUS))
+                    )
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> A310 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A310, "a310")
+                    .projectileSpeed(2.7f)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 5, 1.9f, 2f, 17)
+                    .stat(FiringMode.BURST, 12, 1.7f, 2.9f, 9)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_SOFT_FOCUS, FiringMode.BURST, ScopeTexture.OVAL_SMALL_SOFT_FOCUS)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.A310));
-    public static final DeferredItem<Item> A350 = ITEMS.register("a350",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.5f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_SOFT_FOCUS, FiringMode.BURST, ScopeTexture.OVAL_SMALL_SOFT_FOCUS))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> A350 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.A350, "a350")
+                    .projectileSpeed(2.7f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 6)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_INDENT_GREEN, FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_INDENT_GREEN)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.A350));
-    public static final DeferredItem<Item> AB75_BO_RIFLE = ITEMS.register("ab75_bo_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.AB75_BO_RIFLE));
-    public static final DeferredItem<Item> ABR2_ZATO = ITEMS.register("abr2_zato",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.75f),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.ABR2_ZATO));
-    public static final DeferredItem<Item> AC177 = ITEMS.register("ac177",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 1.9f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.AC177));
-    public static final DeferredItem<Item> ACP_ARRAY = ITEMS.register("acp_array",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 1.9f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.ACP_ARRAY));
-    public static final DeferredItem<Item> ACP_REPEATER = ITEMS.register("acp_repeater",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.75f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.ACP_REPEATER));
-    public static final DeferredItem<Item> AMBAN_DISRUPTOR = ITEMS.register("amban_disruptor",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 4.0f, 1, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(50, 3f, 1f, 30))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.2f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_INDENT_GREEN, FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_INDENT_GREEN))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> AB75_BO_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.AB75_BO_RIFLE, "ab75_bo_rifle")
+                    .projectileSpeed(2.7f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> ABR2_ZATO = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ABR2_ZATO, "abr2_zato")
+                    .projectileSpeed(2.7f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.75f))
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.RIFLE)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> AC177 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.AC177, "ac177")
+                    .projectileSpeed(1.9f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> ACP_ARRAY = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ACP_ARRAY, "acp_array")
+                    .projectileSpeed(1.9f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> ACP_REPEATER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ACP_REPEATER, "acp_repeater")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.75f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> AMBAN_DISRUPTOR = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.AMBAN_DISRUPTOR, "amban_disruptor")
+                    .projectileSpeed(4.0f)
+                    .maxAmmo(1)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 50, 3f, 1f, 30)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.2f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_RED_BLUE)),
-                    FiringMode.SNIPER, AmmoType.SIG, WeaponClassification.DISRUPTOR, WeaponName.AMBAN_DISRUPTOR));
-    public static final DeferredItem<Item> APACHE = ITEMS.register("apache",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.APACHE));
-    public static final DeferredItem<Item> ASTRA40 = ITEMS.register("astra40",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.ASTRA40));
-    public static final DeferredItem<Item> AVARIK = ITEMS.register("avarik",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.0f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.15f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_RED_BLUE))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.SIG)
+                    .classification(WeaponClassification.DISRUPTOR)
+                    .reloadTime(20)
+                    .switchTime(18)
+                    .build()
+    );
+    public static final DeferredItem<Item> APACHE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.APACHE, "apache")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> ASTRA40 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ASTRA40, "astra40")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> AVARIK = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.AVARIK, "avarik")
+                    .projectileSpeed(3.0f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_BLUE_CROSS)),
-                    FiringMode.SNIPER, AmmoType.IONIZED_TIBANNA, WeaponClassification.SNIPER, WeaponName.AVARIK));
-    public static final DeferredItem<Item> AZ6 = ITEMS.register("az6",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.AZ6));
-    public static final DeferredItem<Item> B1NA = ITEMS.register("b1na",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8),
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 4))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.B1NA));
-    public static final DeferredItem<Item> B1X = ITEMS.register("b1x",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.B1X));
-    public static final DeferredItem<Item> B22 = ITEMS.register("b22",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 10, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.B22));
-    public static final DeferredItem<Item> B33 = ITEMS.register("b33",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 10, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.B33));
-    public static final DeferredItem<Item> BAC5 = ITEMS.register("bac5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT,0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.BAC5));
-    public static final DeferredItem<Item> BALNAB = ITEMS.register("balnab",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.5f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_BLUE_CROSS))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> AZ6 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.AZ6, "az6")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> B1NA = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.B1NA, "b1na")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 4)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .switchTime(12)
+                    .build()
+    );
+    public static final DeferredItem<Item> B1X = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.B1X, "b1x")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> B22 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.B22, "b22")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(10)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> B33 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.B33, "b33")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(10)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> BAC5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BAC5, "bac5")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT,0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> BALNAB = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BALNAB, "balnab")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_BLUE_CROSS)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.BALNAB));
-    public static final DeferredItem<Item> BALNAB_SIDEARM = ITEMS.register("balnab_sidearm",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.9f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.BALNAB_SIDEARM));
-    public static final DeferredItem<Item> BARMST12 = ITEMS.register("barmst12",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.85f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.BARMST12));
-    public static final DeferredItem<Item> BATON_BLASTER = ITEMS.register("baton_blaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 1f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.BATON_BLASTER));
-    public static final DeferredItem<Item> BE09 = ITEMS.register("be09",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 5))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.BE09));
-    public static final DeferredItem<Item> BE29 = ITEMS.register("be29",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.5f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_BLUE_CROSS))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> BALNAB_SIDEARM = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BALNAB_SIDEARM, "balnab_sidearm")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.9f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> BARMST12 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BARMST12, "barmst12")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SCATTER, 0, 0f, 0f, 6)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> BATON_BLASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BATON_BLASTER, "baton_blaster")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 1f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> BE09 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BE09, "be09")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 5)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> BE29 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BE29, "be29")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SCATTER, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SCATTER, ScopeTexture.CIRCLE_GREY_DOT)),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.BE29));
-    public static final DeferredItem<Item> BERSERKER = ITEMS.register("berserker",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 2.4f, 3.4f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.BERSERKER));
-    public static final DeferredItem<Item> BH4 = ITEMS.register("bh4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 3))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.BH4));
-    public static final DeferredItem<Item> BK28 = ITEMS.register("bk28",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 3))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.BK28));
-    public static final DeferredItem<Item> BK43 = ITEMS.register("bk43",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.BK43));
-    public static final DeferredItem<Item> BLASTER_SPEAR = ITEMS.register("blaster_spear",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.RIFLE, WeaponName.BLASTER_SPEAR));
-    public static final DeferredItem<Item> BLNDRBUS = ITEMS.register("blndrbus",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 0f, 6),
-                            FiringMode.REPULSE, new ProjectileWeaponStats(0, 0f, 0f, 1),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.85f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.BLNDRBUS));
-    public static final DeferredItem<Item> BLURRG1120 = ITEMS.register("blurrg1120",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 2, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(4, 1.1f, 3f, 9),
-                            FiringMode.BURST, new ProjectileWeaponStats(9, 0.9f, 4f, 4),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(3, 0.6f, 5f, 2))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.8f),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.BLURRG1120));
-    public static final DeferredItem<Item> BM107 = ITEMS.register("bm107",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.5f, 120, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 20),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 29))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.4f,
+                            Map.of(FiringMode.SCATTER, ScopeTexture.CIRCLE_GREY_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> BERSERKER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BERSERKER, "berserker")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 6, 2.4f, 3.4f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> BH4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BH4, "bh4")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 3)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> BK28 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BK28, "bk28")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 3)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .chargeThreshold(20)
+                    .build()
+    );
+    public static final DeferredItem<Item> BK43 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BK43, "bk43")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> BLASTER_SPEAR = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BLASTER_SPEAR, "blaster_spear")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> BLNDRBUS = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BLNDRBUS, "blndrbus")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SCATTER, 0, 0f, 0f, 6)
+                    .stat(FiringMode.REPULSE, 0, 0f, 0f, 1)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> BLURRG1120 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BLURRG1120, "blurrg1120")
+                    .projectileSpeed(2.2f)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 4, 1.1f, 3f, 9)
+                    .stat(FiringMode.BURST, 9, 0.9f, 4f, 4)
+                    .stat(FiringMode.FULL_AUTO, 3, 0.6f, 5f, 2)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.8f))
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> BM107 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BM107, "bm107")
+                    .projectileSpeed(3.5f)
+                    .maxAmmo(120)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 20)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 29)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.4f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_VERT_DOT, FiringMode.CHARGENSHOOT, ScopeTexture.OVAL_SMALL_VERT_DOT)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.BM107));
-    public static final DeferredItem<Item> BOILER_RIFLE = ITEMS.register("boiler_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.5f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_VERT_DOT, FiringMode.CHARGENSHOOT, ScopeTexture.OVAL_SMALL_VERT_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .reloadTime(25)
+                    .chargeThreshold(30)
+                    .build()
+    );
+    public static final DeferredItem<Item> BOILER_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BOILER_RIFLE, "boiler_rifle")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_TRI_DASH)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.BOILER_RIFLE));
-    public static final DeferredItem<Item> BOONTA_BLASTER = ITEMS.register("boonta_blaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.BOONTA_BLASTER));
-    public static final DeferredItem<Item> BOWCASTER = ITEMS.register("bowcaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 75, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(11, 2f, 1.3f, 18),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(10, 4f, 0.7f, 25))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.6f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_TRI_DASH))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> BOONTA_BLASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BOONTA_BLASTER, "boonta_blaster")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> BOWCASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BOWCASTER, "bowcaster")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(75)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 11, 2f, 1.3f, 18)
+                    .stat(FiringMode.CHARGENSHOOT, 10, 4f, 0.7f, 25)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.6f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE_CROSS_2, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_BLUE_CROSS_2)),
-                    FiringMode.SEMI_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.RIFLE, WeaponName.BOWCASTER));
-    public static final DeferredItem<Item> BR14 = ITEMS.register("br14",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 5))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.BR14));
-    public static final DeferredItem<Item> BRYAR_RIFLE = ITEMS.register("bryar_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 20))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.BRYAR_RIFLE));
-    public static final DeferredItem<Item> BSR7 = ITEMS.register("bsr7",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.6f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.BSR7));
-    public static final DeferredItem<Item> BT06 = ITEMS.register("bt06",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.BT06));
-    public static final DeferredItem<Item> BX33 = ITEMS.register("bx33",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.9f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.BX33));
-    public static final DeferredItem<Item> BX49 = ITEMS.register("bx49",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.LAUNCHER, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SNIPER, FiringMode.LAUNCHER),
-                    ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.4f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.BX49));
-    public static final DeferredItem<Item> C10 = ITEMS.register("c10",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16),
-                            FiringMode.CHARGENSHOOTONRELEASE, new ProjectileWeaponStats(0, 0f, 0f, 16),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.C10));
-    public static final DeferredItem<Item> CA87 = ITEMS.register("ca87",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 30, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(25, 5f, 15f, 6),
-                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.85f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.CA87));
-    public static final DeferredItem<Item> CB88 = ITEMS.register("cb88",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(25, 5f, 15f, 6),
-                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f),
-                    FiringMode.STUN, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.CB88));
-    public static final DeferredItem<Item> CC19 = ITEMS.register("cc19",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CC19));
-    public static final DeferredItem<Item> CC420 = ITEMS.register("cc420",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CC420));
-    public static final DeferredItem<Item> CH60 = ITEMS.register("ch60",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 2f, 1f, 9),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.CH60));
-    public static final DeferredItem<Item> CHARRIC = ITEMS.register("charric",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.CHARRIC));
-    public static final DeferredItem<Item> CJ9_BO_RIFLE = ITEMS.register("cj9_bo_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.7f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE_CROSS_2, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_BLUE_CROSS_2))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .reloadTime(25)
+                    .chargeThreshold(44)
+                    .build()
+    );
+    public static final DeferredItem<Item> BR14 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BR14, "br14")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 5)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> BRYAR_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BRYAR_RIFLE, "bryar_rifle")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 20)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .chargeThreshold(32)
+                    .build()
+    );
+    public static final DeferredItem<Item> BSR7 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BSR7, "bsr7")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.6f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> BT06 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BT06, "bt06")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> BX33 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BX33, "bx33")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SCATTER, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.9f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> BX49 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.BX49, "bx49")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 15)
+                    .stat(FiringMode.LAUNCHER, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SNIPER, FiringMode.LAUNCHER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.4f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> C10 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.C10, "c10")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .stat(FiringMode.CHARGENSHOOTONRELEASE, 0, 0f, 0f, 16)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .chargeThreshold(32)
+                    .build()
+    );
+    public static final DeferredItem<Item> CA87 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CA87, "ca87")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(30)
+                    .burstRate(0)
+                    .stat(FiringMode.SCATTER, 25, 5f, 15f, 6)
+                    .stat(FiringMode.REPULSE, 28, 7f, 0f, 2)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> CB88 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CB88, "cb88")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .stat(FiringMode.SCATTER, 25, 5f, 15f, 6)
+                    .stat(FiringMode.REPULSE, 28, 7f, 0f, 2)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f))
+                    .defaultFiringMode(FiringMode.STUN)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> CC19 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CC19, "cc19")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CC420 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CC420, "cc420")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CH60 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CH60, "ch60")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .stat(FiringMode.SEMI_AUTO, 6, 2f, 1f, 9)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> CHARRIC = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CHARRIC, "charric")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .chargeThreshold(49)
+                    .build()
+    );
+    public static final DeferredItem<Item> CJ9_BO_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CJ9_BO_RIFLE, "cj9_bo_rifle")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.7f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.CJ9_BO_RIFLE));
-    public static final DeferredItem<Item> CL14 = ITEMS.register("cl14",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(25, 5f, 15f, 6),
-                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.8f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.CL14));
-    public static final DeferredItem<Item> CORE_J3 = ITEMS.register("core_j3",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CORE_J3));
-    public static final DeferredItem<Item> CORE_R5 = ITEMS.register("core_r5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CORE_R5));
-    public static final DeferredItem<Item> CORE_U12 = ITEMS.register("core_u12",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CORE_U12));
-    public static final DeferredItem<Item> CORPO_RIFLE = ITEMS.register("corpo_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 13))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.6f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> CL14 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CL14, "cl14")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .stat(FiringMode.SCATTER, 25, 5f, 15f, 6)
+                    .stat(FiringMode.REPULSE, 28, 7f, 0f, 2)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.8f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> CORE_J3 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CORE_J3, "core_j3")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CORE_R5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CORE_R5, "core_r5")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CORE_U12 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CORE_U12, "core_u12")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CORPO_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CORPO_RIFLE, "corpo_rifle")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 13)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.6f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.CORPO_RIFLE));
-    public static final DeferredItem<Item> CP5 = ITEMS.register("cp5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 2f, 1f, 9),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.CP5));
-    public static final DeferredItem<Item> CP6 = ITEMS.register("cp6",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 4,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(25, 5f, 15f, 6),
-                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.8f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.CP6));
-    public static final DeferredItem<Item> CQ29 = ITEMS.register("cq29",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 2f, 1f, 9),
-                            FiringMode.REPULSE, new ProjectileWeaponStats(28, 7f, 0f, 2),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.REPULSE, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.8f),
-                    FiringMode.STUN, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.CQ29));
-    public static final DeferredItem<Item> CR2 = ITEMS.register("cr2",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(1, 0.5f, 9.4f, 2),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.FULL_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f),
-                    FiringMode.FULL_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.CR2));
-    public static final DeferredItem<Item> CS14 = ITEMS.register("cs14",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 4),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CS14));
-    public static final DeferredItem<Item> CT33 = ITEMS.register("ct33",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 4,
-                    new EnumMap<>(Map.of(
-                            FiringMode.BURST, new ProjectileWeaponStats(6, 2f, 1f, 9),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.BURST, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.8f),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.CT33));
-    public static final DeferredItem<Item> CW24 = ITEMS.register("cw24",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CW24));
-    public static final DeferredItem<Item> CW76 = ITEMS.register("cw76",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.CW76));
-    public static final DeferredItem<Item> CYCLER_RIFLE = ITEMS.register("cycler_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.9f, 15, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(25, 3f, 1f, 18))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.15f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> CP5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CP5, "cp5")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .stat(FiringMode.SEMI_AUTO, 6, 2f, 1f, 9)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> CP6 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CP6, "cp6")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(4)
+                    .stat(FiringMode.SCATTER, 25, 5f, 15f, 6)
+                    .stat(FiringMode.REPULSE, 28, 7f, 0f, 2)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SCATTER, FiringMode.REPULSE, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.8f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> CQ29 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CQ29, "cq29")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .stat(FiringMode.SEMI_AUTO, 6, 2f, 1f, 9)
+                    .stat(FiringMode.REPULSE, 28, 7f, 0f, 2)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.REPULSE, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.8f))
+                    .defaultFiringMode(FiringMode.STUN)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> CR2 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CR2, "cr2")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 1, 0.5f, 9.4f, 2)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.FULL_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CS14 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CS14, "cs14")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 4)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CT33 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CT33, "ct33")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(4)
+                    .stat(FiringMode.BURST, 6, 2f, 1f, 9)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.BURST, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> CW24 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CW24, "cw24")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CW76 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CW76, "cw76")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> CYCLER_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CYCLER_RIFLE, "cycler_rifle")
+                    .projectileSpeed(3.9f)
+                    .maxAmmo(15)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 25, 3f, 1f, 18)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_CROSS)),
-                    FiringMode.SNIPER, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.SNIPER, WeaponName.CYCLER_RIFLE));
-    public static final DeferredItem<Item> CZERKA_19 = ITEMS.register("czerka_19",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.9f, 15, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(25, 3f, 1f, 18))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.25f),
-                    FiringMode.SNIPER, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.CZERKA_19));
-    public static final DeferredItem<Item> CZERKA_ADVENTURER = ITEMS.register("czerka_adventurer",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 4.0f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.15f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_CROSS))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> CZERKA_19 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CZERKA_19, "czerka_19")
+                    .projectileSpeed(3.9f)
+                    .maxAmmo(15)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 25, 3f, 1f, 18)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.25f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> CZERKA_ADVENTURER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.CZERKA_ADVENTURER, "czerka_adventurer")
+                    .projectileSpeed(4.0f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_YELLOW)),
-                    FiringMode.SNIPER, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.CZERKA_ADVENTURER));
-    public static final DeferredItem<Item> DC12U = ITEMS.register("dc12u",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))),
-                    new BeamWeaponStats(2.5f),
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BEAM),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.RIFLE, WeaponName.DC12U));
-    public static final DeferredItem<Item> DC15A = ITEMS.register("dc15a",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(7, 1.6f, 1f, 17),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(3, 1f, 3f, 5),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.4f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_YELLOW))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC12U = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC12U, "dc12u")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .beam(2.5f)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BEAM)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC15A = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC15A, "dc15a")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 7, 1.6f, 1f, 17)
+                    .stat(FiringMode.FULL_AUTO, 3, 1f, 3f, 5)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.4f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_X, FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_X)),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.RIFLE, WeaponName.DC15A));
-    public static final DeferredItem<Item> DC15LE = ITEMS.register("dc15le",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(3, 1.7f, 4.7f, 6))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.5f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_X, FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_X))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC15LE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC15LE, "dc15le")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 3, 1.7f, 4.7f, 6)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_X)),
-                    FiringMode.FULL_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.RIFLE, WeaponName.DC15LE));
-    public static final DeferredItem<Item> DC15S_CARBINE = ITEMS.register("dc15s_carbine",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(10, 1.7f, 3.5f, 12),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(5, 1.3f, 4.4f, 5),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.CARBINE, WeaponName.DC15S_CARBINE));
-    public static final DeferredItem<Item> DC15S_SIDEARM = ITEMS.register("dc15s_sidearm",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 17, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(3, 1.4f, 4f, 6),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.DC15S_SIDEARM));
-    public static final DeferredItem<Item> DC15X = ITEMS.register("dc15x",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 6, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 23),
-                            FiringMode.CHARGENSHOOTONRELEASE, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SNIPER, FiringMode.CHARGENSHOOTONRELEASE),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.2f,
+                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_X))
+                    )
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC15S_CARBINE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC15S_CARBINE, "dc15s_carbine")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 10, 1.7f, 3.5f, 12)
+                    .stat(FiringMode.FULL_AUTO, 5, 1.3f, 4.4f, 5)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC15S_SIDEARM = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC15S_SIDEARM, "dc15s_sidearm")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(17)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 3, 1.4f, 4f, 6)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC15X = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC15X, "dc15x")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(6)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 23)
+                    .stat(FiringMode.CHARGENSHOOTONRELEASE, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SNIPER, FiringMode.CHARGENSHOOTONRELEASE)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.2f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_SMALL_FANCY, FiringMode.CHARGENSHOOTONRELEASE, ScopeTexture.OVAL_SMALL_FANCY)),
-                    FiringMode.SNIPER, AmmoType.IONIZED_TIBANNA, WeaponClassification.SNIPER, WeaponName.DC15X));
-    public static final DeferredItem<Item> DC17 = ITEMS.register("dc17",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(3, 0.6f, 6f, 14),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.DC17));
-    public static final DeferredItem<Item> DC17M = ITEMS.register("dc17m",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 5),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 25),
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 18),
-                            FiringMode.LAUNCHER, new ProjectileWeaponStats(0, 0f, 0f, 8),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.FULL_AUTO, FiringMode.CHARGENSHOOT, FiringMode.SNIPER, FiringMode.LAUNCHER, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.75f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_SMALL_FANCY, FiringMode.CHARGENSHOOTONRELEASE, ScopeTexture.OVAL_SMALL_FANCY))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.SNIPER)
+                    .chargeThreshold(27)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC17 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC17, "dc17")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 3, 0.6f, 6f, 14)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC17M = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC17M, "dc17m")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 5)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 25)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 18)
+                    .stat(FiringMode.LAUNCHER, 0, 0f, 0f, 8)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(
+                            FiringMode.FULL_AUTO,
+                            FiringMode.CHARGENSHOOT,
+                            FiringMode.SNIPER,
+                            FiringMode.LAUNCHER,
+                            FiringMode.STUN
+                    )
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.75f,
                             Map.of(FiringMode.CHARGENSHOOT, 0.25f, FiringMode.SNIPER, 0.2f, FiringMode.LAUNCHER, 0.8f),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_BLUE, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_GREY_BLUE)),
-                    FiringMode.FULL_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.REPEATER, WeaponName.DC17M));
-    public static final DeferredItem<Item> DC17S = ITEMS.register("dc17s",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(3, 1.3f, 5f, 16),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(2, 1.8f, 3.6f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f),
-                    FiringMode.FULL_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.DC17S));
-    public static final DeferredItem<Item> DC19 = ITEMS.register("dc19",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 10, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNAX, WeaponClassification.CARBINE, WeaponName.DC19));
-    public static final DeferredItem<Item> DCX = ITEMS.register("dcx",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DCX));
-    public static final DeferredItem<Item> DE10 = ITEMS.register("de10",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.7f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_BLUE, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_GREY_BLUE))
+                    )
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(FiringMode.LAUNCHER, 18)
+                    .switchTime(22)
+                    .switchTime(FiringMode.LAUNCHER, 45)
+                    .chargeThreshold(29)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC17S = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC17S, "dc17s")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 3, 1.3f, 5f, 16)
+                    .stat(FiringMode.FULL_AUTO, 2, 1.8f, 3.6f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> DC19 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DC19, "dc19")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(10)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.TIBANNAX)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DCX = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DCX, "dcx")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> DE10 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DE10, "de10")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.7f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_TRI_DASH)),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.DE10));
-    public static final DeferredItem<Item> DEACTIVATOR = ITEMS.register("deactivator",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 1f),
-                    FiringMode.STUN, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.DEACTIVATOR));
-    public static final DeferredItem<Item> DEFTECH = ITEMS.register("deftech",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 300, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17),
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.5f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_TRI_DASH))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DEACTIVATOR = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DEACTIVATOR, "deactivator")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 1f))
+                    .defaultFiringMode(FiringMode.STUN)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DEFTECH = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DEFTECH, "deftech")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(300)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE_CROSS_2, FiringMode.BURST, ScopeTexture.CIRCLE_BLUE_CROSS_2)),
-                    FiringMode.SEMI_AUTO, AmmoType.SIG, WeaponClassification.RIFLE, WeaponName.DEFTECH));
-    public static final DeferredItem<Item> DER4 = ITEMS.register("der4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 300, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DER4));
-    public static final DeferredItem<Item> DFD1 = ITEMS.register("dfd1",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 6, 0, 8,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(2, 2f, 12f, 18))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.75f),
-                    FiringMode.SCATTER, AmmoType.FLECHETTE_CAN, WeaponClassification.FLECHETTE, WeaponName.DFD1));
-    public static final DeferredItem<Item> DFQ91 = ITEMS.register("dfq91",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 6, 0, 8,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(2, 2f, 12f, 18))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.6f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.DFQ91));
-    public static final DeferredItem<Item> DG29 = ITEMS.register("dg29",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.7f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE_CROSS_2, FiringMode.BURST, ScopeTexture.CIRCLE_BLUE_CROSS_2))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SIG)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DER4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DER4, "der4")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(300)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DFD1 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DFD1, "dfd1")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(6)
+                    .burstRate(0)
+                    .scatterShots(8)
+                    .stat(FiringMode.SCATTER, 2, 2f, 12f, 18)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.75f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .ammoType(AmmoType.FLECHETTE_CAN)
+                    .classification(WeaponClassification.FLECHETTE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DFQ91 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DFQ91, "dfq91")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(6)
+                    .burstRate(0)
+                    .scatterShots(8)
+                    .stat(FiringMode.SNIPER, 2, 2f, 12f, 18)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.6f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> DG29 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DG29, "dg29")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.7f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DG29));
-    public static final DeferredItem<Item> DH16 = ITEMS.register("dh16",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DH16));
-    public static final DeferredItem<Item> DH17 = ITEMS.register("dh17",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 2, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(11, 2.7f, 2f, 17),
-                            FiringMode.BURST, new ProjectileWeaponStats(14, 1.4f, 2.7f, 7),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(4, 2.1f, 3.9f, 5),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DH16 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DH16, "dh16")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DH17 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DH17, "dh17")
+                    .projectileSpeed(2.5f)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 11, 2.7f, 2f, 17)
+                    .stat(FiringMode.BURST, 14, 1.4f, 2.7f, 7)
+                    .stat(FiringMode.FULL_AUTO, 4, 2.1f, 3.9f, 5)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CLASSIC_BUBBLED, FiringMode.BURST, ScopeTexture.CLASSIC_BUBBLED, FiringMode.FULL_AUTO, ScopeTexture.CLASSIC_BUBBLED)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DH17));
-    public static final DeferredItem<Item> DH23 = ITEMS.register("dh23",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DH23));
-    public static final DeferredItem<Item> DH42 = ITEMS.register("dh42",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DH42));
-    public static final DeferredItem<Item> DH447 = ITEMS.register("dh447",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.25f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CLASSIC_BUBBLED, FiringMode.BURST, ScopeTexture.CLASSIC_BUBBLED, FiringMode.FULL_AUTO, ScopeTexture.CLASSIC_BUBBLED))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DH23 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DH23, "dh23")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DH42 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DH42, "dh42")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DH447 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DH447, "dh447")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_2)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.DH447));
-    public static final DeferredItem<Item> DL11 = ITEMS.register("dl11",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DL11));
-    public static final DeferredItem<Item> DL18 = ITEMS.register("dl18",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DL18));
-    public static final DeferredItem<Item> DL21 = ITEMS.register("dl21",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 0),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DL21));
-    public static final DeferredItem<Item> DL23 = ITEMS.register("dl23",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.55f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.DL23));
-    public static final DeferredItem<Item> DL44 = ITEMS.register("dl44",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(7, 28f, 2.9f, 16),
-                            FiringMode.SNIPER, new ProjectileWeaponStats(15, 36f, 2.2f, 20))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_2))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> DL11 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DL11, "dl11")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DL18 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DL18, "dl18")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DL21 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DL21, "dl21")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 0)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DL23 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DL23, "dl23")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.55f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DL44 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DL44, "dl44")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 7, 28f, 2.9f, 16)
+                    .stat(FiringMode.SNIPER, 15, 36f, 2.2f, 20)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f,
                             Map.of(FiringMode.SNIPER, 0.35f),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_CROSS)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DL44));
-    public static final DeferredItem<Item> DLS12 = ITEMS.register("dls12",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.CARBINE, WeaponName.DLS12));
-    public static final DeferredItem<Item> DLT15 = ITEMS.register("dlt15",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(2, 1.2f, 3.7f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.55f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.DLT15));
-    public static final DeferredItem<Item> DLT18 = ITEMS.register("dlt18",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(2, 1.2f, 3.7f, 8))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.75f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.DLT18));
-    public static final DeferredItem<Item> DLT19 = ITEMS.register("dlt19",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(2, 0.9f, 2.9f, 9))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.75f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.DLT19));
-    public static final DeferredItem<Item> DLT19D = ITEMS.register("dlt19d",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 10, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(10, 2.5f, 1.4f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.5f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_CROSS))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .switchTime(29)
+                    .build()
+    );
+    public static final DeferredItem<Item> DLS12 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DLS12, "dls12")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DLT15 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DLT15, "dlt15")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 2, 1.2f, 3.7f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.55f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DLT18 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DLT18, "dlt18")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 2, 1.2f, 3.7f, 8)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.75f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DLT19 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DLT19, "dlt19")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 2, 0.9f, 2.9f, 9)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.75f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DLT19D = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DLT19D, "dlt19d")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(10)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 10, 2.5f, 1.4f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_VERT_DOT)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.DLT19D));
-    public static final DeferredItem<Item> DLT19X = ITEMS.register("dlt19x",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 40, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(9, 8f, 1f, 18))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.15f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_VERT_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DLT19X = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DLT19X, "dlt19x")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(40)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 9, 8f, 1f, 18)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CLASSIC_BUBBLED_GREEN)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.DLT19X));
-    public static final DeferredItem<Item> DLT20A = ITEMS.register("dlt20a",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(11, 6.3f, 1.4f, 17))),
-                    new BeamWeaponStats(3.5f),
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BEAM),
-                    ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.5f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CLASSIC_BUBBLED_GREEN))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> DLT20A = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DLT20A, "dlt20a")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 11, 6.3f, 1.4f, 17)
+                    .beam(3.5f)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BEAM)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE_BRACKET, FiringMode.BEAM, ScopeTexture.CIRCLE_BLUE_BRACKET)),
-                    FiringMode.SEMI_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.RIFLE, WeaponName.DLT20A));
-    public static final DeferredItem<Item> DN_BOLT_CASTER = ITEMS.register("dn_bolt_caster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 20))), null,
-                    List.of(FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.6f),
-                    FiringMode.CHARGENSHOOT, AmmoType.IONIZED_TIBANNA, WeaponClassification.DISRUPTOR, WeaponName.DN_BOLT_CASTER));
-    public static final DeferredItem<Item> DP23 = ITEMS.register("dp23",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 13),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.RIFLE, WeaponName.DP23));
-    public static final DeferredItem<Item> DRESSELLIAN_PROJECTILE_RIFLE = ITEMS.register("dressellian_projectile_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.8f, 15, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.65f),
-                    FiringMode.SNIPER, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.DRESSELLIAN_PROJECTILE_RIFLE));
-    public static final DeferredItem<Item> DT12 = ITEMS.register("dt12",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(7, 1.1f, 4.9f, 9))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DT12));
-    public static final DeferredItem<Item> DT15 = ITEMS.register("dt15",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DT15));
-    public static final DeferredItem<Item> DT29 = ITEMS.register("dt29",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 6, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DT29));
-    public static final DeferredItem<Item> DT57 = ITEMS.register("dt57",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 400, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DT57));
-    public static final DeferredItem<Item> DUJ3 = ITEMS.register("duj3",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 400, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DUJ3));
-    public static final DeferredItem<Item> DUL4 = ITEMS.register("dul4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 400, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.DUL4));
-    public static final DeferredItem<Item> DX2 = ITEMS.register("dx2",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 400, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.8f),
-                    FiringMode.CHARGENSHOOT, AmmoType.TIBANNA, WeaponClassification.DISRUPTOR, WeaponName.DX2));
-    public static final DeferredItem<Item> DX13 = ITEMS.register("dx13",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.DX13));
-    public static final DeferredItem<Item> DXR6 = ITEMS.register("dxr6",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.7f),
-                    FiringMode.CHARGENSHOOT, AmmoType.TIBANNA, WeaponClassification.DISRUPTOR, WeaponName.DXR6));
-    public static final DeferredItem<Item> E5 = ITEMS.register("e5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 1.9f, 4f, 6),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E5));
-    public static final DeferredItem<Item> E5_BX = ITEMS.register("e5_bx",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(9, 2f, 3.7f, 12),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E5_BX));
-    public static final DeferredItem<Item> E5_CARBINE = ITEMS.register("e5_carbine",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(9, 2f, 3.7f, 12),
-                            FiringMode.BURST, new ProjectileWeaponStats(9, 2f, 3.7f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.E5_CARBINE));
-    public static final DeferredItem<Item> E5_CE = ITEMS.register("e5_ce",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(8, 2.7f, 3.4f, 13),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(3, 1.5f, 5f, 5))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E5_CE));
-    public static final DeferredItem<Item> E5C = ITEMS.register("e5c",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(2, 0.6f, 5.6f, 4))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.85f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E5C));
-    public static final DeferredItem<Item> E5R = ITEMS.register("e5r",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(2, 0f, 2f, 4))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.25f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE_BRACKET, FiringMode.BEAM, ScopeTexture.CIRCLE_BLUE_BRACKET))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DN_BOLT_CASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DN_BOLT_CASTER, "dn_bolt_caster")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 20)
+                    .firingModes(FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.6f))
+                    .defaultFiringMode(FiringMode.CHARGENSHOOT)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.DISRUPTOR)
+                    .chargeThreshold(19)
+                    .build()
+    );
+    public static final DeferredItem<Item> DP23 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DP23, "dp23")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 13)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DRESSELLIAN_PROJECTILE_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DRESSELLIAN_PROJECTILE_RIFLE, "dressellian_projectile_rifle")
+                    .projectileSpeed(3.8f)
+                    .maxAmmo(15)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.65f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> DT12 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DT12, "dt12")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 7, 1.1f, 4.9f, 9)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DT15 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DT15, "dt15")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DT29 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DT29, "dt29")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(6)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(100)
+                    .build()
+    );
+    public static final DeferredItem<Item> DT57 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DT57, "dt57")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(400)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> DUJ3 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DUJ3, "duj3")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(400)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DUL4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DUL4, "dul4")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(400)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> DX2 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DX2, "dx2")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(400)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.8f))
+                    .defaultFiringMode(FiringMode.CHARGENSHOOT)
+                    .classification(WeaponClassification.DISRUPTOR)
+                    .reloadTime(25)
+                    .chargeThreshold(26)
+                    .build()
+    );
+    public static final DeferredItem<Item> DX13 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DX13, "dx13")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 7)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> DXR6 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.DXR6, "dxr6")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.7f))
+                    .defaultFiringMode(FiringMode.CHARGENSHOOT)
+                    .classification(WeaponClassification.DISRUPTOR)
+                    .reloadTime(25)
+                    .chargeThreshold(60)
+                    .build()
+    );
+    public static final DeferredItem<Item> E5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E5, "e5")
+                    .projectileSpeed(2.1f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 6, 1.9f, 4f, 6)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E5_BX = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E5_BX, "e5_bx")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 9, 2f, 3.7f, 12)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E5_CARBINE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E5_CARBINE, "e5_carbine")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 9, 2f, 3.7f, 12)
+                    .stat(FiringMode.BURST, 9, 2f, 3.7f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E5_CE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E5_CE, "e5_ce")
+                    .projectileSpeed(2.2f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 8, 2.7f, 3.4f, 13)
+                    .stat(FiringMode.FULL_AUTO, 3, 1.5f, 5f, 5)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E5C = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E5C, "e5c")
+                    .projectileSpeed(2.0f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 2, 0.6f, 5.6f, 4)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.85f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E5R = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E5R, "e5r")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 2, 0f, 2f, 4)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_RED_ANGLED_BRACKET)),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.E5R));
-    public static final DeferredItem<Item> E5S = ITEMS.register("e5s",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 4, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 4))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.25f,
+                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_RED_ANGLED_BRACKET))
+                    )
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> E5S = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E5S, "e5s")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(4)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 4)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_YELLOW)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.E5S));
-    public static final DeferredItem<Item> E5T = ITEMS.register("e5t",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E5T));
-    public static final DeferredItem<Item> E10 = ITEMS.register("e10",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8),
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 5))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E10));
-    public static final DeferredItem<Item> E10_5 = ITEMS.register("e10_5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E10_5));
-    public static final DeferredItem<Item> E10R = ITEMS.register("e10r",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.6f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_YELLOW))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> E5T = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E5T, "e5t")
+                    .projectileSpeed(2.8f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E10 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E10, "e10")
+                    .projectileSpeed(2.6f)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 5)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E10_5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E10_5, "e10_5")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 9)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E10R = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E10R, "e10r")
+                    .projectileSpeed(2.8f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.6f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN_REACTOR)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E10R));
-    public static final DeferredItem<Item> E11_CARBINE = ITEMS.register("e11_carbine",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.E11_CARBINE));
-    public static final DeferredItem<Item> E11_RIFLE = ITEMS.register("e11_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(10, 1f, 5f, 13),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(5, 0.8f, 7.8f, 6),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN_REACTOR))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E11_CARBINE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E11_CARBINE, "e11_carbine")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E11_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E11_RIFLE, "e11_rifle")
+                    .projectileSpeed(2.7f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 10, 1f, 5f, 13)
+                    .stat(FiringMode.FULL_AUTO, 5, 0.8f, 7.8f, 6)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE, FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_BLUE)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E11_RIFLE));
-    public static final DeferredItem<Item> E11B = ITEMS.register("e11b",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE, FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_BLUE))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E11B = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E11B, "e11b")
+                    .projectileSpeed(2.7f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 9)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E11B));
-    public static final DeferredItem<Item> E11D = ITEMS.register("e11d",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(7, 2.2f, 2f, 16),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.E11D));
-    public static final DeferredItem<Item> E11P = ITEMS.register("e11p",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(7, 2.2f, 2f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.E11P));
-    public static final DeferredItem<Item> E11S = ITEMS.register("e11s",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.0f, 6, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.2f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E11D = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E11D, "e11d")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 7, 2.2f, 2f, 16)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E11P = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E11P, "e11p")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 7, 2.2f, 2f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> E11S = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E11S, "e11s")
+                    .projectileSpeed(3.0f)
+                    .maxAmmo(6)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.2f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_RED_DOT)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.E11S));
-    public static final DeferredItem<Item> E11T = ITEMS.register("e11t",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.0f, 6, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E11T));
-    public static final DeferredItem<Item> E17D = ITEMS.register("e17d",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.15f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_RED_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> E11T = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E11T, "e11t")
+                    .projectileSpeed(3.0f)
+                    .maxAmmo(6)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E17D = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E17D, "e17d")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CLASSIC_BUBBLED)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.E17D));
-    public static final DeferredItem<Item> E22 = ITEMS.register("e22",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9),
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 6),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 4))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E22));
-    public static final DeferredItem<Item> E44 = ITEMS.register("e44",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.5f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.E44));
-    public static final DeferredItem<Item> E9V = ITEMS.register("e9v",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 19),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.5f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CLASSIC_BUBBLED))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> E22 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E22, "e22")
+                    .projectileSpeed(2.6f)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 9)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 6)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 4)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E44 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E44, "e44")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.5f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> E9V = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.E9V, "e9v")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 19)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_RED_DOT, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_RED_DOT)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNAX, WeaponClassification.RIFLE, WeaponName.E9V));
-    public static final DeferredItem<Item> EC17 = ITEMS.register("ec17",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(5, 1f, 8f, 6),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.EC17));
-    public static final DeferredItem<Item> EE3 = ITEMS.register("ee3",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 300, 2, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(7, 2f, 2.4f, 15),
-                            FiringMode.BURST, new ProjectileWeaponStats(15, 1f, 2.7f, 6))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.65f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_RED_DOT, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_RED_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.TIBANNAX)
+                    .classification(WeaponClassification.RIFLE)
+                    .chargeThreshold(38)
+                    .build()
+    );
+    public static final DeferredItem<Item> EC17 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.EC17, "ec17")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 5, 1f, 8f, 6)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> EE3 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.EE3, "ee3")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(300)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 7, 2f, 2.4f, 15)
+                    .stat(FiringMode.BURST, 15, 1f, 2.7f, 6)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.65f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_TRI_DASH, FiringMode.BURST, ScopeTexture.CIRCLE_GREY_TRI_DASH)),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.EE3));
-    public static final DeferredItem<Item> EE4 = ITEMS.register("ee4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 1, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.7f),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.EE4));
-    public static final DeferredItem<Item> EL5 = ITEMS.register("el5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(5, 1.8f, 4f, 13))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.EL5));
-    public static final DeferredItem<Item> EL244 = ITEMS.register("el244",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(5, 1.8f, 4f, 13))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.65f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.EL244));
-    public static final DeferredItem<Item> ELG3A = ITEMS.register("elg3a",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(5, 1.8f, 4f, 13),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.PISTOL, WeaponName.ELG3A));
-    public static final DeferredItem<Item> EMG2 = ITEMS.register("emg2",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.EMG2));
-    public static final DeferredItem<Item> ESB3 = ITEMS.register("esb3",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 2, 3,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(5, 1.8f, 4f, 13),
-                            FiringMode.BURST, new ProjectileWeaponStats(5, 1.8f, 4f, 13))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.65f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.ESB3));
-//    public static final DeferredItem<Item> EWEB = ITEMS.register("eweb",
-//            () -> new BlasterItem(new Item.Properties().stacksTo(1), 4.0f, 500, 0, 1,
-//                    new EnumMap<>(Map.of(
-//                            FiringMode.FULL_AUTO, new BlasterStats(0, 0f, 0f, 8))), null,
-//                    List.of(FiringMode.FULL_AUTO),
-//                    FiringMode.FULL_AUTO, GasType.TIBANNA, Classification.REPEATER, BlasterName.EWEB));
-    public static final DeferredItem<Item> F2L = ITEMS.register("f2l",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.F2L));
-    public static final DeferredItem<Item> F4L = ITEMS.register("f4l",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 5, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.7f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.F4L));
-    public static final DeferredItem<Item> F38G = ITEMS.register("f38g",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.F38G));
-    public static final DeferredItem<Item> FC1_FLECHETTE_LAUNCHER = ITEMS.register("fc1_flechette_launcher",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 6, 0, 8,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(2, 8f, 12f, 19))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.85f),
-                    FiringMode.SCATTER, AmmoType.FLECHETTE_CAN, WeaponClassification.FLECHETTE, WeaponName.FC1_FLECHETTE_LAUNCHER));
-    public static final DeferredItem<Item> FC29 = ITEMS.register("fc29",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.FC29));
-    public static final DeferredItem<Item> FLITE37 = ITEMS.register("flite37",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.85f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.FLITE37));
-    public static final DeferredItem<Item> FN57 = ITEMS.register("fn57",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.FN57));
-    public static final DeferredItem<Item> FP45 = ITEMS.register("fp45",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 15, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.9f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.FP45));
-//    public static final DeferredItem<Item> FWEB = ITEMS.register("fweb",
-//            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 15, 0, 1,
-//                    new EnumMap<>(Map.of(
-//                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-//                    List.of(FiringMode.FULL_AUTO),
-//                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.FWEB));
-    public static final DeferredItem<Item> FWG5 = ITEMS.register("fwg5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 15, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.FLECHETTE_CAN, WeaponClassification.FLECHETTE, WeaponName.FWG5));
-    public static final DeferredItem<Item> FWG7 = ITEMS.register("fwg7",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 15, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.FLECHETTE_CAN, WeaponClassification.FLECHETTE, WeaponName.FWG7));
-    public static final DeferredItem<Item> G433 = ITEMS.register("g433",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.G433));
-    public static final DeferredItem<Item> GA3R = ITEMS.register("ga3r",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 15, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.GA3R));
-    public static final DeferredItem<Item> GALAAR15 = ITEMS.register("galaar15",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(9, 1.8f, 2.1f, 13))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.SIG, WeaponClassification.CARBINE, WeaponName.GALAAR15));
-    public static final DeferredItem<Item> GALAR90 = ITEMS.register("galar90",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.25f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_TRI_DASH, FiringMode.BURST, ScopeTexture.CIRCLE_GREY_TRI_DASH))
+                    )
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> EE4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.EE4, "ee4")
+                    .projectileSpeed(2.4f)
+                    .burstRate(1)
+                    .scatterShots(1)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.7f))
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> EL5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.EL5, "el5")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 5, 1.8f, 4f, 13)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> EL244 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.EL244, "el244")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 5, 1.8f, 4f, 13)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.65f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> ELG3A = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ELG3A, "elg3a")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 5, 1.8f, 4f, 13)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> EMG2 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.EMG2, "emg2")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> ESB3 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ESB3, "esb3")
+                    .projectileSpeed(2.5f)
+                    .scatterShots(3)
+                    .stat(FiringMode.SEMI_AUTO, 5, 1.8f, 4f, 13)
+                    .stat(FiringMode.BURST, 5, 1.8f, 4f, 13)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.65f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> F2L = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.F2L, "f2l")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> F4L = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.F4L, "f4l")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(5)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.7f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> F38G = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.F38G, "f38g")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> FC1_FLECHETTE_LAUNCHER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.FC1_FLECHETTE_LAUNCHER, "fc1_flechette_launcher")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(6)
+                    .burstRate(0)
+                    .scatterShots(8)
+                    .stat(FiringMode.SCATTER, 2, 8f, 12f, 19)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .ammoType(AmmoType.FLECHETTE_CAN)
+                    .classification(WeaponClassification.FLECHETTE)
+                    .build()
+    );
+    public static final DeferredItem<Item> FC29 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.FC29, "fc29")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> FLITE37 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.FLITE37, "flite37")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SCATTER, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> FN57 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.FN57, "fn57")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> FP45 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.FP45, "fp45")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(15)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.9f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> FWG5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.FWG5, "fwg5")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(15)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.FLECHETTE_CAN)
+                    .classification(WeaponClassification.FLECHETTE)
+                    .build()
+    );
+    public static final DeferredItem<Item> FWG7 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.FWG7, "fwg7")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(15)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.FLECHETTE_CAN)
+                    .classification(WeaponClassification.FLECHETTE)
+                    .build()
+    );
+    public static final DeferredItem<Item> G433 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.G433, "g433")
+                    .projectileSpeed(2.0f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> GA3R = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GA3R, "ga3r")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(15)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> GALAAR15 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GALAAR15, "galaar15")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 9, 1.8f, 2.1f, 13)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SIG)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> GALAR90 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GALAR90, "galar90")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_BLUE_CROSS_3)),
-                    FiringMode.SNIPER, AmmoType.SIG, WeaponClassification.SNIPER, WeaponName.GALAR90));
-    public static final DeferredItem<Item> GE36 = ITEMS.register("ge36",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.0f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.2f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_BLUE_CROSS_3))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.SIG)
+                    .classification(WeaponClassification.SNIPER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> GE36 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GE36, "ge36")
+                    .projectileSpeed(3.0f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.2f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.OCTAGONAL_RED)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.GE36));
-//    public static final DeferredItem<Item> GI9 = ITEMS.register("gi9",
-//            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-//                    new EnumMap<>(Map.of(
-//                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-//                    List.of(FiringMode.SEMI_AUTO),
-//                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.RIFLE, WeaponName.GI9));
-    public static final DeferredItem<Item> GL77 = ITEMS.register("gl77",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.GL77));
-    public static final DeferredItem<Item> GLX_FIRELANCE = ITEMS.register("glx_firelance",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.GLX_FIRELANCE));
-    public static final DeferredItem<Item> GM46 = ITEMS.register("gm46",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.GM46));
-    public static final DeferredItem<Item> GR4_ST = ITEMS.register("gr4_st",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.GR4_ST));
-    public static final DeferredItem<Item> GR13 = ITEMS.register("gr13",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.85f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.GR13));
-    public static final DeferredItem<Item> GRN4 = ITEMS.register("grn4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.GRN4));
-    public static final DeferredItem<Item> GRS1 = ITEMS.register("grs1",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0),
-                            FiringMode.LAUNCHER, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN, FiringMode.LAUNCHER),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.GRS1));
-    public static final DeferredItem<Item> HB9 = ITEMS.register("hb9",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.65f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.HB9));
-    public static final DeferredItem<Item> HF94 = ITEMS.register("hf94",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.75f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.OCTAGONAL_RED))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> GL77 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GL77, "gl77")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> GLX_FIRELANCE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GLX_FIRELANCE, "glx_firelance")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 14)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f))
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> GM46 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GM46, "gm46")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(15)
+                    .chargeThreshold(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> GR4_ST = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GR4_ST, "gr4_st")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> GR13 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GR13, "gr13")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.85f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> GRN4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GRN4, "grn4")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> GRS1 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.GRS1, "grs1")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .stat(FiringMode.LAUNCHER, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN, FiringMode.LAUNCHER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> HB9 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.HB9, "hb9")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.65f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> HF94 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.HF94, "hf94")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.75f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.HF94));
-    public static final DeferredItem<Item> HT9 = ITEMS.register("ht9",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 6),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.HT9));
-    public static final DeferredItem<Item> IB94 = ITEMS.register("ib94",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(5, 1.2f, 2.8f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.IB94));
-    public static final DeferredItem<Item> ION_STUNNER = ITEMS.register("ion_stunner",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 1f),
-                    FiringMode.STUN, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.ION_STUNNER));
-    public static final DeferredItem<Item> IQA11 = ITEMS.register("iqa11",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 7, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.4f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> HT9 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.HT9, "ht9")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 6)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> IB94 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.IB94, "ib94")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 5, 1.2f, 2.8f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> ION_STUNNER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ION_STUNNER, "ion_stunner")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 1f))
+                    .defaultFiringMode(FiringMode.STUN)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> IQA11 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.IQA11, "iqa11")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(7)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.4f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_ORANGE)),
-                    FiringMode.SNIPER, AmmoType.IONIZED_TIBANNA, WeaponClassification.SNIPER, WeaponName.IQA11));
-    public static final DeferredItem<Item> J19_BO_RIFLE = ITEMS.register("j19_bo_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 7, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.J19_BO_RIFLE));
-    public static final DeferredItem<Item> JEZALI_CYCLER_RIFLE = ITEMS.register("jezali_cycler_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.3f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(20, 7f, 2f, 20))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.15f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_ORANGE))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> J19_BO_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.J19_BO_RIFLE, "j19_bo_rifle")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(7)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> JEZALI_CYCLER_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.JEZALI_CYCLER_RIFLE, "jezali_cycler_rifle")
+                    .projectileSpeed(3.3f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 20, 7f, 2f, 20)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_CROSS)),
-                    FiringMode.SNIPER, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.JEZALI_CYCLER_RIFLE));
-    public static final DeferredItem<Item> JND41 = ITEMS.register("jnd41",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.5f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_CROSS))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> JND41 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.JND41, "jnd41")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GOLD_V, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_GOLD_V)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.JND41));
-    public static final DeferredItem<Item> K13 = ITEMS.register("k13",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.K13));
-    public static final DeferredItem<Item> K16_BRYAR_PISTOL = ITEMS.register("k16_bryar_pistol",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.CHARGENSHOOTONRELEASE, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.K16_BRYAR_PISTOL));
-    public static final DeferredItem<Item> K63R = ITEMS.register("k63r",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.K63R));
-    public static final DeferredItem<Item> KA74 = ITEMS.register("ka74",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 5))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GOLD_V, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_GOLD_V))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .chargeThreshold(36)
+                    .build()
+    );
+    public static final DeferredItem<Item> K13 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.K13, "k13")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> K16_BRYAR_PISTOL = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.K16_BRYAR_PISTOL, "k16_bryar_pistol")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .stat(FiringMode.CHARGENSHOOTONRELEASE, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> K63R = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.K63R, "k63r")
+                    .projectileSpeed(2.2f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> KA74 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.KA74, "ka74")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 5)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN_2, FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_GREEN_2)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.KA74));
-    public static final DeferredItem<Item> KINETICBLAST = ITEMS.register("kineticblast",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.KINETICBLAST));
-    public static final DeferredItem<Item> KISTEER_1284 = ITEMS.register("kisteer_1284",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.25f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN_2, FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_GREEN_2))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> KINETICBLAST = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.KINETICBLAST, "kineticblast")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> KISTEER_1284 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.KISTEER_1284, "kisteer_1284")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_RED_BRACKET)),
-                    FiringMode.SNIPER, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.KISTEER_1284));
-    public static final DeferredItem<Item> KL9 = ITEMS.register("kl9",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.KL9));
-    public static final DeferredItem<Item> KM9 = ITEMS.register("km9",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.9f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.KM9));
-    public static final DeferredItem<Item> KUEGET_LN21 = ITEMS.register("kueget_ln21",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.KUEGET_LN21));
-    public static final DeferredItem<Item> KYD21 = ITEMS.register("kyd21",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 75, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.KYD21));
-    public static final DeferredItem<Item> L5 = ITEMS.register("l5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.L5));
-    public static final DeferredItem<Item> L60 = ITEMS.register("l60",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.L60));
-    public static final DeferredItem<Item> LJ40 = ITEMS.register("lj40",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.LJ40));
-    public static final DeferredItem<Item> LJ50 = ITEMS.register("lj50",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.LJ50));
-    public static final DeferredItem<Item> LL30 = ITEMS.register("ll30",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(8, 0.8f, 2f, 16),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.LL30));
-    public static final DeferredItem<Item> LP_LAW = ITEMS.register("lp_law",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(8, 0.8f, 2f, 6))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.LP_LAW));
-    public static final DeferredItem<Item> LS150 = ITEMS.register("ls150",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(8, 0.8f, 2f, 16))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.75f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.LS150));
-    public static final DeferredItem<Item> LV7C = ITEMS.register("lv7c",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 20))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.LV7C));
-    public static final DeferredItem<Item> LW896 = ITEMS.register("lw896",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.LW896));
-    public static final DeferredItem<Item> M12 = ITEMS.register("m12",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.M12));
-    public static final DeferredItem<Item> M32 = ITEMS.register("m32",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.8f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.M32));
-    public static final DeferredItem<Item> M41 = ITEMS.register("m41",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 400, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.75f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.M41));
-    public static final DeferredItem<Item> M45 = ITEMS.register("m45",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.65f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_RED_BRACKET_THERMAL))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> KL9 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.KL9, "kl9")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> KM9 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.KM9, "km9")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.9f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> KUEGET_LN21 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.KUEGET_LN21, "kueget_ln21")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> KYD21 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.KYD21, "kyd21")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(75)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> L5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.L5, "l5")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> L60 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.L60, "l60")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> LJ40 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.LJ40, "lj40")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> LJ50 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.LJ50, "lj50")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> LL30 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.LL30, "ll30")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 8, 0.8f, 2f, 16)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> LP_LAW = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.LP_LAW, "lp_law")
+                    .projectileSpeed(2.7f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 8, 0.8f, 2f, 6)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> LS150 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.LS150, "ls150")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 8, 0.8f, 2f, 16)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.75f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> LV7C = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.LV7C, "lv7c")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 20)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .chargeThreshold(4)
+                    .build()
+    );
+    public static final DeferredItem<Item> LW896 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.LW896, "lw896")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> M12 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.M12, "m12")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> M32 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.M32, "m32")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 9)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.8f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> M41 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.M41, "m41")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(400)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 9)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.75f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> M45 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.M45, "m45")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.65f,
                             Map.of(),
-                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_BLUE)),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.M45));
-    public static final DeferredItem<Item> M55 = ITEMS.register("m55",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.8f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.M55));
-    public static final DeferredItem<Item> M61 = ITEMS.register("m61",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.85f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.M61));
-    public static final DeferredItem<Item> MARG_MCM = ITEMS.register("marg_mcm",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.MARG_MCM));
-    public static final DeferredItem<Item> MK3T = ITEMS.register("mk3t",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 2f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.MK3T));
-    public static final DeferredItem<Item> MK_II_PALADIN = ITEMS.register("mk_ii_paladin",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.65f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.RIFLE, WeaponName.MK_II_PALADIN));
-    public static final DeferredItem<Item> MODEL_57 = ITEMS.register("model_57",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.MODEL_57));
-//    public static final DeferredItem<Item> MORTAR = ITEMS.register("mortar",
-//            () -> new BlasterItem(new Item.Properties().stacksTo(1), 3.0f, 300, 0, 1,
-//                    new EnumMap<>(Map.of(
-//                            FiringMode.SEMI_AUTO, new BlasterStats(0, 0f, 0f, 15))), null,
-//                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-//                    FiringMode.SEMI_AUTO, GasType.IONIZED_TIBANNA, Classification.PISTOL, BlasterName.MORTAR));
-    public static final DeferredItem<Item> MOTTO_MK_4 = ITEMS.register("motto_mk_4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.REPULSE, new ProjectileWeaponStats(0, 0f, 0f, 1),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.REPULSE, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.MOTTO_MK_4));
-    public static final DeferredItem<Item> MSD32 = ITEMS.register("msd32",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 20))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.DISRUPTOR, WeaponName.MSD32));
-    public static final DeferredItem<Item> MW20_BRYAR_PISTOL = ITEMS.register("mw20_bryar_pistol",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.CHARGENSHOOTONRELEASE, new ProjectileWeaponStats(0, 0f, 0f, 1),
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE, FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.MW20_BRYAR_PISTOL));
-    public static final DeferredItem<Item> MWC35C = ITEMS.register("mwc35c",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.MWC35C));
-    public static final DeferredItem<Item> NEO_CRUSADER_RIFLE = ITEMS.register("neo_crusader_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(7, 15f, 3.8f, 17),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(7, 23f, 3.2f, 20))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.7f,
+                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.CIRCLE_BLUE))
+                    )
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> M55 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.M55, "m55")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.8f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> M61 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.M61, "m61")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.85f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> MARG_MCM = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.MARG_MCM, "marg_mcm")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> MK3T = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.MK3T, "mk3t")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 2f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> MK_II_PALADIN = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.MK_II_PALADIN, "mk_ii_paladin")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.65f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> MODEL_57 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.MODEL_57, "model_57")
+                    .projectileSpeed(2.7f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> MOTTO_MK_4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.MOTTO_MK_4, "motto_mk_4")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.REPULSE, 0, 0f, 0f, 1)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.REPULSE, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> MSD32 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.MSD32, "msd32")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 20)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.DISRUPTOR)
+                    .reloadTime(15)
+                    .chargeThreshold(82)
+                    .build()
+    );
+    public static final DeferredItem<Item> MW20_BRYAR_PISTOL = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.MW20_BRYAR_PISTOL, "mw20_bryar_pistol")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.CHARGENSHOOTONRELEASE, 0, 0f, 0f, 1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE, FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .switchTime(16)
+                    .chargeThreshold(27)
+                    .build()
+    );
+    public static final DeferredItem<Item> MWC35C = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.MWC35C, "mwc35c")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 9)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> NEO_CRUSADER_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.NEO_CRUSADER_RIFLE, "neo_crusader_rifle")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 7, 15f, 3.8f, 17)
+                    .stat(FiringMode.CHARGENSHOOT, 7, 23f, 3.2f, 20)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.7f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_GREY_DOT)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.NEO_CRUSADER_RIFLE));
-    public static final DeferredItem<Item> NIGHT_STINGER = ITEMS.register("night_stinger",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 5, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 19),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SNIPER, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.25f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT, FiringMode.CHARGENSHOOT, ScopeTexture.CIRCLE_GREY_DOT))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .reloadTime(25)
+                    .chargeThreshold(35)
+                    .build()
+    );
+    public static final DeferredItem<Item> NIGHT_STINGER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.NIGHT_STINGER, "night_stinger")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(5)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 19)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SNIPER, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_RED_THERMAL, FiringMode.CHARGENSHOOT, ScopeTexture.OVAL_LONG_RED_THERMAL)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.NIGHT_STINGER));
-    public static final DeferredItem<Item> NOSLO19 = ITEMS.register("noslo19",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 5, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.SNIPER, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.2f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SLUGTHROWER, WeaponName.NOSLO19));
-    public static final DeferredItem<Item> NT242 = ITEMS.register("nt242",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.0f, 75, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 18))),
-                    new BeamWeaponStats(7f),
-                    List.of(FiringMode.SNIPER, FiringMode.BEAM),
-                    ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.15f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.OVAL_LONG_RED_THERMAL, FiringMode.CHARGENSHOOT, ScopeTexture.OVAL_LONG_RED_THERMAL))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .chargeThreshold(35)
+                    .build()
+    );
+    public static final DeferredItem<Item> NOSLO19 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.NOSLO19, "noslo19")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(5)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.2f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> NT242 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.NT242, "nt242")
+                    .projectileSpeed(3.0f)
+                    .maxAmmo(75)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 18)
+                    .beam(7f)
+                    .firingModes(FiringMode.SNIPER, FiringMode.BEAM)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.15f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CLASSIC_BUBBLED_GREEN, FiringMode.BEAM, ScopeTexture.CLASSIC_BUBBLED_GREEN)),
-                    FiringMode.SNIPER, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.SNIPER, WeaponName.NT242));
-    public static final DeferredItem<Item> OK98 = ITEMS.register("ok98",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 1000, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CLASSIC_BUBBLED_GREEN, FiringMode.BEAM, ScopeTexture.CLASSIC_BUBBLED_GREEN))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.SNIPER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> OK98 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.OK98, "ok98")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(1000)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_BLUE)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.OK98));
-    public static final DeferredItem<Item> OUTLAND_RIFLE = ITEMS.register("outland_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 8, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.25f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_BLUE))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> OUTLAND_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.OUTLAND_RIFLE, "outland_rifle")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(8)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_CROSS)),
-                    FiringMode.SNIPER, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.OUTLAND_RIFLE));
-    public static final DeferredItem<Item> P224 = ITEMS.register("p224",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.P224));
-    public static final DeferredItem<Item> PANIC_PISTOL = ITEMS.register("panic_pistol",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 5, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.9f),
-                    FiringMode.SEMI_AUTO, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.PANIC_PISTOL));
-    public static final DeferredItem<Item> PD44 = ITEMS.register("pd44",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.PD44));
-    public static final DeferredItem<Item> PK23 = ITEMS.register("pk23",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 40, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 19))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.25f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_CROSS))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> P224 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.P224, "p224")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> PANIC_PISTOL = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.PANIC_PISTOL, "panic_pistol")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(5)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 9)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.9f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> PD44 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.PD44, "pd44")
+                    .projectileSpeed(2.9f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 6)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> PK23 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.PK23, "pk23")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(40)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 19)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.PK23));
-    public static final DeferredItem<Item> POWER_5 = ITEMS.register("power_5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.CHARGENSHOOTONRELEASE, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.POWER_5));
-    public static final DeferredItem<Item> PR9 = ITEMS.register("pr9",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.4f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.PR9));
-    public static final DeferredItem<Item> PRD8 = ITEMS.register("prd8",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.PRD8));
-    public static final DeferredItem<Item> PRD58 = ITEMS.register("prd58",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 9))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.6f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.PRD58));
-    public static final DeferredItem<Item> PRD62 = ITEMS.register("prd62",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.PRD62));
-    public static final DeferredItem<Item> PRECISIONX = ITEMS.register("precisionx",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.15f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.PRECISIONX));
-    public static final DeferredItem<Item> Q2 = ITEMS.register("q2",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(11, 1.3f, 6f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.Q2));
-    public static final DeferredItem<Item> QUARREN_RIFLE = ITEMS.register("quarren_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.QUARREN_RIFLE));
-    public static final DeferredItem<Item> R88 = ITEMS.register("r88",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.REPULSE, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0),
-                            FiringMode.LAUNCHER, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.REPULSE, FiringMode.STUN, FiringMode.LAUNCHER),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.R88));
-    public static final DeferredItem<Item> RD2B = ITEMS.register("rd2b",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.9f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RD2B));
-    public static final DeferredItem<Item> RD6 = ITEMS.register("rd6",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.9f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RD6));
-    public static final DeferredItem<Item> RECIPROCATING_QUAD_BLASTER_CANNON = ITEMS.register("reciprocating_quad_blaster_cannon",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.9f),
-                    FiringMode.FULL_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.REPEATER, WeaponName.RECIPROCATING_QUAD_BLASTER_CANNON));
-    public static final DeferredItem<Item> RELBY_K23 = ITEMS.register("relby_k23",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RELBY_K23));
-    public static final DeferredItem<Item> RELBY_K25 = ITEMS.register("relby_k25",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.BURST, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.5f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> POWER_5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.POWER_5, "power_5")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.CHARGENSHOOTONRELEASE, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOTONRELEASE)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .chargeThreshold(32)
+                    .build()
+    );
+    public static final DeferredItem<Item> PR9 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.PR9, "pr9")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.4f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> PRD8 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.PRD8, "prd8")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 6)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> PRD58 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.PRD58, "prd58")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 9)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.6f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> PRD62 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.PRD62, "prd62")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> PRECISIONX = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.PRECISIONX, "precisionx")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.15f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> Q2 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.Q2, "q2")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 11, 1.3f, 6f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> QUARREN_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.QUARREN_RIFLE, "quarren_rifle")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> R88 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.R88, "r88")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.REPULSE, 0, 0f, 0f, 15)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .stat(FiringMode.LAUNCHER, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.REPULSE, FiringMode.STUN, FiringMode.LAUNCHER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> RD2B = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RD2B, "rd2b")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.9f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> RD6 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RD6, "rd6")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.9f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> RECIPROCATING_QUAD_BLASTER_CANNON = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RECIPROCATING_QUAD_BLASTER_CANNON, "reciprocating_quad_blaster_cannon")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.9f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> RELBY_K23 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RELBY_K23, "relby_k23")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RELBY_K25 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RELBY_K25, "relby_k25")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .stat(FiringMode.BURST, 0, 0f, 0f, 12)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.5f,
                             Map.of(FiringMode.SEMI_AUTO, 0.75f),
-                            Map.of()),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.RELBY_K25));
-    public static final DeferredItem<Item> RELBY_V10 = ITEMS.register("relby_v10",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.CHARGENSHOOTONRELEASE, new ProjectileWeaponStats(0, 0f, 0f, 22),
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 18),
-                            FiringMode.LAUNCHER, new ProjectileWeaponStats(0, 0f, 0f, 4))), null,
-                    List.of(FiringMode.CHARGENSHOOTONRELEASE, FiringMode.SNIPER, FiringMode.LAUNCHER),
-                    ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.2f,
+                            Map.of())
+                    )
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.RIFLE)
+                    .chargeThreshold(47)
+                    .build()
+    );
+    public static final DeferredItem<Item> RELBY_V10 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RELBY_V10, "relby_v10")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.CHARGENSHOOTONRELEASE, 0, 0f, 0f, 22)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 18)
+                    .stat(FiringMode.LAUNCHER, 0, 0f, 0f, 4)
+                    .firingModes(FiringMode.CHARGENSHOOTONRELEASE, FiringMode.SNIPER, FiringMode.LAUNCHER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.2f,
                             Map.of(FiringMode.CHARGENSHOOTONRELEASE, 0.15f, FiringMode.LAUNCHER, 0.8f),
-                            Map.of(FiringMode.CHARGENSHOOTONRELEASE, ScopeTexture.CIRCLE_GREEN_REACTOR, FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_REACTOR)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.RELBY_V10));
-    public static final DeferredItem<Item> RENEGADE = ITEMS.register("renegade",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RENEGADE));
-    public static final DeferredItem<Item> RG4D = ITEMS.register("rg4d",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 50, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RG4D));
-    public static final DeferredItem<Item> RIG420 = ITEMS.register("rig420",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RIG420));
-    public static final DeferredItem<Item> RK2P = ITEMS.register("rk2p",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 13))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RK2P));
-    public static final DeferredItem<Item> RK3 = ITEMS.register("rk3",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 75, 2, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(4, 0.9f, 3.6f, 9),
-                            FiringMode.BURST, new ProjectileWeaponStats(12, 1.1f, 4.2f, 4),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RK3));
-    public static final DeferredItem<Item> RLR_MK_II = ITEMS.register("rlr_mk_ii",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 13),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RLR_MK_II));
-    public static final DeferredItem<Item> RM7 = ITEMS.register("rm7",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RM7));
-    public static final DeferredItem<Item> RM_1P = ITEMS.register("rm_1p",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RM_1P));
-    public static final DeferredItem<Item> RSKF44 = ITEMS.register("rskf44",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.RSKF44));
-    public static final DeferredItem<Item> RT97C = ITEMS.register("rt97c",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(2, 0.9f, 4.5f, 5))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.6f,
+                            Map.of(FiringMode.CHARGENSHOOTONRELEASE, ScopeTexture.CIRCLE_GREEN_REACTOR, FiringMode.SNIPER, ScopeTexture.CIRCLE_GREEN_REACTOR))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .reloadTime(16)
+                    .reloadTime(FiringMode.LAUNCHER, 18)
+                    .chargeThreshold(17)
+                    .build()
+    );
+    public static final DeferredItem<Item> RENEGADE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RENEGADE, "renegade")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RG4D = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RG4D, "rg4d")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(50)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RIG420 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RIG420, "rig420")
+                    .projectileSpeed(2.5f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RK2P = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RK2P, "rk2p")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 13)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RK3 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RK3, "rk3")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(75)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 4, 0.9f, 3.6f, 9)
+                    .stat(FiringMode.BURST, 12, 1.1f, 4.2f, 4)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RLR_MK_II = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RLR_MK_II, "rlr_mk_ii")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 13)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RM7 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RM7, "rm7")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RM_1P = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RM_1P, "rm_1p")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RSKF44 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RSKF44, "rskf44")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> RT97C = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.RT97C, "rt97c")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 2, 0.9f, 4.5f, 5)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.6f,
                             Map.of(),
-                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.CLASSIC_BUBBLED)),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.RT97C));
-    public static final DeferredItem<Item> S2S = ITEMS.register("s2s",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(2, 0.9f, 4.5f, 5))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.9f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.S2S));
-    public static final DeferredItem<Item> S5 = ITEMS.register("s5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 13),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.PISTOL, WeaponName.S5));
-    public static final DeferredItem<Item> S3_MK_5 = ITEMS.register("s3_mk_5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.S3_MK_5));
-    public static final DeferredItem<Item> S195 = ITEMS.register("s195",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.S195));
-    public static final DeferredItem<Item> SACROS_K11 = ITEMS.register("sacros_k11",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.SIG, WeaponClassification.PISTOL, WeaponName.SACROS_K11));
-    public static final DeferredItem<Item> SATINES_LAMENT = ITEMS.register("satines_lament",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 2, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 3f, 5.2f, 17),
-                            FiringMode.BURST, new ProjectileWeaponStats(10, 2f, 7.5f, 7),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(6, 7f, 4.1f, 20),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.CHARGENSHOOT, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SATINES_LAMENT));
-    public static final DeferredItem<Item> SE14C = ITEMS.register("se14c",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 200, 2, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(3, 0.6f, 5.1f, 7))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.75f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.SE14C));
-    public static final DeferredItem<Item> SE14R = ITEMS.register("se14r",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 400, 2, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(8, 1.5f, 4f, 9),
-                            FiringMode.BURST, new ProjectileWeaponStats(16, 0.7f, 6.4f, 6),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SE14R));
-    public static final DeferredItem<Item> SE9V = ITEMS.register("se9v",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SE9V));
-    public static final DeferredItem<Item> SEDGLEYS_MK_5 = ITEMS.register("sedgleys_mk_5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SEDGLEYS_MK_5));
-    public static final DeferredItem<Item> SEL3 = ITEMS.register("sel3",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SEL3));
-    public static final DeferredItem<Item> SER5 = ITEMS.register("ser5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 17))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.5f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.SER5));
-    public static final DeferredItem<Item> SETTLERS_STUN = ITEMS.register("settlers_stun",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 1f),
-                    FiringMode.STUN, AmmoType.IONIZED_TIBANNA, WeaponClassification.PISTOL, WeaponName.SETTLERS_STUN));
-    public static final DeferredItem<Item> SHARD3A = ITEMS.register("shard3a",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SHARD3A));
-    public static final DeferredItem<Item> SK32 = ITEMS.register("sk32",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.MAGNETIZED_SIG, WeaponClassification.PISTOL, WeaponName.SK32));
-    public static final DeferredItem<Item> SNUB_BLASTER = ITEMS.register("snub_blaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SNUB_BLASTER));
-    public static final DeferredItem<Item> SNUB_SCATTER = ITEMS.register("snub_scatter",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.85f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.SNUB_SCATTER));
-    public static final DeferredItem<Item> SNUBBLE = ITEMS.register("snubble",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.CARBINE, WeaponName.SNUBBLE));
-    public static final DeferredItem<Item> SONIC_BLASTER = ITEMS.register("sonic_blaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.RIFLE, WeaponName.SONIC_BLASTER));
-    public static final DeferredItem<Item> SONIC_STUNNER = ITEMS.register("sonic_stunner",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.PISTOL, WeaponName.SONIC_STUNNER));
-    public static final DeferredItem<Item> SS410 = ITEMS.register("ss410",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.SS410));
-    public static final DeferredItem<Item> SWE1 = ITEMS.register("swe1",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 11))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.CARBINE, WeaponName.SWE1));
-    public static final DeferredItem<Item> SWE2 = ITEMS.register("swe2",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.1f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.SWE2));
-    public static final DeferredItem<Item> SX21 = ITEMS.register("sx21",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 150, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 7f, 6))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.85f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.SX21));
-    public static final DeferredItem<Item> T4W1 = ITEMS.register("t4w1",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.T4W1));
-    public static final DeferredItem<Item> T6 = ITEMS.register("t6",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 25, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.T6));
-    public static final DeferredItem<Item> T7_ION_DISRUPTOR = ITEMS.register("t7_ion_disruptor",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 30, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 25))), null,
-                    List.of(FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.6f),
-                    FiringMode.CHARGENSHOOT, AmmoType.TIBANNA, WeaponClassification.DISRUPTOR, WeaponName.T7_ION_DISRUPTOR));
-    public static final DeferredItem<Item> T9K7 = ITEMS.register("t9k7",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 4))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.T9K7));
-    public static final DeferredItem<Item> T21 = ITEMS.register("t21",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 150, 3, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.BURST, new ProjectileWeaponStats(14, 1f, 2f, 13))), null,
-                    List.of(FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.75f),
-                    FiringMode.BURST, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.T21));
-    public static final DeferredItem<Item> T21B = ITEMS.register("t21b",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(10, 2.3f, 1.4f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.5f,
+                            Map.of(FiringMode.FULL_AUTO, ScopeTexture.CLASSIC_BUBBLED))
+                    )
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> S2S = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.S2S, "s2s")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 2, 0.9f, 4.5f, 5)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.9f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> S5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.S5, "s5")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 13)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> S3_MK_5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.S3_MK_5, "s3_mk_5")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> S195 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.S195, "s195")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SACROS_K11 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SACROS_K11, "sacros_k11")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SIG)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SATINES_LAMENT = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SATINES_LAMENT, "satines_lament")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 6, 3f, 5.2f, 17)
+                    .stat(FiringMode.BURST, 10, 2f, 7.5f, 7)
+                    .stat(FiringMode.CHARGENSHOOT, 6, 7f, 4.1f, 20)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.CHARGENSHOOT, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .chargeThreshold(26)
+                    .build()
+    );
+    public static final DeferredItem<Item> SE14C = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SE14C, "se14c")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(200)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 3, 0.6f, 5.1f, 7)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.75f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SE14R = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SE14R, "se14r")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(400)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 8, 1.5f, 4f, 9)
+                    .stat(FiringMode.BURST, 16, 0.7f, 6.4f, 6)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> SE9V = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SE9V, "se9v")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SEDGLEYS_MK_5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SEDGLEYS_MK_5, "sedgleys_mk_5")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SEL3 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SEL3, "sel3")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> SER5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SER5, "ser5")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 17)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.HILL, 0.5f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> SETTLERS_STUN = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SETTLERS_STUN, "settlers_stun")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 1f))
+                    .defaultFiringMode(FiringMode.STUN)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SHARD3A = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SHARD3A, "shard3a")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SK32 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SK32, "sk32")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.MAGNETIZED_SIG)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .chargeThreshold(17)
+                    .build()
+    );
+    public static final DeferredItem<Item> SNUB_BLASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SNUB_BLASTER, "snub_blaster")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SNUB_SCATTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SNUB_SCATTER, "snub_scatter")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .stat(FiringMode.SCATTER, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> SNUBBLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SNUBBLE, "snubble")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.CARBINE)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SONIC_BLASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SONIC_BLASTER, "sonic_blaster")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SONIC_STUNNER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SONIC_STUNNER, "sonic_stunner")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SS410 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SS410, "ss410")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SWE1 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SWE1, "swe1")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 11)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.CARBINE)
+                    .build()
+    );
+    public static final DeferredItem<Item> SWE2 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SWE2, "swe2")
+                    .projectileSpeed(2.1f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> SX21 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SX21, "sx21")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .stat(FiringMode.SCATTER, 0, 0f, 7f, 6)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_CONCENTRIC, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> T4W1 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.T4W1, "t4w1")
+                    .projectileSpeed(2.2f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> T6 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.T6, "t6")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(25)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> T7_ION_DISRUPTOR = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.T7_ION_DISRUPTOR, "t7_ion_disruptor")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(30)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 25)
+                    .firingModes(FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_CROSS, 0.6f))
+                    .defaultFiringMode(FiringMode.CHARGENSHOOT)
+                    .classification(WeaponClassification.DISRUPTOR)
+                    .reloadTime(25)
+                    .chargeThreshold(67)
+                    .build()
+    );
+    public static final DeferredItem<Item> T9K7 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.T9K7, "t9k7")
+                    .projectileSpeed(2.4f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 4)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> T21 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.T21, "t21")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(150)
+                    .burstRate(3)
+                    .scatterShots(1)
+                    .stat(FiringMode.BURST, 14, 1f, 2f, 13)
+                    .firingModes(FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.75f))
+                    .defaultFiringMode(FiringMode.BURST)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> T21B = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.T21B, "t21b")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 10, 2.3f, 1.4f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_LONG_RED_ARROW)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.T21B));
-    public static final DeferredItem<Item> TG446 = ITEMS.register("tg446",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(10, 2.3f, 1.4f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.TG446));
-    public static final DeferredItem<Item> THUNDERBLASTER = ITEMS.register("thunderblaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 150, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(10, 2.3f, 1.4f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.5f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.THUNDERBLASTER));
-    public static final DeferredItem<Item> TL40 = ITEMS.register("tl40",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.LAUNCHER, new ProjectileWeaponStats(0, 0f, 0f, 4))), null,
-                    List.of(FiringMode.LAUNCHER),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.8f),
-                    FiringMode.LAUNCHER, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.TL40));
-    public static final DeferredItem<Item> TL50 = ITEMS.register("tl50",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 4),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
-                    List.of(FiringMode.FULL_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.75f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.TL50));
-    public static final DeferredItem<Item> UMBARAN_BLASTER = ITEMS.register("umbaran_blaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.PISTOL, WeaponName.UMBARAN_BLASTER));
-    public static final DeferredItem<Item> UTK3 = ITEMS.register("utk3",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.UTK3));
-    public static final DeferredItem<Item> V13 = ITEMS.register("v13",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 4))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.V13));
-    public static final DeferredItem<Item> V850_MK = ITEMS.register("v850_mk",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 14, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.15f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.V850_MK));
-    public static final DeferredItem<Item> VALKEN38X = ITEMS.register("valken38x",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.8f, 14, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.25f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_LONG_RED_ARROW))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> TG446 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.TG446, "tg446")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 10, 2.3f, 1.4f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRIANGLE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> THUNDERBLASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.THUNDERBLASTER, "thunderblaster")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(150)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 10, 2.3f, 1.4f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE_DASH, 0.5f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> TL40 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.TL40, "tl40")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.LAUNCHER, 0, 0f, 0f, 4)
+                    .firingModes(FiringMode.LAUNCHER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_SOFT_FOCUS, 0.8f))
+                    .defaultFiringMode(FiringMode.LAUNCHER)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> TL50 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.TL50, "tl50")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 4)
+                    .stat(FiringMode.CHARGENSHOOT, 0, 0f, 0f, 6)
+                    .firingModes(FiringMode.FULL_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.75f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .chargeThreshold(29)
+                    .build()
+    );
+    public static final DeferredItem<Item> UMBARAN_BLASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.UMBARAN_BLASTER, "umbaran_blaster")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> UTK3 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.UTK3, "utk3")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> V13 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.V13, "v13")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 4)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> V850_MK = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.V850_MK, "v850_mk")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(14)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.15f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> VALKEN38X = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.VALKEN38X, "valken38x")
+                    .projectileSpeed(2.8f)
+                    .maxAmmo(14)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_BLUE)),
-                    FiringMode.SNIPER, AmmoType.IONIZED_TIBANNA, WeaponClassification.SNIPER, WeaponName.VALKEN38X));
-    public static final DeferredItem<Item> VANGUARD_SCATTER = ITEMS.register("vanguard_scatter",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.4f, 30, 0, 5,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 8f, 6))), null,
-                    List.of(FiringMode.SCATTER),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.VANGUARD_SCATTER));
-    public static final DeferredItem<Item> VERPINE_SHATTER_RIFLE = ITEMS.register("verpine_shatter_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.2f),
-                    FiringMode.SEMI_AUTO, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.VERPINE_SHATTER_RIFLE));
-    public static final DeferredItem<Item> VERPINE_SIDEARM = ITEMS.register("verpine_sidearm",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.STEEL_SLUG, WeaponClassification.SLUGTHROWER, WeaponName.VERPINE_SIDEARM));
-    public static final DeferredItem<Item> VILMARHS_REVENGE = ITEMS.register("vilmarhs_revenge",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.VILMARHS_REVENGE));
-    public static final DeferredItem<Item> VM19 = ITEMS.register("vm19",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.VM19));
-    public static final DeferredItem<Item> VT20 = ITEMS.register("vt20",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.VT20));
-    public static final DeferredItem<Item> VULK_TAU623_ROTARY = ITEMS.register("vulk_tau623_rotary",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 5))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.9f),
-                    FiringMode.FULL_AUTO, AmmoType.TIBANNA, WeaponClassification.REPEATER, WeaponName.VULK_TAU623_ROTARY));
-    public static final DeferredItem<Item> W50S = ITEMS.register("w50s",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.9f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.W50S));
-    public static final DeferredItem<Item> W90 = ITEMS.register("w90",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.W90));
-    public static final DeferredItem<Item> W210 = ITEMS.register("w210",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 8))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.W210));
-    public static final DeferredItem<Item> W310 = ITEMS.register("w310_blaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.W310));
-    public static final DeferredItem<Item> W340LM = ITEMS.register("w340lm",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.W340LM));
-    public static final DeferredItem<Item> WEEQUAY_LANCE = ITEMS.register("weequay_lance",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.9f, 10, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.25f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY_BLUE))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> VANGUARD_SCATTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.VANGUARD_SCATTER, "vanguard_scatter")
+                    .projectileSpeed(2.4f)
+                    .maxAmmo(30)
+                    .burstRate(0)
+                    .stat(FiringMode.SCATTER, 0, 0f, 8f, 6)
+                    .firingModes(FiringMode.SCATTER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> VERPINE_SHATTER_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.VERPINE_SHATTER_RIFLE, "verpine_shatter_rifle")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TEE, 0.2f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .build()
+    );
+    public static final DeferredItem<Item> VERPINE_SIDEARM = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.VERPINE_SIDEARM, "verpine_sidearm")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.STEEL_SLUG)
+                    .classification(WeaponClassification.SLUGTHROWER)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> VILMARHS_REVENGE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.VILMARHS_REVENGE, "vilmarhs_revenge")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> VM19 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.VM19, "vm19")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> VT20 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.VT20, "vt20")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> VULK_TAU623_ROTARY = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.VULK_TAU623_ROTARY, "vulk_tau623_rotary")
+                    .projectileSpeed(2.3f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 5)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.9f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> W50S = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.W50S, "w50s")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.9f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> W90 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.W90, "w90")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> W210 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.W210, "w210")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 8)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.BOWL, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> W310 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.W310, "w310_blaster")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> W340LM = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.W340LM, "w340lm")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> WEEQUAY_LANCE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WEEQUAY_LANCE, "weequay_lance")
+                    .projectileSpeed(2.9f)
+                    .maxAmmo(10)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.25f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_YELLOW)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.WEEQUAY_LANCE));
-    public static final DeferredItem<Item> WEEQUAY_PISTOL = ITEMS.register("weequay_pistol",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.WEEQUAY_PISTOL));
-    public static final DeferredItem<Item> WEEQUAY_RIFLE = ITEMS.register("weequay_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 3.0f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 18))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.2f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_YELLOW))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> WEEQUAY_PISTOL = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WEEQUAY_PISTOL, "weequay_pistol")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> WEEQUAY_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WEEQUAY_RIFLE, "weequay_rifle")
+                    .projectileSpeed(3.0f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 18)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.MORSE, 0.2f,
                             Map.of(),
-                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY)),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.WEEQUAY_RIFLE));
-    public static final DeferredItem<Item> WESTAR_20 = ITEMS.register("westar_20",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.WESTAR_20));
-    public static final DeferredItem<Item> WESTAR_33 = ITEMS.register("westar_33",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 15))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.WESTAR_33));
-    public static final DeferredItem<Item> WESTAR_34 = ITEMS.register("westar_34",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(13, 2.4f, 4f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.WESTAR_34));
-    public static final DeferredItem<Item> WESTAR_35 = ITEMS.register("westar_35",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(8, 2f, 2f, 17),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(4, 1.5f, 3.7f, 17),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.SIG, WeaponClassification.PISTOL, WeaponName.WESTAR_35));
-    public static final DeferredItem<Item> WESTAR2L = ITEMS.register("westar2l",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 14))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.WESTAR2L));
-    public static final DeferredItem<Item> WESTARE9 = ITEMS.register("westare9",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.7f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 16))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.7f,
+                            Map.of(FiringMode.SNIPER, ScopeTexture.CIRCLE_GREY))
+                    )
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTAR_20 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTAR_20, "westar_20")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS_SQUARE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTAR_33 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTAR_33, "westar_33")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 15)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTAR_34 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTAR_34, "westar_34")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 13, 2.4f, 4f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTAR_35 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTAR_35, "westar_35")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 8, 2f, 2f, 17)
+                    .stat(FiringMode.FULL_AUTO, 4, 1.5f, 3.7f, 17)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.ANGLE_BRACKETS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SIG)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTAR2L = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTAR2L, "westar2l")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTARE9 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTARE9, "westare9")
+                    .projectileSpeed(2.7f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 16)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.7f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE_CROSS_3)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.WESTARE9));
-    public static final DeferredItem<Item> WESTARL4 = ITEMS.register("westarl4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(8, 2f, 2f, 17),
-                            FiringMode.BURST, new ProjectileWeaponStats(4, 1.5f, 3.7f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.SIG, WeaponClassification.RIFLE, WeaponName.WESTARL4));
-    public static final DeferredItem<Item> WESTARLVN = ITEMS.register("westarlvn",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(8, 2f, 2f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.SIG, WeaponClassification.RIFLE, WeaponName.WESTARLVN));
-    public static final DeferredItem<Item> WESTARM5 = ITEMS.register("westarm5",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.5f, 350, 2, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(4, 1f, 3f, 12),
-                            FiringMode.BURST, new ProjectileWeaponStats(11, 0.8f, 3.5f, 5),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(3, 1.4f, 3.8f, 3))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.55f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_BLUE_CROSS_3))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTARL4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTARL4, "westarl4")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 8, 2f, 2f, 17)
+                    .stat(FiringMode.BURST, 4, 1.5f, 3.7f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_LINE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SIG)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTARLVN = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTARLVN, "westarlvn")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 8, 2f, 2f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.QUAD_LINE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SIG)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> WESTARM5 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WESTARM5, "westarm5")
+                    .projectileSpeed(2.5f)
+                    .maxAmmo(350)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 4, 1f, 3f, 12)
+                    .stat(FiringMode.BURST, 11, 0.8f, 3.5f, 5)
+                    .stat(FiringMode.FULL_AUTO, 3, 1.4f, 3.8f, 3)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.BURST, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_CIRCLE, 0.55f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_X, FiringMode.BURST, ScopeTexture.OVAL_SMALL_X, FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_X)),
-                    FiringMode.FULL_AUTO, AmmoType.IONIZED_TIBANNA, WeaponClassification.RIFLE, WeaponName.WESTARM5));
-    public static final DeferredItem<Item> WINCHESTER87 = ITEMS.register("winchester87",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 250, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SCATTER, new ProjectileWeaponStats(0, 0f, 0f, 14),
-                            FiringMode.STUN, new ProjectileWeaponStats(15, 10f, 2f, 0))), null,
-                    List.of(FiringMode.SCATTER, FiringMode.STUN),
-                    ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f),
-                    FiringMode.SCATTER, AmmoType.TIBANNA, WeaponClassification.SCATTER, WeaponName.WINCHESTER87));
-    public static final DeferredItem<Item> WOOKIE_RIFLE = ITEMS.register("wookie_rifle",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 3f, 5.2f, 17),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(6, 3f, 5.2f, 17),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(6, 3f, 5.2f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.7f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.WOOKIE_RIFLE));
-    public static final DeferredItem<Item> WOOKIE_SIDEARM = ITEMS.register("wookie_sidearm",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 3f, 5.2f, 17),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(6, 3f, 5.2f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.WOOKIE_SIDEARM));
-    public static final DeferredItem<Item> WS4 = ITEMS.register("ws4",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.0f, 20, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 10))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.85f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.WS4));
-    public static final DeferredItem<Item> X8_NIGHT_SNIPER = ITEMS.register("x8_night_sniper",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.75f,
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.OVAL_SMALL_X, FiringMode.BURST, ScopeTexture.OVAL_SMALL_X, FiringMode.FULL_AUTO, ScopeTexture.OVAL_SMALL_X))
+                    )
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> WINCHESTER87 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WINCHESTER87, "winchester87")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(250)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SCATTER, 0, 0f, 0f, 14)
+                    .stat(FiringMode.STUN, 15, 10f, 2f, 0)
+                    .firingModes(FiringMode.SCATTER, FiringMode.STUN)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SOFT_FOCUS, 0.85f))
+                    .defaultFiringMode(FiringMode.SCATTER)
+                    .classification(WeaponClassification.SCATTER)
+                    .build()
+    );
+    public static final DeferredItem<Item> WOOKIE_RIFLE = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WOOKIE_RIFLE, "wookie_rifle")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 6, 3f, 5.2f, 17)
+                    .stat(FiringMode.FULL_AUTO, 6, 3f, 5.2f, 17)
+                    .stat(FiringMode.CHARGENSHOOT, 6, 3f, 5.2f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.EYE, 0.7f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .chargeThreshold(23)
+                    .build()
+    );
+    public static final DeferredItem<Item> WOOKIE_SIDEARM = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WOOKIE_SIDEARM, "wookie_sidearm")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 6, 3f, 5.2f, 17)
+                    .stat(FiringMode.CHARGENSHOOT, 6, 3f, 5.2f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .chargeThreshold(25)
+                    .build()
+    );
+    public static final DeferredItem<Item> WS4 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.WS4, "ws4")
+                    .projectileSpeed(2.0f)
+                    .maxAmmo(20)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> X8_NIGHT_SNIPER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.X8_NIGHT_SNIPER, "x8_night_sniper")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.75f,
                             Map.of(),
-                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN_YELLOW)),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.X8_NIGHT_SNIPER));
-    public static final DeferredItem<Item> X30 = ITEMS.register("x30",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.3f, 300, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(6, 3f, 5.2f, 17))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.75f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.X30));
-    public static final DeferredItem<Item> X45 = ITEMS.register("x45",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.25f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.X45));
-    public static final DeferredItem<Item> X47 = ITEMS.register("x47",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 100, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SNIPER, new ProjectileWeaponStats(0, 0f, 0f, 12))), null,
-                    List.of(FiringMode.SNIPER),
-                    ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.5f),
-                    FiringMode.SNIPER, AmmoType.TIBANNA, WeaponClassification.SNIPER, WeaponName.X47));
-    public static final DeferredItem<Item> XT7 = ITEMS.register("xt7",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.6f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 7),
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 3))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.XT7));
-    public static final DeferredItem<Item> Z6_ROTARY = ITEMS.register("z6_rotary",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(2, 0.4f, 5f, 4))), null,
-                    List.of(FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.85f),
-                    FiringMode.CHARGENSHOOT, AmmoType.IONIZED_TIBANNA, WeaponClassification.REPEATER, WeaponName.Z6_ROTARY));
-    public static final DeferredItem<Item> ZB3 = ITEMS.register("zb3",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.FULL_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 4))), null,
-                    List.of(FiringMode.FULL_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f),
-                    FiringMode.FULL_AUTO, AmmoType.SPIN_SEALED_TIBANNA, WeaponClassification.REPEATER, WeaponName.ZB3));
-    public static final DeferredItem<Item> ZP20 = ITEMS.register("zp20",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 500, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(0, 0f, 0f, 6))), null,
-                    List.of(FiringMode.SEMI_AUTO),
-                    ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.PISTOL, WeaponName.ZP20));
-    public static final DeferredItem<Item> ZYGERRIAN_BLASTER = ITEMS.register("zygerrian_blaster",
-            () -> new ProjectileItem(new Item.Properties().stacksTo(1), 2.2f, 200, 0, 1,
-                    new EnumMap<>(Map.of(
-                            FiringMode.SEMI_AUTO, new ProjectileWeaponStats(2, 0.4f, 5f, 4),
-                            FiringMode.CHARGENSHOOT, new ProjectileWeaponStats(2, 0.4f, 5f, 4))), null,
-                    List.of(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT),
-                    ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f),
-                    FiringMode.SEMI_AUTO, AmmoType.TIBANNA, WeaponClassification.RIFLE, WeaponName.ZYGERRIAN_BLASTER));
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREEN_YELLOW))
+                    )
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> X30 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.X30, "x30")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(300)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 6, 3f, 5.2f, 17)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CARROT, 0.75f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> X45 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.X45, "x45")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.SEXTUPLE_DASH, 0.25f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> X47 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.X47, "x47")
+                    .projectileSpeed(2.6f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SNIPER, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SNIPER)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.REACTOR, 0.5f))
+                    .defaultFiringMode(FiringMode.SNIPER)
+                    .classification(WeaponClassification.SNIPER)
+                    .build()
+    );
+    public static final DeferredItem<Item> XT7 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.XT7, "xt7")
+                    .projectileSpeed(2.6f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 7)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 3)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.5f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .build()
+    );
+    public static final DeferredItem<Item> Z6_ROTARY = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.Z6_ROTARY, "z6_rotary")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.CHARGENSHOOT, 2, 0.4f, 5f, 4)
+                    .firingModes(FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_LARGE, 0.85f))
+                    .defaultFiringMode(FiringMode.CHARGENSHOOT)
+                    .ammoType(AmmoType.IONIZED_TIBANNA)
+                    .classification(WeaponClassification.REPEATER)
+                    .reloadTime(25)
+                    .chargeThreshold(52)
+                    .build()
+    );
+    public static final DeferredItem<Item> ZB3 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ZB3, "zb3")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 4)
+                    .firingModes(FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CROSS, 0.8f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.REPEATER)
+                    .build()
+    );
+    public static final DeferredItem<Item> ZP20 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ZP20, "zp20")
+                    .projectileSpeed(2.2f)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 6)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture._X, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.PISTOL)
+                    .build()
+    );
+    public static final DeferredItem<Item> ZYGERRIAN_BLASTER = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.ZYGERRIAN_BLASTER, "zygerrian_blaster")
+                    .projectileSpeed(2.2f)
+                    .maxAmmo(200)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 2, 0.4f, 5f, 4)
+                    .stat(FiringMode.CHARGENSHOOT, 2, 0.4f, 5f, 4)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.CHARGENSHOOT)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.VERTICAL_ANGLE_BRACKETS, 0.8f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .classification(WeaponClassification.RIFLE)
+                    .chargeThreshold(26)
+                    .build()
+    );
 }
