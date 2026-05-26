@@ -118,6 +118,9 @@ public class OperationKnightfall {
             event.registerSpriteSet(ModParticles.REPULSE_SHOT_MEDIUM_PARTICLES.get(), RepulseShotMediumParticles.Provider::new);
             event.registerSpriteSet(ModParticles.REPULSE_SHOT_SMALL_PARTICLES.get(), RepulseShotSmallParticles.Provider::new);
             event.registerSpriteSet(ModParticles.CONCUSSIVE_SHOT_EXPLOSION_PARTICLES.get(), ConcussiveShotExplosionParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.DISINTEGRATION_LARGE_PARTICLES.get(), DisintegrationLargeParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.DISINTEGRATION_MEDIUM_PARTICLES.get(), DisintegrationMediumParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.DISINTEGRATION_SMALL_PARTICLES.get(), DisintegrationSmallParticles.Provider::new);
         }
     }
 }

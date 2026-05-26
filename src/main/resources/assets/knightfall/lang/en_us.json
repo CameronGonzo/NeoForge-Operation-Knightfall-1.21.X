@@ -917,5 +917,8 @@
   "sounds.knightfall.foley_unload_flechette": "Unloads Flechette Weapon",
   "sounds.knightfall.foley_unload_gas": "Unloads Blaster Gas",
   "sounds.knightfall.foley_reload_slug": "Reloads Slugthrower",
-  "sounds.knightfall.foley_unload_slug": "Unloads Slugthrower"
+  "sounds.knightfall.foley_unload_slug": "Unloads Slugthrower",
+
+  "sounds.knightfall.blaster_impact": "Blaster Bolt Impacts",
+  "sounds.knightfall.blaster_impact_disintegration": "Disruptor Shot Disintegrates"
 }

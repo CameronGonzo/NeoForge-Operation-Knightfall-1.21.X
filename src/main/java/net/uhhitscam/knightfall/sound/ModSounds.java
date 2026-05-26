@@ -540,6 +540,17 @@ public class ModSounds {
     public static final Supplier<SoundEvent> FOLEY_UNLOAD_GAS = registerSoundEvent("foley_unload_gas");
     public static final Supplier<SoundEvent> FOLEY_UNLOAD_SLUG = registerSoundEvent("foley_unload_slug");
 
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_DEFAULT = registerSoundEvent("blaster_impact_default");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_DIRT = registerSoundEvent("blaster_impact_dirt");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_DISINTEGRATION = registerSoundEvent("blaster_impact_disintegration");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_FOLIAGE = registerSoundEvent("blaster_impact_foliage");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_GLASS = registerSoundEvent("blaster_impact_glass");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_METAL = registerSoundEvent("blaster_impact_metal");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_MOIST = registerSoundEvent("blaster_impact_moist");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_SAND = registerSoundEvent("blaster_impact_sand");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_STONE = registerSoundEvent("blaster_impact_stone");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_WOOD = registerSoundEvent("blaster_impact_wood");
+
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));

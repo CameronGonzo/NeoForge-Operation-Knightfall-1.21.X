@@ -388,13 +388,13 @@ public class ProjectileItem extends Item {
         }
 
         return switch (ammoType) {
-            case IONIZED_TIBANNA -> new IonizedTibannaBlasterBoltEntity(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, explosiveShot, concussiveShot);
-            case SPIN_SEALED_TIBANNA -> new SpinSealedTibannaBlasterBoltEntity(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, explosiveShot, concussiveShot);
-            case TIBANNAX -> new TibannaXBlasterBoltEntity(ModEntities.TIBANNAX_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, explosiveShot, concussiveShot);
-            case SIG -> new SigBlasterBoltEntity(ModEntities.SIG_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, explosiveShot, concussiveShot);
-            case MAGNETIZED_SIG -> new MagnetizedSigBlasterBoltEntity(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, explosiveShot, concussiveShot);
-            case SKEVON -> new SkevonBlasterBoltEntity(ModEntities.SKEVON_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, explosiveShot, concussiveShot);
-            default -> new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, explosiveShot, concussiveShot);
+            case IONIZED_TIBANNA -> new IonizedTibannaBlasterBoltEntity(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
+            case SPIN_SEALED_TIBANNA -> new SpinSealedTibannaBlasterBoltEntity(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
+            case TIBANNAX -> new TibannaXBlasterBoltEntity(ModEntities.TIBANNAX_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
+            case SIG -> new SigBlasterBoltEntity(ModEntities.SIG_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
+            case MAGNETIZED_SIG -> new MagnetizedSigBlasterBoltEntity(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
+            case SKEVON -> new SkevonBlasterBoltEntity(ModEntities.SKEVON_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
+            default -> new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
         };
     }
 

@@ -1,2 +1,11 @@
-// 1.21.1	2026-01-11T10:58:29.3605793	Tags for minecraft:block mod id knightfall
+// 1.21.1	2026-05-25T21:20:01.0228367	Tags for minecraft:block mod id knightfall
+ee9a0ca4f134a8a518b9c3fca9f19366ae36429b data/knightfall/tags/block/blaster_breakable_glass.json
+886ae82bc6d763fbe4fff9e53c84e0f6974c969c data/knightfall/tags/block/blaster_impact_dirt.json
+a777ae9edd64d7f9002b8efd0f288a42c8b49989 data/knightfall/tags/block/blaster_impact_foliage.json
+48975a4fb6714377b87b4a4a6a453f9106a01040 data/knightfall/tags/block/blaster_impact_glass.json
+da7879b5fde4779ff0f20382f631e23960c1de38 data/knightfall/tags/block/blaster_impact_metal.json
+09455bc8e7a2f4d517497eb2bf6c33aecb3a1219 data/knightfall/tags/block/blaster_impact_moist.json
+ca56d8e2a31965d171c4c7b7d6a16d5b528b3277 data/knightfall/tags/block/blaster_impact_sand.json
+09e9afd6e8d5c67191909f42591cba77bbf6da0d data/knightfall/tags/block/blaster_impact_stone.json
+a1fe7a318a21e627cc6d7bab83cc12b8437bea7f data/knightfall/tags/block/blaster_impact_wood.json
 5647ca6e7c49ed3ab5dc3b1440e8eef08cd2e2ea data/knightfall/tags/block/interactable_blocks.json

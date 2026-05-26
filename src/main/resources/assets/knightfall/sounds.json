@@ -5218,5 +5218,131 @@
       "knightfall:blaster/foley/weapons_blaster_foley_unload_slug_04",
       "knightfall:blaster/foley/weapons_blaster_foley_unload_slug_05"
     ]
+  },
+  "blaster_impact_default": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_default_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_default_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_default_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_default_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_default_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_default_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_default_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_default_08"
+    ]
+  },
+  "blaster_impact_dirt": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_dirt_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_dirt_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_dirt_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_dirt_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_dirt_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_dirt_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_dirt_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_dirt_08"
+    ]
+  },
+  "blaster_impact_disintegration": {
+    "subtitle": "sounds.knightfall.blaster_impact_disintegration",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_disintegration_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_disintegration_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_disintegration_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_disintegration_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_disintegration_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_disintegration_06"
+    ]
+  },
+  "blaster_impact_foliage": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_foliage_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_foliage_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_foliage_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_foliage_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_foliage_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_foliage_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_foliage_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_foliage_08"
+    ]
+  },
+  "blaster_impact_glass": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_glass_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_glass_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_glass_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_glass_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_glass_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_glass_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_glass_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_glass_08"
+    ]
+  },
+  "blaster_impact_metal": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_metal_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_metal_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_metal_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_metal_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_metal_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_metal_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_metal_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_metal_08"
+    ]
+  },
+  "blaster_impact_moist": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_moist_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_moist_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_moist_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_moist_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_moist_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_moist_06"
+    ]
+  },
+  "blaster_impact_sand": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_sand_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_sand_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_sand_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_sand_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_sand_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_sand_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_sand_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_sand_08"
+    ]
+  },
+  "blaster_impact_stone": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_stone_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_stone_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_stone_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_stone_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_stone_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_stone_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_stone_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_stone_08"
+    ]
+  },
+  "blaster_impact_wood": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_wood_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_wood_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_wood_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_wood_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_wood_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_wood_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_wood_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_wood_08"
+    ]
   }
 }

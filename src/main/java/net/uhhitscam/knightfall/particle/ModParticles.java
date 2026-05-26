@@ -39,6 +39,12 @@ public class ModParticles {
             PARTICLE_TYPES.register("repulse_shot_small_particles", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> CONCUSSIVE_SHOT_EXPLOSION_PARTICLES =
             PARTICLE_TYPES.register("concussive_shot_explosion_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> DISINTEGRATION_LARGE_PARTICLES =
+            PARTICLE_TYPES.register("disintegration_large_particles", () -> new SimpleParticleType(false));
+    public static final Supplier<SimpleParticleType> DISINTEGRATION_MEDIUM_PARTICLES =
+            PARTICLE_TYPES.register("disintegration_medium_particles", () -> new SimpleParticleType(false));
+    public static final Supplier<SimpleParticleType> DISINTEGRATION_SMALL_PARTICLES =
+            PARTICLE_TYPES.register("disintegration_small_particles", () -> new SimpleParticleType(false));
 
     public static void register(IEventBus eventBus) {
         PARTICLE_TYPES.register(eventBus);

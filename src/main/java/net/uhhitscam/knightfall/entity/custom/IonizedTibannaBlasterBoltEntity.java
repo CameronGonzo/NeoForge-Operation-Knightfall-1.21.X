@@ -3,20 +3,23 @@ package net.uhhitscam.knightfall.entity.custom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.uhhitscam.knightfall.item.custom.WeaponClassification;
+import net.uhhitscam.knightfall.item.custom.WeaponName;
 import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
 import net.uhhitscam.knightfall.particle.ModParticles;
+import net.uhhitscam.knightfall.sound.ModSounds;
+import net.uhhitscam.knightfall.util.BlasterImpactSoundUtil;
 import net.uhhitscam.knightfall.util.CustomExplosion;
+import net.uhhitscam.knightfall.util.DisintegrationParticles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
@@ -29,6 +32,7 @@ public class IonizedTibannaBlasterBoltEntity extends Snowball {
     private final WeaponClassification classification;
     private boolean explosiveShot;
     private boolean concussiveShot;
+    private final WeaponName weaponName;
 //    private BlockPos lastLightBlockPos;
 
     public IonizedTibannaBlasterBoltEntity(EntityType<? extends IonizedTibannaBlasterBoltEntity> entityType, Level level) {
@@ -36,19 +40,20 @@ public class IonizedTibannaBlasterBoltEntity extends Snowball {
         this.bolt_speed = 2.0F;
         this.blasterDamage = 0;
         this.classification = WeaponClassification.PISTOL;
+        this.weaponName = null;
         this.explosiveShot = false;
         this.concussiveShot = false;
 //        this.lastLightBlockPos = null; // Initialize last position as null
     }
 
-    public IonizedTibannaBlasterBoltEntity(EntityType<? extends IonizedTibannaBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, WeaponClassification classification, boolean explosiveShot, boolean concussiveShot) {
-        super(entityType, level); // Directly reference the EntityType
+    public IonizedTibannaBlasterBoltEntity(EntityType<? extends IonizedTibannaBlasterBoltEntity> entityType, Level level, LivingEntity shooter, float bolt_speed, int blasterDamage, WeaponClassification classification, WeaponName weaponName, boolean explosiveShot, boolean concussiveShot) {
+        super(entityType, level);
         this.bolt_speed = bolt_speed;
         this.blasterDamage = blasterDamage;
         this.classification = classification;
+        this.weaponName = weaponName;
         this.explosiveShot = explosiveShot;
         this.concussiveShot = concussiveShot;
-//        this.lastLightBlockPos = null; // Initialize last position as null
 
         Vec3 direction = shooter.getLookAngle().normalize().scale(bolt_speed);
         this.setDeltaMovement(direction);
@@ -66,6 +71,11 @@ public class IonizedTibannaBlasterBoltEntity extends Snowball {
             //Reset the invulnerability timer to allow immediate damage from other bolts
             if (entity instanceof LivingEntity livingEntity) {
                 livingEntity.invulnerableTime = 0;
+
+                if (shouldSpawnDisintegrationParticles(livingEntity)) {
+                    playEntityImpactSound(entity);
+                    DisintegrationParticles.spawn(this.level(), livingEntity);
+                }
             }
         }
     }
@@ -75,6 +85,11 @@ public class IonizedTibannaBlasterBoltEntity extends Snowball {
 
         if (this.level().isClientSide) {
             return;
+        }
+
+        if (result instanceof BlockHitResult blockHitResult) {
+            BlasterImpactSoundUtil.playBlockImpactSound(this.level(), blockHitResult);
+            breakGlassIfNeeded(blockHitResult);
         }
 
         int numParticles;
@@ -136,6 +151,42 @@ public class IonizedTibannaBlasterBoltEntity extends Snowball {
             this.level().broadcastEntityEvent(this, (byte) 3);
             this.discard();
         }
+    }
+
+    private boolean shouldSpawnDisintegrationParticles(LivingEntity livingEntity) {
+        return classification == WeaponClassification.DISRUPTOR && livingEntity.isDeadOrDying();
+    }
+
+    private void playEntityImpactSound(Entity entity) {
+        if (this.level().isClientSide) {
+            return;
+        }
+
+        if (!classification.equals(WeaponClassification.DISRUPTOR)) {
+            return;
+        }
+
+        this.level().playSound(
+                null,
+                entity.getX(),
+                entity.getY(),
+                entity.getZ(),
+                ModSounds.BLASTER_IMPACT_DISINTEGRATION.get(),
+                SoundSource.NEUTRAL,
+                0.7F,
+                0.95F + this.level().random.nextFloat() * 0.1F
+        );
+    }
+
+    private void breakGlassIfNeeded(BlockHitResult blockHitResult) {
+        BlockPos blockPos = blockHitResult.getBlockPos();
+        BlockState blockState = this.level().getBlockState(blockPos);
+
+        if (!BlasterImpactSoundUtil.isBreakableGlass(blockState)) {
+            return;
+        }
+
+        this.level().destroyBlock(blockPos, false);
     }
 
     @Override
