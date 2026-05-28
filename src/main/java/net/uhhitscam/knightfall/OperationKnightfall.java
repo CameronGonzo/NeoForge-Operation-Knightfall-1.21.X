@@ -23,6 +23,7 @@ import net.uhhitscam.knightfall.effect.client.StunnedEffectRenderer;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.client.*;
 import net.uhhitscam.knightfall.event.ProjectileWeaponZoomEventHandler;
+import net.uhhitscam.knightfall.event.SonicImpactRippleClient;
 import net.uhhitscam.knightfall.item.ModCreativeModeTabs;
 import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.network.PayloadRegister;
@@ -82,6 +83,7 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.SIG_BLASTER_BOLT.get(), SigBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), MagnetizedSigBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.SKEVON_BLASTER_BOLT.get(), SkevonBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.SONIC_BOLT.get(), SonicBoltRenderer::new);
             EntityRenderers.register(ModEntities.STUN_BLASTER_BOLT.get(), StunBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.STEEL_SLUG.get(), SteelSlugRenderer::new);
             EntityRenderers.register(ModEntities.RAZOR_STEEL_SLUG.get(), RazorSteelSlugRenderer::new);
@@ -100,6 +102,7 @@ public class OperationKnightfall {
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 StunnedEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
+                SonicImpactRippleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
             });
         }
 

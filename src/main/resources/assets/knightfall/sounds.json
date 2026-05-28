@@ -3430,16 +3430,7 @@
   "rt97c_fire": {
     "subtitle": "sounds.knightfall.rt97c_fire",
     "sounds": [
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_01",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_02",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_03",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_04",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_05",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_06",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_07",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_08",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_09",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_10"
+
     ]
   },
   "rlr_mk_ii_fire": {
@@ -5317,6 +5308,31 @@
       "knightfall:blaster/impact/weapons_blaster_impact_sand_06",
       "knightfall:blaster/impact/weapons_blaster_impact_sand_07",
       "knightfall:blaster/impact/weapons_blaster_impact_sand_08"
+    ]
+  },
+  "blaster_impact_sonic_bolt": {
+    "subtitle": "sounds.knightfall.blaster_impact",
+    "sounds": [
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_01",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_02",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_03",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_04",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_05",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_06",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_07",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_08",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_09",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_10",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_11",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_12",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_13",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_14",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_15",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_16",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_17",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_18",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_19",
+      "knightfall:blaster/impact/weapons_blaster_impact_sonic_bolt_20"
     ]
   },
   "blaster_impact_stone": {

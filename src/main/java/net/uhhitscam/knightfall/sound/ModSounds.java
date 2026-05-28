@@ -548,6 +548,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> BLASTER_IMPACT_METAL = registerSoundEvent("blaster_impact_metal");
     public static final Supplier<SoundEvent> BLASTER_IMPACT_MOIST = registerSoundEvent("blaster_impact_moist");
     public static final Supplier<SoundEvent> BLASTER_IMPACT_SAND = registerSoundEvent("blaster_impact_sand");
+    public static final Supplier<SoundEvent> BLASTER_IMPACT_SONIC_BOLT = registerSoundEvent("blaster_impact_sonic_bolt");
     public static final Supplier<SoundEvent> BLASTER_IMPACT_STONE = registerSoundEvent("blaster_impact_stone");
     public static final Supplier<SoundEvent> BLASTER_IMPACT_WOOD = registerSoundEvent("blaster_impact_wood");
 

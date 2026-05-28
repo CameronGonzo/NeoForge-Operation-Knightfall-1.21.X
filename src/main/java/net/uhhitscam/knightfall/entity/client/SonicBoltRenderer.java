@@ -1,0 +1,64 @@
+package net.uhhitscam.knightfall.entity.client;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.uhhitscam.knightfall.OperationKnightfall;
+import net.uhhitscam.knightfall.entity.custom.SonicBoltEntity;
+
+public class SonicBoltRenderer extends EntityRenderer<SonicBoltEntity> {
+    private SonicBoltModel model;
+
+    private static final ResourceLocation CORE_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/sonic_bolt_core.png");
+    private static final ResourceLocation GLOW_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/sonic_bolt_exterior.png");
+
+
+    public SonicBoltRenderer(EntityRendererProvider.Context context) {
+        super(context);
+        this.model = new SonicBoltModel(context.bakeLayer(ModModelLayers.SONIC_BOLT));
+    }
+
+    @Override
+    public void render(SonicBoltEntity entity, float entityYaw, float partialTicks,
+                       PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+
+        poseStack.pushPose();
+
+        float scale = 0.6f;
+        poseStack.scale(scale, scale, scale);
+        poseStack.translate(0.0F, 0.1F, 0.0F);
+
+        float yaw = entityYaw;
+        float pitch = -net.minecraft.util.Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+        poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
+
+        int fullBright = 0xF000F0;
+
+        VertexConsumer depthConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(CORE_TEXTURE));
+        model.renderCore(poseStack, depthConsumer, fullBright, OverlayTexture.NO_OVERLAY);
+
+        VertexConsumer glowConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(GLOW_TEXTURE));
+        model.renderGlow(poseStack, glowConsumer, fullBright, OverlayTexture.NO_OVERLAY);
+
+        VertexConsumer coreConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(CORE_TEXTURE));
+        model.renderCore(poseStack, coreConsumer, fullBright, OverlayTexture.NO_OVERLAY);
+
+        poseStack.popPose();
+        super.render(entity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
+    }
+
+
+    @Override
+    public ResourceLocation getTextureLocation(SonicBoltEntity entity) {
+        return GLOW_TEXTURE;
+    }
+}

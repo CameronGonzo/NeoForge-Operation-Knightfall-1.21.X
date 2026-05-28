@@ -17,6 +17,7 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.SIG_BLASTER_BOLT, SigBlasterBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.MAGNETIZED_SIG_BLASTER_BOLT, MagnetizedSigBlasterBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SKEVON_BLASTER_BOLT, SkevonBlasterBoltModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SONIC_BOLT, SonicBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.STUN_BLASTER_BOLT, StunBlasterBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.STEEL_SLUG, SteelSlugModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.RAZOR_STEEL_SLUG, RazorSteelSlugModel::createBodyLayer);

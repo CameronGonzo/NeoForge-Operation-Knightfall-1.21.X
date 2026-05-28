@@ -37,6 +37,9 @@ public class ModEntities {
     public static final Supplier<EntityType<SkevonBlasterBoltEntity>> SKEVON_BLASTER_BOLT =
             ENTITY_TYPES.register("skevon_blaster_bolt", () -> EntityType.Builder.<SkevonBlasterBoltEntity>of(SkevonBlasterBoltEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f).build("skevon_blaster_bolt"));
+    public static final Supplier<EntityType<SonicBoltEntity>> SONIC_BOLT =
+            ENTITY_TYPES.register("sonic_bolt", () -> EntityType.Builder.<SonicBoltEntity>of(SonicBoltEntity::new, MobCategory.MISC)
+                    .sized(0.5f, 0.5f).build("sonic_bolt"));
     public static final Supplier<EntityType<StunBlasterBoltEntity>> STUN_BLASTER_BOLT =
             ENTITY_TYPES.register("stun_blaster_bolt", () -> EntityType.Builder.<StunBlasterBoltEntity>of(StunBlasterBoltEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f).build("stun_blaster_bolt"));

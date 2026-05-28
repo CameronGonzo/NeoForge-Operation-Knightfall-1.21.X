@@ -28,25 +28,7 @@ import net.uhhitscam.knightfall.component.FiringModeData;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 import net.uhhitscam.knightfall.component.ReloadNSwitchCoolDownData;
 import net.uhhitscam.knightfall.entity.ModEntities;
-import net.uhhitscam.knightfall.entity.custom.CeramicSlugEntity;
-import net.uhhitscam.knightfall.entity.custom.ExplosiveTippedSteelSlugEntity;
-import net.uhhitscam.knightfall.entity.custom.FlechetteEntity;
-import net.uhhitscam.knightfall.entity.custom.FlechetteSpreadCanEntity;
-import net.uhhitscam.knightfall.entity.custom.FlechetteToxicEntity;
-import net.uhhitscam.knightfall.entity.custom.FlechetteToxicSpreadCanEntity;
-import net.uhhitscam.knightfall.entity.custom.IonTippedSteelSlugEntity;
-import net.uhhitscam.knightfall.entity.custom.IonizedTibannaBlasterBoltEntity;
-import net.uhhitscam.knightfall.entity.custom.MagnetizedSigBlasterBoltEntity;
-import net.uhhitscam.knightfall.entity.custom.PlasticSlugEntity;
-import net.uhhitscam.knightfall.entity.custom.PoisonTippedSteelSlugEntity;
-import net.uhhitscam.knightfall.entity.custom.RazorSteelSlugEntity;
-import net.uhhitscam.knightfall.entity.custom.SigBlasterBoltEntity;
-import net.uhhitscam.knightfall.entity.custom.SkevonBlasterBoltEntity;
-import net.uhhitscam.knightfall.entity.custom.SpinSealedTibannaBlasterBoltEntity;
-import net.uhhitscam.knightfall.entity.custom.SteelSlugEntity;
-import net.uhhitscam.knightfall.entity.custom.StunBlasterBoltEntity;
-import net.uhhitscam.knightfall.entity.custom.TibannaBlasterBoltEntity;
-import net.uhhitscam.knightfall.entity.custom.TibannaXBlasterBoltEntity;
+import net.uhhitscam.knightfall.entity.custom.*;
 import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.network.PayloadRegister;
 import net.uhhitscam.knightfall.network.SSGasAmmoPacket;
@@ -385,6 +367,8 @@ public class ProjectileItem extends Item {
     private Snowball createGasProjectile(Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats, FiringMode firingMode, boolean explosiveShot, boolean concussiveShot) {
         if (firingMode == FiringMode.STUN) {
             return new StunBlasterBoltEntity(ModEntities.STUN_BLASTER_BOLT.get(), level, player, 1.5F);
+        } else if (getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER)) {
+            return new SonicBoltEntity(ModEntities.SONIC_BOLT.get(), level, player, 1F, 18);
         }
 
         return switch (ammoType) {
