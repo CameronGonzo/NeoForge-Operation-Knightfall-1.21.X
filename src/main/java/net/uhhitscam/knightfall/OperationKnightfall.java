@@ -22,8 +22,8 @@ import net.uhhitscam.knightfall.effect.client.StunEffectRenderer;
 import net.uhhitscam.knightfall.effect.client.StunnedEffectRenderer;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.client.*;
+import net.uhhitscam.knightfall.event.FaceAlignedParticleClient;
 import net.uhhitscam.knightfall.event.ProjectileWeaponZoomEventHandler;
-import net.uhhitscam.knightfall.event.SonicImpactRippleClient;
 import net.uhhitscam.knightfall.item.ModCreativeModeTabs;
 import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.network.PayloadRegister;
@@ -102,7 +102,7 @@ public class OperationKnightfall {
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 StunnedEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
-                SonicImpactRippleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
+                FaceAlignedParticleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
             });
         }
 

@@ -306,10 +306,6 @@ public class ModClientEvents {
         }
 
         PayloadRegister.sendToServer(new SSFireProjectileWeaponPacket(state.side.isMainHand()));
-
-        if (currentAmmo <= 1) {
-            resetState(state, true);
-        }
     }
 
     private static void tickChargeAndShoot(WeaponInputState state, ItemStack stack, ProjectileItem weapon) {

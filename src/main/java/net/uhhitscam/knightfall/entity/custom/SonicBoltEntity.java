@@ -24,10 +24,7 @@ import net.uhhitscam.knightfall.item.custom.WeaponName;
 import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
 import net.uhhitscam.knightfall.particle.ModParticles;
 import net.uhhitscam.knightfall.sound.ModSounds;
-import net.uhhitscam.knightfall.util.BlasterImpactSoundUtil;
-import net.uhhitscam.knightfall.util.CustomExplosion;
-import net.uhhitscam.knightfall.util.DisintegrationParticles;
-import net.uhhitscam.knightfall.util.SonicImpactRipple;
+import net.uhhitscam.knightfall.util.*;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -40,7 +37,7 @@ public class SonicBoltEntity extends Snowball {
 
     public SonicBoltEntity(EntityType<? extends SonicBoltEntity> entityType, Level level) {
         super(entityType, level);
-        this.bolt_speed = 1.0F;
+        this.bolt_speed = 1.4F;
         this.blasterDamage = 0;
     }
 
@@ -82,7 +79,7 @@ public class SonicBoltEntity extends Snowball {
 
         if (result instanceof BlockHitResult blockHitResult) {
             breakGlassIfNeeded(blockHitResult);
-            SonicImpactRipple.spawn(this.level(), blockHitResult);
+            FaceAlignedParticleUtil.spawnSonicRipple(this.level(), blockHitResult);
 
             Vec3 location = blockHitResult.getLocation();
             level().playSound(

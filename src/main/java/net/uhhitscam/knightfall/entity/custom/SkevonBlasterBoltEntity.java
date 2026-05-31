@@ -20,9 +20,8 @@ import net.uhhitscam.knightfall.sound.ModSounds;
 import net.uhhitscam.knightfall.util.BlasterImpactSoundUtil;
 import net.uhhitscam.knightfall.util.CustomExplosion;
 import net.uhhitscam.knightfall.util.DisintegrationParticles;
+import net.uhhitscam.knightfall.util.FaceAlignedParticleUtil;
 import org.joml.Vector3f;
-
-import java.util.List;
 
 public class SkevonBlasterBoltEntity extends Snowball {
     private final float bolt_speed;
@@ -85,6 +84,7 @@ public class SkevonBlasterBoltEntity extends Snowball {
 
         if (result instanceof BlockHitResult blockHitResult) {
             BlasterImpactSoundUtil.playBlockImpactSound(this.level(), blockHitResult);
+            FaceAlignedParticleUtil.spawnBlasterBurn(this.level(), blockHitResult);
             breakGlassIfNeeded(blockHitResult);
         }
 

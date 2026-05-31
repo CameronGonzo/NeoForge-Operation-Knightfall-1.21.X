@@ -368,7 +368,7 @@ public class ProjectileItem extends Item {
         if (firingMode == FiringMode.STUN) {
             return new StunBlasterBoltEntity(ModEntities.STUN_BLASTER_BOLT.get(), level, player, 1.5F);
         } else if (getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER)) {
-            return new SonicBoltEntity(ModEntities.SONIC_BOLT.get(), level, player, 1F, 18);
+            return new SonicBoltEntity(ModEntities.SONIC_BOLT.get(), level, player, 1.4F, 18);
         }
 
         return switch (ammoType) {

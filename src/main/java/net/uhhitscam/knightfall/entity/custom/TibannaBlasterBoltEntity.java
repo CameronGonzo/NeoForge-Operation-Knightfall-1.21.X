@@ -2,23 +2,16 @@ package net.uhhitscam.knightfall.entity.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Snowball;
-import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.SimpleExplosionDamageCalculator;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.uhhitscam.knightfall.event.BlurEffectEventHandler;
 import net.uhhitscam.knightfall.item.custom.WeaponClassification;
 import net.uhhitscam.knightfall.item.custom.WeaponName;
 import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
@@ -27,11 +20,8 @@ import net.uhhitscam.knightfall.sound.ModSounds;
 import net.uhhitscam.knightfall.util.BlasterImpactSoundUtil;
 import net.uhhitscam.knightfall.util.CustomExplosion;
 import net.uhhitscam.knightfall.util.DisintegrationParticles;
+import net.uhhitscam.knightfall.util.FaceAlignedParticleUtil;
 import org.joml.Vector3f;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
 public class TibannaBlasterBoltEntity extends Snowball {
     private final float bolt_speed;
@@ -100,6 +90,7 @@ public class TibannaBlasterBoltEntity extends Snowball {
 
         if (result instanceof BlockHitResult blockHitResult) {
             BlasterImpactSoundUtil.playBlockImpactSound(this.level(), blockHitResult);
+            FaceAlignedParticleUtil.spawnBlasterBurn(this.level(), blockHitResult);
             breakGlassIfNeeded(blockHitResult);
         }
 

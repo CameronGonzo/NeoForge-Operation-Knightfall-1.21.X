@@ -3430,7 +3430,16 @@
   "rt97c_fire": {
     "subtitle": "sounds.knightfall.rt97c_fire",
     "sounds": [
-
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_1",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_2",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_3",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_4",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_5",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_6",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_7",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_8",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_9",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_10"
     ]
   },
   "rlr_mk_ii_fire": {
