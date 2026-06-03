@@ -367,7 +367,7 @@ public class ProjectileItem extends Item {
     private Snowball createGasProjectile(Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats, FiringMode firingMode, boolean explosiveShot, boolean concussiveShot) {
         if (firingMode == FiringMode.STUN) {
             return new StunBlasterBoltEntity(ModEntities.STUN_BLASTER_BOLT.get(), level, player, 1.5F);
-        } else if (getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER)) {
+        } else if (getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER) || getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER_PISTOL)) {
             return new SonicBoltEntity(ModEntities.SONIC_BOLT.get(), level, player, 1.4F, 18);
         }
 

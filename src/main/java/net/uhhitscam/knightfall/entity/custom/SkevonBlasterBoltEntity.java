@@ -84,7 +84,6 @@ public class SkevonBlasterBoltEntity extends Snowball {
 
         if (result instanceof BlockHitResult blockHitResult) {
             BlasterImpactSoundUtil.playBlockImpactSound(this.level(), blockHitResult);
-            FaceAlignedParticleUtil.spawnBlasterBurn(this.level(), blockHitResult);
             breakGlassIfNeeded(blockHitResult);
         }
 
@@ -179,6 +178,7 @@ public class SkevonBlasterBoltEntity extends Snowball {
         BlockState blockState = this.level().getBlockState(blockPos);
 
         if (!BlasterImpactSoundUtil.isBreakableGlass(blockState)) {
+            FaceAlignedParticleUtil.spawnBlasterBurn(this.level(), blockHitResult);
             return;
         }
 

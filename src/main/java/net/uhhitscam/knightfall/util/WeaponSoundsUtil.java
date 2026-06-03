@@ -20,8 +20,8 @@ public final class WeaponSoundsUtil {
             WeaponName.BX49, WeaponName.DFQ91, WeaponName.DX2, WeaponName.DXR6, WeaponName.EWEB,
             WeaponName.GALAR90, WeaponName.GE36, WeaponName.K21C_PORTABLE_ORDANANCE_LAUNCHER, WeaponName.LIGHTBOW, WeaponName.LS150,
             WeaponName.M32, WeaponName.M45, WeaponName.M55, WeaponName.M61, WeaponName.MINIMAG_PROTON_TORPEDO_LAUNCHER,
-            WeaponName.MWC35C, WeaponName.NEO_CRUSADER_RIFLE, WeaponName.NT242, WeaponName.PRECISIONX, WeaponName.T7_ION_DISRUPTOR,
-            WeaponName.T21, WeaponName.T21B, WeaponName.VULK_TAU623_ROTARY, WeaponName.Z6_ROTARY
+            WeaponName.MWC35C, WeaponName.PRECISIONX, WeaponName.T7_ION_DISRUPTOR, WeaponName.T21, WeaponName.T21B,
+            WeaponName.VULK_TAU623_ROTARY, WeaponName.Z6_ROTARY
     );
 
     private static final EnumSet<WeaponName> SMALL_WEAPONS = set(
@@ -40,17 +40,17 @@ public final class WeaponSoundsUtil {
             WeaponName.GR4_ST, WeaponName.GRN4, WeaponName.HF94, WeaponName.HT9, WeaponName.IB94,
             WeaponName.K13, WeaponName.K16_BRYAR_PISTOL, WeaponName.KL9, WeaponName.KM9, WeaponName.KUEGET_LN21,
             WeaponName.KYD21, WeaponName.LL30, WeaponName.LV7C, WeaponName.LW896, WeaponName.MARG_MCM,
-            WeaponName.MODEL_57, WeaponName.MSD32, WeaponName.MW20_BRYAR_PISTOL, WeaponName.P224, WeaponName.PANIC_PISTOL,
-            WeaponName.POWER_5, WeaponName.PR9, WeaponName.Q2, WeaponName.RELBY_K23, WeaponName.RENEGADE,
-            WeaponName.RG4D, WeaponName.RIG420, WeaponName.RK2P, WeaponName.RK3, WeaponName.RLR_MK_II,
+            WeaponName.MODEL_57, WeaponName.MSD32, WeaponName.MW20_BRYAR_PISTOL, WeaponName.NEO_CRUSADER_RIFLE, WeaponName.NT242,
+            WeaponName.P224, WeaponName.PANIC_PISTOL, WeaponName.POWER_5, WeaponName.PR9, WeaponName.Q2, WeaponName.RELBY_K23,
+            WeaponName.RENEGADE, WeaponName.RG4D, WeaponName.RIG420, WeaponName.RK2P, WeaponName.RK3, WeaponName.RLR_MK_II,
             WeaponName.RM7, WeaponName.RM_1P, WeaponName.RSKF44, WeaponName.S2S, WeaponName.S3_MK_5,
             WeaponName.S5, WeaponName.S195, WeaponName.SACROS_K11, WeaponName.SATINES_LAMENT, WeaponName.SE9V,
             WeaponName.SE14C, WeaponName.SEDGLEYS_MK_5, WeaponName.SETTLERS_STUN, WeaponName.SHARD3A, WeaponName.SK32,
-            WeaponName.SNUB_BLASTER, WeaponName.SNUBBLE, WeaponName.SONIC_STUNNER, WeaponName.SS410, WeaponName.T6,
-            WeaponName.TG446, WeaponName.UMBARAN_BLASTER, WeaponName.UTK3, WeaponName.VILMARHS_REVENGE, WeaponName.VM19,
-            WeaponName.VT20, WeaponName.W50S, WeaponName.W310, WeaponName.W340LM, WeaponName.WEEQUAY_PISTOL,
-            WeaponName.WESTAR2L, WeaponName.WESTAR_20, WeaponName.WESTAR_33, WeaponName.WESTAR_34, WeaponName.WESTAR_35,
-            WeaponName.WOOKIE_SIDEARM, WeaponName.WS4, WeaponName.X8_NIGHT_SNIPER, WeaponName.X30
+            WeaponName.SNUB_BLASTER, WeaponName.SNUBBLE, WeaponName.SONIC_BLASTER_PISTOL, WeaponName.SONIC_STUNNER,
+            WeaponName.SS410, WeaponName.T6, WeaponName.TG446, WeaponName.UMBARAN_BLASTER, WeaponName.UTK3,
+            WeaponName.VILMARHS_REVENGE, WeaponName.VM19, WeaponName.VT20, WeaponName.W50S, WeaponName.W310, WeaponName.W340LM,
+            WeaponName.WEEQUAY_PISTOL, WeaponName.WESTAR2L, WeaponName.WESTAR_20, WeaponName.WESTAR_33, WeaponName.WESTAR_34,
+            WeaponName.WESTAR_35, WeaponName.WOOKIE_SIDEARM, WeaponName.WS4, WeaponName.X8_NIGHT_SNIPER, WeaponName.X30
     );
 
     private static final EnumSet<WeaponName> SCATTER_EQUIP_WEAPONS = set(
@@ -448,6 +448,7 @@ public final class WeaponSoundsUtil {
         fireDefault(WeaponName.SNUB_SCATTER, ModSounds.SNUB_SCATTER_FIRE);
         fireDefault(WeaponName.SNUBBLE, ModSounds.SNUBBLE_FIRE);
         fireDefault(WeaponName.SONIC_BLASTER, ModSounds.SONIC_BLASTER_FIRE);
+        fireDefault(WeaponName.SONIC_BLASTER_PISTOL, ModSounds.SONIC_BLASTER_PISTOL_FIRE);
         fireDefault(WeaponName.SONIC_STUNNER, ModSounds.SONIC_STUNNER_FIRE);
         fireDefault(WeaponName.SS410, ModSounds.SS410_FIRE);
         fireDefault(WeaponName.SWE1, ModSounds.SWE1_FIRE);

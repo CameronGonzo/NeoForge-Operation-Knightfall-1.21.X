@@ -285,6 +285,7 @@ public enum WeaponName {
     SNUB_SCATTER,
     SNUBBLE,
     SONIC_BLASTER,
+    SONIC_BLASTER_PISTOL,
     SONIC_STUNNER,
     SS410,
     SWE1,

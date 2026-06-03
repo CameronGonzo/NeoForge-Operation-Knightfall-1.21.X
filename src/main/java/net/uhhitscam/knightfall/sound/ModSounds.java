@@ -351,6 +351,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> SNUB_SCATTER_FIRE = registerSoundEvent("snub_scatter_fire");
     public static final Supplier<SoundEvent> SNUBBLE_FIRE = registerSoundEvent("snubble_fire");
     public static final Supplier<SoundEvent> SONIC_BLASTER_FIRE = registerSoundEvent("sonic_blaster_fire");
+    public static final Supplier<SoundEvent> SONIC_BLASTER_PISTOL_FIRE = registerSoundEvent("sonic_blaster_pistol_fire");
     public static final Supplier<SoundEvent> SONIC_STUNNER_FIRE = registerSoundEvent("sonic_stunner_fire");
     public static final Supplier<SoundEvent> SS410_FIRE = registerSoundEvent("ss410_fire");
     public static final Supplier<SoundEvent> SWE1_FIRE = registerSoundEvent("swe1_fire");

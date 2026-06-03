@@ -3692,6 +3692,17 @@
       "knightfall:blaster/sonic_blaster/weapons_blaster_sonic_blaster_fire_06"
     ]
   },
+  "sonic_blaster_pistol_fire": {
+    "subtitle": "sounds.knightfall.sonic_blaster_pistol_fire",
+    "sounds": [
+      "knightfall:blaster/sonic_blaster_pistol/weapons_blaster_sonic_blaster_pistol_fire_01",
+      "knightfall:blaster/sonic_blaster_pistol/weapons_blaster_sonic_blaster_pistol_fire_02",
+      "knightfall:blaster/sonic_blaster_pistol/weapons_blaster_sonic_blaster_pistol_fire_03",
+      "knightfall:blaster/sonic_blaster_pistol/weapons_blaster_sonic_blaster_pistol_fire_04",
+      "knightfall:blaster/sonic_blaster_pistol/weapons_blaster_sonic_blaster_pistol_fire_05",
+      "knightfall:blaster/sonic_blaster_pistol/weapons_blaster_sonic_blaster_pistol_fire_06"
+    ]
+  },
   "sonic_stunner_fire": {
     "subtitle": "sounds.knightfall.sonic_stunner_fire",
     "sounds": [

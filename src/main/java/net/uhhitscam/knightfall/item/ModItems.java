@@ -4068,7 +4068,7 @@ public class ModItems {
     );
     public static final DeferredItem<Item> SONIC_BLASTER = registerProjectile(
             ProjectileWeaponDefinition.builder(WeaponName.SONIC_BLASTER, "sonic_blaster")
-                    .projectileSpeed(2.1f)
+                    .projectileSpeed(1f)
                     .maxAmmo(100)
                     .burstRate(0)
                     .scatterShots(1)
@@ -4078,6 +4078,21 @@ public class ModItems {
                     .defaultFiringMode(FiringMode.SEMI_AUTO)
                     .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
                     .classification(WeaponClassification.RIFLE)
+                    .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> SONIC_BLASTER_PISTOL = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.SONIC_BLASTER_PISTOL, "sonic_blaster_pistol")
+                    .projectileSpeed(1f)
+                    .maxAmmo(100)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14)
+                    .firingModes(FiringMode.SEMI_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_QUAD, 0.85f))
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
+                    .ammoType(AmmoType.SPIN_SEALED_TIBANNA)
+                    .classification(WeaponClassification.PISTOL)
                     .reloadTime(15)
                     .build()
     );

@@ -136,6 +136,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SK32);
                         pOutput.accept(ModItems.SNUB_BLASTER);
                         pOutput.accept(ModItems.SNUBBLE);
+                        pOutput.accept(ModItems.SONIC_BLASTER_PISTOL);
                         pOutput.accept(ModItems.SONIC_STUNNER);
                         pOutput.accept(ModItems.SS410);
                         pOutput.accept(ModItems.T4W1);
