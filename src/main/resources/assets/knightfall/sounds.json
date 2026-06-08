@@ -2734,6 +2734,14 @@
       "knightfall:blaster/lw896/weapons_blaster_lw896_fire_06"
     ]
   },
+  "lz60_fire": {
+    "subtitle": "sounds.knightfall.lz60_fire",
+    "sounds": [
+      "knightfall:blaster/lz60/weapons_blaster_lz60_fire_01",
+      "knightfall:blaster/lz60/weapons_blaster_lz60_fire_02",
+      "knightfall:blaster/lz60/weapons_blaster_lz60_fire_03"
+    ]
+  },
   "m12_fire": {
     "subtitle": "sounds.knightfall.m12_fire",
     "sounds": [
@@ -3430,15 +3438,15 @@
   "rt97c_fire": {
     "subtitle": "sounds.knightfall.rt97c_fire",
     "sounds": [
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_1",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_2",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_3",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_4",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_5",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_6",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_7",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_8",
-      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_9",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_01",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_02",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_03",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_04",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_05",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_06",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_07",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_08",
+      "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_09",
       "knightfall:blaster/rt97c/weapons_blaster_rt97c_fire_10"
     ]
   },

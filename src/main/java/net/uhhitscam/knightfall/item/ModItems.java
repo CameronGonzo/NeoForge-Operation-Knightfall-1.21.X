@@ -631,13 +631,13 @@ public class ModItems {
                     .maxAmmo(50)
                     .burstRate(0)
                     .scatterShots(1)
-                    .stat(FiringMode.SCATTER, 0, 0f, 0f, 10)
-                    .firingModes(FiringMode.SCATTER)
+                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 10)
+                    .firingModes(FiringMode.SEMI_AUTO)
                     .ui(ProjectileWeaponUI.of(CrosshairTexture.DOT, 0.5f,
                             Map.of(),
-                            Map.of(FiringMode.SCATTER, ScopeTexture.CIRCLE_GREY_DOT))
+                            Map.of(FiringMode.SEMI_AUTO, ScopeTexture.CIRCLE_GREY_DOT))
                     )
-                    .defaultFiringMode(FiringMode.SCATTER)
+                    .defaultFiringMode(FiringMode.SEMI_AUTO)
                     .classification(WeaponClassification.RIFLE)
                     .build()
     );
@@ -3091,6 +3091,20 @@ public class ModItems {
                     .defaultFiringMode(FiringMode.SEMI_AUTO)
                     .classification(WeaponClassification.PISTOL)
                     .reloadTime(15)
+                    .build()
+    );
+    public static final DeferredItem<Item> LZ60 = registerProjectile(
+            ProjectileWeaponDefinition.builder(WeaponName.LZ60, "lz60")
+                    .projectileSpeed(2.3f)
+                    .maxAmmo(500)
+                    .burstRate(0)
+                    .scatterShots(1)
+                    .stat(FiringMode.SEMI_AUTO, 5, 0f, 0f, 10)
+                    .stat(FiringMode.FULL_AUTO, 0, 0f, 0f, 12)
+                    .firingModes(FiringMode.SEMI_AUTO, FiringMode.FULL_AUTO)
+                    .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DOT, 0.65f))
+                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .classification(WeaponClassification.REPEATER)
                     .build()
     );
     public static final DeferredItem<Item> M12 = registerProjectile(

@@ -216,6 +216,7 @@ public enum WeaponName {
     LS150,
     LV7C,
     LW896,
+    LZ60,
     M12,
     M32,
     M41,

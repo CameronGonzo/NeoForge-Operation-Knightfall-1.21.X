@@ -261,6 +261,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> LS150_FIRE = registerSoundEvent("ls150_fire");
     public static final Supplier<SoundEvent> RK2P_FIRE = registerSoundEvent("rk2p_fire");
     public static final Supplier<SoundEvent> LW896_FIRE = registerSoundEvent("lw896_fire");
+    public static final Supplier<SoundEvent> LZ60_FIRE = registerSoundEvent("lz60_fire");
     public static final Supplier<SoundEvent> M12_FIRE = registerSoundEvent("m12_fire");
     public static final Supplier<SoundEvent> CC19_FIRE = registerSoundEvent("cc19_fire");
     public static final Supplier<SoundEvent> M32_FIRE = registerSoundEvent("m32_fire");

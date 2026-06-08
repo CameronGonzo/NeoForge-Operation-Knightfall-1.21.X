@@ -207,6 +207,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.AZ6);
                         pOutput.accept(ModItems.B1X);
                         pOutput.accept(ModItems.BAC5);
+                        pOutput.accept(ModItems.BE29);
                         pOutput.accept(ModItems.BK43);
                         pOutput.accept(ModItems.BLASTER_SPEAR);
                         pOutput.accept(ModItems.BM107);
@@ -290,6 +291,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.E5R);
                         pOutput.accept(ModItems.GR13);
                         pOutput.accept(ModItems.LS150);
+                        pOutput.accept(ModItems.LZ60);
                         pOutput.accept(ModItems.M32);
                         pOutput.accept(ModItems.M41);
                         pOutput.accept(ModItems.M45);
@@ -315,7 +317,6 @@ public class ModCreativeModeTabs {
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "repeating_blasters"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.BARMST12);
-                        pOutput.accept(ModItems.BE29);
                         pOutput.accept(ModItems.BLNDRBUS);
                         pOutput.accept(ModItems.BX33);
                         pOutput.accept(ModItems.CA87);

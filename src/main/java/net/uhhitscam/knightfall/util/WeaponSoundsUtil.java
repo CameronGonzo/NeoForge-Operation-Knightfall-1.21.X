@@ -391,6 +391,7 @@ public final class WeaponSoundsUtil {
         fireDefault(WeaponName.LS150, ModSounds.LS150_FIRE);
         fireDefault(WeaponName.RK2P, ModSounds.RK2P_FIRE);
         fireDefault(WeaponName.LW896, ModSounds.LW896_FIRE);
+        fireDefault(WeaponName.LZ60, ModSounds.LZ60_FIRE);
         fireDefault(WeaponName.M12, ModSounds.M12_FIRE);
         fireDefault(WeaponName.CC19, ModSounds.CC19_FIRE);
         fireDefault(WeaponName.M32, ModSounds.M32_FIRE);
