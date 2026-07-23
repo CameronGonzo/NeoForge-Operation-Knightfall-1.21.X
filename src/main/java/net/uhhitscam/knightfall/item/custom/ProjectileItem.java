@@ -1,7 +1,6 @@
 package net.uhhitscam.knightfall.item.custom;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -20,42 +19,33 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.common.NeoForge;
 import net.uhhitscam.knightfall.component.AmmoData;
 import net.uhhitscam.knightfall.component.AmmoTypeData;
-import net.uhhitscam.knightfall.component.ExtraFiringRateData;
 import net.uhhitscam.knightfall.component.FireCoolDownData;
 import net.uhhitscam.knightfall.component.FiringModeData;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 import net.uhhitscam.knightfall.component.ReloadNSwitchCoolDownData;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.custom.*;
+import net.uhhitscam.knightfall.event.ProjectileWeaponUseEvent;
 import net.uhhitscam.knightfall.item.ModItems;
+import net.uhhitscam.knightfall.network.CSProjectileWeaponRecoilPacket;
 import net.uhhitscam.knightfall.network.PayloadRegister;
-import net.uhhitscam.knightfall.network.SSGasAmmoPacket;
-import net.uhhitscam.knightfall.network.SSGiveItemPacket;
-import net.uhhitscam.knightfall.network.SSReloadPacket;
-import net.uhhitscam.knightfall.network.SSFiringModePacket;
 import net.uhhitscam.knightfall.sound.ModSounds;
 import net.uhhitscam.knightfall.util.Repulse;
+import net.uhhitscam.knightfall.util.WeaponAimRules;
 import net.uhhitscam.knightfall.util.WeaponSoundsUtil;
-import net.uhhitscam.knightfall.util.WeaponZoomUtil;
+import net.uhhitscam.knightfall.util.WeaponTargeting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
 
 public class ProjectileItem extends Item {
-    private static final int BURST_SHOT_COUNT = 3;
+    private static final double TARGETING_RANGE = 128.0;
     private static final int DC15S_SIDEARM_RECHARGE_INTERVAL_TICKS = 20;
-    private static final float MAX_RECOIL = 20.0f;
-    private static final float RECOIL_DECAY = 0.8f;
-    private static final float MIN_RECOIL_TO_KEEP = 0.01f;
-    private static final double DEFAULT_PROJECTILE_SIDE_OFFSET = 0.27;
-    private static final double DEFAULT_PROJECTILE_HEIGHT_OFFSET = -0.1;
 
     private final float projectileSpeed;
     private final int maxAmmo;
@@ -70,8 +60,6 @@ public class ProjectileItem extends Item {
     private final WeaponName projectileWeaponName;
     private final ProjectileWeaponUI ui;
     private final ProjectileWeaponTiming timing;
-
-    private final Map<UUID, Float> recoilMap = new HashMap<>();
 
     public ProjectileItem(Properties properties, ProjectileWeaponDefinition definition) {
         super(properties);
@@ -106,6 +94,10 @@ public class ProjectileItem extends Item {
         return timing.chargeThresholdTicks();
     }
 
+    public int getBurstRate() {
+        return burstRate;
+    }
+
     public ProjectileWeaponStats getStats(FiringMode firingMode) {
         return stats.get(firingMode);
     }
@@ -121,63 +113,62 @@ public class ProjectileItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        return InteractionResultHolder.fail(player.getItemInHand(hand));
-    }
-
-    public void mainHandFiring(Player player) {
-        if (player.getMainHandItem().getItem() instanceof ProjectileItem) {
-            fireHeldWeapon(player.level(), player, true);
+        ItemStack stack = player.getItemInHand(hand);
+        if (hand != InteractionHand.MAIN_HAND) {
+            return InteractionResultHolder.pass(stack);
         }
-    }
 
-    public void offHandFiring(Player player) {
-        if (player.getOffhandItem().getItem() instanceof ProjectileItem) {
-            fireHeldWeapon(player.level(), player, false);
+        if (level.isClientSide) {
+            NeoForge.EVENT_BUS.post(new ProjectileWeaponUseEvent(player));
         }
+
+        return InteractionResultHolder.fail(stack);
     }
 
-    private void fireHeldWeapon(Level level, Player player, boolean mainHand) {
+    public boolean fireServer(ServerPlayer player, ItemStack expectedStack, boolean mainHand, boolean burstFollowup) {
+        Level level = player.level();
         ItemStack stack = getHeldWeaponStack(player, mainHand);
+
+        if (stack != expectedStack || stack.getItem() != this) {
+            return false;
+        }
+
         FiringMode firingMode = getFiringMode(stack);
 
         if (isReloadOrSwitchOnCooldown(stack, level)) {
-            return;
+            return false;
         }
 
-        if (usesFireCooldown(firingMode) && isFireOnCooldown(stack, level)) {
-            return;
+        if (!burstFollowup && usesFireCooldown(firingMode) && isFireOnCooldown(stack, level)) {
+            return false;
         }
 
         int currentAmmo = getAmmo(stack);
         if (isOutOfAmmo(currentAmmo, firingMode)) {
             handleNoAmmo(level, player, stack);
-            return;
-        }
-
-        if (level.isClientSide) {
-            return;
+            return false;
         }
 
         if (firingMode == FiringMode.REPULSE) {
             fireRepulse(level, player, stack, firingMode);
-            return;
+            return true;
         }
 
         AmmoType currentAmmoType = getAmmoType(stack);
 
         switch (firingMode) {
-            case BURST -> fireBurst(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode);
+            case BURST -> fireBurstShot(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode);
             case SCATTER -> fireScatter(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode);
             case CHARGENSHOOT -> fireChargeAndShoot(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode);
-            case BEAM -> {
-                // Beam start/stop behavior is controlled by client input and SSBeamPacket.
-            }
+            case BEAM -> { return false; }
             default -> fireSingleShot(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode);
         }
 
-        if (usesFireCooldown(firingMode)) {
+        if (!burstFollowup && usesFireCooldown(firingMode)) {
             setFireCooldown(level, stack, firingMode);
         }
+
+        return true;
     }
 
     private ItemStack getHeldWeaponStack(Player player, boolean mainHand) {
@@ -213,23 +204,6 @@ public class ProjectileItem extends Item {
         setFireCooldown(level, stack, firingMode);
     }
 
-    private void fireBurst(Level level, Player player, ItemStack stack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode) {
-        ExtraFiringRateData extraFiringRateData = getExtraFiringRateData(stack, mainHand);
-
-        if (extraFiringRateData.shotsFired() == 0) {
-            fireBolt(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode, 0);
-            extraFiringRateData = new ExtraFiringRateData(level.getGameTime() + burstRate, 1, mainHand);
-        } else {
-            extraFiringRateData = new ExtraFiringRateData(
-                    extraFiringRateData.cooldownEndTime(),
-                    extraFiringRateData.shotsFired() + 1,
-                    extraFiringRateData.mainHand()
-            );
-        }
-
-        stack.set(ModDataComponentTypes.EXTRA_FIRING_RATE, extraFiringRateData);
-    }
-
     private void fireScatter(Level level, Player player, ItemStack stack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode) {
         if (isSpreadFlechetteAmmo(currentAmmoType)) {
             fireSingleShot(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode);
@@ -241,6 +215,10 @@ public class ProjectileItem extends Item {
         }
 
         playFireSound(level, player, firingMode);
+    }
+
+    private void fireBurstShot(Level level, Player player, ItemStack stack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode) {
+        fireBolt(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode, 0);
     }
 
     private void fireChargeAndShoot(Level level, Player player, ItemStack stack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode) {
@@ -320,10 +298,9 @@ public class ProjectileItem extends Item {
         projectile.setOwner(player);
         positionProjectile(player, projectile, mainHand);
 
-        if (shouldSpawnProjectile(player)) {
-            setProjectileVelocity(player, projectile, currentAmmoType, currentStats, shot);
-            level.addFreshEntity(projectile);
-        }
+        Vec3 aimDirection = getMuzzleToCrosshairDirection(level, player, projectile.position());
+        setProjectileVelocity(player, projectile, currentAmmoType, currentStats, shot, aimDirection);
+        level.addFreshEntity(projectile);
 
         setAmmo(stack, currentAmmo - 1);
         player.awardStat(Stats.ITEM_USED.get(this));
@@ -371,15 +348,17 @@ public class ProjectileItem extends Item {
             return new SonicBoltEntity(ModEntities.SONIC_BOLT.get(), level, player, 1.4F, 18);
         }
 
-        return switch (ammoType) {
-            case IONIZED_TIBANNA -> new IonizedTibannaBlasterBoltEntity(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
-            case SPIN_SEALED_TIBANNA -> new SpinSealedTibannaBlasterBoltEntity(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
-            case TIBANNAX -> new TibannaXBlasterBoltEntity(ModEntities.TIBANNAX_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
-            case SIG -> new SigBlasterBoltEntity(ModEntities.SIG_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
-            case MAGNETIZED_SIG -> new MagnetizedSigBlasterBoltEntity(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
-            case SKEVON -> new SkevonBlasterBoltEntity(ModEntities.SKEVON_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
-            default -> new TibannaBlasterBoltEntity(ModEntities.TIBANNA_BLASTER_BOLT.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName, explosiveShot, concussiveShot);
-        };
+        return new BlasterBoltEntity(
+                ModEntities.BLASTER_BOLT.get(),
+                level,
+                player,
+                BlasterBoltEntity.BoltType.fromAmmoType(ammoType),
+                projectileSpeed,
+                currentStats.damage(),
+                classification,
+                explosiveShot,
+                concussiveShot
+        );
     }
 
     private Snowball createSlugProjectile(Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats) {
@@ -404,48 +383,20 @@ public class ProjectileItem extends Item {
     }
 
     private void positionProjectile(Player player, Snowball projectile, boolean mainHand) {
-        ProjectileOffset offset = getProjectileOffset(player, mainHand);
-        double yawRadians = Math.toRadians(player.getYRot());
-        double sideMultiplier = mainHand ? -1.0 : 1.0;
-
-        projectile.setPos(
-                player.getX() + sideMultiplier * Math.cos(yawRadians) * offset.closeness(),
-                player.getEyeY() + offset.height(),
-                player.getZ() + sideMultiplier * Math.sin(yawRadians) * offset.closeness()
-        );
+        Vec3 muzzlePosition = WeaponAimRules.getMuzzlePosition(player, mainHand, 1.0F);
+        projectile.setPos(muzzlePosition.x, muzzlePosition.y, muzzlePosition.z);
     }
 
-    private ProjectileOffset getProjectileOffset(Player player, boolean mainHand) {
-        Item mainItem = player.getMainHandItem().getItem();
-        Item offItem = player.getOffhandItem().getItem();
-        boolean isMainWeapon = mainItem instanceof ProjectileItem;
-        boolean isOffWeapon = offItem instanceof ProjectileItem;
-
-        if ((isMainWeapon ^ isOffWeapon) && player.isShiftKeyDown()) {
-            if (mainHand && mainItem instanceof ProjectileItem mainWeapon && WeaponZoomUtil.getScopeTexture(mainWeapon, player.getMainHandItem()) != null) {
-                return new ProjectileOffset(0, 0);
-            }
-
-            if (!mainHand && offItem instanceof ProjectileItem offWeapon && WeaponZoomUtil.getScopeTexture(offWeapon, player.getOffhandItem()) != null) {
-                return new ProjectileOffset(0, 0);
-            }
-        }
-
-        return new ProjectileOffset(DEFAULT_PROJECTILE_SIDE_OFFSET, DEFAULT_PROJECTILE_HEIGHT_OFFSET);
+    private Vec3 getMuzzleToCrosshairDirection(Level level, Player player, Vec3 muzzlePosition) {
+        Vec3 cameraPosition = player.getEyePosition();
+        Vec3 crosshairPosition = WeaponTargeting.findHit(
+                level, player, cameraPosition, player.getLookAngle(), TARGETING_RANGE
+        ).endPosition();
+        Vec3 direction = crosshairPosition.subtract(muzzlePosition);
+        return direction.lengthSqr() < 1.0e-6 ? player.getLookAngle().normalize() : direction.normalize();
     }
 
-    private boolean shouldSpawnProjectile(Player player) {
-        ItemStack mainStack = player.getMainHandItem();
-        ItemStack offStack = player.getOffhandItem();
-
-        boolean mainCanSpawn = mainStack.getItem() instanceof ProjectileItem mainWeapon && mainWeapon.getFiringMode(mainStack) != FiringMode.BEAM;
-        boolean offCanSpawn = offStack.getItem() instanceof ProjectileItem offWeapon && offWeapon.getFiringMode(offStack) != FiringMode.BEAM;
-
-        return mainCanSpawn || offCanSpawn;
-    }
-
-    private void setProjectileVelocity(Player player, Snowball projectile, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, int shot) {
-        Vec3 forward = player.getLookAngle().normalize();
+    private void setProjectileVelocity(Player player, Snowball projectile, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, int shot, Vec3 forward) {
         Vec3 worldUp = new Vec3(0, 1, 0);
         Vec3 right = forward.cross(worldUp);
 
@@ -467,60 +418,32 @@ public class ProjectileItem extends Item {
         Vec3 direction = forward.scale(Math.cos(angle)).add(right.scale(Math.sin(angle)));
 
         float accuracyFactor = getAccuracyFactor(player, currentAmmoType, currentStats);
-        Random random = new Random();
 
         return direction
-                .add(right.scale((random.nextDouble() - 0.5) * accuracyFactor))
-                .add(cameraUp.scale((random.nextDouble() - 0.5) * accuracyFactor))
+                .add(right.scale((player.getRandom().nextDouble() - 0.5) * accuracyFactor))
+                .add(cameraUp.scale((player.getRandom().nextDouble() - 0.5) * accuracyFactor))
                 .normalize();
     }
 
     private float getAccuracyFactor(Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats) {
         float baseInaccuracy = isSpreadFlechetteAmmo(currentAmmoType) ? 1.8f : currentStats.inaccuracy();
-        return player.isShiftKeyDown() ? baseInaccuracy * 0.8f / 100 : baseInaccuracy / 100;
+        return baseInaccuracy * WeaponAimRules.spreadMultiplier(player) / 100;
     }
 
     private void applyShotRecoil(Player player, ProjectileWeaponStats currentStats) {
-        Item mainItem = player.getMainHandItem().getItem();
-        Item offItem = player.getOffhandItem().getItem();
-        boolean isMainWeapon = mainItem instanceof ProjectileItem;
-        boolean isOffWeapon = offItem instanceof ProjectileItem;
-        float recoil = player.isShiftKeyDown() && (isOffWeapon ^ isMainWeapon) ? currentStats.recoil() * 0.4f : currentStats.recoil();
-        applyRecoil(player, recoil);
+        if (player instanceof ServerPlayer serverPlayer) {
+            float recoil = currentStats.recoil() * WeaponAimRules.recoilMultiplier(player);
+            PayloadRegister.sendToPlayer(serverPlayer, new CSProjectileWeaponRecoilPacket(recoil));
+        }
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof Player player) {
-            tickRecoil(player);
-        }
-
         if (level.isClientSide || !(entity instanceof Player player)) {
             return;
         }
 
         rechargeDc15sSidearm(stack, level, player);
-        tickBurstFire(stack, level, player);
-    }
-
-    private void tickRecoil(Player player) {
-        UUID playerId = player.getUUID();
-        Float recoilAmount = recoilMap.get(playerId);
-
-        if (recoilAmount == null) {
-            return;
-        }
-
-        float decayedRecoil = recoilAmount * RECOIL_DECAY;
-        float recoilEffect = recoilAmount - decayedRecoil;
-        float newPitch = Mth.clamp(player.getXRot() - recoilEffect, -90.0f, 90.0f);
-        player.setXRot(newPitch);
-
-        if (decayedRecoil < MIN_RECOIL_TO_KEEP) {
-            recoilMap.remove(playerId);
-        } else {
-            recoilMap.put(playerId, decayedRecoil);
-        }
     }
 
     private void rechargeDc15sSidearm(ItemStack stack, Level level, Player player) {
@@ -543,40 +466,20 @@ public class ProjectileItem extends Item {
         player.inventoryMenu.broadcastChanges();
     }
 
-    private void tickBurstFire(ItemStack stack, Level level, Player player) {
-        ExtraFiringRateData extraFiringRateData = stack.get(ModDataComponentTypes.EXTRA_FIRING_RATE);
-        if (extraFiringRateData == null) {
-            return;
-        }
-
-        if (getFiringMode(stack) == FiringMode.BURST
-                && extraFiringRateData.shotsFired() > 0
-                && extraFiringRateData.shotsFired() < BURST_SHOT_COUNT
-                && level.getGameTime() >= extraFiringRateData.cooldownEndTime()) {
-            fireBolt(level, player, stack, getAmmo(stack), getAmmoType(stack), extraFiringRateData.mainHand(), getFiringMode(stack), 0);
-            extraFiringRateData = extraFiringRateData
-                    .withCooldownEndTime(level.getGameTime() + 2)
-                    .withShotsFired(extraFiringRateData.shotsFired() + 1);
-            stack.set(ModDataComponentTypes.EXTRA_FIRING_RATE, extraFiringRateData);
-        }
-
-        if (extraFiringRateData.shotsFired() >= BURST_SHOT_COUNT) {
-            stack.set(ModDataComponentTypes.EXTRA_FIRING_RATE, new ExtraFiringRateData(0, 0, extraFiringRateData.mainHand()));
-        }
-    }
-
-    public void applyRecoil(Player player, float recoil) {
-        UUID playerId = player.getUUID();
-        float currentRecoil = recoilMap.getOrDefault(playerId, 0.0f);
-        recoilMap.put(playerId, Math.min(currentRecoil + recoil, MAX_RECOIL));
-    }
-
     public int getAmmo(ItemStack stack) {
         AmmoData data = stack.get(ModDataComponentTypes.AMMO.get());
         return data != null ? data.ammo() : 0;
     }
 
-    public ReloadNSwitchCoolDownData getReloadNSwitchCooldownData(ItemStack stack) {
+    public boolean isActionOnCooldown(ServerPlayer player, ItemStack stack) {
+        return getReloadNSwitchCooldownData(stack).isOnCooldown(player.level());
+    }
+
+    public boolean isActionOnCooldown(Level level, ItemStack stack) {
+        return getReloadNSwitchCooldownData(stack).isOnCooldown(level);
+    }
+
+    private ReloadNSwitchCoolDownData getReloadNSwitchCooldownData(ItemStack stack) {
         ReloadNSwitchCoolDownData data = stack.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
         if (data == null) {
             data = new ReloadNSwitchCoolDownData(0);
@@ -585,20 +488,11 @@ public class ProjectileItem extends Item {
         return data;
     }
 
-    public FireCoolDownData getFireCoolDownData(ItemStack stack) {
+    private FireCoolDownData getFireCoolDownData(ItemStack stack) {
         FireCoolDownData data = stack.get(ModDataComponentTypes.FIRE_COOLDOWN);
         if (data == null) {
             data = new FireCoolDownData(0);
             stack.set(ModDataComponentTypes.FIRE_COOLDOWN, data);
-        }
-        return data;
-    }
-
-    public ExtraFiringRateData getExtraFiringRateData(ItemStack stack, boolean mainHand) {
-        ExtraFiringRateData data = stack.get(ModDataComponentTypes.EXTRA_FIRING_RATE);
-        if (data == null) {
-            data = new ExtraFiringRateData(0, 0, mainHand);
-            stack.set(ModDataComponentTypes.EXTRA_FIRING_RATE, data);
         }
         return data;
     }
@@ -627,11 +521,21 @@ public class ProjectileItem extends Item {
 
     public FiringMode getFiringMode(ItemStack stack) {
         FiringModeData data = stack.get(ModDataComponentTypes.FIRING_MODE.get());
-        if (data == null) {
+        if (data == null || data.firingMode() == null || data.firingMode().isBlank()) {
             initializeFiringMode(stack);
-            data = stack.get(ModDataComponentTypes.FIRING_MODE.get());
+            return defaultFiringMode;
         }
-        return FiringMode.valueOf(data.firingMode());
+
+        try {
+            FiringMode firingMode = FiringMode.valueOf(data.firingMode());
+            if (firingModes.contains(firingMode)) {
+                return firingMode;
+            }
+        } catch (IllegalArgumentException ignored) {
+        }
+
+        initializeFiringMode(stack);
+        return defaultFiringMode;
     }
 
     public List<FiringMode> getFiringModes() {
@@ -650,84 +554,120 @@ public class ProjectileItem extends Item {
         return maxAmmo;
     }
 
-    public int reload(Player player, ItemStack stack, boolean mainHand, int additionalAmmoToConsume) {
+    public boolean reload(ServerPlayer player, ItemStack stack) {
+        if (projectileWeaponName == WeaponName.DC15S_SIDEARM
+                || getAmmo(stack) >= maxAmmo
+                || getReloadNSwitchCooldownData(stack).isOnCooldown(player.level())) {
+            return false;
+        }
+
         int currentAmmo = getAmmo(stack);
         AmmoType currentAmmoType = getAmmoType(stack);
-        FiringMode firingMode = getFiringMode(stack);
+        boolean reloaded = tryReloadFromInventory(player, stack, currentAmmo, currentAmmoType);
 
-        if (currentAmmo >= maxAmmo || getReloadNSwitchCooldownData(stack).isOnCooldown(player.level())) {
-            return 0;
+        if (!reloaded && player.isCreative()) {
+            reloaded = tryCreativeReload(stack, currentAmmo, currentAmmoType);
         }
 
-        ReloadResult reloadResult = tryReloadFromInventory(player, stack, currentAmmo, currentAmmoType, mainHand, firingMode, additionalAmmoToConsume);
-        if (reloadResult.reloaded()) {
-            return reloadResult.ammoToConsume();
+        if (!reloaded) {
+            return false;
         }
 
-        return tryCreativeReload(player, stack, currentAmmo, currentAmmoType, mainHand, firingMode) ? 0 : 0;
+        startCooldown(player, stack, WeaponCooldownAction.RELOAD);
+        playReloadSound(player, getFiringMode(stack), 0.5F);
+        player.inventoryMenu.broadcastChanges();
+        return true;
     }
 
-    private ReloadResult tryReloadFromInventory(Player player, ItemStack weaponStack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode, int additionalAmmoToConsume) {
+    private boolean tryReloadFromInventory(Player player, ItemStack weaponStack, int currentAmmo, AmmoType currentAmmoType) {
         for (int slotIndex = 0; slotIndex < player.getInventory().items.size(); slotIndex++) {
             ItemStack ammoStack = player.getInventory().items.get(slotIndex);
             Item item = ammoStack.getItem();
-            player.inventoryMenu.broadcastChanges();
 
             if (classification == WeaponClassification.SLUGTHROWER && item instanceof SlugItem slugItem) {
-                if (tryReloadSlug(player, weaponStack, ammoStack, slugItem, currentAmmo, currentAmmoType, mainHand, firingMode, additionalAmmoToConsume)) {
-                    int ammoToConsume = getItemAmmoToConsume(player, ammoStack, currentAmmo, additionalAmmoToConsume);
-                    weaponStack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(slugItem.getAmmoType().name()));
-                    return ReloadResult.success(ammoToConsume);
+                if (reloadItemAmmo(player, weaponStack, ammoStack, slugItem.getAmmoType(), currentAmmo, currentAmmoType)) {
+                    return true;
                 }
             } else if (classification == WeaponClassification.FLECHETTE && item instanceof FlechetteCanisterItem flechetteItem) {
-                if (tryReloadFlechette(player, weaponStack, ammoStack, flechetteItem, currentAmmo, currentAmmoType, mainHand, firingMode, additionalAmmoToConsume)) {
-                    int ammoToConsume = getItemAmmoToConsume(player, ammoStack, currentAmmo, additionalAmmoToConsume);
-                    weaponStack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(flechetteItem.getAmmoType().name()));
-                    return ReloadResult.success(ammoToConsume);
+                if (reloadItemAmmo(player, weaponStack, ammoStack, flechetteItem.getAmmoType(), currentAmmo, currentAmmoType)) {
+                    return true;
                 }
             } else if (usesGasAmmo() && item instanceof GasItem gasItem) {
-                if (tryReloadGas(player, weaponStack, ammoStack, gasItem, currentAmmo, slotIndex, currentAmmoType, mainHand, firingMode)) {
-                    return ReloadResult.success(0);
+                if (reloadGasAmmo(player, weaponStack, ammoStack, gasItem, slotIndex, currentAmmo, currentAmmoType)) {
+                    return true;
                 }
             }
         }
 
-        return ReloadResult.failed();
+        return false;
     }
 
-    private int getItemAmmoToConsume(Player player, ItemStack ammoStack, int currentAmmo, int additionalAmmoToConsume) {
-        if (player.isCreative()) {
-            return maxAmmo - currentAmmo;
+    private boolean reloadItemAmmo(Player player, ItemStack weaponStack, ItemStack ammoStack, AmmoType ammoType, int currentAmmo, AmmoType currentAmmoType) {
+        if (ammoStack.isEmpty() || currentAmmoType != AmmoType.NONE && currentAmmoType != ammoType) {
+            return false;
         }
 
-        return Math.min(maxAmmo - currentAmmo, ammoStack.getCount() - additionalAmmoToConsume);
+        int ammoToReload = player.isCreative()
+                ? maxAmmo - currentAmmo
+                : Math.min(maxAmmo - currentAmmo, ammoStack.getCount());
+
+        if (ammoToReload <= 0) {
+            return false;
+        }
+
+        setAmmo(weaponStack, currentAmmo + ammoToReload);
+        weaponStack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(ammoType.name()));
+
+        if (!player.isCreative()) {
+            ammoStack.shrink(ammoToReload);
+        }
+
+        return true;
+    }
+
+    private boolean reloadGasAmmo(Player player, ItemStack weaponStack, ItemStack gasStack, GasItem gasItem, int slotIndex, int currentAmmo, AmmoType currentAmmoType) {
+        AmmoType gasType = gasItem.getAmmoType();
+        if (currentAmmoType != AmmoType.NONE && currentAmmoType != gasType) {
+            return false;
+        }
+
+        int gasAmmo = gasItem.getAmmo(gasStack);
+        int ammoToReload = player.isCreative()
+                ? maxAmmo - currentAmmo
+                : Math.min(maxAmmo - currentAmmo, gasAmmo);
+
+        if (ammoToReload <= 0) {
+            return false;
+        }
+
+        setAmmo(weaponStack, currentAmmo + ammoToReload);
+        weaponStack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(gasType.name()));
+
+        if (!player.isCreative()) {
+            int remainingGas = gasAmmo - ammoToReload;
+            gasItem.setAmmo(gasStack, remainingGas);
+
+            if (remainingGas <= 0) {
+                player.getInventory().setItem(slotIndex, new ItemStack(ModItems.GAS_CARTRIDGE.get()));
+            }
+        }
+
+        return true;
     }
 
     private boolean usesGasAmmo() {
         return classification != WeaponClassification.FLECHETTE && classification != WeaponClassification.SLUGTHROWER;
     }
 
-    private boolean tryCreativeReload(Player player, ItemStack stack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode) {
-        if (!player.isCreative()) {
-            return false;
-        }
-
+    private boolean tryCreativeReload(ItemStack stack, int currentAmmo, AmmoType currentAmmoType) {
         AmmoType assumedType = currentAmmoType != AmmoType.NONE ? currentAmmoType : typAmmoType;
         if (assumedType == null || assumedType == AmmoType.NONE || !canUseAmmoType(assumedType)) {
             return false;
         }
 
-        int ammoNeeded = maxAmmo - currentAmmo;
-        if (ammoNeeded <= 0) {
-            return false;
-        }
-
-        int newAmmo = currentAmmo + ammoNeeded;
-        setAmmo(stack, newAmmo);
+        setAmmo(stack, maxAmmo);
         stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(assumedType.name()));
-        PayloadRegister.sendToServer(new SSReloadPacket(stack, newAmmo, assumedType.name(), mainHand));
-        playReloadSound(player, firingMode, 0.3F);
-        return true;
+        return currentAmmo < maxAmmo;
     }
 
     private boolean canUseAmmoType(AmmoType ammoType) {
@@ -738,77 +678,22 @@ public class ProjectileItem extends Item {
         };
     }
 
-    private boolean tryReloadGas(Player player, ItemStack weaponStack, ItemStack ammoStack, GasItem gasItem, int currentAmmo, int slotIndex, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode) {
-        int gasAmmo = gasItem.getAmmo(ammoStack);
-        if (gasAmmo <= 0) {
-            return false;
-        }
-
-        AmmoType gasType = gasItem.getAmmoType();
-        if (currentAmmoType != AmmoType.NONE && currentAmmoType != gasType) {
-            return false;
-        }
-
-        int ammoToReload = player.isCreative() ? maxAmmo - currentAmmo : Math.min(maxAmmo - currentAmmo, gasAmmo);
-        int newAmmo = currentAmmo + ammoToReload;
-        setAmmo(weaponStack, newAmmo);
-        PayloadRegister.sendToServer(new SSReloadPacket(weaponStack, newAmmo, gasType.toString(), mainHand));
-
-        if (!player.isCreative()) {
-            gasAmmo -= ammoToReload;
-            gasItem.setAmmo(ammoStack, gasAmmo);
-            PayloadRegister.sendToServer(new SSGasAmmoPacket(ammoStack, gasAmmo, slotIndex));
-        }
-
-        player.inventoryMenu.broadcastChanges();
-        playReloadSound(player, firingMode, 0.5F);
-        return true;
-    }
-
-    private boolean tryReloadSlug(Player player, ItemStack weaponStack, ItemStack ammoStack, SlugItem slugItem, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode, int additionalAmmoToReload) {
-        int slugAmmo = ammoStack.getCount() - additionalAmmoToReload;
-        AmmoType slugType = slugItem.getAmmoType();
-
-        if (slugAmmo <= 0 || currentAmmoType != AmmoType.NONE && currentAmmoType != slugType) {
-            return false;
-        }
-
-        int ammoToReload = player.isCreative() ? maxAmmo - currentAmmo : Math.min(maxAmmo - currentAmmo, slugAmmo);
-        int newAmmo = currentAmmo + ammoToReload;
-        setAmmo(weaponStack, newAmmo);
-        PayloadRegister.sendToServer(new SSReloadPacket(weaponStack, newAmmo, slugType.toString(), mainHand));
-        playReloadSound(player, firingMode, 0.5F);
-        return true;
-    }
-
-    private boolean tryReloadFlechette(Player player, ItemStack weaponStack, ItemStack ammoStack, FlechetteCanisterItem flechetteCanisterItem, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode, int additionalAmmoToReload) {
-        int flechetteAmmo = ammoStack.getCount() - additionalAmmoToReload;
-        AmmoType flechetteType = flechetteCanisterItem.getAmmoType();
-
-        if (flechetteAmmo <= 0 || currentAmmoType != AmmoType.NONE && currentAmmoType != flechetteType) {
-            return false;
-        }
-
-        int ammoToReload = player.isCreative() ? maxAmmo - currentAmmo : Math.min(maxAmmo - currentAmmo, flechetteAmmo);
-        int newAmmo = currentAmmo + ammoToReload;
-        setAmmo(weaponStack, newAmmo);
-        PayloadRegister.sendToServer(new SSReloadPacket(weaponStack, newAmmo, flechetteType.toString(), mainHand));
-        playReloadSound(player, firingMode, 0.5F);
-        return true;
-    }
-
     private void playReloadSound(Player player, FiringMode firingMode, float volume) {
         SoundEvent reloadSound = WeaponSoundsUtil.getWeaponReloadSound(projectileWeaponName, firingMode, classification);
-        player.playSound(reloadSound, volume, 1.0F);
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), reloadSound, SoundSource.PLAYERS, volume, 1.0F);
     }
 
-    public void unload(Player player, ItemStack stack, boolean mainHand) {
+    public boolean unload(ServerPlayer player, ItemStack stack, boolean mainHand) {
+        if (getReloadNSwitchCooldownData(stack).isOnCooldown(player.level())) {
+            return false;
+        }
+
         int currentAmmo = getAmmo(stack);
         AmmoType currentAmmoType = getAmmoType(stack);
 
         if (currentAmmo <= 0) {
             player.displayClientMessage(Component.translatable("item.knightfall.projectileWeapon.no_ammo_to_unload"), true);
-            return;
+            return false;
         }
 
         if (classification == WeaponClassification.FLECHETTE || classification == WeaponClassification.SLUGTHROWER) {
@@ -819,14 +704,16 @@ public class ProjectileItem extends Item {
 
         playUnloadSound(player, stack);
         setAmmo(stack, 0);
-        PayloadRegister.sendToServer(new SSReloadPacket(stack, 0, currentAmmoType.toString(), mainHand));
+        stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.NONE.name()));
         player.inventoryMenu.broadcastChanges();
+        return true;
     }
 
     private void giveUnloadedAmmo(Player player, AmmoType currentAmmoType, int currentAmmo) {
         ItemStack unloadedAmmo = getUnloadedAmmoStack(currentAmmoType, currentAmmo);
-        PayloadRegister.sendToServer(new SSGiveItemPacket(unloadedAmmo));
-        player.inventoryMenu.broadcastChanges();
+        if (!player.getInventory().add(unloadedAmmo) && !unloadedAmmo.isEmpty()) {
+            player.drop(unloadedAmmo, false);
+        }
     }
 
     private ItemStack getUnloadedAmmoStack(AmmoType ammoType, int amount) {
@@ -849,44 +736,31 @@ public class ProjectileItem extends Item {
     }
 
     private void spawnUnloadSmoke(Player player, boolean mainHand) {
-        ProjectileOffset offset = getProjectileOffset(player, mainHand);
-        double yawRadians = Math.toRadians(player.getYRot());
-        double pitchRadians = Math.toRadians(player.getXRot());
-        double sideMultiplier = mainHand ? -1.0 : 1.0;
+        Vec3 position = WeaponAimRules.getMuzzlePosition(player, mainHand, 1.0F)
+                .add(player.getLookAngle().scale(0.8));
 
-        double x = player.getX()
-                + sideMultiplier * Math.cos(yawRadians) * offset.closeness()
-                - Math.sin(yawRadians);
-        double y = player.getEyeY()
-                + offset.height()
-                - Math.sin(pitchRadians) * 1.2;
-        double z = player.getZ()
-                + sideMultiplier * Math.sin(yawRadians) * offset.closeness()
-                + Math.cos(yawRadians);
-
-        player.level().addParticle(
-                ParticleTypes.LARGE_SMOKE,
-                x,
-                y,
-                z,
-                0,
-                0.05 + player.level().random.nextDouble() * 0.05,
-                0
-        );
+        if (player.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            serverLevel.sendParticles(
+                    ParticleTypes.LARGE_SMOKE,
+                    position.x,
+                    position.y,
+                    position.z,
+                    1,
+                    0,
+                    0.05,
+                    0,
+                    0.01
+            );
+        }
     }
 
     private void playUnloadSound(Player player, ItemStack stack) {
         SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(getFiringMode(stack), classification);
-        player.playSound(unloadSound, 0.5F, 1.0F);
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), unloadSound, SoundSource.PLAYERS, 0.5F, 1.0F);
     }
 
-    public void startCooldown(Player player, ItemStack stack, WeaponCooldownAction action) {
+    public void startCooldown(ServerPlayer player, ItemStack stack, WeaponCooldownAction action) {
         Level level = player.level();
-        int currentAmmo = getAmmo(stack);
-
-        if (action == WeaponCooldownAction.RELOAD && currentAmmo >= maxAmmo) {
-            return;
-        }
 
         ReloadNSwitchCoolDownData cooldownData = getReloadNSwitchCooldownData(stack);
 
@@ -910,10 +784,10 @@ public class ProjectileItem extends Item {
         );
     }
 
-    public void switchFiringMode(Player player, ItemStack stack, boolean mainHand) {
+    public boolean switchFiringMode(ServerPlayer player, ItemStack stack) {
         ReloadNSwitchCoolDownData cooldownData = getReloadNSwitchCooldownData(stack);
-        if (cooldownData.isOnCooldown(player.level())) {
-            return;
+        if (cooldownData.isOnCooldown(player.level()) || firingModes.size() <= 1) {
+            return false;
         }
 
         FiringMode currentFiringMode = getFiringMode(stack);
@@ -926,9 +800,11 @@ public class ProjectileItem extends Item {
         FiringModeData newData = stack.get(ModDataComponentTypes.FIRING_MODE.get()).withFiringMode(nextMode.toString());
         stack.set(ModDataComponentTypes.FIRING_MODE.get(), newData);
 
-        PayloadRegister.sendToServer(new SSFiringModePacket(stack, nextMode.toString(), mainHand));
+        startCooldown(player, stack, WeaponCooldownAction.SWITCH);
         SoundEvent switchSound = WeaponSoundsUtil.getWeaponSwitchFireMode(projectileWeaponName, currentFiringMode);
-        player.playSound(switchSound, 0.5F, 1.0F);
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), switchSound, SoundSource.PLAYERS, 0.5F, 1.0F);
+        player.inventoryMenu.broadcastChanges();
+        return true;
     }
 
     @Override
@@ -936,9 +812,7 @@ public class ProjectileItem extends Item {
         ChatFormatting color = ChatFormatting.WHITE;
         int currentAmmo = getAmmo(stack);
 
-        if (currentAmmo <= 0) {
-            stack.set(ModDataComponentTypes.AMMO_TYPE.get(), null);
-        } else {
+        if (currentAmmo > 0) {
             AmmoType ammoType = getDisplayAmmoType(stack);
             color = getAmmoColor(ammoType);
         }
@@ -977,17 +851,11 @@ public class ProjectileItem extends Item {
     @Override
     public void appendHoverText(ItemStack weaponStack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.literal("Ammo: " + getAmmo(weaponStack) + "/" + maxAmmo));
-
-        if (Screen.hasShiftDown()) {
-            appendAmmoTypeTooltip(weaponStack, tooltip);
-        } else {
-            tooltip.add(Component.translatable("tooltip.knightfall.blaster.shift"));
-        }
-
+        tooltip.add(Component.translatable("tooltip.knightfall.blaster.shift"));
         super.appendHoverText(weaponStack, context, tooltip, flag);
     }
 
-    private void appendAmmoTypeTooltip(ItemStack weaponStack, List<Component> tooltip) {
+    public void appendAmmoTypeTooltip(ItemStack weaponStack, List<Component> tooltip) {
         AmmoTypeData ammoTypeData = weaponStack.get(ModDataComponentTypes.AMMO_TYPE.get());
 
         if (ammoTypeData == null || ammoTypeData.ammoType() == null || ammoTypeData.ammoType().isBlank()) {
@@ -1002,16 +870,4 @@ public class ProjectileItem extends Item {
         }
     }
 
-    private record ProjectileOffset(double closeness, double height) {
-    }
-
-    private record ReloadResult(boolean reloaded, int ammoToConsume) {
-        private static ReloadResult success(int ammoToConsume) {
-            return new ReloadResult(true, ammoToConsume);
-        }
-
-        private static ReloadResult failed() {
-            return new ReloadResult(false, 0);
-        }
-    }
 }

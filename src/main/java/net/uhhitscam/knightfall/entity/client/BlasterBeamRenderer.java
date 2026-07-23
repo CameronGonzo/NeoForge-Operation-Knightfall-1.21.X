@@ -12,12 +12,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.entity.custom.BlasterBeamEndpointEntity;
-import net.uhhitscam.knightfall.item.custom.ProjectileItem;
-import net.uhhitscam.knightfall.util.WeaponZoomUtil;
+import net.uhhitscam.knightfall.util.WeaponAimRules;
+import net.uhhitscam.knightfall.util.WeaponTargeting;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -46,17 +45,21 @@ public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntit
         LivingEntity owner = beam.getOwnerLiving();
         if (owner == null) return;
 
-        double ex = Mth.lerp(partialTick, beam.xo, beam.getX());
-        double ey = Mth.lerp(partialTick, beam.yo, beam.getY());
-        double ez = Mth.lerp(partialTick, beam.zo, beam.getZ());
-        Vec3 end = new Vec3(ex, ey, ez);
-
         Vec3 start;
+        Vec3 direction = owner.getViewVector(partialTick);
         if (owner instanceof Player player) {
-            start = computeBeamStart(player, beam, partialTick);
+            start = WeaponAimRules.getBeamMuzzlePosition(player, beam.isMainHand(), partialTick);
         } else {
-            start = owner.getEyePosition(partialTick).add(owner.getViewVector(partialTick).scale(0.4));
+            start = owner.getEyePosition(partialTick).add(direction.scale(0.4));
         }
+        Vec3 end = WeaponTargeting.findBeamHit(
+                owner.level(), owner, start, direction, BlasterBeamEndpointEntity.DEFAULT_RANGE
+        ).endPosition();
+        Vec3 entityOrigin = new Vec3(
+                Mth.lerp(partialTick, beam.xo, beam.getX()),
+                Mth.lerp(partialTick, beam.yo, beam.getY()),
+                Mth.lerp(partialTick, beam.zo, beam.getZ())
+        );
 
         Vec3 dir = end.subtract(start);
         float len = (float) dir.length();
@@ -64,7 +67,7 @@ public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntit
 
         Vec3 n = dir.scale(1.0 / len);
 
-        Vec3 diff = start.subtract(end);
+        Vec3 diff = start.subtract(entityOrigin);
 
         poseStack.pushPose();
         poseStack.translate(diff.x, diff.y, diff.z);
@@ -80,49 +83,6 @@ public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntit
 
         poseStack.popPose();
         super.render(beam, entityYaw, partialTick, poseStack, buffer, packedLight);
-    }
-
-    private static Vec3 computeBeamStart(Player player, BlasterBeamEndpointEntity beam, float partialTick) {
-        ItemStack mainItem = player.getMainHandItem();
-        ItemStack offItem  = player.getOffhandItem();
-
-        boolean isMainWeapon = mainItem.getItem() instanceof ProjectileItem;
-        boolean isOffWeapon  = offItem.getItem()  instanceof ProjectileItem;
-
-        double closeness = 0.14;
-        double height    = -0.10;
-        double forward   = 0.20;
-
-        if ((isMainWeapon ^ isOffWeapon) && player.isShiftKeyDown()) {
-            if (beam.isMainHand() && isMainWeapon) {
-                ProjectileItem w = (ProjectileItem) mainItem.getItem();
-                if (WeaponZoomUtil.getScopeTexture(w, mainItem) != null) {
-                    closeness = 0;
-                    height = -0.08;
-                    forward = 0.10;
-                }
-            } else if (!beam.isMainHand() && isOffWeapon) {
-                ProjectileItem w = (ProjectileItem) offItem.getItem();
-                if (WeaponZoomUtil.getScopeTexture(w, offItem) != null) {
-                    closeness = 0;
-                    height = 0;
-                    forward = 0.20;
-                }
-            }
-        }
-
-        float yaw = Mth.lerp(partialTick, player.yRotO, player.getYRot());
-        double yawRad = Math.toRadians(yaw);
-
-        double sign = beam.isMainHand() ? -1.0 : 1.0;
-
-        Vec3 start = new Vec3(
-                player.getX() + sign * (Math.cos(yawRad) * closeness),
-                player.getEyeY() + height,
-                player.getZ() + sign * (Math.sin(yawRad) * closeness)
-        );
-
-        return start.add(player.getViewVector(partialTick).scale(forward));
     }
 
     private static void renderSpinningBeam(PoseStack poseStack, MultiBufferSource buffer,

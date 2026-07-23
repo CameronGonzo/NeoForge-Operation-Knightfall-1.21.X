@@ -10,13 +10,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(ModModelLayers.TIBANNA_BLASTER_BOLT, TibannaBlasterBoltModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.IONIZED_TIBANNA_BLASTER_BOLT, IonizedTibannaBlasterBoltModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.SPIN_SEALED_TIBANNA_BLASTER_BOLT, SpinSealedTibannaBlasterBoltModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.TIBANNAX_BLASTER_BOLT, TibannaXBlasterBoltModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.SIG_BLASTER_BOLT, SigBlasterBoltModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.MAGNETIZED_SIG_BLASTER_BOLT, MagnetizedSigBlasterBoltModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.SKEVON_BLASTER_BOLT, SkevonBlasterBoltModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.BLASTER_BOLT, BlasterBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SONIC_BOLT, SonicBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.STUN_BLASTER_BOLT, StunBlasterBoltModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.STEEL_SLUG, SteelSlugModel::createBodyLayer);

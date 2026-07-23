@@ -4,7 +4,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -12,24 +11,25 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.knightfall.component.AmmoTypeData;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
+import net.uhhitscam.knightfall.effect.ModEffects;
 import net.uhhitscam.knightfall.item.custom.AmmoType;
 import net.uhhitscam.knightfall.item.custom.FiringMode;
 import net.uhhitscam.knightfall.item.custom.ProjectileItem;
 import net.uhhitscam.knightfall.sound.ModSounds;
+import net.uhhitscam.knightfall.util.WeaponAimRules;
+import net.uhhitscam.knightfall.util.WeaponTargeting;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
 public class BlasterBeamEndpointEntity extends Entity {
+    public static final double DEFAULT_RANGE = 64.0;
 
     private static final EntityDataAccessor<Boolean> MAIN_HAND =
             SynchedEntityData.defineId(BlasterBeamEndpointEntity.class, EntityDataSerializers.BOOLEAN);
@@ -38,7 +38,7 @@ public class BlasterBeamEndpointEntity extends Entity {
             SynchedEntityData.defineId(BlasterBeamEndpointEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     private float damagePerPulse = 2.0F;
-    private double range = 48.0;
+    private double range = DEFAULT_RANGE;
     private int damageTicker = 0;
     private float ammoDrainAccumulator = 0.0F;
 
@@ -99,7 +99,10 @@ public class BlasterBeamEndpointEntity extends Entity {
         if (this.level().isClientSide) return;
 
         LivingEntity owner = getOwnerLiving();
-        if (!(owner instanceof Player player) || !owner.isAlive()) {
+        if (!(owner instanceof Player player)
+                || !owner.isAlive()
+                || player.isSpectator()
+                || player.hasEffect(ModEffects.STUN_EFFECT)) {
             this.discard();
             return;
         }
@@ -135,15 +138,18 @@ public class BlasterBeamEndpointEntity extends Entity {
             }
         }
 
-        BeamHit hit = computeBeamHit((ServerLevel) this.level(), owner, range);
+        Vec3 start = WeaponAimRules.getBeamMuzzlePosition(player, isMainHand(), 1.0F);
+        WeaponTargeting.WeaponHit hit = WeaponTargeting.findBeamHit(
+                this.level(), owner, start, owner.getLookAngle(), range
+        );
 
-        Vec3 end = hit.endPos();
+        Vec3 end = hit.endPosition();
         this.setPos(end.x, end.y, end.z);
 
         if (++damageTicker >= 5) {
             damageTicker = 0;
 
-            LivingEntity target = hit.hitEntity();
+            LivingEntity target = hit.livingEntity();
             if (target != null && target.isAlive()) {
                 target.invulnerableTime = 0;
 
@@ -181,62 +187,4 @@ public class BlasterBeamEndpointEntity extends Entity {
         return super.getBoundingBoxForCulling().inflate(1.0);
     }
 
-    public record BeamHit(Vec3 endPos, @Nullable LivingEntity hitEntity) {}
-
-    private static BeamHit computeBeamHit(ServerLevel level, LivingEntity owner, double range) {
-        Vec3 look = owner.getLookAngle();
-        Vec3 start = owner.getEyePosition().add(look.scale(0.2));
-        Vec3 maxEnd = start.add(look.scale(range));
-
-        BlockHitResult blockHit = level.clip(new ClipContext(
-                start, maxEnd,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                owner
-        ));
-
-        Vec3 end = maxEnd;
-        double maxDist = range;
-        if (blockHit.getType() != HitResult.Type.MISS) {
-            end = blockHit.getLocation();
-            maxDist = end.distanceTo(start);
-        }
-
-        Vec3 cappedEnd = start.add(look.scale(maxDist));
-        AABB scanBox = new AABB(start, cappedEnd).inflate(0.5);
-
-        LivingEntity bestEntity = null;
-        Vec3 bestHitPos = null;
-        double bestDist = maxDist;
-
-        for (Entity e : level.getEntities(owner, scanBox, ent ->
-                ent instanceof LivingEntity &&
-                        ent.isPickable() &&
-                        ent != owner
-        )) {
-            AABB bb = e.getBoundingBox().inflate(0.2);
-            if (bb.contains(start)) {
-                bestEntity = (LivingEntity) e;
-                bestHitPos = start;
-                bestDist = 0.0;
-                break;
-            }
-
-            var clipped = bb.clip(start, cappedEnd);
-            if (clipped.isPresent()) {
-                double d = start.distanceTo(clipped.get());
-                if (d < bestDist) {
-                    bestDist = d;
-                    bestEntity = (LivingEntity) e;
-                    bestHitPos = clipped.get();
-                }
-            }
-        }
-
-        if (bestEntity != null) {
-            return new BeamHit(bestHitPos != null ? bestHitPos : cappedEnd, bestEntity);
-        }
-
-        return new BeamHit(end, null);
-    }
 }

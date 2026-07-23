@@ -3,6 +3,7 @@ package net.uhhitscam.knightfall.network;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -15,17 +16,11 @@ public class PayloadRegister {
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
         registrar = event.registrar("knightfall");
-        server(SSReloadPacket.TYPE, SSReloadPacket.STREAM_CODEC);
-        server(SSGasAmmoPacket.TYPE, SSGasAmmoPacket.STREAM_CODEC);
-        server(SSFireProjectileWeaponPacket.TYPE, SSFireProjectileWeaponPacket.STREAM_CODEC);
-        server(SSFiringModePacket.TYPE, SSFiringModePacket.STREAM_CODEC);
-        server(SSCooldownPacket.TYPE, SSCooldownPacket.STREAM_CODEC);
-        server(SSDropItemPacket.TYPE, SSDropItemPacket.STREAM_CODEC);
-        server(SSGiveItemPacket.TYPE, SSGiveItemPacket.STREAM_CODEC);
-        server(SSConsumeItemPacket.TYPE, SSConsumeItemPacket.STREAM_CODEC);
-        server(SSBeamPacket.TYPE, SSBeamPacket.STREAM_CODEC);
+        server(SSProjectileWeaponInputPacket.TYPE, SSProjectileWeaponInputPacket.STREAM_CODEC);
+        server(SSProjectileWeaponActionPacket.TYPE, SSProjectileWeaponActionPacket.STREAM_CODEC);
         server(SSSoundPacket.TYPE, SSSoundPacket.STREAM_CODEC);
 
+        client(CSProjectileWeaponRecoilPacket.TYPE, CSProjectileWeaponRecoilPacket.STREAM_CODEC);
         client(CSRepulseParticlesPacket.TYPE, CSRepulseParticlesPacket.STREAM_CODEC);
         client(CSDisintegrationParticlesPacket.TYPE, CSDisintegrationParticlesPacket.STREAM_CODEC);
         client(CSConcussionBlurPacket.TYPE, CSConcussionBlurPacket.STREAM_CODEC);
@@ -46,5 +41,9 @@ public class PayloadRegister {
 
     public static void sendToServer(Packet packet) {
         PacketDistributor.sendToServer(packet);
+    }
+
+    public static void sendToPlayer(ServerPlayer player, Packet packet) {
+        PacketDistributor.sendToPlayer(player, packet);
     }
 }

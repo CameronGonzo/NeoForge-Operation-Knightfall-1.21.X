@@ -11,7 +11,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class FullyChargedSoundInstance extends AbstractTickableSoundInstance {
     private final Player player;
-    public static boolean stopAudio = false;
     public final SoundEvent soundEvent;
 
     public FullyChargedSoundInstance(SoundEvent soundEvent, Player player) {
@@ -28,10 +27,9 @@ public class FullyChargedSoundInstance extends AbstractTickableSoundInstance {
 
     @Override
     public void tick() {
-        if (player.isRemoved() || stopAudio) {
+        if (player.isRemoved()) {
             Minecraft.getInstance().getSoundManager().stop(this);
             this.stop();
-            stopAudio = false;
         }
 
         this.x = player.getX();

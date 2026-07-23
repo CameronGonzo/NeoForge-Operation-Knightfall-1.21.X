@@ -76,13 +76,7 @@ public class OperationKnightfall {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            EntityRenderers.register(ModEntities.TIBANNA_BLASTER_BOLT.get(), TibannaBlasterBoltRenderer::new);
-            EntityRenderers.register(ModEntities.IONIZED_TIBANNA_BLASTER_BOLT.get(), IonizedTibannaBlasterBoltRenderer::new);
-            EntityRenderers.register(ModEntities.SPIN_SEALED_TIBANNA_BLASTER_BOLT.get(), SpinSealedTibannaBlasterBoltRenderer::new);
-            EntityRenderers.register(ModEntities.TIBANNAX_BLASTER_BOLT.get(), TibannaXBlasterBoltRenderer::new);
-            EntityRenderers.register(ModEntities.SIG_BLASTER_BOLT.get(), SigBlasterBoltRenderer::new);
-            EntityRenderers.register(ModEntities.MAGNETIZED_SIG_BLASTER_BOLT.get(), MagnetizedSigBlasterBoltRenderer::new);
-            EntityRenderers.register(ModEntities.SKEVON_BLASTER_BOLT.get(), SkevonBlasterBoltRenderer::new);
+            EntityRenderers.register(ModEntities.BLASTER_BOLT.get(), BlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.SONIC_BOLT.get(), SonicBoltRenderer::new);
             EntityRenderers.register(ModEntities.STUN_BLASTER_BOLT.get(), StunBlasterBoltRenderer::new);
             EntityRenderers.register(ModEntities.STEEL_SLUG.get(), SteelSlugRenderer::new);

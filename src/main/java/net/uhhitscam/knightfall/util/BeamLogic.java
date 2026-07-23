@@ -19,7 +19,7 @@ public final class BeamLogic {
             return;
         }
 
-        double range = 64.0F;
+        double range = BlasterBeamEndpointEntity.DEFAULT_RANGE;
         float damage = beamStats.damagePerPulse();
 
         BlasterBeamEndpointEntity beam = findExisting(level, player, mainHand);
