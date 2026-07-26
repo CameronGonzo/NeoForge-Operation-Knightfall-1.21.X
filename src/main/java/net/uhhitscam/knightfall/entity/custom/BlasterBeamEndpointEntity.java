@@ -161,6 +161,10 @@ public class BlasterBeamEndpointEntity extends Entity {
                     target.invulnerableTime = 0;
                 }
             }
+
+            if (weapon.addBeamOverheat(held, this.level())) {
+                this.discard();
+            }
         }
     }
 

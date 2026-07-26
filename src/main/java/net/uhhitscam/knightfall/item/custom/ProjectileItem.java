@@ -26,6 +26,7 @@ import net.uhhitscam.knightfall.component.AmmoTypeData;
 import net.uhhitscam.knightfall.component.FireCoolDownData;
 import net.uhhitscam.knightfall.component.FiringModeData;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
+import net.uhhitscam.knightfall.component.OverheatData;
 import net.uhhitscam.knightfall.component.ReloadNSwitchCoolDownData;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.custom.*;
@@ -46,9 +47,14 @@ import java.util.List;
 public class ProjectileItem extends Item {
     private static final double TARGETING_RANGE = 128.0;
     private static final int DC15S_SIDEARM_RECHARGE_INTERVAL_TICKS = 20;
+    private static final int OVERHEAT_PENALTY = 20;
+    private static final int OVERHEAT_COOLING_DELAY_TICKS = 20;
 
     private final float projectileSpeed;
     private final int maxAmmo;
+    private final int maxOverheat;
+    private final int overheatCoolingAmount;
+    private final int overheatCoolingIntervalTicks;
     private final int burstRate;
     private final int scatterShots;
     private final EnumMap<FiringMode, ProjectileWeaponStats> stats;
@@ -65,6 +71,9 @@ public class ProjectileItem extends Item {
         super(properties);
         this.projectileSpeed = definition.projectileSpeed();
         this.maxAmmo = definition.maxAmmo();
+        this.maxOverheat = definition.maxOverheat();
+        this.overheatCoolingAmount = definition.overheatCoolingAmount();
+        this.overheatCoolingIntervalTicks = definition.overheatCoolingIntervalTicks();
         this.burstRate = definition.burstRate();
         this.scatterShots = definition.scatterShots();
         this.stats = definition.stats();
@@ -143,6 +152,10 @@ public class ProjectileItem extends Item {
             return false;
         }
 
+        if (isOverheated(stack, level)) {
+            return false;
+        }
+
         int currentAmmo = getAmmo(stack);
         if (isOutOfAmmo(currentAmmo, firingMode)) {
             handleNoAmmo(level, player, stack);
@@ -163,6 +176,8 @@ public class ProjectileItem extends Item {
             case BEAM -> { return false; }
             default -> fireSingleShot(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode);
         }
+
+        addShotOverheat(stack, level, firingMode);
 
         if (!burstFollowup && usesFireCooldown(firingMode)) {
             setFireCooldown(level, stack, firingMode);
@@ -443,6 +458,7 @@ public class ProjectileItem extends Item {
             return;
         }
 
+        updateOverheat(stack, level);
         rechargeDc15sSidearm(stack, level, player);
     }
 
@@ -469,6 +485,113 @@ public class ProjectileItem extends Item {
     public int getAmmo(ItemStack stack) {
         AmmoData data = stack.get(ModDataComponentTypes.AMMO.get());
         return data != null ? data.ammo() : 0;
+    }
+
+    public boolean usesOverheat() {
+        return maxOverheat > 0;
+    }
+
+    public int getMaxOverheat() {
+        return maxOverheat;
+    }
+
+    public int getOverheatCoolingAmount() {
+        return overheatCoolingAmount;
+    }
+
+    public int getOverheatCoolingIntervalTicks() {
+        return overheatCoolingIntervalTicks;
+    }
+
+    public int getOverheat(ItemStack stack, Level level) {
+        if (!usesOverheat()) {
+            return 0;
+        }
+
+        return resolveOverheatData(getOverheatData(stack), level.getGameTime()).heat();
+    }
+
+    public boolean isOverheated(ItemStack stack, Level level) {
+        return usesOverheat() && getOverheat(stack, level) >= maxOverheat;
+    }
+
+    public boolean addBeamOverheat(ItemStack stack, Level level) {
+        if (beamStats == null) {
+            return false;
+        }
+
+        return addOverheat(stack, level, beamStats.overheatPerPulse());
+    }
+
+    private void addShotOverheat(ItemStack stack, Level level, FiringMode firingMode) {
+        if (!usesOverheat() || firingMode == FiringMode.REPULSE) {
+            return;
+        }
+
+        addOverheat(stack, level, getRequiredStats(firingMode).overheatPerShot());
+    }
+
+    private boolean addOverheat(ItemStack stack, Level level, int amount) {
+        if (!usesOverheat() || amount <= 0) {
+            return false;
+        }
+
+        OverheatData currentData = updateOverheat(stack, level);
+        if (currentData.heat() >= maxOverheat) {
+            return true;
+        }
+
+        int newHeat = currentData.heat() + amount;
+        if (newHeat >= maxOverheat) {
+            newHeat += OVERHEAT_PENALTY;
+        }
+
+        stack.set(
+                ModDataComponentTypes.OVERHEAT.get(),
+                new OverheatData(newHeat, level.getGameTime() + OVERHEAT_COOLING_DELAY_TICKS)
+        );
+        return newHeat >= maxOverheat;
+    }
+
+    private OverheatData updateOverheat(ItemStack stack, Level level) {
+        OverheatData currentData = getOverheatData(stack);
+
+        if (!usesOverheat()) {
+            OverheatData clearedData = new OverheatData(0, 0);
+            if (!clearedData.equals(currentData)) {
+                stack.set(ModDataComponentTypes.OVERHEAT.get(), clearedData);
+            }
+            return clearedData;
+        }
+
+        OverheatData resolvedData = resolveOverheatData(currentData, level.getGameTime());
+
+        if (!resolvedData.equals(currentData)) {
+            stack.set(ModDataComponentTypes.OVERHEAT.get(), resolvedData);
+        }
+
+        return resolvedData;
+    }
+
+    private OverheatData getOverheatData(ItemStack stack) {
+        OverheatData data = stack.get(ModDataComponentTypes.OVERHEAT.get());
+        return data != null ? data : new OverheatData(0, 0);
+    }
+
+    private OverheatData resolveOverheatData(OverheatData data, long gameTime) {
+        if (data.heat() <= 0 || data.nextCoolingTick() <= 0 || gameTime < data.nextCoolingTick()) {
+            return data;
+        }
+
+        long coolingSteps = 1L + (gameTime - data.nextCoolingTick()) / overheatCoolingIntervalTicks;
+        long maximumUsefulSteps = ((long) data.heat() + overheatCoolingAmount - 1L) / overheatCoolingAmount;
+        long appliedCoolingSteps = Math.min(coolingSteps, maximumUsefulSteps);
+        long heatReduction = appliedCoolingSteps * overheatCoolingAmount;
+        int cooledHeat = (int) (data.heat() - heatReduction);
+        long nextCoolingTick = cooledHeat > 0
+                ? data.nextCoolingTick() + coolingSteps * overheatCoolingIntervalTicks
+                : 0L;
+        return new OverheatData(cooledHeat, nextCoolingTick);
     }
 
     public boolean isActionOnCooldown(ServerPlayer player, ItemStack stack) {
@@ -557,7 +680,7 @@ public class ProjectileItem extends Item {
     public boolean reload(ServerPlayer player, ItemStack stack) {
         if (projectileWeaponName == WeaponName.DC15S_SIDEARM
                 || getAmmo(stack) >= maxAmmo
-                || getReloadNSwitchCooldownData(stack).isOnCooldown(player.level())) {
+                || getReloadNSwitchCooldownData(stack).blocksReload(player.level())) {
             return false;
         }
 
@@ -764,7 +887,9 @@ public class ProjectileItem extends Item {
 
         ReloadNSwitchCoolDownData cooldownData = getReloadNSwitchCooldownData(stack);
 
-        if (cooldownData.isOnCooldown(level)) {
+        boolean reloadReplacingEquipCooldown = action == WeaponCooldownAction.RELOAD
+                && cooldownData.isActiveEquipCooldown(level);
+        if (cooldownData.isOnCooldown(level) && !reloadReplacingEquipCooldown) {
             return;
         }
 
@@ -780,7 +905,7 @@ public class ProjectileItem extends Item {
 
         stack.set(
                 ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN,
-                cooldownData.withReloadNSwitchCoolDownEndTime(cooldownEndTime)
+                cooldownData.withCooldown(cooldownEndTime, action)
         );
     }
 

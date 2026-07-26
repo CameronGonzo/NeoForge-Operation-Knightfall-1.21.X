@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public final class ProjectileWeaponZoomEventHandler {
     private static final float NORMAL_FOV = 1.0F;
-    private static final float ZOOM_SPEED = 0.1F;
+    private static final float ZOOM_SPEED = 0.5F;
     private static final double AIM_SENSITIVITY_MULTIPLIER = 0.75;
 
     private static float previousZoom = NORMAL_FOV;

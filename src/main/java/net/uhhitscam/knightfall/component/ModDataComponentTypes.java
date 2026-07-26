@@ -24,6 +24,8 @@ public class ModDataComponentTypes {
             builder -> builder.persistent(ReloadNSwitchCoolDownData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ExtraFiringRateData>> EXTRA_FIRING_RATE = register("extra_firing_rate",
             builder -> builder.persistent(ExtraFiringRateData.CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<OverheatData>> OVERHEAT = register("overheat",
+            builder -> builder.persistent(OverheatData.CODEC));
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());

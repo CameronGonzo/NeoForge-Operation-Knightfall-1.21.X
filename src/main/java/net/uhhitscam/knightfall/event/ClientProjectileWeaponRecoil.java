@@ -7,7 +7,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
 
 import java.util.UUID;
@@ -28,11 +28,10 @@ public final class ClientProjectileWeaponRecoil {
     }
 
     @SubscribeEvent
-    public static void onClientTick(ClientTickEvent.Post event) {
+    public static void onRenderFrame(RenderFrameEvent.Pre event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
-            recoil = 0.0F;
-            currentPlayerId = null;
+            reset();
             return;
         }
 
@@ -46,7 +45,9 @@ public final class ClientProjectileWeaponRecoil {
             return;
         }
 
-        float decayedRecoil = recoil * RECOIL_DECAY;
+        float deltaTicks = Mth.clamp(event.getPartialTick().getGameTimeDeltaTicks(), 0.0F, 1.0F);
+        float decayFactor = (float) Math.pow(RECOIL_DECAY, deltaTicks);
+        float decayedRecoil = recoil * decayFactor;
         float recoilEffect = recoil - decayedRecoil;
         player.setXRot(Mth.clamp(player.getXRot() - recoilEffect, -90.0F, 90.0F));
         recoil = decayedRecoil;
@@ -54,6 +55,10 @@ public final class ClientProjectileWeaponRecoil {
 
     @SubscribeEvent
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        reset();
+    }
+
+    private static void reset() {
         recoil = 0.0F;
         currentPlayerId = null;
     }

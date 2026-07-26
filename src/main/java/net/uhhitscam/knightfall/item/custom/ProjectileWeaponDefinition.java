@@ -14,6 +14,9 @@ public record ProjectileWeaponDefinition(
         Item.Properties itemProperties,
         float projectileSpeed,
         int maxAmmo,
+        int maxOverheat,
+        int overheatCoolingAmount,
+        int overheatCoolingIntervalTicks,
         int burstRate,
         int scatterShots,
         EnumMap<FiringMode, ProjectileWeaponStats> stats,
@@ -36,6 +39,9 @@ public record ProjectileWeaponDefinition(
         private Item.Properties itemProperties = new Item.Properties().stacksTo(1);
         private float projectileSpeed;
         private int maxAmmo = 500;
+        private int maxOverheat = -1;
+        private int overheatCoolingAmount = -1;
+        private int overheatCoolingIntervalTicks = -1;
         private int burstRate = 2;
         private int scatterShots = 5;
         private final EnumMap<FiringMode, ProjectileWeaponStats> stats = new EnumMap<>(FiringMode.class);
@@ -103,6 +109,17 @@ public record ProjectileWeaponDefinition(
             return this;
         }
 
+        public Builder maxOverheat(int maxOverheat) {
+            this.maxOverheat = maxOverheat;
+            return this;
+        }
+
+        public Builder overheatCooling(int amount, int intervalTicks) {
+            this.overheatCoolingAmount = amount;
+            this.overheatCoolingIntervalTicks = intervalTicks;
+            return this;
+        }
+
         public Builder burstRate(int burstRate) {
             this.burstRate = burstRate;
             return this;
@@ -113,8 +130,8 @@ public record ProjectileWeaponDefinition(
             return this;
         }
 
-        public Builder stat(FiringMode firingMode, int fireRate, float recoil, float inaccuracy, int damage) {
-            return stat(firingMode, new ProjectileWeaponStats(fireRate, recoil, inaccuracy, damage));
+        public Builder stat(FiringMode firingMode, int fireRate, float recoil, float inaccuracy, int damage, int overheatPerShot) {
+            return stat(firingMode, new ProjectileWeaponStats(fireRate, recoil, inaccuracy, damage, overheatPerShot));
         }
 
         public Builder stat(FiringMode firingMode, ProjectileWeaponStats weaponStats) {
@@ -125,8 +142,8 @@ public record ProjectileWeaponDefinition(
             return this;
         }
 
-        public Builder beam(float damagePerPulse) {
-            this.beamStats = new BeamWeaponStats(damagePerPulse);
+        public Builder beam(float damagePerPulse, int overheatPerPulse) {
+            this.beamStats = new BeamWeaponStats(damagePerPulse, overheatPerPulse);
             return this;
         }
 
@@ -174,6 +191,9 @@ public record ProjectileWeaponDefinition(
                     itemProperties,
                     projectileSpeed,
                     maxAmmo,
+                    maxOverheat,
+                    overheatCoolingAmount,
+                    overheatCoolingIntervalTicks,
                     burstRate,
                     scatterShots,
                     new EnumMap<>(stats),
@@ -194,6 +214,14 @@ public record ProjectileWeaponDefinition(
 
             if (maxAmmo <= 0) {
                 throw new IllegalStateException(weaponName + " must have maxAmmo greater than 0.");
+            }
+
+            if (maxOverheat < 0) {
+                throw new IllegalStateException(weaponName + " must declare maxOverheat.");
+            }
+
+            if (overheatCoolingAmount < 0 || overheatCoolingIntervalTicks < 0) {
+                throw new IllegalStateException(weaponName + " must declare overheat cooling.");
             }
 
             if (scatterShots <= 0) {
@@ -220,10 +248,37 @@ public record ProjectileWeaponDefinition(
                 throw new IllegalStateException(weaponName + " must have a WeaponClassification.");
             }
 
+            boolean usesGasAmmo = classification != WeaponClassification.SLUGTHROWER
+                    && classification != WeaponClassification.FLECHETTE;
+
+            if (usesGasAmmo && maxOverheat <= 0) {
+                throw new IllegalStateException(weaponName + " must have maxOverheat greater than 0.");
+            }
+
+            if (usesGasAmmo && (overheatCoolingAmount <= 0 || overheatCoolingIntervalTicks <= 0)) {
+                throw new IllegalStateException(weaponName + " must have positive overheat cooling values.");
+            }
+
+            if (!usesGasAmmo && maxOverheat != 0) {
+                throw new IllegalStateException(weaponName + " cannot use overheat without gas ammo.");
+            }
+
+            if (!usesGasAmmo && (overheatCoolingAmount != 0 || overheatCoolingIntervalTicks != 0)) {
+                throw new IllegalStateException(weaponName + " cannot cool overheat without gas ammo.");
+            }
+
             for (FiringMode firingMode : firingModes) {
                 if (firingMode == FiringMode.BEAM) {
                     if (beamStats == null) {
                         throw new IllegalStateException(weaponName + " has BEAM firing mode but no BeamWeaponStats.");
+                    }
+
+                    if (beamStats.overheatPerPulse() < 0) {
+                        throw new IllegalStateException(weaponName + " has negative BEAM overheat.");
+                    }
+
+                    if (usesGasAmmo && beamStats.overheatPerPulse() <= 0) {
+                        throw new IllegalStateException(weaponName + " must have positive BEAM overheat.");
                     }
 
                     continue;
@@ -231,6 +286,23 @@ public record ProjectileWeaponDefinition(
 
                 if (!stats.containsKey(firingMode)) {
                     throw new IllegalStateException(weaponName + " is missing stats for firing mode " + firingMode + ".");
+                }
+
+                int overheatPerShot = stats.get(firingMode).overheatPerShot();
+                if (overheatPerShot < 0) {
+                    throw new IllegalStateException(weaponName + " has negative overheat for " + firingMode + ".");
+                }
+
+                if (firingMode == FiringMode.REPULSE && overheatPerShot != 0) {
+                    throw new IllegalStateException(weaponName + " REPULSE mode cannot add overheat.");
+                }
+
+                if (!usesGasAmmo && overheatPerShot != 0) {
+                    throw new IllegalStateException(weaponName + " cannot add overheat without gas ammo.");
+                }
+
+                if (usesGasAmmo && firingMode != FiringMode.REPULSE && overheatPerShot <= 0) {
+                    throw new IllegalStateException(weaponName + " must have positive overheat for " + firingMode + ".");
                 }
             }
         }

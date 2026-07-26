@@ -128,6 +128,10 @@ public final class ProjectileWeaponServerEvents {
             return;
         }
 
+        if (weapon.isOverheated(state.stack, player.level())) {
+            return;
+        }
+
         BeamLogic.startOrUpdateBeam(player, weapon, state.stack, mainHand);
         state.beamActive = true;
     }
@@ -190,6 +194,14 @@ public final class ProjectileWeaponServerEvents {
     private static void tickBeam(ServerPlayer player, HandState state, ProjectileItem weapon, boolean mainHand) {
         if (weapon.getAmmo(state.stack) <= 0) {
             stopInput(player, state, mainHand, false);
+            return;
+        }
+
+        if (weapon.isOverheated(state.stack, player.level())) {
+            if (state.beamActive) {
+                BeamLogic.stopBeam(player, mainHand);
+                state.beamActive = false;
+            }
             return;
         }
 

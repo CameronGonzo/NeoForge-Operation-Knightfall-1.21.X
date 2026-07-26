@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public final class WeaponAimRules {
-    private static final float AIMED_SPREAD_MULTIPLIER = 0.8F;
+    private static final float AIMED_SPREAD_MULTIPLIER = 0.7F;
     private static final float AIMED_RECOIL_MULTIPLIER = 0.4F;
     private static final double DEFAULT_MUZZLE_SIDE_OFFSET = 0.27;
     private static final double DEFAULT_MUZZLE_HEIGHT_OFFSET = -0.1;

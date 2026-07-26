@@ -192,7 +192,7 @@ public final class ModClientEvents {
                 }
             }
             case BEAM -> {
-                if (weapon.getAmmo(stack) > 0) {
+                if (weapon.getAmmo(stack) > 0 && !weapon.isOverheated(stack, player.level())) {
                     startBeamSound(player, state, weapon);
                 }
             }
@@ -222,8 +222,12 @@ public final class ModClientEvents {
 
         if (state.activeMode == FiringMode.CHARGENSHOOT || state.activeMode == FiringMode.CHARGENSHOOTONRELEASE) {
             tickChargePresentation(player, state, weapon);
-        } else if (state.activeMode == FiringMode.BEAM && weapon.getAmmo(currentStack) <= 0) {
-            stopBeamSound(state);
+        } else if (state.activeMode == FiringMode.BEAM) {
+            if (weapon.getAmmo(currentStack) <= 0 || weapon.isOverheated(currentStack, player.level())) {
+                stopBeamSound(state);
+            } else if (state.beamSound == null) {
+                startBeamSound(player, state, weapon);
+            }
         }
     }
 

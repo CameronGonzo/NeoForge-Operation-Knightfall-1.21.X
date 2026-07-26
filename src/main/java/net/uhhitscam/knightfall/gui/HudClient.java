@@ -63,6 +63,26 @@ public class HudClient {
             Component offhandAmmoComponent = Component.literal(String.format("Ammo: %d%%", offhandBlasterAmmoPercent));
             text(guiGraphics, textRenderer, offhandAmmoComponent, guiMidWidth - 180, guiHeight - 14, WHITE, OUTLINE_COLOR);
 
+            if (offhandBlasterItem.usesOverheat()) {
+                int heat = offhandBlasterItem.getOverheat(player.getOffhandItem(), level);
+                int maxHeat = offhandBlasterItem.getMaxOverheat();
+                int heatPercent = (int) ((double) heat / maxHeat * 100);
+                boolean overheated = heat >= maxHeat;
+                Component heatComponent = Component.literal(String.format(
+                        overheated ? "Overheated: %d%%" : "Heat: %d%%",
+                        heatPercent
+                ));
+                text(
+                        guiGraphics,
+                        textRenderer,
+                        heatComponent,
+                        guiMidWidth - 180,
+                        guiHeight - 26,
+                        overheated ? RED : WHITE,
+                        OUTLINE_COLOR
+                );
+            }
+
             FiringMode offhandFiringMode = offhandBlasterItem.getFiringMode(player.getOffhandItem());
             ResourceLocation texture = switch (offhandFiringMode) {
                 case FiringMode.BURST -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
@@ -85,6 +105,26 @@ public class HudClient {
 
             Component mainHandAmmoComponent = Component.literal(String.format("Ammo: %d%%", mainHandBlasterAmmoPercent));
             text(guiGraphics, textRenderer, mainHandAmmoComponent, guiMidWidth + 115, guiHeight - 14, WHITE, OUTLINE_COLOR);
+
+            if (mainHandBlasterItem.usesOverheat()) {
+                int heat = mainHandBlasterItem.getOverheat(player.getMainHandItem(), level);
+                int maxHeat = mainHandBlasterItem.getMaxOverheat();
+                int heatPercent = (int) ((double) heat / maxHeat * 100);
+                boolean overheated = heat >= maxHeat;
+                Component heatComponent = Component.literal(String.format(
+                        overheated ? "Overheated: %d%%" : "Heat: %d%%",
+                        heatPercent
+                ));
+                text(
+                        guiGraphics,
+                        textRenderer,
+                        heatComponent,
+                        guiMidWidth + 115,
+                        guiHeight - 26,
+                        overheated ? RED : WHITE,
+                        OUTLINE_COLOR
+                );
+            }
 
             FiringMode mainHandFiringMode = mainHandBlasterItem.getFiringMode(player.getMainHandItem());
             ResourceLocation texture = switch (mainHandFiringMode) {

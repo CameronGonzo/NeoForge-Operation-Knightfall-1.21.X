@@ -4,5 +4,6 @@ public record ProjectileWeaponStats(
         int fireRate,
         float recoil,
         float inaccuracy,
-        int damage) {
+        int damage,
+        int overheatPerShot) {
 }
