@@ -58,6 +58,12 @@ public class ModEntities {
     public static final Supplier<EntityType<FlechetteToxicSpreadCanEntity>> FLECHETTE_TOXIC_SPREAD_CAN =
             ENTITY_TYPES.register("flechette_toxic_spread_can", () -> EntityType.Builder.<FlechetteToxicSpreadCanEntity>of(FlechetteToxicSpreadCanEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f).build("flechette_toxic_spread_can"));
+    public static final Supplier<EntityType<GrenadeEntity>> GRENADE =
+            ENTITY_TYPES.register("grenade", () -> EntityType.Builder.<GrenadeEntity>of(GrenadeEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(64)
+                    .updateInterval(1)
+                    .build("grenade"));
     public static final DeferredHolder<EntityType<?>, EntityType<BlasterBeamEndpointEntity>> BLASTER_BEAM =
             ENTITY_TYPES.register("blaster_beam", () ->
                     EntityType.Builder.<BlasterBeamEndpointEntity>of(BlasterBeamEndpointEntity::new, MobCategory.MISC)

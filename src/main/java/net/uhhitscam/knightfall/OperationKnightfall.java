@@ -2,6 +2,7 @@ package net.uhhitscam.knightfall;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;
@@ -19,7 +20,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 import net.uhhitscam.knightfall.effect.ModEffects;
 import net.uhhitscam.knightfall.effect.client.StunEffectRenderer;
-import net.uhhitscam.knightfall.effect.client.StunnedEffectRenderer;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.client.*;
 import net.uhhitscam.knightfall.event.FaceAlignedParticleClient;
@@ -90,11 +90,11 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.FLECHETTE_TOXIC.get(), FlechetteToxicRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE_SPREAD_CAN.get(), FlechetteSpreadCanRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE_TOXIC_SPREAD_CAN.get(), FlechetteToxicSpreadCanRenderer::new);
+            EntityRenderers.register(ModEntities.GRENADE.get(), ThrownItemRenderer::new);
             EntityRenderers.register(ModEntities.BLASTER_BEAM.get(), BlasterBeamRenderer::new);
 
             event.enqueueWork(() -> {
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
-                StunnedEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 FaceAlignedParticleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
             });

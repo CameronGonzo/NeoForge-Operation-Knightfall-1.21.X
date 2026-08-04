@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.effect.ModEffects;
+import net.uhhitscam.knightfall.effect.custom.StunEffect;
 import net.uhhitscam.knightfall.gui.HudClient;
 import net.uhhitscam.knightfall.item.custom.FiringMode;
 import net.uhhitscam.knightfall.item.custom.ProjectileItem;
@@ -125,7 +125,7 @@ public final class ModClientEvents {
     }
 
     private static boolean canStartInput(LocalPlayer player) {
-        return Minecraft.getInstance().screen == null && !player.hasEffect(ModEffects.STUN_EFFECT);
+        return Minecraft.getInstance().screen == null && !StunEffect.isStunned(player);
     }
 
     private static void releaseStoppedInputs(Minecraft minecraft, LocalPlayer player) {

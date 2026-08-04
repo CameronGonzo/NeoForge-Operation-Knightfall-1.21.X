@@ -12,17 +12,25 @@ import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class CustomExplosion {
     public static void create(Entity sourceEntity, Vec3 location,
                               double entityRadius, float damage, double knockback) {
-        create(sourceEntity, location, entityRadius, damage, knockback,
+        create(sourceEntity, sourceEntity, location, entityRadius, damage, knockback,
                 0.0f, Level.ExplosionInteraction.NONE, false);
     }
 
     public static void create(Entity sourceEntity, Vec3 location,
+                              double entityRadius, float damage, double knockback,
+                              float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire) {
+        create(sourceEntity, sourceEntity, location, entityRadius, damage, knockback,
+                blockBreakRadius, interaction, causesFire);
+    }
+
+    public static void create(Entity sourceEntity, @Nullable Entity causingEntity, Vec3 location,
                               double entityRadius, float damage, double knockback,
                               float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire) {
 
@@ -39,7 +47,7 @@ public class CustomExplosion {
         );
 
         List<LivingEntity> entities = serverLevel.getEntitiesOfClass(LivingEntity.class, box);
-        DamageSource dmgSrc = sourceEntity.damageSources().explosion(sourceEntity, sourceEntity);
+        DamageSource dmgSrc = sourceEntity.damageSources().explosion(sourceEntity, causingEntity);
 
         double r2 = entityRadius * entityRadius;
 

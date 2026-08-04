@@ -1,13 +1,17 @@
 package net.uhhitscam.knightfall.event;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.effect.ModEffects;
+import net.uhhitscam.knightfall.effect.custom.StunEffect;
 import net.uhhitscam.knightfall.item.custom.FiringMode;
 import net.uhhitscam.knightfall.item.custom.ProjectileItem;
 import net.uhhitscam.knightfall.item.custom.WeaponAction;
@@ -23,6 +27,8 @@ import java.util.UUID;
 public final class ProjectileWeaponServerEvents {
     private static final int BURST_SHOT_COUNT = 3;
     private static final int BURST_FOLLOWUP_DELAY_TICKS = 2;
+    private static final ResourceLocation HELD_WEAPON_SPEED_MODIFIER_ID =
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "held_projectile_weapon_speed");
     private static final Map<UUID, PlayerWeaponState> PLAYER_STATES = new HashMap<>();
 
     private ProjectileWeaponServerEvents() {}
@@ -92,6 +98,7 @@ public final class ProjectileWeaponServerEvents {
         detectHeldWeaponChange(player, state, false);
         tickHand(player, state.mainHand, true);
         tickHand(player, state.offHand, false);
+        updateHeldMovementSpeed(player);
     }
 
     @SubscribeEvent
@@ -268,7 +275,44 @@ public final class ProjectileWeaponServerEvents {
     }
 
     private static boolean canAct(ServerPlayer player) {
-        return player.isAlive() && !player.isSpectator() && !player.hasEffect(ModEffects.STUN_EFFECT);
+        return player.isAlive() && !player.isSpectator() && !StunEffect.isStunned(player);
+    }
+
+    private static void updateHeldMovementSpeed(ServerPlayer player) {
+        double speedMultiplier = Math.min(
+                getHeldMovementSpeedMultiplier(player.getMainHandItem()),
+                getHeldMovementSpeedMultiplier(player.getOffhandItem())
+        );
+        double modifierAmount = speedMultiplier - 1.0;
+        AttributeInstance movementSpeed = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (movementSpeed == null) {
+            return;
+        }
+
+        AttributeModifier currentModifier = movementSpeed.getModifier(HELD_WEAPON_SPEED_MODIFIER_ID);
+        if (modifierAmount == 0.0) {
+            if (currentModifier != null) {
+                movementSpeed.removeModifier(HELD_WEAPON_SPEED_MODIFIER_ID);
+            }
+            return;
+        }
+
+        if (currentModifier != null && Double.compare(currentModifier.amount(), modifierAmount) == 0) {
+            return;
+        }
+
+        movementSpeed.removeModifier(HELD_WEAPON_SPEED_MODIFIER_ID);
+        movementSpeed.addTransientModifier(new AttributeModifier(
+                HELD_WEAPON_SPEED_MODIFIER_ID,
+                modifierAmount,
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+        ));
+    }
+
+    private static double getHeldMovementSpeedMultiplier(ItemStack stack) {
+        return stack.getItem() instanceof ProjectileItem weapon
+                ? weapon.getHeldMovementSpeedMultiplier()
+                : 1.0;
     }
 
     private static ItemStack getHeldStack(ServerPlayer player, boolean mainHand) {

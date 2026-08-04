@@ -5,72 +5,113 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
+import net.uhhitscam.knightfall.effect.ModEffects;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-public class StunEffectRenderer {
-    private static final ResourceLocation STUN_OVERLAY = ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_hit_effect.png");
-
-    private static final int FRAME_HEIGHT = 16;
+public final class StunEffectRenderer {
+    private static final ResourceLocation STUN_HIT_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            OperationKnightfall.MODID,
+            "textures/gui/stun_hit_effect.png"
+    );
+    private static final int TEXTURE_WIDTH = 16;
+    private static final int FRAME_SIZE = 16;
     private static final int FRAME_COUNT = 16;
-    private static final int FRAME_DURATION_TICKS = 2;
+    private static final int TEXTURE_HEIGHT = FRAME_SIZE * FRAME_COUNT;
+    private static final int TICKS_PER_FRAME = 2;
+    private static final int BLUE_FADE_IN_TICKS = 80;
+    private static final int BLUE_TINT_RGB = 0x1B46C8;
 
-    private static final Map<UUID, Long> stunStartTimes = new HashMap<>();
-    private static final int ANIMATION_DURATION_TICKS = FRAME_COUNT * FRAME_DURATION_TICKS;
+    private static UUID trackedPlayer;
+    private static long effectStartTick;
+    private static int previousRemainingTicks = -1;
+
+    private StunEffectRenderer() {}
 
     public static void register(IEventBus eventBus) {
-        eventBus.addListener(StunEffectRenderer::onRenderScreen);
+        eventBus.addListener(StunEffectRenderer::onRenderGui);
     }
 
-    public static void triggerStunAnimation(Player player) {
-        if (player != null && player.level().isClientSide) {
-            stunStartTimes.put(player.getUUID(), Minecraft.getInstance().level.getGameTime());
-        }
-    }
-
-    public static void onRenderScreen(RenderGuiLayerEvent.Post event) {
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
-        if (player == null) return;
-
-        Long startTick = stunStartTimes.get(player.getUUID());
-        if (startTick == null) return;
-
-        long currentTick = mc.level.getGameTime();
-        long elapsed = currentTick - startTick;
-
-        if (elapsed >= ANIMATION_DURATION_TICKS) {
-            stunStartTimes.remove(player.getUUID());
+    private static void onRenderGui(RenderGuiEvent.Post event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
+        MobEffectInstance stunEffect = player == null ? null : player.getEffect(ModEffects.STUN_EFFECT);
+        if (stunEffect == null) {
+            reset();
             return;
         }
 
-        int currentFrame = (int) (elapsed / FRAME_DURATION_TICKS);
-        int screenWidth = mc.getWindow().getGuiScaledWidth();
-        int screenHeight = mc.getWindow().getGuiScaledHeight();
-        int frameY = currentFrame * screenHeight;
+        long currentTick = player.level().getGameTime();
+        int remainingTicks = stunEffect.getDuration();
+        if (!player.getUUID().equals(trackedPlayer)
+                || currentTick < effectStartTick
+                || remainingTicks > previousRemainingTicks) {
+            trackedPlayer = player.getUUID();
+            effectStartTick = currentTick;
+        }
+        previousRemainingTicks = remainingTicks;
+
+        int elapsedTicks = (int) Math.max(0L, currentTick - effectStartTick);
+        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
+        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
         RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
 
-        guiGraphics.blit(
-                STUN_OVERLAY,
-                0,
-                0,
-                0,
-                (float) 0,
-                (float) frameY,
-                screenWidth,
-                screenHeight,
-                screenWidth,
-                screenHeight * FRAME_HEIGHT
-        );
+        renderHitAnimation(guiGraphics, screenWidth, screenHeight, elapsedTicks);
+        renderBlueTint(guiGraphics, screenWidth, screenHeight, elapsedTicks);
 
         RenderSystem.disableBlend();
+    }
+
+    private static void renderHitAnimation(
+            GuiGraphics guiGraphics,
+            int screenWidth,
+            int screenHeight,
+            int elapsedTicks
+    ) {
+        int frame = elapsedTicks / TICKS_PER_FRAME;
+        if (frame >= FRAME_COUNT) {
+            return;
+        }
+
+        guiGraphics.blit(
+                STUN_HIT_TEXTURE,
+                0,
+                0,
+                screenWidth,
+                screenHeight,
+                0.0F,
+                (float) (frame * FRAME_SIZE),
+                FRAME_SIZE,
+                FRAME_SIZE,
+                TEXTURE_WIDTH,
+                TEXTURE_HEIGHT
+        );
+    }
+
+    private static void renderBlueTint(
+            GuiGraphics guiGraphics,
+            int screenWidth,
+            int screenHeight,
+            int elapsedTicks
+    ) {
+        float fadeProgress = Math.min(elapsedTicks / (float) BLUE_FADE_IN_TICKS, 1.0F);
+        int alpha = Math.round(fadeProgress * fadeProgress * 255.0F);
+        if (alpha == 0) {
+            return;
+        }
+
+        guiGraphics.fill(0, 0, screenWidth, screenHeight, alpha << 24 | BLUE_TINT_RGB);
+    }
+
+    private static void reset() {
+        trackedPlayer = null;
+        previousRemainingTicks = -1;
     }
 }

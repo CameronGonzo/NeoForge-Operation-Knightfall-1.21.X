@@ -1,6 +1,10 @@
 package net.uhhitscam.knightfall.item;
 
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -16,6 +20,11 @@ public class ModItems {
     private static DeferredItem<Item> registerProjectile(ProjectileWeaponDefinition definition) {
         return ITEMS.register(definition.registryName(),
                 () -> new ProjectileItem(definition.itemProperties(), definition));
+    }
+
+    private static DeferredItem<Item> registerGrenade(GrenadeDefinition definition) {
+        return ITEMS.register(definition.registryName(),
+                () -> new GrenadeItem(definition.itemProperties(), definition));
     }
 
     public static void register(IEventBus eventBus) {
@@ -65,6 +74,46 @@ public class ModItems {
             properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_SPREAD_CAN), new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> FLECHETTE_TOXIC_SPREAD_CANISTER = ITEMS.registerItem("flechette_toxic_spread_canister",
             properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_TOXIC_SPREAD_CAN), new Item.Properties().stacksTo(16));
+
+    // Grenades
+    public static final DeferredItem<Item> THERMAL_DETONATOR = registerGrenade(
+            GrenadeDefinition.builder("thermal_detonator")
+                    .fuseTicks(80)
+                    .trigger(GrenadeTrigger.FUSE)
+                    .throwVelocity(1.5F)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.03, 0.45, 0.8, 0.08))
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> SoundEvents.METAL_HIT, SoundSource.BLOCKS, 0.4F, 1.2F),
+                            new GrenadeSound(() -> SoundEvents.LEVER_CLICK, SoundSource.NEUTRAL, 0.7F, 1.4F),
+                            20,
+                            5,
+                            20))
+                    .effect(GrenadeEffects.explosion(
+                            GrenadeExplosionSpec.builder(
+                                            4.0,
+                                            8.0F,
+                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                    .knockback(0.6)
+                                    .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
+                                    .particle(new GrenadeParticleBurst(
+                                            () -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            0.0))
+                                    .particle(new GrenadeParticleBurst(
+                                            () -> ParticleTypes.SMOKE,
+                                            24,
+                                            0.8,
+                                            0.5,
+                                            0.8,
+                                            0.03
+                                    )).build())).build()
+    );
 
     // Projectile weapon items
     public static final DeferredItem<Item> _22T4 = registerProjectile(
@@ -5539,6 +5588,7 @@ public class ModItems {
                     .classification(WeaponClassification.REPEATER)
                     .reloadTime(25)
                     .chargeThreshold(52)
+                    .heldMovementSpeedMultiplier(0.7)
                     .build()
     );
     public static final DeferredItem<Item> ZB3 = registerProjectile(

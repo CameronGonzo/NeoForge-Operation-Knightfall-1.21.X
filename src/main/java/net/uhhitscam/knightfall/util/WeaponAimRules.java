@@ -45,12 +45,34 @@ public final class WeaponAimRules {
         return isProjectileWeapon(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
     }
 
-    public static float spreadMultiplier(Player player) {
-        return isAiming(player) ? AIMED_SPREAD_MULTIPLIER : 1.0F;
+    public static float adjustInaccuracy(Player player, ProjectileItem weapon, float inaccuracy) {
+        if (isAiming(player)) {
+            return inaccuracy * AIMED_SPREAD_MULTIPLIER;
+        }
+
+        if (!isDualWielding(player)) {
+            return inaccuracy;
+        }
+
+        return Math.max(
+                inaccuracy * weapon.getDualWieldInaccuracyMultiplier(),
+                inaccuracy + weapon.getDualWieldInaccuracyPenalty()
+        );
     }
 
-    public static float recoilMultiplier(Player player) {
-        return isAiming(player) ? AIMED_RECOIL_MULTIPLIER : 1.0F;
+    public static float adjustRecoil(Player player, ProjectileItem weapon, float recoil) {
+        if (isAiming(player)) {
+            return recoil * AIMED_RECOIL_MULTIPLIER;
+        }
+
+        if (!isDualWielding(player)) {
+            return recoil;
+        }
+
+        return Math.max(
+                recoil * weapon.getDualWieldRecoilMultiplier(),
+                recoil + weapon.getDualWieldRecoilPenalty()
+        );
     }
 
     public static WeaponSelection getUiWeapon(Player player) {

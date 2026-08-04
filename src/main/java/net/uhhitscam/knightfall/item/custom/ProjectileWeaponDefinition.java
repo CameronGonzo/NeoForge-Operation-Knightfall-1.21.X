@@ -26,6 +26,11 @@ public record ProjectileWeaponDefinition(
         FiringMode defaultFiringMode,
         AmmoType ammoType,
         WeaponClassification classification,
+        float dualWieldRecoilMultiplier,
+        float dualWieldRecoilPenalty,
+        float dualWieldInaccuracyMultiplier,
+        float dualWieldInaccuracyPenalty,
+        double heldMovementSpeedMultiplier,
         ProjectileWeaponTiming timing
 ) {
     public static Builder builder(WeaponName weaponName, String registryName) {
@@ -51,6 +56,11 @@ public record ProjectileWeaponDefinition(
         private FiringMode defaultFiringMode;
         private AmmoType ammoType = AmmoType.TIBANNA;
         private WeaponClassification classification;
+        private Float dualWieldRecoilMultiplier;
+        private Float dualWieldRecoilPenalty;
+        private Float dualWieldInaccuracyMultiplier;
+        private Float dualWieldInaccuracyPenalty;
+        private double heldMovementSpeedMultiplier = 1.0;
         private ProjectileWeaponTiming timing;
 
         private Builder(WeaponName weaponName, String registryName) {
@@ -182,6 +192,31 @@ public record ProjectileWeaponDefinition(
             return this;
         }
 
+        public Builder dualWieldRecoilMultiplier(float multiplier) {
+            this.dualWieldRecoilMultiplier = multiplier;
+            return this;
+        }
+
+        public Builder dualWieldRecoilPenalty(float penalty) {
+            this.dualWieldRecoilPenalty = penalty;
+            return this;
+        }
+
+        public Builder dualWieldInaccuracyMultiplier(float multiplier) {
+            this.dualWieldInaccuracyMultiplier = multiplier;
+            return this;
+        }
+
+        public Builder dualWieldInaccuracyPenalty(float penalty) {
+            this.dualWieldInaccuracyPenalty = penalty;
+            return this;
+        }
+
+        public Builder heldMovementSpeedMultiplier(double multiplier) {
+            this.heldMovementSpeedMultiplier = multiplier;
+            return this;
+        }
+
         public ProjectileWeaponDefinition build() {
             validate();
 
@@ -203,6 +238,19 @@ public record ProjectileWeaponDefinition(
                     defaultFiringMode,
                     ammoType,
                     classification,
+                    dualWieldRecoilMultiplier != null
+                            ? dualWieldRecoilMultiplier
+                            : defaultDualWieldPenaltyMultiplier(classification),
+                    dualWieldRecoilPenalty != null
+                            ? dualWieldRecoilPenalty
+                            : defaultDualWieldRecoilPenalty(classification),
+                    dualWieldInaccuracyMultiplier != null
+                            ? dualWieldInaccuracyMultiplier
+                            : defaultDualWieldPenaltyMultiplier(classification),
+                    dualWieldInaccuracyPenalty != null
+                            ? dualWieldInaccuracyPenalty
+                            : defaultDualWieldInaccuracyPenalty(classification),
+                    heldMovementSpeedMultiplier,
                     timing
             );
         }
@@ -246,6 +294,26 @@ public record ProjectileWeaponDefinition(
 
             if (classification == null) {
                 throw new IllegalStateException(weaponName + " must have a WeaponClassification.");
+            }
+
+            if (dualWieldRecoilMultiplier != null && dualWieldRecoilMultiplier < 1.0F) {
+                throw new IllegalStateException(weaponName + " dual-wield recoil multiplier cannot reduce recoil.");
+            }
+
+            if (dualWieldRecoilPenalty != null && dualWieldRecoilPenalty < 0.0F) {
+                throw new IllegalStateException(weaponName + " dual-wield recoil penalty cannot be negative.");
+            }
+
+            if (dualWieldInaccuracyMultiplier != null && dualWieldInaccuracyMultiplier < 1.0F) {
+                throw new IllegalStateException(weaponName + " dual-wield inaccuracy multiplier cannot improve accuracy.");
+            }
+
+            if (dualWieldInaccuracyPenalty != null && dualWieldInaccuracyPenalty < 0.0F) {
+                throw new IllegalStateException(weaponName + " dual-wield inaccuracy penalty cannot be negative.");
+            }
+
+            if (heldMovementSpeedMultiplier <= 0.0 || heldMovementSpeedMultiplier > 1.0) {
+                throw new IllegalStateException(weaponName + " held movement speed multiplier must be greater than 0 and at most 1.");
             }
 
             boolean usesGasAmmo = classification != WeaponClassification.SLUGTHROWER
@@ -305,6 +373,30 @@ public record ProjectileWeaponDefinition(
                     throw new IllegalStateException(weaponName + " must have positive overheat for " + firingMode + ".");
                 }
             }
+        }
+
+        private static float defaultDualWieldPenaltyMultiplier(WeaponClassification classification) {
+            return switch (classification) {
+                case CARBINE -> 1.15F;
+                case RIFLE, REPEATER, SNIPER, SLUGTHROWER, FLECHETTE, DISRUPTOR -> 1.35F;
+                case PISTOL, SCATTER -> 1.0F;
+            };
+        }
+
+        private static float defaultDualWieldRecoilPenalty(WeaponClassification classification) {
+            return switch (classification) {
+                case CARBINE -> 0.25F;
+                case RIFLE, REPEATER, SNIPER, SLUGTHROWER, FLECHETTE, DISRUPTOR -> 0.5F;
+                case PISTOL, SCATTER -> 0.0F;
+            };
+        }
+
+        private static float defaultDualWieldInaccuracyPenalty(WeaponClassification classification) {
+            return switch (classification) {
+                case CARBINE -> 0.75F;
+                case RIFLE, REPEATER, SNIPER, SLUGTHROWER, FLECHETTE, DISRUPTOR -> 1.5F;
+                case PISTOL, SCATTER -> 0.0F;
+            };
         }
     }
 }

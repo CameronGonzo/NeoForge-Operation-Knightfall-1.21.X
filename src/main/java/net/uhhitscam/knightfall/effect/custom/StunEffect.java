@@ -3,25 +3,30 @@ package net.uhhitscam.knightfall.effect.custom;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.Vec3;
+import net.uhhitscam.knightfall.effect.ModEffects;
 
-public class StunEffect extends MobEffect {
-    public StunEffect(MobEffectCategory pCategory, int pColor) {
-        super(pCategory, pColor);
+public final class StunEffect extends MobEffect {
+    public static final int DURATION_TICKS = 12 * 20;
+
+    public StunEffect(MobEffectCategory category, int color) {
+        super(category, color);
     }
 
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        return true;
+    public void onEffectStarted(LivingEntity entity, int amplifier) {
+        entity.stopUsingItem();
+
+        Vec3 movement = entity.getDeltaMovement();
+        entity.setDeltaMovement(0.0, movement.y, 0.0);
+
+        if (entity instanceof Mob mob) {
+            mob.getNavigation().stop();
+        }
     }
 
-    @Override
-    public boolean shouldApplyEffectTickThisTick(int pDuration, int pAmplifier) {
-        return true;
-    }
-
-    @Override
-    public void removeAttributeModifiers(AttributeMap attributeMap) {
-        super.removeAttributeModifiers(attributeMap);
+    public static boolean isStunned(LivingEntity entity) {
+        return entity.hasEffect(ModEffects.STUN_EFFECT);
     }
 }

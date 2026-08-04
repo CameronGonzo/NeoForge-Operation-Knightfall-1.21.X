@@ -65,6 +65,11 @@ public class ProjectileItem extends Item {
     private final WeaponClassification classification;
     private final WeaponName projectileWeaponName;
     private final ProjectileWeaponUI ui;
+    private final float dualWieldRecoilMultiplier;
+    private final float dualWieldRecoilPenalty;
+    private final float dualWieldInaccuracyMultiplier;
+    private final float dualWieldInaccuracyPenalty;
+    private final double heldMovementSpeedMultiplier;
     private final ProjectileWeaponTiming timing;
 
     public ProjectileItem(Properties properties, ProjectileWeaponDefinition definition) {
@@ -84,6 +89,11 @@ public class ProjectileItem extends Item {
         this.typAmmoType = definition.ammoType();
         this.classification = definition.classification();
         this.projectileWeaponName = definition.weaponName();
+        this.dualWieldRecoilMultiplier = definition.dualWieldRecoilMultiplier();
+        this.dualWieldRecoilPenalty = definition.dualWieldRecoilPenalty();
+        this.dualWieldInaccuracyMultiplier = definition.dualWieldInaccuracyMultiplier();
+        this.dualWieldInaccuracyPenalty = definition.dualWieldInaccuracyPenalty();
+        this.heldMovementSpeedMultiplier = definition.heldMovementSpeedMultiplier();
         this.timing = definition.timing();
     }
 
@@ -358,7 +368,7 @@ public class ProjectileItem extends Item {
 
     private Snowball createGasProjectile(Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats, FiringMode firingMode, boolean explosiveShot, boolean concussiveShot) {
         if (firingMode == FiringMode.STUN) {
-            return new StunBlasterBoltEntity(ModEntities.STUN_BLASTER_BOLT.get(), level, player, 1.5F);
+            return new StunBlasterBoltEntity(ModEntities.STUN_BLASTER_BOLT.get(), level);
         } else if (getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER) || getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER_PISTOL)) {
             return new SonicBoltEntity(ModEntities.SONIC_BOLT.get(), level, player, 1.4F, 18);
         }
@@ -442,12 +452,12 @@ public class ProjectileItem extends Item {
 
     private float getAccuracyFactor(Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats) {
         float baseInaccuracy = isSpreadFlechetteAmmo(currentAmmoType) ? 1.8f : currentStats.inaccuracy();
-        return baseInaccuracy * WeaponAimRules.spreadMultiplier(player) / 100;
+        return WeaponAimRules.adjustInaccuracy(player, this, baseInaccuracy) / 100;
     }
 
     private void applyShotRecoil(Player player, ProjectileWeaponStats currentStats) {
         if (player instanceof ServerPlayer serverPlayer) {
-            float recoil = currentStats.recoil() * WeaponAimRules.recoilMultiplier(player);
+            float recoil = WeaponAimRules.adjustRecoil(player, this, currentStats.recoil());
             PayloadRegister.sendToPlayer(serverPlayer, new CSProjectileWeaponRecoilPacket(recoil));
         }
     }
@@ -667,6 +677,26 @@ public class ProjectileItem extends Item {
 
     public WeaponClassification getClassification() {
         return classification;
+    }
+
+    public float getDualWieldRecoilMultiplier() {
+        return dualWieldRecoilMultiplier;
+    }
+
+    public float getDualWieldRecoilPenalty() {
+        return dualWieldRecoilPenalty;
+    }
+
+    public float getDualWieldInaccuracyMultiplier() {
+        return dualWieldInaccuracyMultiplier;
+    }
+
+    public float getDualWieldInaccuracyPenalty() {
+        return dualWieldInaccuracyPenalty;
+    }
+
+    public double getHeldMovementSpeedMultiplier() {
+        return heldMovementSpeedMultiplier;
     }
 
     public WeaponName getProjectileWeaponName() {
