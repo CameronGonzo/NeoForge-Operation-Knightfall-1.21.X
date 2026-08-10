@@ -29,6 +29,16 @@
 
   "tooltip.knightfall.blaster.shift": "Press §eShift",
 
+  "sounds.knightfall.equipment_throw": "Equipment Thrown",
+  "item.knightfall.thermal_detonator": "Thermal Detonator",
+  "sounds.knightfall.thermal_detonator_activate": "Thermal Detonator Activates",
+  "sounds.knightfall.thermal_detonator_beep": "Thermal Detonator Beeps",
+  "sounds.knightfall.thermal_detonator_impact": "Thermal Detonator Bounces",
+  "item.knightfall.impact_thermal_detonator": "Impact Thermal Detonator",
+  "sounds.knightfall.impact_thermal_detonator_activate": "Impact Thermal Detonator Activates",
+  "sounds.knightfall.impact_thermal_detonator_beep": "Impact Thermal Detonator Beeps",
+  "sounds.knightfall.impact_thermal_detonator_impact": "Impact Thermal Detonator Impacts",
+
   "item.knightfall._22t4": "22T4 Hold-out Blaster",
   "item.knightfall._62aug2_hunting_rifle": "6-2Aug2 Hunting Rifle",
   "item.knightfall._84u_hunting_rifle": "84-U Hunting Rifle",
@@ -379,7 +389,6 @@
   "item.knightfall.zp20": "ZP-20 Blaster Pistol",
   "item.knightfall.zygerrian_blaster": "Zygerrian Blaster Rifle",
 
-  "item.knightfall.thermal_detonator": "Thermal Detonator",
 
   "itemGroup.knightfall.hand_blasters": "Hand Blasters",
   "itemGroup.knightfall.carbine_blasters": "Carbine Blasters",

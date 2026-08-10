@@ -13,6 +13,14 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, OperationKnightfall.MODID);
 
+    public static final Supplier<SoundEvent> EQUIPMENT_THROW = registerSoundEvent("equipment_throw");
+    public static final Supplier<SoundEvent> THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("thermal_detonator_activate");
+    public static final Supplier<SoundEvent> THERMAL_DETONATOR_BEEP = registerSoundEvent("thermal_detonator_beep");
+    public static final Supplier<SoundEvent> THERMAL_DETONATOR_IMPACT = registerSoundEvent("thermal_detonator_impact");
+    public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("impact_thermal_detonator_activate");
+    public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_BEEP = registerSoundEvent("impact_thermal_detonator_beep");
+    public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_IMPACT = registerSoundEvent("impact_thermal_detonator_impact");
+
     public static final Supplier<SoundEvent> _22T4_FIRE = registerSoundEvent("22t4_fire");
     public static final Supplier<SoundEvent> _62AUG2_HUNTING_RIFLE_FIRE = registerSoundEvent("62aug2_hunting_rifle_fire");
     public static final Supplier<SoundEvent> _84U_HUNTING_RIFLE_FIRE = registerSoundEvent("84u_hunting_rifle_fire");

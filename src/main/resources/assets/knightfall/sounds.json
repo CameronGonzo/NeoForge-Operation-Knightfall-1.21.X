@@ -1,4 +1,46 @@
 {
+  "equipment_throw": {
+    "subtitle": "sounds.knightfall.equipment_throw",
+    "sounds": [
+      "knightfall:equipment/equipment_throw_01"
+    ]
+  },
+  "thermal_detonator_activate": {
+    "subtitle": "sounds.knightfall.thermal_detonator_activate",
+    "sounds": [
+      "knightfall:equipment/thermal_detonator/equipment_grenade_thermal_detonator_activate_01"
+    ]
+  },
+  "thermal_detonator_beep": {
+    "subtitle": "sounds.knightfall.thermal_detonator_beep",
+    "sounds": [
+      "knightfall:equipment/thermal_detonator/equipment_grenade_thermal_detonator_beep_01"
+    ]
+  },
+  "thermal_detonator_impact": {
+    "subtitle": "sounds.knightfall.thermal_detonator_impact",
+    "sounds": [
+      "knightfall:equipment/thermal_detonator/equipment_grenade_thermal_detonator_impact_01"
+    ]
+  },
+  "impact_thermal_detonator_activate": {
+    "subtitle": "sounds.knightfall.impact_thermal_detonator_activate",
+    "sounds": [
+      "knightfall:equipment/impact_thermal_detonator/equipment_grenade_impact_thermal_detonator_activate_01"
+    ]
+  },
+  "impact_thermal_detonator_beep": {
+    "subtitle": "sounds.knightfall.impact_thermal_detonator_beep",
+    "sounds": [
+      "knightfall:equipment/impact_thermal_detonator/equipment_grenade_impact_thermal_detonator_beep_01"
+    ]
+  },
+  "impact_thermal_detonator_impact": {
+    "subtitle": "sounds.knightfall.impact_thermal_detonator_impact",
+    "sounds": [
+      "knightfall:equipment/impact_thermal_detonator/equipment_grenade_impact_thermal_detonator_impact_01"
+    ]
+  },
   "22t4_fire": {
     "subtitle": "sounds.knightfall.22t4_fire",
     "sounds": [

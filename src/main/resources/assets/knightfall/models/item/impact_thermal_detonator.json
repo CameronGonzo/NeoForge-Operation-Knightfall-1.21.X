@@ -1,0 +1,17 @@
+{
+  "parent": "knightfall:item/impact_thermal_detonator_item",
+  "overrides": [
+    {
+      "predicate": {
+        "knightfall:grenade_state": 1.0
+      },
+      "model": "knightfall:item/impact_thermal_detonator_item_1"
+    },
+    {
+      "predicate": {
+        "knightfall:grenade_state": 2.0
+      },
+      "model": "knightfall:item/impact_thermal_detonator_item_2"
+    }
+  ]
+}

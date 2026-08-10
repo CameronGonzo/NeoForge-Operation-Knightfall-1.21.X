@@ -1,34 +1,48 @@
-Operation Knightfall Asset License
+OPERATION KNIGHTFALL PROJECT-ASSET LICENSE
 
 Copyright (c) 2026 CameronGonzo
-
 All Rights Reserved.
 
-This license applies only to visual assets contained within this repository.
+1. SCOPE
 
-Audio files and source code are NOT covered by this asset license and are instead licensed under the MIT License.
+This license applies only to original models, textures, artwork, animations, and related visual assets created by the Operation Knightfall project maintainer, to the extent that the maintainer owns the applicable rights.
 
-These assets include, but are not limited to:
+These materials are referred to below as the "Project Assets."
 
-- 3D models
-- Blockbench models
-- textures
-- artwork
-- visual designs
-- graphical elements
+2. PERMITTED USE
 
-Permission is NOT granted to:
+Permission is granted to download and use the Project Assets as part of Operation Knightfall for personal, noncommercial gameplay and local development.
 
-- Copy or redistribute these assets independently of this mod
-- Modify or create derivative works of these assets
-- Use these assets in other mods or projects
-- Claim these assets as your own work
+3. RESTRICTIONS
 
-Permission IS granted to:
+Unless the project maintainer provides prior written permission, the Project Assets may not be:
 
-- Include the unmodified Operation Knightfall mod in modpacks
-- Distribute the unmodified mod as part of a modpack provided proper credit is given to the author
+a. extracted or used separately from Operation Knightfall;
 
-The source code of this repository is licensed separately under the MIT License and is not restricted by this asset license.
+b. copied into another mod, game, resource pack, project, or collection;
 
-If you wish to use any assets from this project outside of this mod, you must obtain explicit permission from the author.
+c. modified, adapted, recolored, converted, or used to create derivative assets for redistribution;
+
+d. redistributed, rehosted, sublicensed, sold, or commercially exploited;
+
+e. used to train, develop, or supply an artificial-intelligence model or asset-generation system; or
+
+f. presented as the original work of another person or project.
+
+This license does not authorize redistribution or independent rehosting of the complete Operation Knightfall mod.
+
+4. THIRD-PARTY INTELLECTUAL PROPERTY
+
+This license applies only to original creative expression owned by the project maintainer.
+
+It does not claim ownership of or grant rights in Star Wars characters, names, settings, designs, symbols, trademarks, or other intellectual property belonging to Lucasfilm Ltd., The Walt Disney Company, or another applicable rights holder.
+
+Third-party audio is not covered by this license.
+
+5. NO IMPLIED PERMISSION
+
+No additional license or permission is granted by implication, public availability, download, use, or inclusion in the Operation Knightfall repository.
+
+6. WARRANTY
+
+THE PROJECT ASSETS ARE PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, THE COPYRIGHT HOLDER SHALL NOT BE LIABLE FOR CLAIMS OR DAMAGES ARISING FROM THEIR USE.

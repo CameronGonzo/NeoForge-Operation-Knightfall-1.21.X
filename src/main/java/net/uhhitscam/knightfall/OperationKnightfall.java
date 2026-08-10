@@ -2,7 +2,6 @@ package net.uhhitscam.knightfall;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;
@@ -26,6 +25,7 @@ import net.uhhitscam.knightfall.event.FaceAlignedParticleClient;
 import net.uhhitscam.knightfall.event.ProjectileWeaponZoomEventHandler;
 import net.uhhitscam.knightfall.item.ModCreativeModeTabs;
 import net.uhhitscam.knightfall.item.ModItems;
+import net.uhhitscam.knightfall.item.client.GrenadeItemModelProperties;
 import net.uhhitscam.knightfall.network.PayloadRegister;
 import net.uhhitscam.knightfall.particle.*;
 import net.uhhitscam.knightfall.sound.ModSounds;
@@ -90,10 +90,12 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.FLECHETTE_TOXIC.get(), FlechetteToxicRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE_SPREAD_CAN.get(), FlechetteSpreadCanRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE_TOXIC_SPREAD_CAN.get(), FlechetteToxicSpreadCanRenderer::new);
-            EntityRenderers.register(ModEntities.GRENADE.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.GRENADE.get(), GrenadeRenderer::new);
             EntityRenderers.register(ModEntities.BLASTER_BEAM.get(), BlasterBeamRenderer::new);
 
             event.enqueueWork(() -> {
+                GrenadeItemModelProperties.register(ModItems.THERMAL_DETONATOR.get());
+                GrenadeItemModelProperties.register(ModItems.IMPACT_THERMAL_DETONATOR.get());
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 FaceAlignedParticleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);

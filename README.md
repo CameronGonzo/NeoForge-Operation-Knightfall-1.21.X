@@ -97,19 +97,20 @@ Below is the current development roadmap for Operation Knightfall.
 
 ## License
 
-This repository uses a split licensing model.
+Operation Knightfall uses a split licensing structure. No single license applies to the entire repository or compiled mod.
 
-| Component | License |
-|----------|--------|
-| Source Code | MIT License |
-| Audio | MIT License |
-| Models & Textures | All Rights Reserved |
+| Component                                             | Terms                                              |
+| ----------------------------------------------------- | -------------------------------------------------- |
+| Project-authored source code                          | MIT License                                        |
+| Project-authored models, textures, and artwork        | All Rights Reserved                                |
+| Third-party audio                                     | Excluded from all licenses granted by this project |
+| Star Wars and other third-party intellectual property | Property of the applicable rights holders          |
 
-The MIT license allows the source code and audio to be freely used, modified, and distributed under the terms of the license.
+See [`LICENSE`](LICENSE), [`LICENSE_CODE`](LICENSE-CODE), and [`LICENSE_ASSETS`](LICENSE-ASSETS) for the complete terms.
 
-All visual assets (including models and textures) are **All Rights Reserved** and may not be reused, redistributed, or modified outside of this mod without explicit permission from the author.
+The source-code license does not grant permission to extract, reuse, modify, redistribute, sublicense, or commercialize the audio or other third-party material contained in this project.
 
-Modpacks **are permitted** to include the unmodified Operation Knightfall mod provided proper credit is given.
+Redistribution or independent rehosting of the complete mod is not authorized. Modpacks and other collections should link to an official Operation Knightfall distribution page rather than rehosting the mod file.
 
 ---
 
@@ -119,14 +120,24 @@ This project was initially created using the NeoForge MDK and development templa
 
 ---
 
-## **Disclaimer**
+## Third-Party Audio Notice
 
-This mod is a fan-made project inspired by the Star Wars franchise. All rights, trademarks, characters, sounds, and other intellectual property related to Star Wars are the exclusive property of Lucasfilm Ltd. and The Walt Disney Company.
+Operation Knightfall presently contains certain sound effects sourced or derived from officially released Star Wars films, television productions, and video games.
 
-I am not affiliated with, endorsed by, or sponsored by Lucasfilm, Disney, or any of their subsidiaries. This project is created solely for entertainment purposes by fans, for fans.
+These recordings are third-party material. They are not covered by the MIT License or by the terms governing project-authored visual assets. The project maintainer does not claim ownership of these recordings or authority to license, sublicense, or authorize their reuse.
 
-All models, textures, music, and original content within this mod were created by me. Any use of Star Wars-inspired sounds or references is intended purely as a homage to the franchise.
+The project does not claim that these recordings are licensed, authorized, or used with permission from the applicable rights holders. Source identification and attribution are provided for transparency only and do not imply permission, approval, or endorsement.
 
-This mod is provided completely free of charge and is not to be sold or monetized in any way. By downloading or using this mod, you acknowledge that it is an unofficial fan creation and that you do so at your own risk.
+Operation Knightfall does not intentionally include Star Wars music or character dialogue.
 
-If requested by the rights holders, I will promptly remove or alter this project to comply with their wishes.
+---
+
+## Fan Project Disclaimer
+
+Operation Knightfall is an unofficial, noncommercial, fan-made Minecraft mod inspired by the Star Wars universe.
+
+This project is not affiliated with, endorsed by, sponsored by, or approved by Lucasfilm Ltd., The Walt Disney Company, Mojang Studios, Microsoft, or any applicable game publisher, developer, or rights holder.
+
+Star Wars and its related names, characters, settings, designs, trademarks, and other intellectual property belong to their applicable rights holders. Minecraft and its related intellectual property belong to Mojang Studios and Microsoft.
+
+Operation Knightfall is distributed without charge. It is not sold, commercially licensed, or supported through payments or donations.

@@ -33,4 +33,8 @@ public class ModModelLayers {
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "flechette_spread_can"), "main");
     public static final ModelLayerLocation FLECHETTE_TOXIC_SPREAD_CAN = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "flechette_toxic_spread_can"), "main");
+    public static final ModelLayerLocation THERMAL_DETONATOR = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "thermal_detonator"), "main");
+    public static final ModelLayerLocation IMPACT_THERMAL_DETONATOR = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "impact_thermal_detonator"), "main");
 }

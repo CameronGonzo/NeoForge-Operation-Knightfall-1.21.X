@@ -1,6 +1,17 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "minecraft:item/fire_charge"
-  }
+  "parent": "knightfall:item/thermal_detonator_item",
+  "overrides": [
+    {
+      "predicate": {
+        "knightfall:grenade_state": 1.0
+      },
+      "model": "knightfall:item/thermal_detonator_item_1"
+    },
+    {
+      "predicate": {
+        "knightfall:grenade_state": 2.0
+      },
+      "model": "knightfall:item/thermal_detonator_item_2"
+    }
+  ]
 }

@@ -1,21 +1,35 @@
-MIT License
+OPERATION KNIGHTFALL LICENSING NOTICE
 
-Copyright (c) 2026 CameronGonzo
+Operation Knightfall contains materials subject to different licensing and ownership terms. No single license applies to the entire repository or compiled mod.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. PROJECT-AUTHORED SOURCE CODE
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Project-authored source code located under src/main/java is licensed under the MIT License contained in LICENSE-CODE.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+The MIT License does not apply to audio, models, textures, artwork, trademarks, fictional characters, fictional designs, or other third-party material.
+
+2. PROJECT-AUTHORED VISUAL ASSETS
+
+Original models, textures, artwork, and related visual assets created specifically for Operation Knightfall are governed by LICENSE-ASSETS.
+
+Those terms apply only to original creative expression owned by the project maintainer. They do not claim or grant rights in Star Wars characters, names, settings, designs, trademarks, or other underlying intellectual property.
+
+3. THIRD-PARTY AUDIO
+
+Audio files contained in this repository or distributed with the compiled mod, including OGG, WAV, and other audio formats, are excluded from the MIT License and every other license granted by this project.
+
+Some audio files were sourced or derived from third-party films, television productions, and video games. The project maintainer does not claim ownership of those recordings or authority to license, sublicense, or authorize their reuse.
+
+Their inclusion in this repository must not be interpreted as permission to extract, copy, modify, redistribute, sell, sublicense, or otherwise reuse them.
+
+4. THIRD-PARTY INTELLECTUAL PROPERTY
+
+Star Wars and its related names, characters, settings, designs, trademarks, and other intellectual property belong to their applicable rights holders.
+
+Operation Knightfall is an unofficial, noncommercial fan project. It is not affiliated with, endorsed by, sponsored by, or approved by Lucasfilm Ltd., The Walt Disney Company, Mojang Studios, Microsoft, or any applicable publisher, developer, or rights holder.
+
+5. OTHER CONTENT
+
+Repository content not expressly covered by LICENSE-CODE or LICENSE-ASSETS remains All Rights Reserved unless a separate written notice states otherwise.
+
+No license or permission should be inferred merely because material is publicly accessible through this repository.

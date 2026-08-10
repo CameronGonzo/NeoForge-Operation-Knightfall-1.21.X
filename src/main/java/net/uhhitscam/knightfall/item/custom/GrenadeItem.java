@@ -39,7 +39,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
 
         player.startUsingItem(hand);
         if (!level.isClientSide) {
-            definition.audio().beepSound().play(level, player.position());
+            definition.audio().activationSound().play(level, player.position());
         }
         return InteractionResultHolder.consume(stack);
     }
@@ -64,7 +64,14 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
         int remainingFuseTicks = definition.trigger().detonatesOnFuse()
                 ? Math.max(1, timeLeft)
                 : definition.fuseTicks();
-        throwGrenade((ServerLevel) level, user, stack, remainingFuseTicks);
+        int useTicks = Math.max(0, getUseDuration(stack, user) - timeLeft);
+        throwGrenade(
+                (ServerLevel) level,
+                user,
+                stack,
+                remainingFuseTicks,
+                definition.throwVelocity(useTicks)
+        );
     }
 
     @Override
@@ -73,14 +80,26 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
             if (definition.trigger().detonatesOnFuse()) {
                 detonateInHand(serverLevel, user, stack);
             } else {
-                throwGrenade(serverLevel, user, stack, definition.fuseTicks());
+                throwGrenade(
+                        serverLevel,
+                        user,
+                        stack,
+                        definition.fuseTicks(),
+                        definition.throwVelocity()
+                );
             }
         }
 
         return stack;
     }
 
-    private void throwGrenade(ServerLevel level, LivingEntity user, ItemStack stack, int remainingFuseTicks) {
+    private void throwGrenade(
+            ServerLevel level,
+            LivingEntity user,
+            ItemStack stack,
+            int remainingFuseTicks,
+            float throwVelocity
+    ) {
         if (stack.isEmpty()) {
             return;
         }
@@ -93,7 +112,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
                 user.getXRot(),
                 user.getYRot(),
                 0.0F,
-                definition.throwVelocity(),
+                throwVelocity,
                 definition.throwInaccuracy()
         );
         level.addFreshEntity(grenade);

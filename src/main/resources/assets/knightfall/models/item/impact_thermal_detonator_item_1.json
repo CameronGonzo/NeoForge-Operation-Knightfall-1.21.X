@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/impact_thermal_detonator_item",
+  "textures": {
+    "0": "knightfall:item/impact_thermal_detonator_item_1",
+    "particle": "knightfall:item/impact_thermal_detonator_item_1"
+  }
+}

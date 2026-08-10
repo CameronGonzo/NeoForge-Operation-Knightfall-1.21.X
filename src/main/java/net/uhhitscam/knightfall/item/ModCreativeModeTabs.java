@@ -418,6 +418,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.BOWCASTER);
                         pOutput.accept(ModItems.TL40);
                         pOutput.accept(ModItems.THERMAL_DETONATOR);
+                        pOutput.accept(ModItems.IMPACT_THERMAL_DETONATOR);
                         pOutput.accept(ModItems.GAS_CARTRIDGE);
                         pOutput.accept(ModItems.TIBANNA_GAS);
                         pOutput.accept(ModItems.IONIZED_TIBANNA_GAS);

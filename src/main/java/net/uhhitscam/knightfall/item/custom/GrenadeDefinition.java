@@ -10,6 +10,8 @@ public record GrenadeDefinition(
         int fuseTicks,
         GrenadeTrigger trigger,
         float throwVelocity,
+        float minimumThrowVelocity,
+        int throwChargeTicks,
         float throwInaccuracy,
         int cooldownTicks,
         GrenadePhysics physics,
@@ -27,6 +29,8 @@ public record GrenadeDefinition(
         private int fuseTicks = -1;
         private GrenadeTrigger trigger = GrenadeTrigger.FUSE;
         private float throwVelocity = 1.5F;
+        private Float minimumThrowVelocity;
+        private int throwChargeTicks = 10;
         private float throwInaccuracy = 1.0F;
         private int cooldownTicks;
         private GrenadePhysics physics = GrenadePhysics.defaults();
@@ -57,6 +61,16 @@ public record GrenadeDefinition(
 
         public Builder throwVelocity(float throwVelocity) {
             this.throwVelocity = throwVelocity;
+            return this;
+        }
+
+        public Builder minimumThrowVelocity(float minimumThrowVelocity) {
+            this.minimumThrowVelocity = minimumThrowVelocity;
+            return this;
+        }
+
+        public Builder throwChargeTicks(int throwChargeTicks) {
+            this.throwChargeTicks = throwChargeTicks;
             return this;
         }
 
@@ -92,6 +106,18 @@ public record GrenadeDefinition(
             if (throwVelocity <= 0.0F) {
                 throw new IllegalStateException(registryName + " must have throwVelocity greater than 0.");
             }
+            float resolvedMinimumThrowVelocity = minimumThrowVelocity != null
+                    ? minimumThrowVelocity
+                    : throwVelocity * 0.4F;
+            if (resolvedMinimumThrowVelocity <= 0.0F) {
+                throw new IllegalStateException(registryName + " must have minimumThrowVelocity greater than 0.");
+            }
+            if (resolvedMinimumThrowVelocity > throwVelocity) {
+                throw new IllegalStateException(registryName + " minimumThrowVelocity cannot exceed throwVelocity.");
+            }
+            if (throwChargeTicks <= 0) {
+                throw new IllegalStateException(registryName + " must have throwChargeTicks greater than 0.");
+            }
             if (throwInaccuracy < 0.0F) {
                 throw new IllegalStateException(registryName + " cannot have negative throwInaccuracy.");
             }
@@ -114,6 +140,8 @@ public record GrenadeDefinition(
                     fuseTicks,
                     trigger,
                     throwVelocity,
+                    resolvedMinimumThrowVelocity,
+                    throwChargeTicks,
                     throwInaccuracy,
                     cooldownTicks,
                     physics,
@@ -121,5 +149,10 @@ public record GrenadeDefinition(
                     effect
             );
         }
+    }
+
+    public float throwVelocity(int useTicks) {
+        float charge = Math.max(0.0F, Math.min(1.0F, (float) useTicks / throwChargeTicks));
+        return minimumThrowVelocity + (throwVelocity - minimumThrowVelocity) * charge;
     }
 }

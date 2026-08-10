@@ -5,6 +5,7 @@ import java.util.Objects;
 public record GrenadeAudioProfile(
         GrenadeSound throwSound,
         GrenadeSound bounceSound,
+        GrenadeSound activationSound,
         GrenadeSound beepSound,
         int normalBeepIntervalTicks,
         int urgentBeepIntervalTicks,
@@ -13,6 +14,7 @@ public record GrenadeAudioProfile(
     public GrenadeAudioProfile {
         Objects.requireNonNull(throwSound, "Grenade throw sound cannot be null.");
         Objects.requireNonNull(bounceSound, "Grenade bounce sound cannot be null.");
+        Objects.requireNonNull(activationSound, "Grenade activation sound cannot be null.");
         Objects.requireNonNull(beepSound, "Grenade beep sound cannot be null.");
 
         if (normalBeepIntervalTicks <= 0) {
