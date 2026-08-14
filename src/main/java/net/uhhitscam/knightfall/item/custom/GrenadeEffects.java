@@ -1,5 +1,7 @@
 package net.uhhitscam.knightfall.item.custom;
 
+import net.minecraft.world.phys.AABB;
+import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 import net.uhhitscam.knightfall.util.CustomExplosion;
 
 import java.util.Objects;
@@ -28,6 +30,21 @@ public final class GrenadeEffects {
             for (GrenadeParticleBurst particle : spec.particles()) {
                 particle.spawn(context.level(), context.position());
             }
+
+            detonateNearbyGrenades(context, spec.entityRadius());
         };
+    }
+
+    private static void detonateNearbyGrenades(GrenadeDetonationContext context, double radius) {
+        double radiusSquared = radius * radius;
+        AABB bounds = new AABB(context.position(), context.position()).inflate(radius);
+
+        for (GrenadeEntity grenade : context.level().getEntitiesOfClass(GrenadeEntity.class, bounds)) {
+            if (grenade != context.grenade()
+                    && !grenade.isRemoved()
+                    && grenade.distanceToSqr(context.position()) <= radiusSquared) {
+                grenade.detonate();
+            }
+        }
     }
 }

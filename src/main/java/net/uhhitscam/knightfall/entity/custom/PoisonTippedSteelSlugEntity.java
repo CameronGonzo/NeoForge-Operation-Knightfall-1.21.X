@@ -165,6 +165,7 @@ public class PoisonTippedSteelSlugEntity extends Snowball {
 
     @Override
     protected boolean canHitEntity(Entity entity) {
+        if (entity instanceof GrenadeEntity) return super.canHitEntity(entity);
         if (!(entity instanceof LivingEntity living)) return false;
         if (!living.isAlive() || living.isSpectator()) return false;
         if (this.getOwner() != null && entity == this.getOwner()) return false;

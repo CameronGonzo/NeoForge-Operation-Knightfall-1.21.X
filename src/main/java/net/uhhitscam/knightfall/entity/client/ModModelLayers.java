@@ -37,4 +37,8 @@ public class ModModelLayers {
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "thermal_detonator"), "main");
     public static final ModelLayerLocation IMPACT_THERMAL_DETONATOR = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "impact_thermal_detonator"), "main");
+    public static final ModelLayerLocation MAGNETIC_THERMAL_DETONATOR = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "magnetic_thermal_detonator"), "main");
+    public static final ModelLayerLocation GRAV_CHARGE = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "grav_charge"), "main");
 }

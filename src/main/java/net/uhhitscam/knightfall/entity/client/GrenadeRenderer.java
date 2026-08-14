@@ -3,6 +3,7 @@ package net.uhhitscam.knightfall.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.core.Direction;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -22,9 +23,21 @@ import net.uhhitscam.knightfall.item.custom.GrenadeVisualState;
 public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
     private static final GrenadeTextures THERMAL_DETONATOR_TEXTURES = textures("thermal_detonator");
     private static final GrenadeTextures IMPACT_THERMAL_DETONATOR_TEXTURES = textures("impact_thermal_detonator");
+    private static final GrenadeTextures MAGNETIC_THERMAL_DETONATOR_TEXTURES = new GrenadeTextures(
+            texture("magnetic_thermal_detonator"),
+            texture("magnetic_thermal_detonator"),
+            texture("magnetic_thermal_detonator_1")
+    );
+    private static final GrenadeTextures GRAV_CHARGE_TEXTURES = new GrenadeTextures(
+            texture("grav_charge"),
+            texture("grav_charge"),
+            texture("grav_charge_1")
+    );
 
     private final ThermalDetonatorModel thermalDetonatorModel;
     private final ImpactThermalDetonatorModel impactThermalDetonatorModel;
+    private final MagneticThermalDetonatorModel magneticThermalDetonatorModel;
+    private final GravChargeModel gravChargeModel;
     private final ItemRenderer itemRenderer;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -35,6 +48,10 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         this.impactThermalDetonatorModel = new ImpactThermalDetonatorModel(
                 context.bakeLayer(ModModelLayers.IMPACT_THERMAL_DETONATOR)
         );
+        this.magneticThermalDetonatorModel = new MagneticThermalDetonatorModel(
+                context.bakeLayer(ModModelLayers.MAGNETIC_THERMAL_DETONATOR)
+        );
+        this.gravChargeModel = new GravChargeModel(context.bakeLayer(ModModelLayers.GRAV_CHARGE));
         this.itemRenderer = context.getItemRenderer();
         this.shadowRadius = 0.15F;
     }
@@ -60,11 +77,16 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         poseStack.scale(0.8F, -0.8F, 0.8F);
 
         float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
-        float pitch = entity.isResting()
-                ? 0.0F
-                : Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
-        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
-        poseStack.mulPose(Axis.XP.rotationDegrees(-pitch));
+        Direction stuckFace = entity.getStuckFace();
+        if (stuckFace != null) {
+            applyStuckRotation(poseStack, stuckFace, yaw);
+        } else {
+            float pitch = entity.isResting()
+                    ? 0.0F
+                    : Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
+            poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+            poseStack.mulPose(Axis.XP.rotationDegrees(-pitch));
+        }
 
         ResourceLocation texture = getTextureLocation(entity);
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(texture));
@@ -112,7 +134,11 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
             return textures.base();
         }
 
-        return switch (GrenadeVisualState.forThrownGrenade(definition, entity.getFuseTicks())) {
+        return switch (GrenadeVisualState.forThrownGrenade(
+                definition,
+                entity.getFuseTicks(),
+                entity.isFuseRunning()
+        )) {
             case INACTIVE -> textures.base();
             case ACTIVE -> textures.active();
             case BEEP -> textures.beep();
@@ -126,6 +152,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         if (entity.getItem().is(ModItems.IMPACT_THERMAL_DETONATOR.get())) {
             return impactThermalDetonatorModel;
         }
+        if (entity.getItem().is(ModItems.MAGNETIC_THERMAL_DETONATOR.get())) {
+            return magneticThermalDetonatorModel;
+        }
+        if (entity.getItem().is(ModItems.GRAV_CHARGE.get())) {
+            return gravChargeModel;
+        }
         return null;
     }
 
@@ -136,7 +168,26 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         if (entity.getItem().is(ModItems.IMPACT_THERMAL_DETONATOR.get())) {
             return IMPACT_THERMAL_DETONATOR_TEXTURES;
         }
+        if (entity.getItem().is(ModItems.MAGNETIC_THERMAL_DETONATOR.get())) {
+            return MAGNETIC_THERMAL_DETONATOR_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.GRAV_CHARGE.get())) {
+            return GRAV_CHARGE_TEXTURES;
+        }
         return null;
+    }
+
+    private static void applyStuckRotation(PoseStack poseStack, Direction direction, float yaw) {
+        switch (direction) {
+            case UP -> {
+            }
+            case DOWN -> poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+            case NORTH -> poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            case SOUTH -> poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            case EAST -> poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
+            case WEST -> poseStack.mulPose(Axis.ZP.rotationDegrees(-90.0F));
+        }
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
     }
 
     private static GrenadeTextures textures(String name) {

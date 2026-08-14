@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +19,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.knightfall.item.ModItems;
+import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.item.custom.GrenadeDefinition;
 import net.uhhitscam.knightfall.item.custom.GrenadeDetonationContext;
 import net.uhhitscam.knightfall.item.custom.GrenadeItem;
@@ -26,7 +28,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class GrenadeEntity extends ThrowableItemProjectile {
     private static final String FUSE_TAG = "Fuse";
+    private static final String FUSE_RUNNING_TAG = "FuseRunning";
     private static final String RESTING_TAG = "Resting";
+    private static final String STUCK_FACE_TAG = "StuckFace";
     private static final String DETONATED_TAG = "Detonated";
     private static final double HIT_POSITION_EPSILON = 0.01;
     private static final double GROUND_PROBE_START_OFFSET = 0.02;
@@ -38,6 +42,10 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_RESTING =
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_FUSE_RUNNING =
+            SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> DATA_STUCK_FACE =
+            SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
 
     @Nullable
     private Vec3 velocityAfterImpact;
@@ -62,6 +70,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         super.defineSynchedData(builder);
         builder.define(DATA_FUSE_TICKS, 80);
         builder.define(DATA_RESTING, false);
+        builder.define(DATA_FUSE_RUNNING, true);
+        builder.define(DATA_STUCK_FACE, -1);
     }
 
     public int getFuseTicks() {
@@ -72,12 +82,34 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         entityData.set(DATA_FUSE_TICKS, Math.max(0, fuseTicks));
     }
 
+    public boolean isFuseRunning() {
+        return entityData.get(DATA_FUSE_RUNNING);
+    }
+
+    public void setFuseRunning(boolean fuseRunning) {
+        entityData.set(DATA_FUSE_RUNNING, fuseRunning);
+    }
+
     public boolean isResting() {
         return entityData.get(DATA_RESTING);
     }
 
     private void setResting(boolean resting) {
         entityData.set(DATA_RESTING, resting);
+    }
+
+    public boolean isStuck() {
+        return entityData.get(DATA_STUCK_FACE) >= 0;
+    }
+
+    @Nullable
+    public Direction getStuckFace() {
+        int directionId = entityData.get(DATA_STUCK_FACE);
+        return directionId >= 0 ? Direction.from3DDataValue(directionId) : null;
+    }
+
+    private void setStuckFace(@Nullable Direction direction) {
+        entityData.set(DATA_STUCK_FACE, direction == null ? -1 : direction.get3DDataValue());
     }
 
     @Nullable
@@ -89,7 +121,11 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
     @Override
     public void tick() {
-        updateRestingMotion();
+        if (isStuck()) {
+            setDeltaMovement(Vec3.ZERO);
+        } else {
+            updateRestingMotion();
+        }
 
         super.tick();
 
@@ -109,11 +145,22 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             return;
         }
 
+        if (!isFuseRunning()) {
+            return;
+        }
+
         int remainingFuseTicks = getFuseTicks() - 1;
         setFuseTicks(remainingFuseTicks);
+        boolean shouldPlayBeep = definition.audio().shouldPlayBeep(
+                remainingFuseTicks,
+                definition.fuseTicks()
+        );
 
         if (remainingFuseTicks <= 0) {
             if (definition.trigger().detonatesOnFuse()) {
+                if (shouldPlayBeep) {
+                    definition.audio().playBeep(level(), position(), remainingFuseTicks, definition.fuseTicks());
+                }
                 detonate();
             } else {
                 discard();
@@ -121,8 +168,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             return;
         }
 
-        if (definition.audio().shouldPlayBeep(remainingFuseTicks, definition.fuseTicks())) {
-            definition.audio().beepSound().play(level(), position());
+        if (shouldPlayBeep) {
+            definition.audio().playBeep(level(), position(), remainingFuseTicks, definition.fuseTicks());
         }
     }
 
@@ -146,6 +193,14 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             return;
         }
 
+        if (definition.trigger().sticksToBlocks()) {
+            startFuseIfNeeded(definition);
+            if (!isStuck() && definition.canStickTo(level().getBlockState(result.getBlockPos()))) {
+                stickToBlock(result, definition);
+                return;
+            }
+        }
+
         Direction direction = result.getDirection();
         Vec3 normal = Vec3.atLowerCornerOf(direction.getNormal());
         bounce(result.getLocation(), normal, definition, direction == Direction.UP);
@@ -156,7 +211,33 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         GrenadeDefinition definition = getGrenadeDefinition();
         return definition != null
                 && definition.trigger().detonatesOnImpact()
+                && !(target instanceof GrenadeEntity)
                 && super.canHitEntity(target);
+    }
+
+    @Override
+    public boolean isPickable() {
+        return !isRemoved();
+    }
+
+    @Override
+    public float getPickRadius() {
+        return 0.0F;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (level().isClientSide || detonated || isRemoved()) {
+            return false;
+        }
+
+        Entity directEntity = source.getDirectEntity();
+        if (directEntity == null || !ModEntities.isGrenadeTriggeringProjectile(directEntity)) {
+            return false;
+        }
+
+        detonate();
+        return true;
     }
 
     @Override
@@ -243,6 +324,58 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         }
     }
 
+    private void stickToBlock(BlockHitResult result, GrenadeDefinition definition) {
+        Direction direction = result.getDirection();
+        Vec3 normal = Vec3.atLowerCornerOf(direction.getNormal());
+        setPos(result.getLocation().add(normal.scale(surfaceAttachmentDistance(direction, definition))));
+        setDeltaMovement(Vec3.ZERO);
+        velocityAfterImpact = null;
+        setResting(false);
+        setStuckFace(direction);
+        startFuseIfNeeded(definition);
+
+        if (!level().isClientSide) {
+            definition.audio().bounceSound().play(level(), result.getLocation());
+        }
+    }
+
+    public void placeOnSurface(Vec3 location, Direction direction) {
+        Vec3 normal = Vec3.atLowerCornerOf(direction.getNormal());
+        GrenadeDefinition definition = getGrenadeDefinition();
+        double attachmentDistance = definition != null
+                ? surfaceAttachmentDistance(direction, definition)
+                : surfaceAttachmentDistance(direction, -0.05);
+        setPos(location.add(normal.scale(attachmentDistance)));
+        setDeltaMovement(Vec3.ZERO);
+        velocityAfterImpact = null;
+        setResting(false);
+        setStuckFace(direction);
+        setFuseRunning(true);
+    }
+
+    private double surfaceAttachmentDistance(Direction direction, GrenadeDefinition definition) {
+        return surfaceAttachmentDistance(direction, definition.surfaceAttachmentOffset());
+    }
+
+    private double surfaceAttachmentDistance(Direction direction, double adjustment) {
+        if (direction == Direction.UP) {
+            return adjustment;
+        }
+        if (direction == Direction.DOWN) {
+            return getBbHeight() + adjustment;
+        }
+        return getBbWidth() * 0.5 + adjustment;
+    }
+
+    private void startFuseIfNeeded(GrenadeDefinition definition) {
+        if (isFuseRunning()) {
+            return;
+        }
+
+        setFuseTicks(definition.fuseTicks());
+        setFuseRunning(true);
+    }
+
     private void updateRestingMotion() {
         if (!isResting()) {
             return;
@@ -309,6 +442,12 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     private void restoreVelocityAfterImpact() {
+        if (isStuck()) {
+            setDeltaMovement(Vec3.ZERO);
+            velocityAfterImpact = null;
+            return;
+        }
+
         if (velocityAfterImpact == null) {
             return;
         }
@@ -352,7 +491,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
     @Override
     protected double getDefaultGravity() {
-        if (isResting()) {
+        if (isResting() || isStuck()) {
             return 0.0;
         }
 
@@ -362,7 +501,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
     @Override
     protected void updateRotation() {
-        if (getDeltaMovement().lengthSqr() > 1.0E-6) {
+        if (!isStuck() && getDeltaMovement().lengthSqr() > 1.0E-6) {
             super.updateRotation();
         }
     }
@@ -371,7 +510,12 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt(FUSE_TAG, getFuseTicks());
+        tag.putBoolean(FUSE_RUNNING_TAG, isFuseRunning());
         tag.putBoolean(RESTING_TAG, isResting());
+        Direction stuckFace = getStuckFace();
+        if (stuckFace != null) {
+            tag.putInt(STUCK_FACE_TAG, stuckFace.get3DDataValue());
+        }
         tag.putBoolean(DETONATED_TAG, detonated);
     }
 
@@ -381,7 +525,13 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         if (tag.contains(FUSE_TAG)) {
             setFuseTicks(tag.getInt(FUSE_TAG));
         }
+        if (tag.contains(FUSE_RUNNING_TAG)) {
+            setFuseRunning(tag.getBoolean(FUSE_RUNNING_TAG));
+        }
         setResting(tag.getBoolean(RESTING_TAG));
+        setStuckFace(tag.contains(STUCK_FACE_TAG)
+                ? Direction.from3DDataValue(tag.getInt(STUCK_FACE_TAG))
+                : null);
         detonated = tag.getBoolean(DETONATED_TAG);
     }
 }

@@ -26,6 +26,8 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.FLECHETTE_TOXIC_SPREAD_CAN, FlechetteToxicSpreadCanModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.THERMAL_DETONATOR, ThermalDetonatorModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.IMPACT_THERMAL_DETONATOR, ImpactThermalDetonatorModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.MAGNETIC_THERMAL_DETONATOR, MagneticThermalDetonatorModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.GRAV_CHARGE, GravChargeModel::createBodyLayer);
     }
 
 //    @SubscribeEvent

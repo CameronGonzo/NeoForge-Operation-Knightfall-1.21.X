@@ -1,6 +1,10 @@
 package net.uhhitscam.knightfall.item.custom;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -9,13 +13,16 @@ public record GrenadeDefinition(
         Item.Properties itemProperties,
         int fuseTicks,
         GrenadeTrigger trigger,
+        GrenadeDeployment deployment,
         float throwVelocity,
         float minimumThrowVelocity,
         int throwChargeTicks,
         float throwInaccuracy,
         int cooldownTicks,
         GrenadePhysics physics,
+        double surfaceAttachmentOffset,
         GrenadeAudioProfile audio,
+        @Nullable TagKey<Block> stickyBlockTag,
         GrenadeEffect effect
 ) {
     public static Builder builder(String registryName) {
@@ -28,13 +35,17 @@ public record GrenadeDefinition(
         private Item.Properties itemProperties = new Item.Properties().stacksTo(16);
         private int fuseTicks = -1;
         private GrenadeTrigger trigger = GrenadeTrigger.FUSE;
+        private GrenadeDeployment deployment = GrenadeDeployment.THROW;
         private float throwVelocity = 1.5F;
         private Float minimumThrowVelocity;
         private int throwChargeTicks = 10;
         private float throwInaccuracy = 1.0F;
         private int cooldownTicks;
         private GrenadePhysics physics = GrenadePhysics.defaults();
+        private double surfaceAttachmentOffset = -0.05;
         private GrenadeAudioProfile audio;
+        @Nullable
+        private TagKey<Block> stickyBlockTag;
         private GrenadeEffect effect;
 
         private Builder(String registryName) {
@@ -56,6 +67,11 @@ public record GrenadeDefinition(
 
         public Builder trigger(GrenadeTrigger trigger) {
             this.trigger = Objects.requireNonNull(trigger, "Grenade trigger cannot be null.");
+            return this;
+        }
+
+        public Builder deployment(GrenadeDeployment deployment) {
+            this.deployment = Objects.requireNonNull(deployment, "Grenade deployment cannot be null.");
             return this;
         }
 
@@ -89,8 +105,18 @@ public record GrenadeDefinition(
             return this;
         }
 
+        public Builder surfaceAttachmentOffset(double surfaceAttachmentOffset) {
+            this.surfaceAttachmentOffset = surfaceAttachmentOffset;
+            return this;
+        }
+
         public Builder audio(GrenadeAudioProfile audio) {
             this.audio = Objects.requireNonNull(audio, "Grenade audio profile cannot be null.");
+            return this;
+        }
+
+        public Builder stickyBlockTag(TagKey<Block> stickyBlockTag) {
+            this.stickyBlockTag = Objects.requireNonNull(stickyBlockTag, "Grenade sticky block tag cannot be null.");
             return this;
         }
 
@@ -124,11 +150,17 @@ public record GrenadeDefinition(
             if (cooldownTicks < 0) {
                 throw new IllegalStateException(registryName + " cannot have a negative cooldown.");
             }
+            if (!Double.isFinite(surfaceAttachmentOffset)) {
+                throw new IllegalStateException(registryName + " must have a finite surface attachment offset.");
+            }
             if (audio == null) {
                 throw new IllegalStateException(registryName + " must have a GrenadeAudioProfile.");
             }
             if (audio.urgentThresholdTicks() > fuseTicks) {
                 throw new IllegalStateException(registryName + " urgent beep threshold cannot exceed its fuse.");
+            }
+            if (stickyBlockTag != null && !trigger.sticksToBlocks()) {
+                throw new IllegalStateException(registryName + " cannot define a sticky block tag without a sticky trigger.");
             }
             if (effect == null) {
                 throw new IllegalStateException(registryName + " must have a GrenadeEffect.");
@@ -139,13 +171,16 @@ public record GrenadeDefinition(
                     itemProperties,
                     fuseTicks,
                     trigger,
+                    deployment,
                     throwVelocity,
                     resolvedMinimumThrowVelocity,
                     throwChargeTicks,
                     throwInaccuracy,
                     cooldownTicks,
                     physics,
+                    surfaceAttachmentOffset,
                     audio,
+                    stickyBlockTag,
                     effect
             );
         }
@@ -154,5 +189,10 @@ public record GrenadeDefinition(
     public float throwVelocity(int useTicks) {
         float charge = Math.max(0.0F, Math.min(1.0F, (float) useTicks / throwChargeTicks));
         return minimumThrowVelocity + (throwVelocity - minimumThrowVelocity) * charge;
+    }
+
+    public boolean canStickTo(BlockState blockState) {
+        return trigger.sticksToBlocks()
+                && (stickyBlockTag == null || blockState.is(stickyBlockTag));
     }
 }

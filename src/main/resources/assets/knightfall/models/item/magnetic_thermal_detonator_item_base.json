@@ -1,0 +1,8 @@
+{
+  "parent": "knightfall:item/magnetic_thermal_detonator_item",
+  "textures": {
+    "0": "knightfall:item/magnetic_thermal_detonator_item",
+    "1": "knightfall:item/magnetic_thermal_detonator_item",
+    "particle": "knightfall:item/magnetic_thermal_detonator_item"
+  }
+}

@@ -22,6 +22,10 @@ public enum GrenadeVisualState {
             int useTicks,
             int remainingUseTicks
     ) {
+        if (definition.trigger().sticksToBlocks()) {
+            return INACTIVE;
+        }
+
         if (useTicks < BEEP_FLASH_TICKS) {
             return BEEP;
         }
@@ -36,8 +40,13 @@ public enum GrenadeVisualState {
 
     public static GrenadeVisualState forThrownGrenade(
             GrenadeDefinition definition,
-            int remainingFuseTicks
+            int remainingFuseTicks,
+            boolean fuseRunning
     ) {
+        if (!fuseRunning) {
+            return INACTIVE;
+        }
+
         return isBeepFlashActive(definition, remainingFuseTicks) ? BEEP : ACTIVE;
     }
 

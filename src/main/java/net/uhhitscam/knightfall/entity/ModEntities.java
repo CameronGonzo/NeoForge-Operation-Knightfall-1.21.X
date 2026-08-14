@@ -1,6 +1,7 @@
 package net.uhhitscam.knightfall.entity;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
@@ -73,6 +74,24 @@ public class ModEntities {
                             .setShouldReceiveVelocityUpdates(false)
                             .build("blaster_beam")
             );
+
+    public static boolean isGrenadeTriggeringProjectile(Entity entity) {
+        EntityType<?> type = entity.getType();
+        return type == BLASTER_BOLT.get()
+                || type == SONIC_BOLT.get()
+                || type == STUN_BLASTER_BOLT.get()
+                || type == STEEL_SLUG.get()
+                || type == RAZOR_STEEL_SLUG.get()
+                || type == POISON_TIPPED_STEEL_SLUG.get()
+                || type == EXPLOSIVE_TIPPED_STEEL_SLUG.get()
+                || type == ION_TIPPED_STEEL_SLUG.get()
+                || type == PLASTIC_SLUG.get()
+                || type == CERAMIC_SLUG.get()
+                || type == FLECHETTE.get()
+                || type == FLECHETTE_TOXIC.get()
+                || type == FLECHETTE_SPREAD_CAN.get()
+                || type == FLECHETTE_TOXIC_SPREAD_CAN.get();
+    }
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

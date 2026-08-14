@@ -1,0 +1,11 @@
+{
+  "parent": "knightfall:item/grav_charge_item_base",
+  "overrides": [
+    {
+      "predicate": {
+        "knightfall:grenade_state": 2.0
+      },
+      "model": "knightfall:item/grav_charge_item_1"
+    }
+  ]
+}

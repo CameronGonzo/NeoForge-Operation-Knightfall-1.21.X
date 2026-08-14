@@ -41,6 +41,156 @@
       "knightfall:equipment/impact_thermal_detonator/equipment_grenade_impact_thermal_detonator_impact_01"
     ]
   },
+  "magnetic_thermal_detonator_activate": {
+    "subtitle": "sounds.knightfall.magnetic_thermal_detonator_activate",
+    "sounds": [
+      "knightfall:equipment/magnetic_thermal_detonator/equipment_grenade_magnetic_thermal_detonator_activate_01"
+    ]
+  },
+  "magnetic_thermal_detonator_beep": {
+    "subtitle": "sounds.knightfall.magnetic_thermal_detonator_beep",
+    "sounds": [
+      "knightfall:equipment/magnetic_thermal_detonator/equipment_grenade_magnetic_thermal_detonator_beep_01"
+    ]
+  },
+  "magnetic_thermal_detonator_impact": {
+    "subtitle": "sounds.knightfall.magnetic_thermal_detonator_impact",
+    "sounds": [
+      "knightfall:equipment/magnetic_thermal_detonator/equipment_grenade_magnetic_thermal_detonator_impact_01"
+    ]
+  },
+  "grav_charge_activate": {
+    "subtitle": "sounds.knightfall.grav_charge_activate",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_activate_01"
+    ]
+  },
+  "grav_charge_impact": {
+    "subtitle": "sounds.knightfall.grav_charge_impact",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_impact_01"
+    ]
+  },
+  "grav_charge_beep_01": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_01"
+    ]
+  },
+  "grav_charge_beep_02": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_02"
+    ]
+  },
+  "grav_charge_beep_03": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_03"
+    ]
+  },
+  "grav_charge_beep_04": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_04"
+    ]
+  },
+  "grav_charge_beep_05": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_05"
+    ]
+  },
+  "grav_charge_beep_06": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_06"
+    ]
+  },
+  "grav_charge_beep_07": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_07"
+    ]
+  },
+  "grav_charge_beep_08": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_08"
+    ]
+  },
+  "grav_charge_beep_09": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_09"
+    ]
+  },
+  "grav_charge_beep_10": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_10"
+    ]
+  },
+  "grav_charge_beep_11": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_11"
+    ]
+  },
+  "grav_charge_beep_12": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_12"
+    ]
+  },
+  "grav_charge_beep_13": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_13"
+    ]
+  },
+  "grav_charge_beep_14": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_14"
+    ]
+  },
+  "grav_charge_beep_15": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_15"
+    ]
+  },
+  "grav_charge_beep_16": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_16"
+    ]
+  },
+  "grav_charge_beep_17": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_17"
+    ]
+  },
+  "grav_charge_beep_18": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_18"
+    ]
+  },
+  "grav_charge_beep_19": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_19"
+    ]
+  },
+  "grav_charge_beep_20": {
+    "subtitle": "sounds.knightfall.grav_charge_beep",
+    "sounds": [
+      "knightfall:equipment/grav_charge/equipment_grenade_grav_charge_beep_20"
+    ]
+  },
   "22t4_fire": {
     "subtitle": "sounds.knightfall.22t4_fire",
     "sounds": [

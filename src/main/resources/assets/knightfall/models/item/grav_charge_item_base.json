@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/grav_charge_item",
+  "textures": {
+    "0": "knightfall:item/grav_charge_item",
+    "particle": "knightfall:item/grav_charge_item"
+  }
+}

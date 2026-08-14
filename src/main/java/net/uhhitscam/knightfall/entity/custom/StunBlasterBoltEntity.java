@@ -26,6 +26,11 @@ public class StunBlasterBoltEntity extends Snowball {
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
 
+        if (!this.level().isClientSide && result.getEntity() instanceof GrenadeEntity grenade) {
+            grenade.hurt(this.damageSources().thrown(this, this.getOwner()), 0.0F);
+            return;
+        }
+
         if (!this.level().isClientSide && result.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.addEffect(
                     new MobEffectInstance(ModEffects.STUN_EFFECT, StunEffect.DURATION_TICKS),

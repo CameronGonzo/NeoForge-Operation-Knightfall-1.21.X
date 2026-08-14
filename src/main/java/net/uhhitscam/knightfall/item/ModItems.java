@@ -12,6 +12,7 @@ import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.item.custom.*;
 import net.uhhitscam.knightfall.item.custom.ProjectileItem;
 import net.uhhitscam.knightfall.sound.ModSounds;
+import net.uhhitscam.knightfall.util.ModTags;
 
 import java.util.Map;
 
@@ -107,7 +108,7 @@ public class ModItems {
     public static final DeferredItem<Item> IMPACT_THERMAL_DETONATOR = registerGrenade(
             GrenadeDefinition.builder("impact_thermal_detonator")
                     .fuseTicks(100)
-                    .trigger(GrenadeTrigger.IMPACT)
+                    .trigger(GrenadeTrigger.IMPACT_OR_FUSE)
                     .throwVelocity(1.5F)
                     .minimumThrowVelocity(0.3F)
                     .throwChargeTicks(10)
@@ -119,12 +120,67 @@ public class ModItems {
                             new GrenadeSound(() -> ModSounds.IMPACT_THERMAL_DETONATOR_IMPACT.get(), SoundSource.BLOCKS, 0.4F, 1.2F),
                             new GrenadeSound(() -> ModSounds.IMPACT_THERMAL_DETONATOR_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.4F),
                             new GrenadeSound(() -> ModSounds.IMPACT_THERMAL_DETONATOR_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.4F),
-                            20, 5, 120))
+                            20, 5, 100))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             4.0, 8.0F,
                                             new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
                                     .knockback(0.6)
                                     .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.SMOKE,
+                                            24, 0.8, 0.5, 0.8, 0.03))
+                                    .build())).build()
+    );
+    public static final DeferredItem<Item> MAGNETIC_THERMAL_DETONATOR = registerGrenade(
+            GrenadeDefinition.builder("magnetic_thermal_detonator")
+                    .fuseTicks(160)
+                    .trigger(GrenadeTrigger.STICKY_FUSE)
+                    .throwVelocity(1.6F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .stickyBlockTag(ModTags.Blocks.BLASTER_IMPACT_METAL)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.MAGNETIC_THERMAL_DETONATOR_IMPACT.get(), SoundSource.BLOCKS, 0.4F, 1.2F),
+                            new GrenadeSound(() -> ModSounds.MAGNETIC_THERMAL_DETONATOR_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.4F),
+                            new GrenadeSound(() -> ModSounds.MAGNETIC_THERMAL_DETONATOR_BEEP.get(), SoundSource.NEUTRAL, 0.1F, 1.4F),
+                            12, 12, 0))
+                    .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
+                                            4.0, 8.0F,
+                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                    .knockback(0.6)
+                                    .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.SMOKE,
+                                            24, 0.8, 0.5, 0.8, 0.03))
+                                    .build())).build()
+    );
+    public static final DeferredItem<Item> GRAV_CHARGE = registerGrenade(
+            GrenadeDefinition.builder("grav_charge")
+                    .fuseTicks(200)
+                    .trigger(GrenadeTrigger.FUSE)
+                    .deployment(GrenadeDeployment.PLACE)
+                    .surfaceAttachmentOffset(-0.1)
+                    .cooldownTicks(10)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.GRAV_CHARGE_IMPACT.get(), SoundSource.BLOCKS, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.GRAV_CHARGE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(ModSounds.GRAV_CHARGE_BEEPS.getFirst(), SoundSource.NEUTRAL, 0.25F, 1.0F),
+                            10, 10, 0,
+                            ModSounds.GRAV_CHARGE_BEEPS.stream()
+                                    .map(sound -> new GrenadeSound(sound, SoundSource.NEUTRAL, 0.25F, 1.0F))
+                                    .toList()))
+                    .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
+                                            4.0, 8.0F,
+                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                    .knockback(0.6)
+                                    .terrain(4.0F, Level.ExplosionInteraction.BLOCK, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
                                             1, 0.0, 0.0, 0.0, 0.0))
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.SMOKE,

@@ -96,6 +96,8 @@ public class OperationKnightfall {
             event.enqueueWork(() -> {
                 GrenadeItemModelProperties.register(ModItems.THERMAL_DETONATOR.get());
                 GrenadeItemModelProperties.register(ModItems.IMPACT_THERMAL_DETONATOR.get());
+                GrenadeItemModelProperties.register(ModItems.MAGNETIC_THERMAL_DETONATOR.get());
+                GrenadeItemModelProperties.register(ModItems.GRAV_CHARGE.get());
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 FaceAlignedParticleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);

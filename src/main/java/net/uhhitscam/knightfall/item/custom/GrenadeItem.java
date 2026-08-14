@@ -5,6 +5,7 @@ import net.minecraft.core.Position;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
@@ -33,6 +35,10 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (definition.deployment() == GrenadeDeployment.PLACE) {
+            return InteractionResultHolder.pass(stack);
+        }
+
         if (player.getCooldowns().isOnCooldown(this)) {
             return InteractionResultHolder.fail(stack);
         }
@@ -46,13 +52,41 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
 
     @Override
     public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseDuration) {
-        if (level.isClientSide || !definition.trigger().detonatesOnFuse()) {
+        if (level.isClientSide || !definition.trigger().fuseRunsWhileHeld()) {
             return;
         }
 
         if (definition.audio().shouldPlayBeep(remainingUseDuration, definition.fuseTicks())) {
-            definition.audio().beepSound().play(level, user.position());
+            definition.audio().playBeep(level, user.position(), remainingUseDuration, definition.fuseTicks());
         }
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        if (definition.deployment() != GrenadeDeployment.PLACE) {
+            return super.useOn(context);
+        }
+
+        Player player = context.getPlayer();
+        ItemStack stack = context.getItemInHand();
+        if (player == null || stack.isEmpty() || player.getCooldowns().isOnCooldown(this)) {
+            return InteractionResult.FAIL;
+        }
+
+        Level level = context.getLevel();
+        if (level instanceof ServerLevel serverLevel) {
+            GrenadeEntity grenade = new GrenadeEntity(ModEntities.GRENADE.get(), serverLevel, player);
+            grenade.setItem(stack.copyWithCount(1));
+            grenade.setFuseTicks(definition.fuseTicks());
+            grenade.placeOnSurface(context.getClickLocation(), context.getClickedFace());
+            serverLevel.addFreshEntity(grenade);
+
+            definition.audio().activationSound().play(serverLevel, grenade.position());
+            definition.audio().bounceSound().play(serverLevel, grenade.position());
+            completeUse(player, stack);
+        }
+
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
@@ -61,7 +95,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
             return;
         }
 
-        int remainingFuseTicks = definition.trigger().detonatesOnFuse()
+        int remainingFuseTicks = definition.trigger().fuseRunsWhileHeld()
                 ? Math.max(1, timeLeft)
                 : definition.fuseTicks();
         int useTicks = Math.max(0, getUseDuration(stack, user) - timeLeft);
@@ -77,7 +111,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity user) {
         if (level instanceof ServerLevel serverLevel) {
-            if (definition.trigger().detonatesOnFuse()) {
+            if (definition.trigger().fuseRunsWhileHeld()) {
                 detonateInHand(serverLevel, user, stack);
             } else {
                 throwGrenade(
@@ -107,6 +141,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
         GrenadeEntity grenade = new GrenadeEntity(ModEntities.GRENADE.get(), level, user);
         grenade.setItem(stack.copyWithCount(1));
         grenade.setFuseTicks(remainingFuseTicks);
+        grenade.setFuseRunning(!definition.trigger().sticksToBlocks());
         grenade.shootFromRotation(
                 user,
                 user.getXRot(),
@@ -149,7 +184,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return definition.trigger().detonatesOnFuse()
+        return definition.trigger().fuseRunsWhileHeld()
                 ? definition.fuseTicks()
                 : IMPACT_ONLY_USE_DURATION;
     }
@@ -165,6 +200,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
         grenade.setPos(position.x(), position.y(), position.z());
         grenade.setItem(stack.copyWithCount(1));
         grenade.setFuseTicks(definition.fuseTicks());
+        grenade.setFuseRunning(!definition.trigger().sticksToBlocks());
         return grenade;
     }
 

@@ -7,7 +7,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.knightfall.OperationKnightfall;
 
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
@@ -20,6 +22,14 @@ public class ModSounds {
     public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("impact_thermal_detonator_activate");
     public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_BEEP = registerSoundEvent("impact_thermal_detonator_beep");
     public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_IMPACT = registerSoundEvent("impact_thermal_detonator_impact");
+    public static final Supplier<SoundEvent> MAGNETIC_THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("magnetic_thermal_detonator_activate");
+    public static final Supplier<SoundEvent> MAGNETIC_THERMAL_DETONATOR_BEEP = registerSoundEvent("magnetic_thermal_detonator_beep");
+    public static final Supplier<SoundEvent> MAGNETIC_THERMAL_DETONATOR_IMPACT = registerSoundEvent("magnetic_thermal_detonator_impact");
+    public static final Supplier<SoundEvent> GRAV_CHARGE_ACTIVATE = registerSoundEvent("grav_charge_activate");
+    public static final Supplier<SoundEvent> GRAV_CHARGE_IMPACT = registerSoundEvent("grav_charge_impact");
+    public static final List<Supplier<SoundEvent>> GRAV_CHARGE_BEEPS = IntStream.rangeClosed(1, 20)
+            .mapToObj(index -> registerSoundEvent("grav_charge_beep_" + String.format("%02d", index)))
+            .toList();
 
     public static final Supplier<SoundEvent> _22T4_FIRE = registerSoundEvent("22t4_fire");
     public static final Supplier<SoundEvent> _62AUG2_HUNTING_RIFLE_FIRE = registerSoundEvent("62aug2_hunting_rifle_fire");
