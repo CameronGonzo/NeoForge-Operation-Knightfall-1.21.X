@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/explosive_knife_item",
+  "textures": {
+    "0": "knightfall:item/explosive_knife_item_1",
+    "particle": "knightfall:item/explosive_knife_item_1"
+  }
+}

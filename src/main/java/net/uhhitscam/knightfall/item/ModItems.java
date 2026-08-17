@@ -29,6 +29,11 @@ public class ModItems {
                 () -> new GrenadeItem(definition.itemProperties(), definition));
     }
 
+    private static DeferredItem<Item> registerMeleeWeapon(MeleeWeaponDefinition definition) {
+        return ITEMS.register(definition.registryName(),
+                () -> new MeleeWeaponItem(definition.itemProperties(), definition));
+    }
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
@@ -186,6 +191,172 @@ public class ModItems {
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.SMOKE,
                                             24, 0.8, 0.5, 0.8, 0.03))
                                     .build())).build()
+    );
+    public static final DeferredItem<Item> DETONITE_CHARGE_DETONATOR = ITEMS.register(
+            "detonite_charge_detonator",
+            () -> new GrenadeDetonatorItem(
+                    new Item.Properties().stacksTo(1),
+                    new GrenadeSound(
+                            () -> ModSounds.EQUIPMENT_DETONATOR.get(),
+                            SoundSource.PLAYERS,
+                            0.7F,
+                            1.0F
+                    )
+            )
+    );
+    public static final DeferredItem<Item> BARADIUM_BOMB_DETONATOR = ITEMS.register(
+            "baradium_bomb_detonator",
+            () -> new GrenadeDetonatorItem(
+                    new Item.Properties().stacksTo(1),
+                    new GrenadeSound(
+                            () -> ModSounds.EQUIPMENT_DETONATOR.get(),
+                            SoundSource.PLAYERS,
+                            0.7F,
+                            1.0F
+                    )
+            )
+    );
+    public static final DeferredItem<Item> PYRO_DENTON_EXPLOSIVE_DETONATOR = ITEMS.register(
+            "pyro_denton_explosive_detonator",
+            () -> new GrenadeDetonatorItem(
+                    new Item.Properties().stacksTo(1),
+                    new GrenadeSound(
+                            () -> ModSounds.EQUIPMENT_DETONATOR.get(),
+                            SoundSource.PLAYERS,
+                            0.7F,
+                            1.0F
+                    )
+            )
+    );
+    public static final DeferredItem<Item> DETONITE_CHARGE = registerGrenade(
+            GrenadeDefinition.builder("detonite_charge")
+                    .fuseTicks(20)
+                    .trigger(GrenadeTrigger.REMOTE_STICKY)
+                    .throwVelocity(0.75F)
+                    .minimumThrowVelocity(0.2F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .surfaceAttachmentOffset(-0.123)
+                    .remoteProfile(new GrenadeRemoteProfile(DETONITE_CHARGE_DETONATOR, 20))
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.DETONITE_CHARGE_IMPACT.get(), SoundSource.BLOCKS, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.DETONITE_CHARGE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.DETONITE_CHARGE_BEEP.get(), SoundSource.NEUTRAL, 0.3F, 1.0F),
+                            20, 20, 0))
+                    .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
+                                            4.0, 8.0F,
+                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                    .knockback(0.6)
+                                    .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.SMOKE,
+                                            24, 0.8, 0.5, 0.8, 0.03))
+                                    .build())).build()
+    );
+    public static final DeferredItem<Item> BARADIUM_BOMB = registerGrenade(
+            GrenadeDefinition.builder("baradium_bomb")
+                    .itemProperties(new Item.Properties().stacksTo(1))
+                    .fuseTicks(20)
+                    .trigger(GrenadeTrigger.REMOTE_STICKY)
+                    .deployment(GrenadeDeployment.PLACE)
+                    .cooldownTicks(10)
+                    .hitbox(0.6F, 0.55F, 0.2F)
+                    .surfaceAttachmentOffset(-0.1)
+                    .remoteProfile(new GrenadeRemoteProfile(
+                            BARADIUM_BOMB_DETONATOR,
+                            0,
+                            GrenadeDetonatorDelivery.REPLACE_USED_STACK
+                    ))
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.BARADIUM_BOMB_ACTIVATE.get(), SoundSource.PLAYERS, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.BARADIUM_BOMB_IMPACT.get(), SoundSource.BLOCKS, 0.8F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.BARADIUM_BOMB_ACTIVATE.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.BARADIUM_BOMB_ACTIVATE.get(), SoundSource.NEUTRAL, 0.0F, 1.0F),
+                            20, 20, 0))
+                    .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
+                                            7.0, 16.0F,
+                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.2F, 0.9F))
+                                    .knockback(0.8)
+                                    .terrain(7.0F, Level.ExplosionInteraction.BLOCK, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.SMOKE,
+                                            36, 1.2, 0.8, 1.2, 0.04))
+                                    .build())).build()
+    );
+    public static final DeferredItem<Item> PYRO_DENTON_EXPLOSIVE = registerGrenade(
+            GrenadeDefinition.builder("pyro_denton_explosive")
+                    .fuseTicks(48)
+                    .trigger(GrenadeTrigger.REMOTE_STICKY)
+                    .throwVelocity(0.75F)
+                    .minimumThrowVelocity(0.2F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .hitbox(0.4F, 0.4F, 0.15F)
+                    .remoteProfile(new GrenadeRemoteProfile(
+                            PYRO_DENTON_EXPLOSIVE_DETONATOR,
+                            48,
+                            GrenadeDetonatorDelivery.ADD_TO_INVENTORY,
+                            false,
+                            true,
+                            24,
+                            new GrenadeSound(
+                                    () -> ModSounds.PYRO_DENTON_EXPLOSIVE_BEEP_02.get(),
+                                    SoundSource.NEUTRAL,
+                                    0.3F,
+                                    1.0F
+                            )
+                    ))
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.PYRO_DENTON_EXPLOSIVE_IMPACT.get(), SoundSource.BLOCKS, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.PYRO_DENTON_EXPLOSIVE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.PYRO_DENTON_EXPLOSIVE_BEEP_01.get(), SoundSource.NEUTRAL, 0.3F, 1.0F),
+                            48, 48, 0))
+                    .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
+                                            4.0, 8.0F,
+                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                    .knockback(0.6)
+                                    .terrain(4.0F, Level.ExplosionInteraction.BLOCK, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.SMOKE,
+                                            24, 0.8, 0.5, 0.8, 0.03))
+                                    .build())).build()
+    );
+
+    // Melee weapons
+    public static final DeferredItem<Item> EXPLOSIVE_KNIFE = registerMeleeWeapon(
+            MeleeWeaponDefinition.builder("explosive_knife")
+                    .itemProperties(new Item.Properties()
+                            .stacksTo(1)
+                            .attributes(SwordItem.createAttributes(Tiers.IRON, 2, -2.4F)))
+                    .audio(new MeleeWeaponAudioProfile(
+                            new MeleeWeaponSound(() -> ModSounds.EXPLOSIVE_KNIFE_EQUIP.get(), SoundSource.PLAYERS, 0.7F, 1.0F),
+                            new MeleeWeaponSound(() -> ModSounds.EXPLOSIVE_KNIFE_UNEQUIP.get(), SoundSource.PLAYERS, 0.7F, 1.0F)))
+                    .hitEffect(MeleeEffects.attachedExplosive(new AttachedExplosiveSpec(
+                            60,
+                            10,
+                            10,
+                            10,
+                            new MeleeWeaponSound(() -> ModSounds.EXPLOSIVE_KNIFE_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new MeleeWeaponSound(() -> ModSounds.EXPLOSIVE_KNIFE_URGENT_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new MeleeWeaponSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F),
+                            4.0,
+                            8.0F,
+                            0.6,
+                            0.0F,
+                            Level.ExplosionInteraction.NONE,
+                            false
+                    )))
+                    .consumesOnSuccessfulHit()
+                    .build()
     );
 
     // Projectile weapon items

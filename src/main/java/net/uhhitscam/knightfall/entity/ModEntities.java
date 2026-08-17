@@ -65,6 +65,13 @@ public class ModEntities {
                     .clientTrackingRange(64)
                     .updateInterval(1)
                     .build("grenade"));
+    public static final Supplier<EntityType<ExplosiveKnifeEntity>> EXPLOSIVE_KNIFE =
+            ENTITY_TYPES.register("explosive_knife", () -> EntityType.Builder.<ExplosiveKnifeEntity>of(ExplosiveKnifeEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(64)
+                    .updateInterval(1)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build("explosive_knife"));
     public static final DeferredHolder<EntityType<?>, EntityType<BlasterBeamEndpointEntity>> BLASTER_BEAM =
             ENTITY_TYPES.register("blaster_beam", () ->
                     EntityType.Builder.<BlasterBeamEndpointEntity>of(BlasterBeamEndpointEntity::new, MobCategory.MISC)

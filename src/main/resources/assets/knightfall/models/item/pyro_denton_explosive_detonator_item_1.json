@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/pyro_denton_explosive_detonator_item",
+  "textures": {
+    "0": "knightfall:item/pyro_denton_explosive_detonator_1",
+    "particle": "knightfall:item/pyro_denton_explosive_detonator_1"
+  }
+}

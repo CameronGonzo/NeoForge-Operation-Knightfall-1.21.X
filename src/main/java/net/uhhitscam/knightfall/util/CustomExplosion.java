@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
@@ -98,6 +99,18 @@ public class CustomExplosion {
                     ParticleTypes.EXPLOSION_EMITTER,
                     BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.GENERIC_EXPLODE.value())
             );
+        }
+
+        destroyGroundItems(serverLevel, location, Math.max(entityRadius, blockBreakRadius));
+    }
+
+    private static void destroyGroundItems(ServerLevel level, Vec3 location, double radius) {
+        double radiusSquared = radius * radius;
+        AABB bounds = new AABB(location, location).inflate(radius);
+        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, bounds)) {
+            if (item.distanceToSqr(location) <= radiusSquared) {
+                item.discard();
+            }
         }
     }
 }

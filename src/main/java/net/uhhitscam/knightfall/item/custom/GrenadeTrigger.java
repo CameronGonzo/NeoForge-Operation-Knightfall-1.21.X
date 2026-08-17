@@ -5,7 +5,8 @@ public enum GrenadeTrigger {
     IMPACT(false, true, false, false),
     IMPACT_OR_FUSE(true, true, false, false),
     FUSE_OR_IMPACT(true, true, true, false),
-    STICKY_FUSE(true, false, false, true);
+    STICKY_FUSE(true, false, false, true),
+    REMOTE_STICKY(false, false, false, true);
 
     private final boolean detonatesOnFuse;
     private final boolean detonatesOnImpact;

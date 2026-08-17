@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/detonite_charge_detonator_item",
+  "textures": {
+    "0": "knightfall:item/detonite_charge_detonator_1",
+    "particle": "knightfall:item/detonite_charge_detonator_1"
+  }
+}

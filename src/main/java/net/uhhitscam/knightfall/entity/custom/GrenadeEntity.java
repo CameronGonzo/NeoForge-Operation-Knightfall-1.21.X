@@ -6,14 +6,23 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -24,6 +33,10 @@ import net.uhhitscam.knightfall.item.custom.GrenadeDefinition;
 import net.uhhitscam.knightfall.item.custom.GrenadeDetonationContext;
 import net.uhhitscam.knightfall.item.custom.GrenadeItem;
 import net.uhhitscam.knightfall.item.custom.GrenadePhysics;
+import net.uhhitscam.knightfall.item.custom.GrenadeRemoteDetonations;
+import net.uhhitscam.knightfall.item.custom.GrenadeRemoteProfile;
+import net.uhhitscam.knightfall.component.GrenadeRemoteLink;
+import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 import org.jetbrains.annotations.Nullable;
 
 public class GrenadeEntity extends ThrowableItemProjectile {
@@ -32,6 +45,9 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     private static final String RESTING_TAG = "Resting";
     private static final String STUCK_FACE_TAG = "StuckFace";
     private static final String DETONATED_TAG = "Detonated";
+    private static final String BEEP_FLASH_TAG = "BeepFlash";
+    private static final String REMOTE_REGISTERED_TAG = "RemoteRegistered";
+    private static final String REMOTE_DETONATION_TICKS_TAG = "RemoteDetonationTicks";
     private static final double HIT_POSITION_EPSILON = 0.01;
     private static final double GROUND_PROBE_START_OFFSET = 0.02;
     private static final double GROUND_PROBE_DISTANCE = 0.08;
@@ -46,11 +62,20 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_STUCK_FACE =
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_BEEP_FLASH_TICKS =
+            SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_REMOTE_DETONATION_TICKS =
+            SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
 
     @Nullable
     private Vec3 velocityAfterImpact;
+    @Nullable
+    private Item dimensionsItem;
+    @Nullable
+    private Direction dimensionsFace;
     private long lastBounceSoundTick = Long.MIN_VALUE;
     private boolean detonated;
+    private boolean remoteRegistered;
 
     public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level level) {
         super(entityType, level);
@@ -61,8 +86,53 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     @Override
+    public void onAddedToLevel() {
+        super.onAddedToLevel();
+        if (level().isClientSide || remoteRegistered) {
+            return;
+        }
+
+        GrenadeDefinition definition = getGrenadeDefinition();
+        GrenadeRemoteLink link = getItem().get(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
+        if (definition != null && definition.remoteProfile() != null && link != null) {
+            GrenadeRemoteDetonations.get(((ServerLevel) level()).getServer()).registerDeployedCharge(link);
+            remoteRegistered = true;
+        }
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        if (!level().isClientSide && remoteRegistered && reason.shouldDestroy()) {
+            GrenadeRemoteLink link = getItem().get(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
+            if (link != null) {
+                GrenadeRemoteDetonations detonations = GrenadeRemoteDetonations.get(((ServerLevel) level()).getServer());
+                detonations.unregisterDeployedCharge(((ServerLevel) level()).getServer(), link);
+            }
+            remoteRegistered = false;
+        }
+        super.remove(reason);
+    }
+
+    @Override
     protected Item getDefaultItem() {
         return ModItems.THERMAL_DETONATOR.get();
+    }
+
+    @Override
+    public void setItem(ItemStack stack) {
+        super.setItem(stack);
+        dimensionsItem = stack.getItem();
+        dimensionsFace = getStuckFace();
+        refreshDimensions();
+        setBoundingBox(makeBoundingBox());
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        GrenadeDefinition definition = getGrenadeDefinition();
+        return definition != null
+                ? EntityDimensions.fixed(definition.hitboxWidth(), definition.hitboxHeight())
+                : super.getDimensions(pose);
     }
 
     @Override
@@ -72,6 +142,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         builder.define(DATA_RESTING, false);
         builder.define(DATA_FUSE_RUNNING, true);
         builder.define(DATA_STUCK_FACE, -1);
+        builder.define(DATA_BEEP_FLASH_TICKS, 0);
+        builder.define(DATA_REMOTE_DETONATION_TICKS, -1);
     }
 
     public int getFuseTicks() {
@@ -110,6 +182,51 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
     private void setStuckFace(@Nullable Direction direction) {
         entityData.set(DATA_STUCK_FACE, direction == null ? -1 : direction.get3DDataValue());
+        dimensionsFace = direction;
+        setBoundingBox(makeBoundingBox());
+    }
+
+    @Override
+    protected AABB makeBoundingBox() {
+        GrenadeDefinition definition = getGrenadeDefinition();
+        Direction stuckFace = getStuckFace();
+        if (definition == null || stuckFace == null) {
+            return super.makeBoundingBox();
+        }
+
+        double halfWidth = definition.hitboxWidth() * 0.5;
+        double halfDepth = definition.hitboxDepth() * 0.5;
+        double height = definition.hitboxHeight();
+        double x = getX();
+        double y = getY();
+        double z = getZ();
+
+        return switch (stuckFace.getAxis()) {
+            case Y -> new AABB(
+                    x - halfWidth, y, z - halfWidth,
+                    x + halfWidth, y + definition.hitboxDepth(), z + halfWidth
+            );
+            case Z -> new AABB(
+                    x - halfWidth, y, z - halfDepth,
+                    x + halfWidth, y + height, z + halfDepth
+            );
+            case X -> new AABB(
+                    x - halfDepth, y, z - halfWidth,
+                    x + halfDepth, y + height, z + halfWidth
+            );
+        };
+    }
+
+    public boolean isBeepFlashActive() {
+        return entityData.get(DATA_BEEP_FLASH_TICKS) > 0;
+    }
+
+    public boolean isRemoteDetonationActivated() {
+        return entityData.get(DATA_REMOTE_DETONATION_TICKS) >= 0;
+    }
+
+    private void setBeepFlashTicks(int ticks) {
+        entityData.set(DATA_BEEP_FLASH_TICKS, Math.max(0, ticks));
     }
 
     @Nullable
@@ -121,6 +238,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
     @Override
     public void tick() {
+        refreshDimensionsIfItemChanged();
+
         if (isStuck()) {
             setDeltaMovement(Vec3.ZERO);
         } else {
@@ -142,6 +261,31 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         GrenadeDefinition definition = getGrenadeDefinition();
         if (definition == null || detonated) {
             discard();
+            return;
+        }
+
+        if (isBeepFlashActive()) {
+            setBeepFlashTicks(entityData.get(DATA_BEEP_FLASH_TICKS) - 1);
+        }
+
+        GrenadeRemoteProfile remoteProfile = definition.remoteProfile();
+        if (remoteProfile != null) {
+            if (isRemoteDetonationActivated()) {
+                int remainingTicks = entityData.get(DATA_REMOTE_DETONATION_TICKS) - 1;
+                entityData.set(DATA_REMOTE_DETONATION_TICKS, remainingTicks);
+                if (remainingTicks <= 0) {
+                    detonate();
+                }
+                return;
+            }
+
+            GrenadeRemoteLink link = getItem().get(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
+            if (link != null && GrenadeRemoteDetonations.get(((ServerLevel) level()).getServer()).isActivated(link)) {
+                activateRemoteDetonation();
+                return;
+            }
+
+            tickRemoteBeep(definition, remoteProfile);
             return;
         }
 
@@ -171,6 +315,33 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         if (shouldPlayBeep) {
             definition.audio().playBeep(level(), position(), remainingFuseTicks, definition.fuseTicks());
         }
+    }
+
+    private void refreshDimensionsIfItemChanged() {
+        Item currentItem = getItem().getItem();
+        Direction currentFace = getStuckFace();
+        if (currentItem != dimensionsItem || currentFace != dimensionsFace) {
+            dimensionsItem = currentItem;
+            dimensionsFace = currentFace;
+            refreshDimensions();
+            setBoundingBox(makeBoundingBox());
+        }
+    }
+
+    private void tickRemoteBeep(GrenadeDefinition definition, GrenadeRemoteProfile remoteProfile) {
+        if (!isFuseRunning() || !remoteProfile.beepsWhileDeployed()) {
+            return;
+        }
+
+        int remainingBeepTicks = getFuseTicks() - 1;
+        if (remainingBeepTicks > 0) {
+            setFuseTicks(remainingBeepTicks);
+            return;
+        }
+
+        definition.audio().beepSound().play(level(), position());
+        setFuseTicks(remoteProfile.beepIntervalTicks());
+        setBeepFlashTicks(3);
     }
 
     @Override
@@ -218,6 +389,32 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     @Override
     public boolean isPickable() {
         return !isRemoved();
+    }
+
+    @Override
+    public InteractionResult interact(Player player, InteractionHand hand) {
+        GrenadeDefinition definition = getGrenadeDefinition();
+        if (detonated || isRemoteDetonationActivated() || isRemoved() || player.isSpectator()
+                || definition == null || definition.remoteProfile() == null) {
+            return InteractionResult.PASS;
+        }
+
+        if (level().isClientSide) {
+            return InteractionResult.SUCCESS;
+        }
+
+        ItemStack pickedUpCharge = getItem().copyWithCount(1);
+        pickedUpCharge.remove(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
+        Item pickedUpItem = pickedUpCharge.getItem();
+        if (!player.getInventory().add(pickedUpCharge) && !pickedUpCharge.isEmpty()) {
+            player.drop(pickedUpCharge, false);
+        }
+
+        playSound(SoundEvents.ITEM_PICKUP, 0.2F, 1.0F);
+        player.take(this, 1);
+        player.awardStat(Stats.ITEM_PICKED_UP.get(pickedUpItem), 1);
+        discard();
+        return InteractionResult.CONSUME;
     }
 
     @Override
@@ -336,6 +533,14 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         if (!level().isClientSide) {
             definition.audio().bounceSound().play(level(), result.getLocation());
+            GrenadeRemoteProfile remoteProfile = definition.remoteProfile();
+            if (remoteProfile != null && remoteProfile.activationSoundOnStick()) {
+                definition.audio().activationSound().play(level(), result.getLocation());
+                if (remoteProfile.beepsWhileDeployed()) {
+                    definition.audio().beepSound().play(level(), result.getLocation());
+                    setFuseTicks(remoteProfile.beepIntervalTicks());
+                }
+            }
         }
     }
 
@@ -354,7 +559,14 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     private double surfaceAttachmentDistance(Direction direction, GrenadeDefinition definition) {
-        return surfaceAttachmentDistance(direction, definition.surfaceAttachmentOffset());
+        double adjustment = definition.surfaceAttachmentOffset();
+        if (direction == Direction.UP) {
+            return adjustment;
+        }
+        if (direction == Direction.DOWN) {
+            return definition.hitboxDepth() + adjustment;
+        }
+        return definition.hitboxDepth() * 0.5 + adjustment;
     }
 
     private double surfaceAttachmentDistance(Direction direction, double adjustment) {
@@ -372,7 +584,9 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             return;
         }
 
-        setFuseTicks(definition.fuseTicks());
+        setFuseTicks(definition.remoteProfile() != null
+                ? definition.remoteProfile().beepIntervalTicks()
+                : definition.fuseTicks());
         setFuseRunning(true);
     }
 
@@ -489,6 +703,24 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         }
     }
 
+    public void activateRemoteDetonation() {
+        if (level().isClientSide || detonated || isRemoteDetonationActivated()) {
+            return;
+        }
+
+        GrenadeDefinition definition = getGrenadeDefinition();
+        GrenadeRemoteProfile remoteProfile = definition != null ? definition.remoteProfile() : null;
+        if (remoteProfile == null || remoteProfile.remoteDetonationDelayTicks() <= 0) {
+            detonate();
+            return;
+        }
+
+        setFuseRunning(false);
+        setBeepFlashTicks(0);
+        entityData.set(DATA_REMOTE_DETONATION_TICKS, remoteProfile.remoteDetonationDelayTicks());
+        remoteProfile.remoteDetonationSound().play(level(), position());
+    }
+
     @Override
     protected double getDefaultGravity() {
         if (isResting() || isStuck()) {
@@ -517,6 +749,9 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             tag.putInt(STUCK_FACE_TAG, stuckFace.get3DDataValue());
         }
         tag.putBoolean(DETONATED_TAG, detonated);
+        tag.putInt(BEEP_FLASH_TAG, entityData.get(DATA_BEEP_FLASH_TICKS));
+        tag.putBoolean(REMOTE_REGISTERED_TAG, remoteRegistered);
+        tag.putInt(REMOTE_DETONATION_TICKS_TAG, entityData.get(DATA_REMOTE_DETONATION_TICKS));
     }
 
     @Override
@@ -533,5 +768,11 @@ public class GrenadeEntity extends ThrowableItemProjectile {
                 ? Direction.from3DDataValue(tag.getInt(STUCK_FACE_TAG))
                 : null);
         detonated = tag.getBoolean(DETONATED_TAG);
+        setBeepFlashTicks(tag.getInt(BEEP_FLASH_TAG));
+        remoteRegistered = tag.getBoolean(REMOTE_REGISTERED_TAG);
+        entityData.set(
+                DATA_REMOTE_DETONATION_TICKS,
+                tag.contains(REMOTE_DETONATION_TICKS_TAG) ? tag.getInt(REMOTE_DETONATION_TICKS_TAG) : -1
+        );
     }
 }

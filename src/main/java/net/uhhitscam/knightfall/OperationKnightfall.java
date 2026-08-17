@@ -26,6 +26,8 @@ import net.uhhitscam.knightfall.event.ProjectileWeaponZoomEventHandler;
 import net.uhhitscam.knightfall.item.ModCreativeModeTabs;
 import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.item.client.GrenadeItemModelProperties;
+import net.uhhitscam.knightfall.item.client.MeleeWeaponItemModelProperties;
+import net.uhhitscam.knightfall.item.client.RemoteDetonatorItemModelProperties;
 import net.uhhitscam.knightfall.network.PayloadRegister;
 import net.uhhitscam.knightfall.particle.*;
 import net.uhhitscam.knightfall.sound.ModSounds;
@@ -91,6 +93,7 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.FLECHETTE_SPREAD_CAN.get(), FlechetteSpreadCanRenderer::new);
             EntityRenderers.register(ModEntities.FLECHETTE_TOXIC_SPREAD_CAN.get(), FlechetteToxicSpreadCanRenderer::new);
             EntityRenderers.register(ModEntities.GRENADE.get(), GrenadeRenderer::new);
+            EntityRenderers.register(ModEntities.EXPLOSIVE_KNIFE.get(), ExplosiveKnifeRenderer::new);
             EntityRenderers.register(ModEntities.BLASTER_BEAM.get(), BlasterBeamRenderer::new);
 
             event.enqueueWork(() -> {
@@ -98,6 +101,10 @@ public class OperationKnightfall {
                 GrenadeItemModelProperties.register(ModItems.IMPACT_THERMAL_DETONATOR.get());
                 GrenadeItemModelProperties.register(ModItems.MAGNETIC_THERMAL_DETONATOR.get());
                 GrenadeItemModelProperties.register(ModItems.GRAV_CHARGE.get());
+                GrenadeItemModelProperties.register(ModItems.DETONITE_CHARGE.get());
+                RemoteDetonatorItemModelProperties.register(ModItems.DETONITE_CHARGE_DETONATOR.get());
+                RemoteDetonatorItemModelProperties.register(ModItems.PYRO_DENTON_EXPLOSIVE_DETONATOR.get());
+                MeleeWeaponItemModelProperties.register(ModItems.EXPLOSIVE_KNIFE.get());
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 FaceAlignedParticleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);

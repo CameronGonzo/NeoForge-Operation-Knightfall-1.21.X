@@ -20,9 +20,13 @@ public record GrenadeDefinition(
         float throwInaccuracy,
         int cooldownTicks,
         GrenadePhysics physics,
+        float hitboxWidth,
+        float hitboxHeight,
+        float hitboxDepth,
         double surfaceAttachmentOffset,
         GrenadeAudioProfile audio,
         @Nullable TagKey<Block> stickyBlockTag,
+        @Nullable GrenadeRemoteProfile remoteProfile,
         GrenadeEffect effect
 ) {
     public static Builder builder(String registryName) {
@@ -42,10 +46,15 @@ public record GrenadeDefinition(
         private float throwInaccuracy = 1.0F;
         private int cooldownTicks;
         private GrenadePhysics physics = GrenadePhysics.defaults();
+        private float hitboxWidth = 0.25F;
+        private float hitboxHeight = 0.25F;
+        private float hitboxDepth = 0.25F;
         private double surfaceAttachmentOffset = -0.05;
         private GrenadeAudioProfile audio;
         @Nullable
         private TagKey<Block> stickyBlockTag;
+        @Nullable
+        private GrenadeRemoteProfile remoteProfile;
         private GrenadeEffect effect;
 
         private Builder(String registryName) {
@@ -105,6 +114,20 @@ public record GrenadeDefinition(
             return this;
         }
 
+        public Builder hitbox(float width, float height) {
+            this.hitboxWidth = width;
+            this.hitboxHeight = height;
+            this.hitboxDepth = width;
+            return this;
+        }
+
+        public Builder hitbox(float width, float height, float depth) {
+            this.hitboxWidth = width;
+            this.hitboxHeight = height;
+            this.hitboxDepth = depth;
+            return this;
+        }
+
         public Builder surfaceAttachmentOffset(double surfaceAttachmentOffset) {
             this.surfaceAttachmentOffset = surfaceAttachmentOffset;
             return this;
@@ -117,6 +140,11 @@ public record GrenadeDefinition(
 
         public Builder stickyBlockTag(TagKey<Block> stickyBlockTag) {
             this.stickyBlockTag = Objects.requireNonNull(stickyBlockTag, "Grenade sticky block tag cannot be null.");
+            return this;
+        }
+
+        public Builder remoteProfile(GrenadeRemoteProfile remoteProfile) {
+            this.remoteProfile = Objects.requireNonNull(remoteProfile, "Grenade remote profile cannot be null.");
             return this;
         }
 
@@ -150,6 +178,15 @@ public record GrenadeDefinition(
             if (cooldownTicks < 0) {
                 throw new IllegalStateException(registryName + " cannot have a negative cooldown.");
             }
+            if (!Float.isFinite(hitboxWidth) || hitboxWidth <= 0.0F) {
+                throw new IllegalStateException(registryName + " must have a positive, finite hitbox width.");
+            }
+            if (!Float.isFinite(hitboxHeight) || hitboxHeight <= 0.0F) {
+                throw new IllegalStateException(registryName + " must have a positive, finite hitbox height.");
+            }
+            if (!Float.isFinite(hitboxDepth) || hitboxDepth <= 0.0F) {
+                throw new IllegalStateException(registryName + " must have a positive, finite hitbox depth.");
+            }
             if (!Double.isFinite(surfaceAttachmentOffset)) {
                 throw new IllegalStateException(registryName + " must have a finite surface attachment offset.");
             }
@@ -161,6 +198,9 @@ public record GrenadeDefinition(
             }
             if (stickyBlockTag != null && !trigger.sticksToBlocks()) {
                 throw new IllegalStateException(registryName + " cannot define a sticky block tag without a sticky trigger.");
+            }
+            if ((trigger == GrenadeTrigger.REMOTE_STICKY) != (remoteProfile != null)) {
+                throw new IllegalStateException(registryName + " must pair REMOTE_STICKY with a GrenadeRemoteProfile.");
             }
             if (effect == null) {
                 throw new IllegalStateException(registryName + " must have a GrenadeEffect.");
@@ -178,9 +218,13 @@ public record GrenadeDefinition(
                     throwInaccuracy,
                     cooldownTicks,
                     physics,
+                    hitboxWidth,
+                    hitboxHeight,
+                    hitboxDepth,
                     surfaceAttachmentOffset,
                     audio,
                     stickyBlockTag,
+                    remoteProfile,
                     effect
             );
         }

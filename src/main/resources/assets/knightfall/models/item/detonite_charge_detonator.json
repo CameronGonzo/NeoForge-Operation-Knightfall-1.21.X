@@ -1,0 +1,11 @@
+{
+  "parent": "knightfall:item/detonite_charge_detonator_item",
+  "overrides": [
+    {
+      "predicate": {
+        "knightfall:activated": 1.0
+      },
+      "model": "knightfall:item/detonite_charge_detonator_item_1"
+    }
+  ]
+}

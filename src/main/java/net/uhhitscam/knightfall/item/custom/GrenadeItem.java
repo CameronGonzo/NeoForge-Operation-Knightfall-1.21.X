@@ -17,6 +17,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
+import net.uhhitscam.knightfall.component.GrenadeRemoteLink;
+import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 
 public class GrenadeItem extends Item implements net.minecraft.world.item.ProjectileItem {
     private static final int IMPACT_ONLY_USE_DURATION = 72000;
@@ -44,7 +46,8 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
         }
 
         player.startUsingItem(hand);
-        if (!level.isClientSide) {
+        GrenadeRemoteProfile remoteProfile = definition.remoteProfile();
+        if (!level.isClientSide && (remoteProfile == null || !remoteProfile.activationSoundOnStick())) {
             definition.audio().activationSound().play(level, player.position());
         }
         return InteractionResultHolder.consume(stack);
@@ -75,6 +78,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
 
         Level level = context.getLevel();
         if (level instanceof ServerLevel serverLevel) {
+            GrenadeRemoteLink remoteLink = prepareRemoteLink(serverLevel, stack);
             GrenadeEntity grenade = new GrenadeEntity(ModEntities.GRENADE.get(), serverLevel, player);
             grenade.setItem(stack.copyWithCount(1));
             grenade.setFuseTicks(definition.fuseTicks());
@@ -83,7 +87,16 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
 
             definition.audio().activationSound().play(serverLevel, grenade.position());
             definition.audio().bounceSound().play(serverLevel, grenade.position());
-            completeUse(player, stack);
+            if (remoteLink != null
+                    && definition.remoteProfile().detonatorDelivery() == GrenadeDetonatorDelivery.REPLACE_USED_STACK) {
+                player.setItemInHand(context.getHand(), createRemoteDetonator(remoteLink));
+                completeUseWithoutConsumption(player);
+            } else {
+                completeUse(player, stack);
+                if (remoteLink != null) {
+                    grantRemoteDetonator(player, remoteLink);
+                }
+            }
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);
@@ -138,10 +151,14 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
             return;
         }
 
+        GrenadeRemoteLink remoteLink = prepareRemoteLink(level, stack);
+        boolean shouldGrantDetonator = remoteLink != null
+                && remoteLink.equals(stack.get(ModDataComponentTypes.GRENADE_REMOTE_LINK.get()));
+
         GrenadeEntity grenade = new GrenadeEntity(ModEntities.GRENADE.get(), level, user);
         grenade.setItem(stack.copyWithCount(1));
         grenade.setFuseTicks(remainingFuseTicks);
-        grenade.setFuseRunning(!definition.trigger().sticksToBlocks());
+        grenade.setFuseRunning(shouldStartFuseWhenThrown());
         grenade.shootFromRotation(
                 user,
                 user.getXRot(),
@@ -154,6 +171,55 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
 
         definition.audio().throwSound().play(level, user.position());
         completeUse(user, stack);
+
+        if (shouldGrantDetonator && user instanceof Player player) {
+            grantRemoteDetonator(player, remoteLink);
+        }
+    }
+
+    private GrenadeRemoteLink prepareRemoteLink(ServerLevel level, ItemStack stack) {
+        GrenadeRemoteProfile remoteProfile = definition.remoteProfile();
+        if (remoteProfile == null) {
+            return null;
+        }
+
+        GrenadeRemoteLink existingLink = stack.get(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
+        if (existingLink != null && !GrenadeRemoteDetonations.get(level.getServer()).isActivated(existingLink)) {
+            return null;
+        }
+
+        GrenadeRemoteLink newLink = GrenadeRemoteLink.create();
+        stack.set(ModDataComponentTypes.GRENADE_REMOTE_LINK.get(), newLink);
+        return newLink;
+    }
+
+    private boolean shouldStartFuseWhenThrown() {
+        GrenadeRemoteProfile remoteProfile = definition.remoteProfile();
+        return remoteProfile != null
+                ? remoteProfile.beepsBeforeSticking()
+                : !definition.trigger().sticksToBlocks();
+    }
+
+    private void grantRemoteDetonator(Player player, GrenadeRemoteLink link) {
+        ItemStack detonator = createRemoteDetonator(link);
+        if (detonator.isEmpty()) {
+            return;
+        }
+
+        if (!player.getInventory().add(detonator)) {
+            player.drop(detonator, false);
+        }
+    }
+
+    private ItemStack createRemoteDetonator(GrenadeRemoteLink link) {
+        GrenadeRemoteProfile remoteProfile = definition.remoteProfile();
+        if (remoteProfile == null) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack detonator = new ItemStack(remoteProfile.detonatorItem().get());
+        detonator.set(ModDataComponentTypes.GRENADE_REMOTE_LINK.get(), link);
+        return detonator;
     }
 
     private void detonateInHand(ServerLevel level, LivingEntity user, ItemStack stack) {
@@ -174,6 +240,10 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
     private void completeUse(LivingEntity user, ItemStack stack) {
         stack.consume(1, user);
 
+        completeUseWithoutConsumption(user);
+    }
+
+    private void completeUseWithoutConsumption(LivingEntity user) {
         if (user instanceof Player player) {
             player.awardStat(Stats.ITEM_USED.get(this));
             if (definition.cooldownTicks() > 0) {
@@ -200,7 +270,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
         grenade.setPos(position.x(), position.y(), position.z());
         grenade.setItem(stack.copyWithCount(1));
         grenade.setFuseTicks(definition.fuseTicks());
-        grenade.setFuseRunning(!definition.trigger().sticksToBlocks());
+        grenade.setFuseRunning(shouldStartFuseWhenThrown());
         return grenade;
     }
 

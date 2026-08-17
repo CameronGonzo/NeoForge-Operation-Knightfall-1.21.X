@@ -16,6 +16,9 @@ import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.effect.custom.StunEffect;
 import net.uhhitscam.knightfall.gui.HudClient;
 import net.uhhitscam.knightfall.item.custom.FiringMode;
+import net.uhhitscam.knightfall.item.custom.MeleeWeaponDefinition;
+import net.uhhitscam.knightfall.item.custom.MeleeWeaponItem;
+import net.uhhitscam.knightfall.item.custom.MeleeWeaponSound;
 import net.uhhitscam.knightfall.item.custom.ProjectileItem;
 import net.uhhitscam.knightfall.item.custom.WeaponName;
 import net.uhhitscam.knightfall.network.PayloadRegister;
@@ -331,6 +334,8 @@ public final class ModClientEvents {
         }
         if (previous.projectileWeapon()) {
             player.playSound(WeaponSoundsUtil.getWeaponUnequip(previous.weaponName()), 0.5F, 1.0F);
+        } else if (previous.meleeWeapon() != null) {
+            playLocalMeleeSound(player, previous.meleeWeapon().audio().unequipSound());
         }
         if (current.projectileWeapon()) {
             player.playSound(WeaponSoundsUtil.getWeaponEquip(current.weaponName()), 0.5F, 1.0F);
@@ -343,11 +348,22 @@ public final class ModClientEvents {
                     offEquipReadyTime = equipReadyTime;
                 }
             }
+        } else if (current.meleeWeapon() != null) {
+            playLocalMeleeSound(player, current.meleeWeapon().audio().equipSound());
+            if (mainHand) {
+                mainEquipReadyTime = 0;
+            } else {
+                offEquipReadyTime = 0;
+            }
         } else if (mainHand) {
             mainEquipReadyTime = 0;
         } else {
             offEquipReadyTime = 0;
         }
+    }
+
+    private static void playLocalMeleeSound(LocalPlayer player, MeleeWeaponSound sound) {
+        player.playSound(sound.sound().get(), sound.volume(), sound.pitch());
     }
 
     private static void resetHeldWeaponSoundTracker() {
@@ -451,21 +467,34 @@ public final class ModClientEvents {
         }
     }
 
-    private record HeldWeaponSnapshot(boolean projectileWeapon, WeaponName weaponName, int slotIndex) {
-        private static final HeldWeaponSnapshot EMPTY = new HeldWeaponSnapshot(false, null, -1);
+    private record HeldWeaponSnapshot(
+            boolean projectileWeapon,
+            WeaponName weaponName,
+            MeleeWeaponDefinition meleeWeapon,
+            int slotIndex
+    ) {
+        private static final HeldWeaponSnapshot EMPTY = new HeldWeaponSnapshot(false, null, null, -1);
 
         private static HeldWeaponSnapshot fromMainHand(LocalPlayer player) {
             ItemStack stack = player.getMainHandItem();
-            return stack.getItem() instanceof ProjectileItem weapon
-                    ? new HeldWeaponSnapshot(true, weapon.getProjectileWeaponName(), player.getInventory().selected)
-                    : EMPTY;
+            if (stack.getItem() instanceof ProjectileItem weapon) {
+                return new HeldWeaponSnapshot(true, weapon.getProjectileWeaponName(), null, player.getInventory().selected);
+            }
+            if (stack.getItem() instanceof MeleeWeaponItem weapon) {
+                return new HeldWeaponSnapshot(false, null, weapon.getDefinition(), player.getInventory().selected);
+            }
+            return EMPTY;
         }
 
         private static HeldWeaponSnapshot fromOffHand(LocalPlayer player) {
             ItemStack stack = player.getOffhandItem();
-            return stack.getItem() instanceof ProjectileItem weapon
-                    ? new HeldWeaponSnapshot(true, weapon.getProjectileWeaponName(), -2)
-                    : EMPTY;
+            if (stack.getItem() instanceof ProjectileItem weapon) {
+                return new HeldWeaponSnapshot(true, weapon.getProjectileWeaponName(), null, -2);
+            }
+            if (stack.getItem() instanceof MeleeWeaponItem weapon) {
+                return new HeldWeaponSnapshot(false, null, weapon.getDefinition(), -2);
+            }
+            return EMPTY;
         }
     }
 

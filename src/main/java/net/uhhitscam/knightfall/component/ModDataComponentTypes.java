@@ -26,6 +26,14 @@ public class ModDataComponentTypes {
             builder -> builder.persistent(ExtraFiringRateData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<OverheatData>> OVERHEAT = register("overheat",
             builder -> builder.persistent(OverheatData.CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<GrenadeRemoteLink>> GRENADE_REMOTE_LINK =
+            register("grenade_remote_link", builder -> builder
+                    .persistent(GrenadeRemoteLink.CODEC)
+                    .networkSynchronized(GrenadeRemoteLink.STREAM_CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<RemoteDetonatorState>> REMOTE_DETONATOR_STATE =
+            register("remote_detonator_state", builder -> builder
+                    .persistent(RemoteDetonatorState.CODEC)
+                    .networkSynchronized(RemoteDetonatorState.STREAM_CODEC));
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());

@@ -33,11 +33,25 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
             texture("grav_charge"),
             texture("grav_charge_1")
     );
+    private static final GrenadeTextures DETONITE_CHARGE_TEXTURES = new GrenadeTextures(
+            texture("detonite_charge"),
+            texture("detonite_charge"),
+            texture("detonite_charge_1")
+    );
+    private static final GrenadeTextures BARADIUM_BOMB_TEXTURES = singleTexture("baradium_bomb");
+    private static final GrenadeTextures PYRO_DENTON_EXPLOSIVE_TEXTURES = new GrenadeTextures(
+            texture("pyro_denton_explosive"),
+            texture("pyro_denton_explosive_1"),
+            texture("pyro_denton_explosive")
+    );
 
     private final ThermalDetonatorModel thermalDetonatorModel;
     private final ImpactThermalDetonatorModel impactThermalDetonatorModel;
     private final MagneticThermalDetonatorModel magneticThermalDetonatorModel;
     private final GravChargeModel gravChargeModel;
+    private final DetoniteChargeModel detoniteChargeModel;
+    private final BaradiumBombModel baradiumBombModel;
+    private final PyroDentonExplosiveModel pyroDentonExplosiveModel;
     private final ItemRenderer itemRenderer;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -52,6 +66,11 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
                 context.bakeLayer(ModModelLayers.MAGNETIC_THERMAL_DETONATOR)
         );
         this.gravChargeModel = new GravChargeModel(context.bakeLayer(ModModelLayers.GRAV_CHARGE));
+        this.detoniteChargeModel = new DetoniteChargeModel(context.bakeLayer(ModModelLayers.DETONITE_CHARGE));
+        this.baradiumBombModel = new BaradiumBombModel(context.bakeLayer(ModModelLayers.BARADIUM_BOMB));
+        this.pyroDentonExplosiveModel = new PyroDentonExplosiveModel(
+                context.bakeLayer(ModModelLayers.PYRO_DENTON_EXPLOSIVE)
+        );
         this.itemRenderer = context.getItemRenderer();
         this.shadowRadius = 0.15F;
     }
@@ -73,7 +92,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         }
 
         poseStack.pushPose();
-        poseStack.translate(0.0F, 0.125F, 0.0F);
+        poseStack.translate(0.0F, entity.getBoundingBox().getYsize() * 0.5F, 0.0F);
         poseStack.scale(0.8F, -0.8F, 0.8F);
 
         float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
@@ -134,6 +153,13 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
             return textures.base();
         }
 
+        if (definition.remoteProfile() != null) {
+            if (entity.isRemoteDetonationActivated()) {
+                return textures.active();
+            }
+            return entity.isBeepFlashActive() ? textures.beep() : textures.base();
+        }
+
         return switch (GrenadeVisualState.forThrownGrenade(
                 definition,
                 entity.getFuseTicks(),
@@ -158,6 +184,15 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         if (entity.getItem().is(ModItems.GRAV_CHARGE.get())) {
             return gravChargeModel;
         }
+        if (entity.getItem().is(ModItems.DETONITE_CHARGE.get())) {
+            return detoniteChargeModel;
+        }
+        if (entity.getItem().is(ModItems.BARADIUM_BOMB.get())) {
+            return baradiumBombModel;
+        }
+        if (entity.getItem().is(ModItems.PYRO_DENTON_EXPLOSIVE.get())) {
+            return pyroDentonExplosiveModel;
+        }
         return null;
     }
 
@@ -173,6 +208,15 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         }
         if (entity.getItem().is(ModItems.GRAV_CHARGE.get())) {
             return GRAV_CHARGE_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.DETONITE_CHARGE.get())) {
+            return DETONITE_CHARGE_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.BARADIUM_BOMB.get())) {
+            return BARADIUM_BOMB_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.PYRO_DENTON_EXPLOSIVE.get())) {
+            return PYRO_DENTON_EXPLOSIVE_TEXTURES;
         }
         return null;
     }
@@ -196,6 +240,11 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
                 texture(name + "_1"),
                 texture(name + "_2")
         );
+    }
+
+    private static GrenadeTextures singleTexture(String name) {
+        ResourceLocation base = texture(name);
+        return new GrenadeTextures(base, base, base);
     }
 
     private static ResourceLocation texture(String name) {

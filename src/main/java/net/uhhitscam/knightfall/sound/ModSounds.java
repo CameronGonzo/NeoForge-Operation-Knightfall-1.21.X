@@ -16,6 +16,7 @@ public class ModSounds {
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, OperationKnightfall.MODID);
 
     public static final Supplier<SoundEvent> EQUIPMENT_THROW = registerSoundEvent("equipment_throw");
+    public static final Supplier<SoundEvent> EQUIPMENT_DETONATOR = registerSoundEvent("equipment_detonator");
     public static final Supplier<SoundEvent> THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("thermal_detonator_activate");
     public static final Supplier<SoundEvent> THERMAL_DETONATOR_BEEP = registerSoundEvent("thermal_detonator_beep");
     public static final Supplier<SoundEvent> THERMAL_DETONATOR_IMPACT = registerSoundEvent("thermal_detonator_impact");
@@ -30,6 +31,19 @@ public class ModSounds {
     public static final List<Supplier<SoundEvent>> GRAV_CHARGE_BEEPS = IntStream.rangeClosed(1, 20)
             .mapToObj(index -> registerSoundEvent("grav_charge_beep_" + String.format("%02d", index)))
             .toList();
+    public static final Supplier<SoundEvent> DETONITE_CHARGE_ACTIVATE = registerSoundEvent("detonite_charge_activate");
+    public static final Supplier<SoundEvent> DETONITE_CHARGE_BEEP = registerSoundEvent("detonite_charge_beep");
+    public static final Supplier<SoundEvent> DETONITE_CHARGE_IMPACT = registerSoundEvent("detonite_charge_impact");
+    public static final Supplier<SoundEvent> BARADIUM_BOMB_ACTIVATE = registerSoundEvent("baradium_bomb_activate");
+    public static final Supplier<SoundEvent> BARADIUM_BOMB_IMPACT = registerSoundEvent("baradium_bomb_impact");
+    public static final Supplier<SoundEvent> PYRO_DENTON_EXPLOSIVE_ACTIVATE = registerSoundEvent("pyro_denton_explosive_activate");
+    public static final Supplier<SoundEvent> PYRO_DENTON_EXPLOSIVE_BEEP_01 = registerSoundEvent("pyro_denton_explosive_beep_01");
+    public static final Supplier<SoundEvent> PYRO_DENTON_EXPLOSIVE_BEEP_02 = registerSoundEvent("pyro_denton_explosive_beep_02");
+    public static final Supplier<SoundEvent> PYRO_DENTON_EXPLOSIVE_IMPACT = registerSoundEvent("pyro_denton_explosive_impact");
+    public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_EQUIP = registerSoundEvent("explosive_knife_equip");
+    public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_UNEQUIP = registerSoundEvent("explosive_knife_unequip");
+    public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_BEEP = registerSoundEvent("explosive_knife_beep");
+    public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_URGENT_BEEP = registerSoundEvent("explosive_knife_urgent_beep");
 
     public static final Supplier<SoundEvent> _22T4_FIRE = registerSoundEvent("22t4_fire");
     public static final Supplier<SoundEvent> _62AUG2_HUNTING_RIFLE_FIRE = registerSoundEvent("62aug2_hunting_rifle_fire");

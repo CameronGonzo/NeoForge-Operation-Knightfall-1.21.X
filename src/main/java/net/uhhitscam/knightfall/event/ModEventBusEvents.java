@@ -28,6 +28,10 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.IMPACT_THERMAL_DETONATOR, ImpactThermalDetonatorModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.MAGNETIC_THERMAL_DETONATOR, MagneticThermalDetonatorModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.GRAV_CHARGE, GravChargeModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.DETONITE_CHARGE, DetoniteChargeModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.BARADIUM_BOMB, BaradiumBombModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.PYRO_DENTON_EXPLOSIVE, PyroDentonExplosiveModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.EXPLOSIVE_KNIFE, ExplosiveKnifeModel::createBodyLayer);
     }
 
 //    @SubscribeEvent

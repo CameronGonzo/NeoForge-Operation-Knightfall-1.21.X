@@ -1,0 +1,130 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "knightfall:item/pyro_denton_explosive_item",
+		"particle": "knightfall:item/pyro_denton_explosive_item"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 2, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1, 8]},
+			"faces": {
+				"north": {"uv": [4, 4, 8, 5], "texture": "#0"},
+				"east": {"uv": [0, 4, 4, 5], "texture": "#0"},
+				"south": {"uv": [12, 4, 16, 5], "texture": "#0"},
+				"west": {"uv": [8, 4, 12, 5], "texture": "#0"},
+				"up": {"uv": [8, 4, 4, 0], "texture": "#0"},
+				"down": {"uv": [12, 0, 8, 4], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5, 1.5, 5],
+			"to": [6, 2.5, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1.5, 8]},
+			"faces": {
+				"north": {"uv": [3, 12.5, 3.5, 13], "texture": "#0"},
+				"east": {"uv": [0, 12.5, 3, 13], "texture": "#0"},
+				"south": {"uv": [6.5, 12.5, 7, 13], "texture": "#0"},
+				"west": {"uv": [3.5, 12.5, 6.5, 13], "texture": "#0"},
+				"up": {"uv": [3.5, 12.5, 3, 9.5], "texture": "#0"},
+				"down": {"uv": [4, 9.5, 3.5, 12.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [10, 1.5, 5],
+			"to": [11, 2.5, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [13, 1.5, 8]},
+			"faces": {
+				"north": {"uv": [10, 12.5, 10.5, 13], "texture": "#0"},
+				"east": {"uv": [7, 12.5, 10, 13], "texture": "#0"},
+				"south": {"uv": [13.5, 12.5, 14, 13], "texture": "#0"},
+				"west": {"uv": [10.5, 12.5, 13.5, 13], "texture": "#0"},
+				"up": {"uv": [10.5, 12.5, 10, 9.5], "texture": "#0"},
+				"down": {"uv": [11, 9.5, 10.5, 12.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6, 1.5, 10],
+			"to": [10, 2.5, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 1.5, 8]},
+			"faces": {
+				"north": {"uv": [0.5, 13.5, 2.5, 14], "texture": "#0"},
+				"east": {"uv": [0, 13.5, 0.5, 14], "texture": "#0"},
+				"south": {"uv": [3, 13.5, 5, 14], "texture": "#0"},
+				"west": {"uv": [2.5, 13.5, 3, 14], "texture": "#0"},
+				"up": {"uv": [2.5, 13.5, 0.5, 13], "texture": "#0"},
+				"down": {"uv": [4.5, 13, 2.5, 13.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6, 1.5, 5],
+			"to": [10, 2.5, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 1.5, 3]},
+			"faces": {
+				"north": {"uv": [5.5, 13.5, 7.5, 14], "texture": "#0"},
+				"east": {"uv": [5, 13.5, 5.5, 14], "texture": "#0"},
+				"south": {"uv": [8, 13.5, 10, 14], "texture": "#0"},
+				"west": {"uv": [7.5, 13.5, 8, 14], "texture": "#0"},
+				"up": {"uv": [7.5, 13.5, 5.5, 13], "texture": "#0"},
+				"down": {"uv": [9.5, 13, 7.5, 13.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [3.99, 0.49, 3.99],
+			"to": [12.01, 1.51, 12.01],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1.5, 8]},
+			"faces": {
+				"north": {"uv": [4, 9, 8, 9.5], "texture": "#0"},
+				"east": {"uv": [0, 9, 4, 9.5], "texture": "#0"},
+				"south": {"uv": [12, 9, 16, 9.5], "texture": "#0"},
+				"west": {"uv": [8, 9, 12, 9.5], "texture": "#0"},
+				"up": {"uv": [8, 9, 4, 5], "texture": "#0"},
+				"down": {"uv": [12, 5, 8, 9], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 4, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 4, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [45, -23, 23],
+			"translation": [0, 6.75, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [45, -23, 23],
+			"translation": [0, 6.75, 0]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.35, 0.35, 0.35]
+		},
+		"gui": {
+			"rotation": [45, -45, 0],
+			"translation": [0, 5.25, 0],
+			"scale": [1.1, 1.1, 1.1]
+		},
+		"head": {
+			"translation": [0, 12.75, 0],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"fixed": {
+			"rotation": [-90, -180, 0],
+			"translation": [0, 0, -10.5],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"on_shelf": {
+			"rotation": [90, 0, 0],
+			"translation": [0, 0, 8.25],
+			"scale": [1.3, 1.3, 1.3]
+		}
+	}
+}
