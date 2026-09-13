@@ -10,6 +10,8 @@ public record GrenadeExplosionSpec(
         double entityRadius,
         float damage,
         double knockback,
+        boolean forceKnockback,
+        boolean playsDetonationSound,
         float blockBreakRadius,
         Level.ExplosionInteraction blockInteraction,
         boolean causesFire,
@@ -53,6 +55,8 @@ public record GrenadeExplosionSpec(
         private final List<GrenadeParticleBurst> particles = new ArrayList<>();
 
         private double knockback;
+        private boolean forceKnockback;
+        private boolean playsDetonationSound = true;
         private float blockBreakRadius;
         private Level.ExplosionInteraction blockInteraction = Level.ExplosionInteraction.NONE;
         private boolean causesFire;
@@ -65,6 +69,16 @@ public record GrenadeExplosionSpec(
 
         public Builder knockback(double knockback) {
             this.knockback = knockback;
+            return this;
+        }
+
+        public Builder forceKnockback() {
+            this.forceKnockback = true;
+            return this;
+        }
+
+        public Builder silentDetonation() {
+            this.playsDetonationSound = false;
             return this;
         }
 
@@ -85,6 +99,8 @@ public record GrenadeExplosionSpec(
                     entityRadius,
                     damage,
                     knockback,
+                    forceKnockback,
+                    playsDetonationSound,
                     blockBreakRadius,
                     blockInteraction,
                     causesFire,

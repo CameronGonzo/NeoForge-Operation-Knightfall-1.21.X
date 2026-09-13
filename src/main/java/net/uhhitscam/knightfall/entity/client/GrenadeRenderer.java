@@ -21,6 +21,8 @@ import net.uhhitscam.knightfall.item.custom.GrenadeDefinition;
 import net.uhhitscam.knightfall.item.custom.GrenadeVisualState;
 
 public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
+    private static final float DEFAULT_MODEL_SCALE = 0.8F;
+    private static final float THERMAL_IMPLODER_MODEL_SCALE = 0.85F;
     private static final GrenadeTextures THERMAL_DETONATOR_TEXTURES = textures("thermal_detonator");
     private static final GrenadeTextures IMPACT_THERMAL_DETONATOR_TEXTURES = textures("impact_thermal_detonator");
     private static final GrenadeTextures MAGNETIC_THERMAL_DETONATOR_TEXTURES = new GrenadeTextures(
@@ -44,6 +46,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
             texture("pyro_denton_explosive_1"),
             texture("pyro_denton_explosive")
     );
+    private static final GrenadeTextures STUNNER_TEXTURES = textures("stunner");
+    private static final GrenadeTextures THERMAL_IMPLODER_TEXTURES = singleTexture("thermal_imploder");
+    private static final GrenadeTextures INCENDIARY_GRENADE_TEXTURES = singleTexture("incendiary_grenade");
 
     private final ThermalDetonatorModel thermalDetonatorModel;
     private final ImpactThermalDetonatorModel impactThermalDetonatorModel;
@@ -52,6 +57,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
     private final DetoniteChargeModel detoniteChargeModel;
     private final BaradiumBombModel baradiumBombModel;
     private final PyroDentonExplosiveModel pyroDentonExplosiveModel;
+    private final StunnerModel stunnerModel;
+    private final ThermalImploderModel thermalImploderModel;
+    private final IncendiaryGrenadeModel incendiaryGrenadeModel;
     private final ItemRenderer itemRenderer;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -70,6 +78,13 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         this.baradiumBombModel = new BaradiumBombModel(context.bakeLayer(ModModelLayers.BARADIUM_BOMB));
         this.pyroDentonExplosiveModel = new PyroDentonExplosiveModel(
                 context.bakeLayer(ModModelLayers.PYRO_DENTON_EXPLOSIVE)
+        );
+        this.stunnerModel = new StunnerModel(context.bakeLayer(ModModelLayers.STUNNER));
+        this.thermalImploderModel = new ThermalImploderModel(
+                context.bakeLayer(ModModelLayers.THERMAL_IMPLODER)
+        );
+        this.incendiaryGrenadeModel = new IncendiaryGrenadeModel(
+                context.bakeLayer(ModModelLayers.INCENDIARY_GRENADE)
         );
         this.itemRenderer = context.getItemRenderer();
         this.shadowRadius = 0.15F;
@@ -93,7 +108,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
 
         poseStack.pushPose();
         poseStack.translate(0.0F, entity.getBoundingBox().getYsize() * 0.5F, 0.0F);
-        poseStack.scale(0.8F, -0.8F, 0.8F);
+        float modelScale = DEFAULT_MODEL_SCALE * getModelScale(entity);
+        poseStack.scale(modelScale, -modelScale, modelScale);
 
         float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
         Direction stuckFace = entity.getStuckFace();
@@ -193,6 +209,15 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         if (entity.getItem().is(ModItems.PYRO_DENTON_EXPLOSIVE.get())) {
             return pyroDentonExplosiveModel;
         }
+        if (entity.getItem().is(ModItems.STUNNER.get())) {
+            return stunnerModel;
+        }
+        if (entity.getItem().is(ModItems.THERMAL_IMPLODER.get())) {
+            return thermalImploderModel;
+        }
+        if (entity.getItem().is(ModItems.INCENDIARY_GRENADE.get())) {
+            return incendiaryGrenadeModel;
+        }
         return null;
     }
 
@@ -218,6 +243,15 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         if (entity.getItem().is(ModItems.PYRO_DENTON_EXPLOSIVE.get())) {
             return PYRO_DENTON_EXPLOSIVE_TEXTURES;
         }
+        if (entity.getItem().is(ModItems.STUNNER.get())) {
+            return STUNNER_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.THERMAL_IMPLODER.get())) {
+            return THERMAL_IMPLODER_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.INCENDIARY_GRENADE.get())) {
+            return INCENDIARY_GRENADE_TEXTURES;
+        }
         return null;
     }
 
@@ -232,6 +266,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
             case WEST -> poseStack.mulPose(Axis.ZP.rotationDegrees(-90.0F));
         }
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+    }
+
+    private static float getModelScale(GrenadeEntity entity) {
+        return entity.getItem().is(ModItems.THERMAL_IMPLODER.get())
+                ? THERMAL_IMPLODER_MODEL_SCALE
+                : 1.0F;
     }
 
     private static GrenadeTextures textures(String name) {

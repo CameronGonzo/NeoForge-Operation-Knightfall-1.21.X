@@ -110,25 +110,102 @@
   "pyro_denton_explosive_activate": {
     "subtitle": "sounds.knightfall.pyro_denton_explosive_activate",
     "sounds": [
-      "knightfall:equipment/pyro_denton_exposive/equipment_grenade_pyro_denton_explosive_activate_01"
+      "knightfall:equipment/pyro_denton_explosive/equipment_grenade_pyro_denton_explosive_activate_01"
     ]
   },
   "pyro_denton_explosive_beep_01": {
     "subtitle": "sounds.knightfall.pyro_denton_explosive_beep_01",
     "sounds": [
-      "knightfall:equipment/pyro_denton_exposive/equipment_grenade_pyro_denton_explosive_beep_01"
+      "knightfall:equipment/pyro_denton_explosive/equipment_grenade_pyro_denton_explosive_beep_01"
     ]
   },
   "pyro_denton_explosive_beep_02": {
     "subtitle": "sounds.knightfall.pyro_denton_explosive_beep_02",
     "sounds": [
-      "knightfall:equipment/pyro_denton_exposive/equipment_grenade_pyro_denton_explosive_beep_02"
+      "knightfall:equipment/pyro_denton_explosive/equipment_grenade_pyro_denton_explosive_beep_02"
     ]
   },
   "pyro_denton_explosive_impact": {
     "subtitle": "sounds.knightfall.pyro_denton_explosive_impact",
     "sounds": [
-      "knightfall:equipment/pyro_denton_exposive/equipment_grenade_pyro_denton_explosive_impact_01"
+      "knightfall:equipment/pyro_denton_explosive/equipment_grenade_pyro_denton_explosive_impact_01"
+    ]
+  },
+  "stunner_activate": {
+    "subtitle": "sounds.knightfall.stunner_activate",
+    "sounds": [
+      "knightfall:equipment/stunner/equipment_grenade_stunner_activate_01"
+    ]
+  },
+  "stunner_beep": {
+    "subtitle": "sounds.knightfall.stunner_beep",
+    "sounds": [
+      "knightfall:equipment/stunner/equipment_grenade_stunner_beep_01"
+    ]
+  },
+  "stunner_explosion": {
+    "subtitle": "sounds.knightfall.stunner_explosion",
+    "sounds": [
+      "knightfall:equipment/stunner/equipment_grenade_stunner_explosion_01"
+    ]
+  },
+  "stunner_impact": {
+    "subtitle": "sounds.knightfall.stunner_impact",
+    "sounds": [
+      "knightfall:equipment/stunner/equipment_grenade_stunner_impact_01"
+    ]
+  },
+  "thermal_imploder_activate": {
+    "subtitle": "sounds.knightfall.thermal_imploder_activate",
+    "sounds": [
+      "knightfall:equipment/thermal_imploder/equipment_grenade_thermal_imploder_activate_01"
+    ]
+  },
+  "thermal_imploder_beep": {
+    "subtitle": "sounds.knightfall.thermal_imploder_beep",
+    "sounds": [
+      "knightfall:equipment/thermal_imploder/equipment_grenade_thermal_imploder_beep_01"
+    ]
+  },
+  "thermal_imploder_explosion": {
+    "subtitle": "sounds.knightfall.thermal_imploder_explosion",
+    "sounds": [
+      "knightfall:equipment/thermal_imploder/equipment_grenade_thermal_imploder_beep_02",
+      "knightfall:equipment/thermal_imploder/equipment_grenade_thermal_imploder_beep_03",
+      "knightfall:equipment/thermal_imploder/equipment_grenade_thermal_imploder_explosion_01"
+    ]
+  },
+  "thermal_imploder_impact": {
+    "subtitle": "sounds.knightfall.thermal_imploder_impact",
+    "sounds": [
+      "knightfall:equipment/thermal_imploder/equipment_grenade_thermal_imploder_impact_01"
+    ]
+  },
+  "incendiary_grenade_activate": {
+    "subtitle": "sounds.knightfall.incendiary_grenade_activate",
+    "sounds": [
+      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_activate_01"
+    ]
+  },
+  "incendiary_grenade_beep": {
+    "subtitle": "sounds.knightfall.incendiary_grenade_beep",
+    "sounds": [
+      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_beep_01"
+    ]
+  },
+  "incendiary_grenade_explode": {
+    "subtitle": "sounds.knightfall.incendiary_grenade_explode",
+    "sounds": [
+      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_explode_01",
+      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_explode_02",
+      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_explode_03",
+      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_explode_04"
+    ]
+  },
+  "incendiary_grenade_impact": {
+    "subtitle": "sounds.knightfall.incendiary_grenade_impact",
+    "sounds": [
+      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_impact_01"
     ]
   },
   "grav_charge_beep_01": {

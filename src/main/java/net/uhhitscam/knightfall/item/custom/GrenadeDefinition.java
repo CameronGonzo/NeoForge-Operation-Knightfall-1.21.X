@@ -25,8 +25,11 @@ public record GrenadeDefinition(
         float hitboxDepth,
         double surfaceAttachmentOffset,
         GrenadeAudioProfile audio,
+        GrenadeFuseSoundMode fuseSoundMode,
+        int visualFlashIntervalTicks,
         @Nullable TagKey<Block> stickyBlockTag,
         @Nullable GrenadeRemoteProfile remoteProfile,
+        @Nullable GrenadeImplosionProfile implosionProfile,
         GrenadeEffect effect
 ) {
     public static Builder builder(String registryName) {
@@ -51,10 +54,14 @@ public record GrenadeDefinition(
         private float hitboxDepth = 0.25F;
         private double surfaceAttachmentOffset = -0.05;
         private GrenadeAudioProfile audio;
+        private GrenadeFuseSoundMode fuseSoundMode = GrenadeFuseSoundMode.SCHEDULED_BEEPS;
+        private int visualFlashIntervalTicks;
         @Nullable
         private TagKey<Block> stickyBlockTag;
         @Nullable
         private GrenadeRemoteProfile remoteProfile;
+        @Nullable
+        private GrenadeImplosionProfile implosionProfile;
         private GrenadeEffect effect;
 
         private Builder(String registryName) {
@@ -138,6 +145,16 @@ public record GrenadeDefinition(
             return this;
         }
 
+        public Builder fuseSoundMode(GrenadeFuseSoundMode fuseSoundMode) {
+            this.fuseSoundMode = Objects.requireNonNull(fuseSoundMode, "Grenade fuse sound mode cannot be null.");
+            return this;
+        }
+
+        public Builder visualFlashIntervalTicks(int visualFlashIntervalTicks) {
+            this.visualFlashIntervalTicks = visualFlashIntervalTicks;
+            return this;
+        }
+
         public Builder stickyBlockTag(TagKey<Block> stickyBlockTag) {
             this.stickyBlockTag = Objects.requireNonNull(stickyBlockTag, "Grenade sticky block tag cannot be null.");
             return this;
@@ -145,6 +162,11 @@ public record GrenadeDefinition(
 
         public Builder remoteProfile(GrenadeRemoteProfile remoteProfile) {
             this.remoteProfile = Objects.requireNonNull(remoteProfile, "Grenade remote profile cannot be null.");
+            return this;
+        }
+
+        public Builder implosionProfile(GrenadeImplosionProfile implosionProfile) {
+            this.implosionProfile = Objects.requireNonNull(implosionProfile, "Grenade implosion profile cannot be null.");
             return this;
         }
 
@@ -196,6 +218,9 @@ public record GrenadeDefinition(
             if (audio.urgentThresholdTicks() > fuseTicks) {
                 throw new IllegalStateException(registryName + " urgent beep threshold cannot exceed its fuse.");
             }
+            if (visualFlashIntervalTicks < 0) {
+                throw new IllegalStateException(registryName + " cannot have a negative visual flash interval.");
+            }
             if (stickyBlockTag != null && !trigger.sticksToBlocks()) {
                 throw new IllegalStateException(registryName + " cannot define a sticky block tag without a sticky trigger.");
             }
@@ -223,8 +248,11 @@ public record GrenadeDefinition(
                     hitboxDepth,
                     surfaceAttachmentOffset,
                     audio,
+                    fuseSoundMode,
+                    visualFlashIntervalTicks,
                     stickyBlockTag,
                     remoteProfile,
+                    implosionProfile,
                     effect
             );
         }

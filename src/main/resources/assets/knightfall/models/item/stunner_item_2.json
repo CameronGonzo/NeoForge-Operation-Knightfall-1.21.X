@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/stunner_item",
+  "textures": {
+    "0": "knightfall:item/stunner_item_2",
+    "particle": "knightfall:item/stunner_item_2"
+  }
+}

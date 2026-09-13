@@ -26,6 +26,12 @@ public enum GrenadeVisualState {
             return INACTIVE;
         }
 
+        if (definition.visualFlashIntervalTicks() > 0) {
+            return isPeriodicFlashActive(useTicks, definition.visualFlashIntervalTicks())
+                    ? BEEP
+                    : ACTIVE;
+        }
+
         if (useTicks < BEEP_FLASH_TICKS) {
             return BEEP;
         }
@@ -51,6 +57,11 @@ public enum GrenadeVisualState {
     }
 
     private static boolean isBeepFlashActive(GrenadeDefinition definition, int remainingFuseTicks) {
+        if (definition.visualFlashIntervalTicks() > 0) {
+            int elapsedFuseTicks = Math.max(0, definition.fuseTicks() - remainingFuseTicks);
+            return isPeriodicFlashActive(elapsedFuseTicks, definition.visualFlashIntervalTicks());
+        }
+
         for (int elapsedTicks = 0; elapsedTicks < BEEP_FLASH_TICKS; elapsedTicks++) {
             int beepFuseTicks = remainingFuseTicks + elapsedTicks;
             if (beepFuseTicks <= definition.fuseTicks()
@@ -60,5 +71,9 @@ public enum GrenadeVisualState {
         }
 
         return false;
+    }
+
+    private static boolean isPeriodicFlashActive(int elapsedTicks, int intervalTicks) {
+        return elapsedTicks > 0 && elapsedTicks % intervalTicks < BEEP_FLASH_TICKS;
     }
 }

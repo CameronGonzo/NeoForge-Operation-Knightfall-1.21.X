@@ -31,6 +31,8 @@ import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.item.custom.GrenadeDefinition;
 import net.uhhitscam.knightfall.item.custom.GrenadeDetonationContext;
+import net.uhhitscam.knightfall.item.custom.GrenadeFuseSoundMode;
+import net.uhhitscam.knightfall.item.custom.GrenadeImplosionProfile;
 import net.uhhitscam.knightfall.item.custom.GrenadeItem;
 import net.uhhitscam.knightfall.item.custom.GrenadePhysics;
 import net.uhhitscam.knightfall.item.custom.GrenadeRemoteDetonations;
@@ -48,6 +50,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     private static final String BEEP_FLASH_TAG = "BeepFlash";
     private static final String REMOTE_REGISTERED_TAG = "RemoteRegistered";
     private static final String REMOTE_DETONATION_TICKS_TAG = "RemoteDetonationTicks";
+    private static final String ONE_SHOT_FUSE_SOUND_PLAYED_TAG = "OneShotFuseSoundPlayed";
+    private static final String IMPLOSION_TICKS_TAG = "ImplosionTicks";
     private static final double HIT_POSITION_EPSILON = 0.01;
     private static final double GROUND_PROBE_START_OFFSET = 0.02;
     private static final double GROUND_PROBE_DISTANCE = 0.08;
@@ -66,6 +70,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_REMOTE_DETONATION_TICKS =
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_IMPLOSION_TICKS =
+            SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
 
     @Nullable
     private Vec3 velocityAfterImpact;
@@ -76,6 +82,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     private long lastBounceSoundTick = Long.MIN_VALUE;
     private boolean detonated;
     private boolean remoteRegistered;
+    private boolean oneShotFuseSoundPlayed;
 
     public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level level) {
         super(entityType, level);
@@ -144,6 +151,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         builder.define(DATA_STUCK_FACE, -1);
         builder.define(DATA_BEEP_FLASH_TICKS, 0);
         builder.define(DATA_REMOTE_DETONATION_TICKS, -1);
+        builder.define(DATA_IMPLOSION_TICKS, -1);
     }
 
     public int getFuseTicks() {
@@ -225,6 +233,10 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         return entityData.get(DATA_REMOTE_DETONATION_TICKS) >= 0;
     }
 
+    public boolean isImploding() {
+        return entityData.get(DATA_IMPLOSION_TICKS) >= 0;
+    }
+
     private void setBeepFlashTicks(int ticks) {
         entityData.set(DATA_BEEP_FLASH_TICKS, Math.max(0, ticks));
     }
@@ -264,6 +276,11 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             return;
         }
 
+        if (isImploding()) {
+            tickImplosion(definition);
+            return;
+        }
+
         if (isBeepFlashActive()) {
             setBeepFlashTicks(entityData.get(DATA_BEEP_FLASH_TICKS) - 1);
         }
@@ -293,9 +310,12 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             return;
         }
 
+        playOneShotFuseSoundIfNeeded(definition);
+
         int remainingFuseTicks = getFuseTicks() - 1;
         setFuseTicks(remainingFuseTicks);
-        boolean shouldPlayBeep = definition.audio().shouldPlayBeep(
+        boolean shouldPlayBeep = definition.fuseSoundMode() == GrenadeFuseSoundMode.SCHEDULED_BEEPS
+                && definition.audio().shouldPlayBeep(
                 remainingFuseTicks,
                 definition.fuseTicks()
         );
@@ -315,6 +335,17 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         if (shouldPlayBeep) {
             definition.audio().playBeep(level(), position(), remainingFuseTicks, definition.fuseTicks());
         }
+    }
+
+    private void playOneShotFuseSoundIfNeeded(GrenadeDefinition definition) {
+        if (oneShotFuseSoundPlayed
+                || definition.fuseSoundMode()
+                != GrenadeFuseSoundMode.ONCE_WHEN_THROWN) {
+            return;
+        }
+
+        oneShotFuseSoundPlayed = true;
+        definition.audio().beepSound().playAttached(this);
     }
 
     private void refreshDimensionsIfItemChanged() {
@@ -687,6 +718,75 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             return;
         }
 
+        GrenadeImplosionProfile implosionProfile = definition.implosionProfile();
+        if (implosionProfile != null) {
+            if (!isImploding()) {
+                beginImplosion(implosionProfile);
+            }
+            return;
+        }
+
+        completeDetonation(definition, serverLevel);
+    }
+
+    private void beginImplosion(GrenadeImplosionProfile profile) {
+        setFuseRunning(false);
+        setResting(true);
+        setDeltaMovement(Vec3.ZERO);
+        velocityAfterImpact = null;
+        entityData.set(DATA_IMPLOSION_TICKS, profile.durationTicks());
+        profile.startSound().play(level(), position());
+        if (profile.particles() != null && level() instanceof ServerLevel serverLevel) {
+            profile.particles().spawn(serverLevel, getBoundingBox().getCenter());
+        }
+    }
+
+    private void tickImplosion(GrenadeDefinition definition) {
+        GrenadeImplosionProfile profile = definition.implosionProfile();
+        if (profile == null || !(level() instanceof ServerLevel serverLevel)) {
+            entityData.set(DATA_IMPLOSION_TICKS, -1);
+            detonate();
+            return;
+        }
+
+        pullNearbyLivingEntities(profile);
+        if (profile.particles() != null) {
+            profile.particles().spawn(serverLevel, getBoundingBox().getCenter());
+        }
+
+        int remainingTicks = entityData.get(DATA_IMPLOSION_TICKS) - 1;
+        entityData.set(DATA_IMPLOSION_TICKS, remainingTicks);
+        if (remainingTicks <= 0) {
+            completeDetonation(definition, serverLevel);
+        }
+    }
+
+    private void pullNearbyLivingEntities(GrenadeImplosionProfile profile) {
+        Vec3 center = getBoundingBox().getCenter();
+        double radiusSquared = profile.radius() * profile.radius();
+        AABB bounds = new AABB(center, center).inflate(profile.radius());
+
+        for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class, bounds)) {
+            if (!target.isAlive() || target.isSpectator()) {
+                continue;
+            }
+
+            Vec3 targetCenter = target.position().add(0.0, target.getBbHeight() * 0.5, 0.0);
+            Vec3 towardCenter = center.subtract(targetCenter);
+            double distanceSquared = towardCenter.lengthSqr();
+            if (distanceSquared <= 1.0E-6 || distanceSquared > radiusSquared) {
+                continue;
+            }
+
+            double distance = Math.sqrt(distanceSquared);
+            double falloff = 1.0 - distance / profile.radius();
+            Vec3 pull = towardCenter.scale(profile.pullStrength() * falloff / distance);
+            target.setDeltaMovement(target.getDeltaMovement().add(pull));
+            target.hurtMarked = true;
+        }
+    }
+
+    private void completeDetonation(GrenadeDefinition definition, ServerLevel serverLevel) {
         detonated = true;
         LivingEntity owner = getOwner() instanceof LivingEntity livingEntity ? livingEntity : null;
 
@@ -752,6 +852,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         tag.putInt(BEEP_FLASH_TAG, entityData.get(DATA_BEEP_FLASH_TICKS));
         tag.putBoolean(REMOTE_REGISTERED_TAG, remoteRegistered);
         tag.putInt(REMOTE_DETONATION_TICKS_TAG, entityData.get(DATA_REMOTE_DETONATION_TICKS));
+        tag.putBoolean(ONE_SHOT_FUSE_SOUND_PLAYED_TAG, oneShotFuseSoundPlayed);
+        tag.putInt(IMPLOSION_TICKS_TAG, entityData.get(DATA_IMPLOSION_TICKS));
     }
 
     @Override
@@ -773,6 +875,11 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         entityData.set(
                 DATA_REMOTE_DETONATION_TICKS,
                 tag.contains(REMOTE_DETONATION_TICKS_TAG) ? tag.getInt(REMOTE_DETONATION_TICKS_TAG) : -1
+        );
+        oneShotFuseSoundPlayed = tag.getBoolean(ONE_SHOT_FUSE_SOUND_PLAYED_TAG);
+        entityData.set(
+                DATA_IMPLOSION_TICKS,
+                tag.contains(IMPLOSION_TICKS_TAG) ? tag.getInt(IMPLOSION_TICKS_TAG) : -1
         );
     }
 }

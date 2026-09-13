@@ -104,6 +104,7 @@ public class OperationKnightfall {
                 GrenadeItemModelProperties.register(ModItems.DETONITE_CHARGE.get());
                 RemoteDetonatorItemModelProperties.register(ModItems.DETONITE_CHARGE_DETONATOR.get());
                 RemoteDetonatorItemModelProperties.register(ModItems.PYRO_DENTON_EXPLOSIVE_DETONATOR.get());
+                GrenadeItemModelProperties.register(ModItems.STUNNER.get());
                 MeleeWeaponItemModelProperties.register(ModItems.EXPLOSIVE_KNIFE.get());
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
@@ -126,6 +127,7 @@ public class OperationKnightfall {
             event.registerSpriteSet(ModParticles.REPULSE_SHOT_MEDIUM_PARTICLES.get(), RepulseShotMediumParticles.Provider::new);
             event.registerSpriteSet(ModParticles.REPULSE_SHOT_SMALL_PARTICLES.get(), RepulseShotSmallParticles.Provider::new);
             event.registerSpriteSet(ModParticles.CONCUSSIVE_SHOT_EXPLOSION_PARTICLES.get(), ConcussiveShotExplosionParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.IMPLOSION_DUST_PARTICLES.get(), ImplosionDustParticles.Provider::new);
             event.registerSpriteSet(ModParticles.DISINTEGRATION_LARGE_PARTICLES.get(), DisintegrationLargeParticles.Provider::new);
             event.registerSpriteSet(ModParticles.DISINTEGRATION_MEDIUM_PARTICLES.get(), DisintegrationMediumParticles.Provider::new);
             event.registerSpriteSet(ModParticles.DISINTEGRATION_SMALL_PARTICLES.get(), DisintegrationSmallParticles.Provider::new);

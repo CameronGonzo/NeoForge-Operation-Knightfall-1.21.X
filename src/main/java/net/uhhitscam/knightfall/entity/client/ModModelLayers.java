@@ -47,6 +47,12 @@ public class ModModelLayers {
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "baradium_bomb"), "main");
     public static final ModelLayerLocation PYRO_DENTON_EXPLOSIVE = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "pyro_denton_explosive"), "main");
+    public static final ModelLayerLocation STUNNER = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "stunner"), "main");
+    public static final ModelLayerLocation THERMAL_IMPLODER = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "thermal_imploder"), "main");
+    public static final ModelLayerLocation INCENDIARY_GRENADE = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "incendiary_grenade"), "main");
     public static final ModelLayerLocation EXPLOSIVE_KNIFE = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "explosive_knife"), "main");
 }

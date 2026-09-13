@@ -34,6 +34,13 @@ public class CustomExplosion {
     public static void create(Entity sourceEntity, @Nullable Entity causingEntity, Vec3 location,
                               double entityRadius, float damage, double knockback,
                               float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire) {
+        create(sourceEntity, causingEntity, location, entityRadius, damage, knockback,
+                false, blockBreakRadius, interaction, causesFire);
+    }
+
+    public static void create(Entity sourceEntity, @Nullable Entity causingEntity, Vec3 location,
+                              double entityRadius, float damage, double knockback, boolean forceKnockback,
+                              float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire) {
 
         if (sourceEntity.level().isClientSide) return;
         ServerLevel serverLevel = (ServerLevel) sourceEntity.level();
@@ -63,7 +70,17 @@ public class CustomExplosion {
             Vec3 delta = target.position().subtract(x, y, z);
             if (delta.lengthSqr() > 1.0e-6) {
                 Vec3 dir = delta.normalize();
-                target.push(dir.x * knockback, dir.y * knockback * 0.5, dir.z * knockback);
+                Vec3 impulse = new Vec3(
+                        dir.x * knockback,
+                        dir.y * knockback * 0.5,
+                        dir.z * knockback
+                );
+                if (forceKnockback) {
+                    target.setDeltaMovement(target.getDeltaMovement().add(impulse));
+                    target.hurtMarked = true;
+                } else {
+                    target.push(impulse.x, impulse.y, impulse.z);
+                }
             }
         }
 

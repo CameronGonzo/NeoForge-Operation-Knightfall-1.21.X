@@ -424,6 +424,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.DETONITE_CHARGE);
                         pOutput.accept(ModItems.BARADIUM_BOMB);
                         pOutput.accept(ModItems.PYRO_DENTON_EXPLOSIVE);
+                        pOutput.accept(ModItems.STUNNER);
+                        pOutput.accept(ModItems.THERMAL_IMPLODER);
+                        pOutput.accept(ModItems.INCENDIARY_GRENADE);
                         pOutput.accept(ModItems.EXPLOSIVE_KNIFE);
                         pOutput.accept(ModItems.GAS_CARTRIDGE);
                         pOutput.accept(ModItems.TIBANNA_GAS);
