@@ -11,7 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.item.custom.GrenadeRemoteDetonations;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeRemoteDetonations;
 
 @EventBusSubscriber(modid = OperationKnightfall.MODID)
 public final class GrenadeRemoteDetonatorEvents {

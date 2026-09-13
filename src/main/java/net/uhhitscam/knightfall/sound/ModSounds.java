@@ -29,8 +29,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> GRAV_CHARGE_ACTIVATE = registerSoundEvent("grav_charge_activate");
     public static final Supplier<SoundEvent> GRAV_CHARGE_IMPACT = registerSoundEvent("grav_charge_impact");
     public static final List<Supplier<SoundEvent>> GRAV_CHARGE_BEEPS = IntStream.rangeClosed(1, 20)
-            .mapToObj(index -> registerSoundEvent("grav_charge_beep_" + String.format("%02d", index)))
-            .toList();
+            .mapToObj(index -> registerSoundEvent("grav_charge_beep_" + String.format("%02d", index))).toList();
     public static final Supplier<SoundEvent> DETONITE_CHARGE_ACTIVATE = registerSoundEvent("detonite_charge_activate");
     public static final Supplier<SoundEvent> DETONITE_CHARGE_BEEP = registerSoundEvent("detonite_charge_beep");
     public static final Supplier<SoundEvent> DETONITE_CHARGE_IMPACT = registerSoundEvent("detonite_charge_impact");
@@ -48,10 +47,10 @@ public class ModSounds {
     public static final Supplier<SoundEvent> THERMAL_IMPLODER_BEEP = registerSoundEvent("thermal_imploder_beep");
     public static final Supplier<SoundEvent> THERMAL_IMPLODER_EXPLOSION = registerSoundEvent("thermal_imploder_explosion");
     public static final Supplier<SoundEvent> THERMAL_IMPLODER_IMPACT = registerSoundEvent("thermal_imploder_impact");
-    public static final Supplier<SoundEvent> INCENDIARY_GRENADE_ACTIVATE = registerSoundEvent("incendiary_grenade_activate");
-    public static final Supplier<SoundEvent> INCENDIARY_GRENADE_BEEP = registerSoundEvent("incendiary_grenade_beep");
-    public static final Supplier<SoundEvent> INCENDIARY_GRENADE_EXPLODE = registerSoundEvent("incendiary_grenade_explode");
-    public static final Supplier<SoundEvent> INCENDIARY_GRENADE_IMPACT = registerSoundEvent("incendiary_grenade_impact");
+    public static final Supplier<SoundEvent> FIREBOMB_ACTIVATE = registerSoundEvent("firebomb_activate");
+    public static final Supplier<SoundEvent> FIREBOMB_BEEP = registerSoundEvent("firebomb_beep");
+    public static final Supplier<SoundEvent> FIREBOMB_EXPLODE = registerSoundEvent("firebomb_explode");
+    public static final Supplier<SoundEvent> FIREBOMB_IMPACT = registerSoundEvent("firebomb_impact");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_EQUIP = registerSoundEvent("explosive_knife_equip");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_UNEQUIP = registerSoundEvent("explosive_knife_unequip");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_BEEP = registerSoundEvent("explosive_knife_beep");

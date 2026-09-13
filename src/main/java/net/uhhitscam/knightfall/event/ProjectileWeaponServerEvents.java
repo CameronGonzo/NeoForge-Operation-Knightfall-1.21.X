@@ -12,11 +12,11 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.effect.custom.StunEffect;
-import net.uhhitscam.knightfall.item.custom.FiringMode;
-import net.uhhitscam.knightfall.item.custom.ProjectileItem;
-import net.uhhitscam.knightfall.item.custom.WeaponAction;
-import net.uhhitscam.knightfall.item.custom.WeaponCooldownAction;
-import net.uhhitscam.knightfall.item.custom.WeaponName;
+import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponAction;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponCooldownAction;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponName;
 import net.uhhitscam.knightfall.util.BeamLogic;
 
 import java.util.HashMap;

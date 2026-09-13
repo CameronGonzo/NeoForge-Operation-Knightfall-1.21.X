@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.event.ProjectileWeaponServerEvents;
-import net.uhhitscam.knightfall.item.custom.WeaponAction;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponAction;
 
 public record SSProjectileWeaponActionPacket(boolean mainHand, WeaponAction action) implements Packet {
     public static final Type<SSProjectileWeaponActionPacket> TYPE = new Type<>(

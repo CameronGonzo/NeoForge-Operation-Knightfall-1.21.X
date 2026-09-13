@@ -19,8 +19,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.uhhitscam.knightfall.item.ModItems;
-import net.uhhitscam.knightfall.item.custom.WeaponClassification;
-import net.uhhitscam.knightfall.item.custom.WeaponName;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponClassification;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponName;
 import net.uhhitscam.knightfall.particle.ModParticles;
 import org.jetbrains.annotations.Nullable;
 

@@ -12,6 +12,12 @@ public class ModDataComponentTypes {
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
             DeferredRegister.createDataComponents(OperationKnightfall.MODID);
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> MELEE_ALTERNATE_FORM =
+            register("melee_alternate_form", builder -> builder.persistent(com.mojang.serialization.Codec.BOOL)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.BOOL));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MELEE_ACTION =
+            register("melee_action", builder -> builder.networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmmoData>> AMMO = register("ammo",
             builder -> builder.persistent(AmmoData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmmoTypeData>> AMMO_TYPE = register("ammo_type",

@@ -5,9 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "LivingEntityMixin",
-    "GameRendererAccessorMixin"
+    "MeleeAttackGoalMixin"
   ],
-  "client": [],
+  "client": ["GameRendererAccessorMixin"],
   "injectors": {
     "defaultRequire": 1
   }

@@ -7,7 +7,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.item.custom.ProjectileItem;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
 
 @EventBusSubscriber(modid = OperationKnightfall.MODID, value = Dist.CLIENT)
 public final class ProjectileWeaponTooltipEvents {

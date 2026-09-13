@@ -17,6 +17,7 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
+import net.uhhitscam.knightfall.block.ModBlocks;
 import net.uhhitscam.knightfall.effect.ModEffects;
 import net.uhhitscam.knightfall.effect.client.StunEffectRenderer;
 import net.uhhitscam.knightfall.entity.ModEntities;
@@ -46,9 +47,12 @@ public class OperationKnightfall {
     public OperationKnightfall(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
 
-        KeyBinding.register(modEventBus);
+        if (net.neoforged.fml.loading.FMLEnvironment.dist == Dist.CLIENT) {
+            KeyBinding.register(modEventBus);
+        }
         ModCreativeModeTabs.register(modEventBus);
         ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
         ModEntities.register(modEventBus);
         ModDataComponentTypes.register(modEventBus);
         ModParticles.register(modEventBus);
@@ -94,6 +98,7 @@ public class OperationKnightfall {
             EntityRenderers.register(ModEntities.FLECHETTE_TOXIC_SPREAD_CAN.get(), FlechetteToxicSpreadCanRenderer::new);
             EntityRenderers.register(ModEntities.GRENADE.get(), GrenadeRenderer::new);
             EntityRenderers.register(ModEntities.EXPLOSIVE_KNIFE.get(), ExplosiveKnifeRenderer::new);
+            EntityRenderers.register(ModEntities.MELEE_PROJECTILE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
             EntityRenderers.register(ModEntities.BLASTER_BEAM.get(), BlasterBeamRenderer::new);
 
             event.enqueueWork(() -> {
@@ -105,7 +110,11 @@ public class OperationKnightfall {
                 RemoteDetonatorItemModelProperties.register(ModItems.DETONITE_CHARGE_DETONATOR.get());
                 RemoteDetonatorItemModelProperties.register(ModItems.PYRO_DENTON_EXPLOSIVE_DETONATOR.get());
                 GrenadeItemModelProperties.register(ModItems.STUNNER.get());
-                MeleeWeaponItemModelProperties.register(ModItems.EXPLOSIVE_KNIFE.get());
+                ModItems.ITEMS.getEntries().forEach(entry -> {
+                    if (entry.get() instanceof net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem) {
+                        MeleeWeaponItemModelProperties.register(entry.get());
+                    }
+                });
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 FaceAlignedParticleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);

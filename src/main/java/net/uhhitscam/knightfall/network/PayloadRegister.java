@@ -16,6 +16,8 @@ public class PayloadRegister {
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
         registrar = event.registrar("knightfall");
+        server(SSMeleeInputPacket.TYPE, SSMeleeInputPacket.STREAM_CODEC);
+        client(CSMeleeRecoveryPacket.TYPE, CSMeleeRecoveryPacket.STREAM_CODEC);
         server(SSProjectileWeaponInputPacket.TYPE, SSProjectileWeaponInputPacket.STREAM_CODEC);
         server(SSProjectileWeaponActionPacket.TYPE, SSProjectileWeaponActionPacket.STREAM_CODEC);
         server(SSSoundPacket.TYPE, SSSoundPacket.STREAM_CODEC);

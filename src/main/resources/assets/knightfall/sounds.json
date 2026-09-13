@@ -181,31 +181,31 @@
       "knightfall:equipment/thermal_imploder/equipment_grenade_thermal_imploder_impact_01"
     ]
   },
-  "incendiary_grenade_activate": {
-    "subtitle": "sounds.knightfall.incendiary_grenade_activate",
+  "firebomb_activate": {
+    "subtitle": "sounds.knightfall.firebomb_activate",
     "sounds": [
-      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_activate_01"
+      "knightfall:equipment/firebomb/equipment_grenade_firebomb_activate_01"
     ]
   },
-  "incendiary_grenade_beep": {
-    "subtitle": "sounds.knightfall.incendiary_grenade_beep",
+  "firebomb_beep": {
+    "subtitle": "sounds.knightfall.firebomb_beep",
     "sounds": [
-      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_beep_01"
+      "knightfall:equipment/firebomb/equipment_grenade_firebomb_beep_01"
     ]
   },
-  "incendiary_grenade_explode": {
-    "subtitle": "sounds.knightfall.incendiary_grenade_explode",
+  "firebomb_explode": {
+    "subtitle": "sounds.knightfall.firebomb_explode",
     "sounds": [
-      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_explode_01",
-      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_explode_02",
-      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_explode_03",
-      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_explode_04"
+      "knightfall:equipment/firebomb/equipment_grenade_firebomb_explode_01",
+      "knightfall:equipment/firebomb/equipment_grenade_firebomb_explode_02",
+      "knightfall:equipment/firebomb/equipment_grenade_firebomb_explode_03",
+      "knightfall:equipment/firebomb/equipment_grenade_firebomb_explode_04"
     ]
   },
-  "incendiary_grenade_impact": {
-    "subtitle": "sounds.knightfall.incendiary_grenade_impact",
+  "firebomb_impact": {
+    "subtitle": "sounds.knightfall.firebomb_impact",
     "sounds": [
-      "knightfall:equipment/incendiary_grenade/equipment_grenade_incendiary_grenade_impact_01"
+      "knightfall:equipment/firebomb/equipment_grenade_firebomb_impact_01"
     ]
   },
   "grav_charge_beep_01": {

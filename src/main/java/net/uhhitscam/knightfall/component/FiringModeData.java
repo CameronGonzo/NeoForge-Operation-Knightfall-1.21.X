@@ -1,5 +1,8 @@
 package net.uhhitscam.knightfall.component;
 
+import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
+
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 

@@ -12,9 +12,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.uhhitscam.knightfall.item.custom.AttachedExplosiveMeleeEffect;
-import net.uhhitscam.knightfall.item.custom.AttachedExplosiveSpec;
-import net.uhhitscam.knightfall.item.custom.MeleeWeaponItem;
+import net.uhhitscam.knightfall.item.custom.melee.AttachedExplosiveMeleeEffect;
+import net.uhhitscam.knightfall.item.custom.melee.AttachedExplosiveSpec;
+import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem;
 import net.uhhitscam.knightfall.util.CustomExplosion;
 import org.jetbrains.annotations.Nullable;
 

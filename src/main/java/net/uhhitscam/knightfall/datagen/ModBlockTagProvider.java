@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.uhhitscam.knightfall.OperationKnightfall;
+import net.uhhitscam.knightfall.block.ModBlocks;
 import net.uhhitscam.knightfall.util.ModTags;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,44 @@ public class ModBlockTagProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        tag(ModTags.Blocks.INTERACTABLE_BLOCKS)
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(ModBlocks.BESKAR_ORE.get(),
+                        ModBlocks.BRONZIUM_ORE.get(),
+                        ModBlocks.CINNABAR_ORE.get(),
+                        ModBlocks.CORTOSIS_ORE.get(),
+                        ModBlocks.DEDLANITE_ORE.get(),
+                        ModBlocks.DIATIUM_ORE.get(),
+                        ModBlocks.DURASTEEL_ORE.get(),
+                        ModBlocks.DURITE_ORE.get(),
+                        ModBlocks.EXONIUM_ORE.get(),
+                        ModBlocks.HAYSIAN_SMELT_ORE.get(),
+                        ModBlocks.IPSIUM_ORE.get(),
+                        ModBlocks.KALKITE_ORE.get(),
+                        ModBlocks.MALSARR_ORE.get(),
+                        ModBlocks.PHRIK_ORE.get(),
+                        ModBlocks.TITANIUM_ORE.get());
+
+        this.tag(BlockTags.NEEDS_IRON_TOOL)
+                .add(ModBlocks.BESKAR_ORE.get(),
+                        ModBlocks.BRONZIUM_ORE.get(),
+                        ModBlocks.CINNABAR_ORE.get(),
+                        ModBlocks.CORTOSIS_ORE.get(),
+                        ModBlocks.DEDLANITE_ORE.get(),
+                        ModBlocks.DIATIUM_ORE.get(),
+                        ModBlocks.DURASTEEL_ORE.get(),
+                        ModBlocks.DURITE_ORE.get(),
+                        ModBlocks.EXONIUM_ORE.get(),
+                        ModBlocks.HAYSIAN_SMELT_ORE.get(),
+                        ModBlocks.IPSIUM_ORE.get(),
+                        ModBlocks.KALKITE_ORE.get(),
+                        ModBlocks.MALSARR_ORE.get(),
+                        ModBlocks.PHRIK_ORE.get(),
+                        ModBlocks.TITANIUM_ORE.get());
+
+//        this.tag(BlockTags.NEEDS_DIAMOND_TOOL)
+//                .add(ModBlocks.name.get());
+
+        this.tag(ModTags.Blocks.INTERACTABLE_BLOCKS)
                 .addTag(BlockTags.BUTTONS)
                 .addTag(BlockTags.WOODEN_DOORS)
                 .addTag(BlockTags.ANVIL)
@@ -62,7 +100,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.CHEST)
                 .add(Blocks.TRAPPED_CHEST);
 
-        tag(ModTags.Blocks.BLASTER_IMPACT_DIRT)
+        this.tag(ModTags.Blocks.BLASTER_IMPACT_DIRT)
                 .add(Blocks.DIRT)
                 .add(Blocks.COARSE_DIRT)
                 .add(Blocks.ROOTED_DIRT)
@@ -72,7 +110,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.FARMLAND)
                 .add(Blocks.DIRT_PATH);
 
-        tag(ModTags.Blocks.BLASTER_IMPACT_MOIST)
+        this.tag(ModTags.Blocks.BLASTER_IMPACT_MOIST)
                 .add(Blocks.MUD)
                 .add(Blocks.PACKED_MUD)
                 .add(Blocks.MUDDY_MANGROVE_ROOTS)
@@ -82,7 +120,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.SPONGE)
                 .add(Blocks.WET_SPONGE);
 
-        tag(ModTags.Blocks.BLASTER_IMPACT_SAND)
+        this.tag(ModTags.Blocks.BLASTER_IMPACT_SAND)
                 .add(Blocks.SAND)
                 .add(Blocks.RED_SAND)
                 .add(Blocks.GRAVEL)
@@ -107,7 +145,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.MAGENTA_CONCRETE_POWDER)
                 .add(Blocks.PINK_CONCRETE_POWDER);
 
-        tag(ModTags.Blocks.BLASTER_IMPACT_WOOD)
+        this.tag(ModTags.Blocks.BLASTER_IMPACT_WOOD)
                 .addTag(BlockTags.LOGS)
                 .addTag(BlockTags.PLANKS)
                 .addTag(BlockTags.WOODEN_DOORS)
@@ -134,7 +172,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.BAMBOO_MOSAIC)
                 .add(Blocks.BAMBOO_PLANKS);
 
-        tag(ModTags.Blocks.BLASTER_IMPACT_FOLIAGE)
+        this.tag(ModTags.Blocks.BLASTER_IMPACT_FOLIAGE)
                 .addTag(BlockTags.LEAVES)
                 .addTag(BlockTags.FLOWERS)
                 .addTag(BlockTags.SAPLINGS)
@@ -174,7 +212,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.RED_MUSHROOM_BLOCK)
                 .add(Blocks.MUSHROOM_STEM);
 
-        tag(ModTags.Blocks.BLASTER_IMPACT_GLASS)
+        this.tag(ModTags.Blocks.BLASTER_IMPACT_GLASS)
                 .add(Blocks.GLASS)
                 .add(Blocks.TINTED_GLASS)
                 .add(Blocks.GLASS_PANE)
@@ -219,7 +257,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.SEA_LANTERN)
                 .add(Blocks.GLOWSTONE);
 
-        tag(ModTags.Blocks.BLASTER_BREAKABLE_GLASS)
+        this.tag(ModTags.Blocks.BLASTER_BREAKABLE_GLASS)
                 .add(Blocks.GLASS)
                 .add(Blocks.TINTED_GLASS)
                 .add(Blocks.GLASS_PANE)
@@ -256,7 +294,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.MAGENTA_STAINED_GLASS_PANE)
                 .add(Blocks.PINK_STAINED_GLASS_PANE);
 
-        tag(ModTags.Blocks.BLASTER_IMPACT_METAL)
+        this.tag(ModTags.Blocks.BLASTER_IMPACT_METAL)
                 .addTag(BlockTags.ANVIL)
                 .addTag(BlockTags.RAILS)
                 .add(Blocks.IRON_BLOCK)
@@ -344,7 +382,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 .add(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE);
 
-        tag(ModTags.Blocks.BLASTER_IMPACT_STONE)
+        this.tag(ModTags.Blocks.BLASTER_IMPACT_STONE)
                 .addTag(BlockTags.BASE_STONE_OVERWORLD)
                 .addTag(BlockTags.BASE_STONE_NETHER)
                 .add(Blocks.COBBLESTONE)

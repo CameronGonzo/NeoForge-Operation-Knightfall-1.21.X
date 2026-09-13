@@ -5,8 +5,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.custom.BlasterBeamEndpointEntity;
-import net.uhhitscam.knightfall.item.custom.BeamWeaponStats;
-import net.uhhitscam.knightfall.item.custom.ProjectileItem;
+import net.uhhitscam.knightfall.item.custom.projectile.BeamWeaponStats;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
 
 public final class BeamLogic {
     private BeamLogic() {}

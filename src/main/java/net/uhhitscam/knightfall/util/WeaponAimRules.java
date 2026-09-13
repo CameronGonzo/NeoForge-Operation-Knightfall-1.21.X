@@ -4,9 +4,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.uhhitscam.knightfall.item.custom.FiringMode;
-import net.uhhitscam.knightfall.item.custom.ProjectileItem;
-import net.uhhitscam.knightfall.item.custom.ScopeTexture;
+import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
+import net.uhhitscam.knightfall.item.custom.projectile.ScopeTexture;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 

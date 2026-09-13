@@ -1,1 +1,16 @@
-// 1.21.1	2025-05-21T23:37:11.1328484	Loot Tables
+// 1.21.1	2026-09-13T00:47:01.2611458	Loot Tables
+3734528f98356db686fb33098ef940650f94fb47 data/knightfall/loot_table/blocks/beskar_ore.json
+42aadf5753d57e24967ebad936f466f5cd2f2b6d data/knightfall/loot_table/blocks/bronzium_ore.json
+69451956a7d3069915ab788696a6271718096511 data/knightfall/loot_table/blocks/cinnabar_ore.json
+0f68e625b0eaaf50ddbe5760736894afedb33014 data/knightfall/loot_table/blocks/cortosis_ore.json
+75c742767ebbe29f6b6cfe9a0cd9718e06217b3e data/knightfall/loot_table/blocks/dedlanite_ore.json
+21a8d46a3436d75354f7d1ea2241f5b7a5fc7a15 data/knightfall/loot_table/blocks/diatium_ore.json
+30757b204b9323e839bf92662d6c373c4d20a49c data/knightfall/loot_table/blocks/durasteel_ore.json
+f243c8d3ea2e5c03d40e739cd6ecc8d163ba3d08 data/knightfall/loot_table/blocks/durite_ore.json
+16e49aafd698707004787cc60539461e28929f77 data/knightfall/loot_table/blocks/exonium_ore.json
+90f67df983befaa726251a15d905942663e31504 data/knightfall/loot_table/blocks/haysian_smelt_ore.json
+b1528c117ef9a8d8a2082379e874ca76719d5610 data/knightfall/loot_table/blocks/ipsium_ore.json
+b4f7d4bec8e40cbc76a011e587aeb4514bcf24e0 data/knightfall/loot_table/blocks/kalkite_ore.json
+6c4b61cc9602f87b98b562c83e3364680afe9f5a data/knightfall/loot_table/blocks/malsarr_ore.json
+af0f681eb1af2a3442d6c2c535ba5601f9dac4a9 data/knightfall/loot_table/blocks/phrik_ore.json
+d93cf08e0ad24451704092b68840de6db49c81e9 data/knightfall/loot_table/blocks/titanium_ore.json

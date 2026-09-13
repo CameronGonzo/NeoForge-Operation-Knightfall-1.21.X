@@ -23,8 +23,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.item.custom.AmmoType;
-import net.uhhitscam.knightfall.item.custom.WeaponClassification;
+import net.uhhitscam.knightfall.item.custom.projectile.AmmoType;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponClassification;
 import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
 import net.uhhitscam.knightfall.particle.ModParticles;
 import net.uhhitscam.knightfall.sound.ModSounds;
@@ -45,6 +45,18 @@ public class BlasterBoltEntity extends Snowball {
     private WeaponClassification classification = WeaponClassification.PISTOL;
     private boolean explosiveShot;
     private boolean concussiveShot;
+    private net.minecraft.world.item.ItemStack meleeWeapon = net.minecraft.world.item.ItemStack.EMPTY;
+
+    public void setMeleeWeapon(net.minecraft.world.item.ItemStack stack) {
+        meleeWeapon = stack.copyWithCount(1);
+    }
+
+    @Override
+    protected boolean canHitEntity(Entity entity) {
+        return super.canHitEntity(entity) && (meleeWeapon.isEmpty() || !(entity instanceof LivingEntity target)
+                || !(getOwner() instanceof LivingEntity owner)
+                || net.uhhitscam.knightfall.util.MeleeTargeting.canHit(owner, target));
+    }
 
     public BlasterBoltEntity(EntityType<? extends BlasterBoltEntity> entityType, Level level) {
         super(entityType, level);
@@ -93,9 +105,15 @@ public class BlasterBoltEntity extends Snowball {
 
         Entity entity = result.getEntity();
         int damage = calculateDamage(entity);
+        float healthBefore = entity instanceof LivingEntity living ? living.getHealth() + living.getAbsorptionAmount() : 0;
 
         if (entity.hurt(this.damageSources().thrown(this, this.getOwner()), damage)
                 && entity instanceof LivingEntity livingEntity) {
+            if (!meleeWeapon.isEmpty() && getOwner() instanceof net.minecraft.server.level.ServerPlayer player
+                    && livingEntity.getHealth() + livingEntity.getAbsorptionAmount() < healthBefore) {
+                net.uhhitscam.knightfall.event.MeleeWeaponServerEvents.applyProperties(player, livingEntity, meleeWeapon);
+                net.uhhitscam.knightfall.event.MeleeWeaponServerEvents.projectileHit(player, meleeWeapon);
+            }
             livingEntity.invulnerableTime = 0;
 
             if (shouldSpawnDisintegrationParticles(livingEntity)) {
@@ -261,6 +279,7 @@ public class BlasterBoltEntity extends Snowball {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        if (!meleeWeapon.isEmpty()) tag.put("MeleeWeapon", meleeWeapon.save(registryAccess()));
         tag.putString("BoltType", getBoltType().name());
         tag.putFloat("BoltSpeed", this.boltSpeed);
         tag.putInt("BlasterDamage", this.blasterDamage);
@@ -272,6 +291,7 @@ public class BlasterBoltEntity extends Snowball {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        meleeWeapon = net.minecraft.world.item.ItemStack.parseOptional(registryAccess(), tag.getCompound("MeleeWeapon"));
         this.setBoltType(BoltType.fromName(tag.getString("BoltType")));
 
         if (tag.contains("BoltSpeed")) {

@@ -1,9 +1,9 @@
 package net.uhhitscam.knightfall.util;
 
 import net.minecraft.sounds.SoundEvent;
-import net.uhhitscam.knightfall.item.custom.FiringMode;
-import net.uhhitscam.knightfall.item.custom.WeaponClassification;
-import net.uhhitscam.knightfall.item.custom.WeaponName;
+import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponClassification;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponName;
 import net.uhhitscam.knightfall.sound.ModSounds;
 
 import java.util.Collections;

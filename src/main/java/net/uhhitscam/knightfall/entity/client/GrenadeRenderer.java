@@ -17,8 +17,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 import net.uhhitscam.knightfall.item.ModItems;
-import net.uhhitscam.knightfall.item.custom.GrenadeDefinition;
-import net.uhhitscam.knightfall.item.custom.GrenadeVisualState;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeVisualState;
 
 public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
     private static final float DEFAULT_MODEL_SCALE = 0.8F;
@@ -48,7 +48,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
     );
     private static final GrenadeTextures STUNNER_TEXTURES = textures("stunner");
     private static final GrenadeTextures THERMAL_IMPLODER_TEXTURES = singleTexture("thermal_imploder");
-    private static final GrenadeTextures INCENDIARY_GRENADE_TEXTURES = singleTexture("incendiary_grenade");
+    private static final GrenadeTextures FIREBOMB_TEXTURES = singleTexture("firebomb");
 
     private final ThermalDetonatorModel thermalDetonatorModel;
     private final ImpactThermalDetonatorModel impactThermalDetonatorModel;
@@ -59,7 +59,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
     private final PyroDentonExplosiveModel pyroDentonExplosiveModel;
     private final StunnerModel stunnerModel;
     private final ThermalImploderModel thermalImploderModel;
-    private final IncendiaryGrenadeModel incendiaryGrenadeModel;
+    private final FirebombModel firebombModel;
     private final ItemRenderer itemRenderer;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -83,8 +83,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         this.thermalImploderModel = new ThermalImploderModel(
                 context.bakeLayer(ModModelLayers.THERMAL_IMPLODER)
         );
-        this.incendiaryGrenadeModel = new IncendiaryGrenadeModel(
-                context.bakeLayer(ModModelLayers.INCENDIARY_GRENADE)
+        this.firebombModel = new FirebombModel(
+                context.bakeLayer(ModModelLayers.FIREBOMB)
         );
         this.itemRenderer = context.getItemRenderer();
         this.shadowRadius = 0.15F;
@@ -215,8 +215,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         if (entity.getItem().is(ModItems.THERMAL_IMPLODER.get())) {
             return thermalImploderModel;
         }
-        if (entity.getItem().is(ModItems.INCENDIARY_GRENADE.get())) {
-            return incendiaryGrenadeModel;
+        if (entity.getItem().is(ModItems.FIREBOMB.get())) {
+            return firebombModel;
         }
         return null;
     }
@@ -249,8 +249,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         if (entity.getItem().is(ModItems.THERMAL_IMPLODER.get())) {
             return THERMAL_IMPLODER_TEXTURES;
         }
-        if (entity.getItem().is(ModItems.INCENDIARY_GRENADE.get())) {
-            return INCENDIARY_GRENADE_TEXTURES;
+        if (entity.getItem().is(ModItems.FIREBOMB.get())) {
+            return FIREBOMB_TEXTURES;
         }
         return null;
     }

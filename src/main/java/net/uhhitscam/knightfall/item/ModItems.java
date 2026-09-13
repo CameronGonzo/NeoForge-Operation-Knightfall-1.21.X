@@ -1,5 +1,42 @@
 package net.uhhitscam.knightfall.item;
 
+import net.uhhitscam.knightfall.item.custom.projectile.AmmoType;
+import net.uhhitscam.knightfall.item.custom.melee.AttachedExplosiveSpec;
+import net.uhhitscam.knightfall.item.custom.projectile.CrosshairTexture;
+import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
+import net.uhhitscam.knightfall.item.custom.projectile.FlechetteCanisterItem;
+import net.uhhitscam.knightfall.item.custom.projectile.GasItem;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeAudioProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeConcussionProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDeployment;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonatorDelivery;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonatorItem;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeEffects;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeExplosionSpec;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeFirebombProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeFuseSoundMode;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeImplosionParticleProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeImplosionProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeItem;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeParticleBurst;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadePhysics;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeRemoteProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeSound;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeTrigger;
+import net.uhhitscam.knightfall.item.custom.melee.MeleeEffects;
+import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponAudioProfile;
+import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponDefinition;
+import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem;
+import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponSound;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileWeaponDefinition;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileWeaponUI;
+import net.uhhitscam.knightfall.item.custom.projectile.ScopeTexture;
+import net.uhhitscam.knightfall.item.custom.projectile.SlugItem;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponClassification;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponName;
+
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -9,8 +46,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.item.custom.*;
-import net.uhhitscam.knightfall.item.custom.ProjectileItem;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
 import net.uhhitscam.knightfall.particle.ModParticles;
 import net.uhhitscam.knightfall.sound.ModSounds;
 import net.uhhitscam.knightfall.util.ModTags;
@@ -38,6 +74,38 @@ public class ModItems {
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
+
+    // Ore items
+    public static final DeferredItem<Item> BESKAR_BAR = ITEMS.registerSimpleItem("beskar_bar");
+    public static final DeferredItem<Item> BESKAR_FRAGMENT = ITEMS.registerSimpleItem("beskar_fragment");
+    public static final DeferredItem<Item> RAW_BRONZIUM = ITEMS.registerSimpleItem("raw_bronzium");
+    public static final DeferredItem<Item> BRONZIUM_INGOT = ITEMS.registerSimpleItem("bronzium_ingot");
+    public static final DeferredItem<Item> BRONZIUM_NUGGET = ITEMS.registerSimpleItem("bronzium_nugget");
+    public static final DeferredItem<Item> CINNABAR_DUST = ITEMS.registerSimpleItem("cinnabar_dust");
+    public static final DeferredItem<Item> CORTOSIS_CHUNK = ITEMS.registerSimpleItem("cortosis_chunk");
+    public static final DeferredItem<Item> DEDLANITE_CHUNK = ITEMS.registerSimpleItem("dedlanite_chunk");
+    public static final DeferredItem<Item> DIATIUM_GEM = ITEMS.registerSimpleItem("diatium_gem");
+    public static final DeferredItem<Item> DURANIUM_INGOT = ITEMS.registerSimpleItem("duranium_ingot");
+    public static final DeferredItem<Item> RAW_DURASTEEL = ITEMS.registerSimpleItem("raw_durasteel");
+    public static final DeferredItem<Item> DURASTEEL_INGOT = ITEMS.registerSimpleItem("durasteel_ingot");
+    public static final DeferredItem<Item> DURASTEEL_NUGGET = ITEMS.registerSimpleItem("durasteel_nugget");
+    public static final DeferredItem<Item> DURITE_CHUNK = ITEMS.registerSimpleItem("durite_chunk");
+    public static final DeferredItem<Item> EXONIUM = ITEMS.registerSimpleItem("exonium");
+    public static final DeferredItem<Item> EXONIUM_REFINED = ITEMS.registerSimpleItem("exonium_refined");
+    public static final DeferredItem<Item> RAW_HAYSIAN_SMELT = ITEMS.registerSimpleItem("raw_haysian_smelt");
+    public static final DeferredItem<Item> HAYSIAN_SMELT_INGOT = ITEMS.registerSimpleItem("haysian_smelt_ingot");
+    public static final DeferredItem<Item> HAYSIAN_SMELT_NUGGET = ITEMS.registerSimpleItem("haysian_smelt_nugget");
+    public static final DeferredItem<Item> IONITE_REFINED = ITEMS.registerSimpleItem("ionite_refined");
+    public static final DeferredItem<Item> IONITE_SHARD = ITEMS.registerSimpleItem("ionite_shard");
+    public static final DeferredItem<Item> KALKITE = ITEMS.registerSimpleItem("kalkite");
+    public static final DeferredItem<Item> KYBER_CRYSTAL = ITEMS.registerSimpleItem("kyber_crystal");
+    public static final DeferredItem<Item> MALSARR = ITEMS.registerSimpleItem("malsarr");
+    public static final DeferredItem<Item> PHRIK_CHUNK = ITEMS.registerSimpleItem("phrik_chunk");
+    public static final DeferredItem<Item> SILICAX_OXALATE = ITEMS.registerSimpleItem("silicax_oxalate");
+    public static final DeferredItem<Item> TITANITE_POWDER = ITEMS.registerSimpleItem("titanite_powder");
+    public static final DeferredItem<Item> RAW_TITANIUM = ITEMS.registerSimpleItem("raw_titanium");
+    public static final DeferredItem<Item> TITANIUM_INGOT = ITEMS.registerSimpleItem("titanium_ingot");
+    public static final DeferredItem<Item> TITANIUM_NUGGET = ITEMS.registerSimpleItem("titanium_nugget");
 
     // Gas items
     public static final DeferredItem<Item> GAS_CARTRIDGE = ITEMS.registerSimpleItem("gas_cartridge");
@@ -406,8 +474,8 @@ public class ModItems {
                                             36, 1.2, 0.8, 1.2, 0.04))
                                     .build())).build()
     );
-    public static final DeferredItem<Item> INCENDIARY_GRENADE = registerGrenade(
-            GrenadeDefinition.builder("incendiary_grenade")
+    public static final DeferredItem<Item> FIREBOMB = registerGrenade(
+            GrenadeDefinition.builder("firebomb")
                     .fuseTicks(50)
                     .trigger(GrenadeTrigger.FUSE_AFTER_THROW)
                     .throwVelocity(1.5F)
@@ -420,14 +488,14 @@ public class ModItems {
                     .fuseSoundMode(GrenadeFuseSoundMode.ONCE_WHEN_THROWN)
                     .audio(new GrenadeAudioProfile(
                             new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
-                            new GrenadeSound(() -> ModSounds.INCENDIARY_GRENADE_IMPACT.get(), SoundSource.BLOCKS, 0.5F, 1.0F),
-                            new GrenadeSound(() -> ModSounds.INCENDIARY_GRENADE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
-                            new GrenadeSound(() -> ModSounds.INCENDIARY_GRENADE_BEEP.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.FIREBOMB_IMPACT.get(), SoundSource.BLOCKS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.FIREBOMB_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.FIREBOMB_BEEP.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
                             50, 50, 0))
-                    .effect(GrenadeEffects.incendiaryExplosion(
+                    .effect(GrenadeEffects.firebombExplosion(
                             GrenadeExplosionSpec.builder(
                                             3.5, 6.0F,
-                                            new GrenadeSound(() -> ModSounds.INCENDIARY_GRENADE_EXPLODE.get(),
+                                            new GrenadeSound(() -> ModSounds.FIREBOMB_EXPLODE.get(),
                                                     SoundSource.BLOCKS, 1.1F, 1.0F))
                                     .knockback(0.6)
                                     .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
@@ -438,7 +506,7 @@ public class ModItems {
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.LARGE_SMOKE,
                                             20, 1.2, 0.6, 1.2, 0.04))
                                     .build(),
-                            new GrenadeIncendiaryProfile(
+                            new GrenadeFirebombProfile(
                                     4.5,
                                     160,
                                     3.5,

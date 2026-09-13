@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_knightfall:titanium_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "knightfall:titanium_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "knightfall:titanium_nugget"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_knightfall:titanium_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "knightfall:titanium_nugget"
+    ]
+  }
+}

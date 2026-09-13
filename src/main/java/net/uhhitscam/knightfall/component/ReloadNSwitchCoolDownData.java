@@ -3,7 +3,7 @@ package net.uhhitscam.knightfall.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.Level;
-import net.uhhitscam.knightfall.item.custom.WeaponCooldownAction;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponCooldownAction;
 
 import java.util.Objects;
 

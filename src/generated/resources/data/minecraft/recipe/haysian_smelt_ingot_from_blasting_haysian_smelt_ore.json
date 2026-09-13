@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "haysian_smelt",
+  "ingredient": {
+    "item": "knightfall:haysian_smelt_ore"
+  },
+  "result": {
+    "count": 1,
+    "id": "knightfall:haysian_smelt_ingot"
+  }
+}

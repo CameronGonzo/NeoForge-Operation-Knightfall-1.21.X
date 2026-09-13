@@ -7,6 +7,7 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.uhhitscam.knightfall.OperationKnightfall;
+import net.uhhitscam.knightfall.block.ModBlocks;
 
 public class ModBlockStateProvider extends BlockStateProvider {
 
@@ -16,7 +17,21 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-//        blockWithItem(ModBlocks.name);
+        blockWithItem(ModBlocks.BESKAR_ORE);
+        blockWithItem(ModBlocks.BRONZIUM_ORE);
+        blockWithItem(ModBlocks.CINNABAR_ORE);
+        blockWithItem(ModBlocks.CORTOSIS_ORE);
+        blockWithItem(ModBlocks.DEDLANITE_ORE);
+        blockWithItem(ModBlocks.DIATIUM_ORE);
+        blockWithItem(ModBlocks.DURASTEEL_ORE);
+        blockWithItem(ModBlocks.DURITE_ORE);
+        blockWithItem(ModBlocks.EXONIUM_ORE);
+        blockWithItem(ModBlocks.HAYSIAN_SMELT_ORE);
+        blockWithItem(ModBlocks.IPSIUM_ORE);
+        blockWithItem(ModBlocks.KALKITE_ORE);
+        blockWithItem(ModBlocks.MALSARR_ORE);
+        blockWithItem(ModBlocks.PHRIK_ORE);
+        blockWithItem(ModBlocks.TITANIUM_ORE);
 //
 //        stairsBlock(((StairBlock) ModBlocks.BLACK_OPAL_STAIRS.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));
 //        slabBlock(((SlabBlock) ModBlocks.BLACK_OPAL_SLAB.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));

@@ -6,7 +6,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-@EventBusSubscriber(modid = OperationKnightfall.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = OperationKnightfall.MODID, bus = EventBusSubscriber.Bus.MOD, value = net.neoforged.api.distmarker.Dist.CLIENT)
 public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -33,7 +33,7 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.PYRO_DENTON_EXPLOSIVE, PyroDentonExplosiveModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.STUNNER, StunnerModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.THERMAL_IMPLODER, ThermalImploderModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.INCENDIARY_GRENADE, IncendiaryGrenadeModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.FIREBOMB, FirebombModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.EXPLOSIVE_KNIFE, ExplosiveKnifeModel::createBodyLayer);
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.knightfall.OperationKnightfall;
+import net.uhhitscam.knightfall.block.ModBlocks;
 
 import java.util.function.Supplier;
 
@@ -426,7 +427,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.PYRO_DENTON_EXPLOSIVE);
                         pOutput.accept(ModItems.STUNNER);
                         pOutput.accept(ModItems.THERMAL_IMPLODER);
-                        pOutput.accept(ModItems.INCENDIARY_GRENADE);
+                        pOutput.accept(ModItems.FIREBOMB);
                         pOutput.accept(ModItems.EXPLOSIVE_KNIFE);
                         pOutput.accept(ModItems.GAS_CARTRIDGE);
                         pOutput.accept(ModItems.TIBANNA_GAS);
@@ -450,6 +451,59 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.FLECHETTE_TOXIC_CANISTER);
                         pOutput.accept(ModItems.FLECHETTE_SPREAD_CANISTER);
                         pOutput.accept(ModItems.FLECHETTE_TOXIC_SPREAD_CANISTER);
+                    }).build());
+
+    public static final Supplier<CreativeModeTab> MATERIALS =
+            CREATIVE_MODE_TABS.register("materials", () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.knightfall.materials"))
+                    .icon(() -> new ItemStack(ModItems.BRONZIUM_INGOT.get()))
+                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "misc_weapons"))
+                    .displayItems((pParameters, pOutput) -> {
+                        pOutput.accept(ModBlocks.BESKAR_ORE);
+                        pOutput.accept(ModItems.BESKAR_FRAGMENT);
+                        pOutput.accept(ModItems.BESKAR_BAR);
+                        pOutput.accept(ModBlocks.BRONZIUM_ORE);
+                        pOutput.accept(ModItems.RAW_BRONZIUM);
+                        pOutput.accept(ModItems.BRONZIUM_INGOT);
+                        pOutput.accept(ModItems.BRONZIUM_NUGGET);
+                        pOutput.accept(ModBlocks.CINNABAR_ORE);
+                        pOutput.accept(ModItems.CINNABAR_DUST);
+                        pOutput.accept(ModBlocks.CORTOSIS_ORE);
+                        pOutput.accept(ModItems.CORTOSIS_CHUNK);
+                        pOutput.accept(ModBlocks.DEDLANITE_ORE);
+                        pOutput.accept(ModItems.DEDLANITE_CHUNK);
+                        pOutput.accept(ModBlocks.DIATIUM_ORE);
+                        pOutput.accept(ModItems.DIATIUM_GEM);
+                        pOutput.accept(ModBlocks.DURASTEEL_ORE);
+                        pOutput.accept(ModItems.RAW_DURASTEEL);
+                        pOutput.accept(ModItems.DURASTEEL_INGOT);
+                        pOutput.accept(ModItems.DURASTEEL_NUGGET);
+                        pOutput.accept(ModItems.DURANIUM_INGOT);
+                        pOutput.accept(ModBlocks.DURITE_ORE);
+                        pOutput.accept(ModItems.DURITE_CHUNK);
+                        pOutput.accept(ModBlocks.EXONIUM_ORE);
+                        pOutput.accept(ModItems.EXONIUM);
+                        pOutput.accept(ModItems.EXONIUM_REFINED);
+                        pOutput.accept(ModBlocks.HAYSIAN_SMELT_ORE);
+                        pOutput.accept(ModItems.RAW_HAYSIAN_SMELT);
+                        pOutput.accept(ModItems.HAYSIAN_SMELT_INGOT);
+                        pOutput.accept(ModItems.HAYSIAN_SMELT_NUGGET);
+                        pOutput.accept(ModBlocks.IPSIUM_ORE);
+                        pOutput.accept(ModItems.IONITE_SHARD);
+                        pOutput.accept(ModItems.IONITE_REFINED);
+                        pOutput.accept(ModBlocks.KALKITE_ORE);
+                        pOutput.accept(ModItems.KALKITE);
+                        pOutput.accept(ModItems.KYBER_CRYSTAL);
+                        pOutput.accept(ModBlocks.MALSARR_ORE);
+                        pOutput.accept(ModItems.MALSARR);
+                        pOutput.accept(ModBlocks.PHRIK_ORE);
+                        pOutput.accept(ModItems.PHRIK_CHUNK);
+                        pOutput.accept(ModItems.SILICAX_OXALATE);
+                        pOutput.accept(ModItems.TITANITE_POWDER);
+                        pOutput.accept(ModBlocks.TITANIUM_ORE);
+                        pOutput.accept(ModItems.RAW_TITANIUM);
+                        pOutput.accept(ModItems.TITANIUM_INGOT);
+                        pOutput.accept(ModItems.TITANIUM_NUGGET);
                     }).build());
 
     public static void register(IEventBus eventBus){

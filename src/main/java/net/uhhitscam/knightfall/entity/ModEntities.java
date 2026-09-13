@@ -20,6 +20,11 @@ public class ModEntities {
     public static final Supplier<EntityType<BlasterBoltEntity>> BLASTER_BOLT =
             ENTITY_TYPES.register("blaster_bolt", () -> EntityType.Builder.<BlasterBoltEntity>of(BlasterBoltEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f).build("blaster_bolt"));
+    public static final Supplier<EntityType<net.uhhitscam.knightfall.entity.custom.MeleeProjectileEntity>> MELEE_PROJECTILE =
+            ENTITY_TYPES.register("melee_projectile", () -> EntityType.Builder
+                    .<net.uhhitscam.knightfall.entity.custom.MeleeProjectileEntity>of(
+                            net.uhhitscam.knightfall.entity.custom.MeleeProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F).clientTrackingRange(64).updateInterval(1).build("melee_projectile"));
     public static final Supplier<EntityType<SonicBoltEntity>> SONIC_BOLT =
             ENTITY_TYPES.register("sonic_bolt", () -> EntityType.Builder.<SonicBoltEntity>of(SonicBoltEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f).build("sonic_bolt"));

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_knightfall:bronzium_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "knightfall:bronzium_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "knightfall:bronzium_nugget"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_knightfall:bronzium_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "knightfall:bronzium_nugget"
+    ]
+  }
+}

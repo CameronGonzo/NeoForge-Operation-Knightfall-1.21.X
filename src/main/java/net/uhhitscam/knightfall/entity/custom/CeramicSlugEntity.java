@@ -12,7 +12,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.knightfall.item.ModItems;
-import net.uhhitscam.knightfall.item.custom.WeaponClassification;
+import net.uhhitscam.knightfall.item.custom.projectile.WeaponClassification;
 import net.uhhitscam.knightfall.particle.ModParticles;
 
 public class CeramicSlugEntity extends Snowball {

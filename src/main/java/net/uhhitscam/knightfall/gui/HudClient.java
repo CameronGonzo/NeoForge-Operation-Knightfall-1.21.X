@@ -9,8 +9,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.item.custom.ProjectileItem;
-import net.uhhitscam.knightfall.item.custom.FiringMode;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
+import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
 import net.uhhitscam.knightfall.util.KeyBinding;
 
 public class HudClient {
