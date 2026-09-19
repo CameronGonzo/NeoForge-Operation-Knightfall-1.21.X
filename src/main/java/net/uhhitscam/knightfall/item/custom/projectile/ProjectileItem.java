@@ -8,15 +8,15 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.server.level.ServerPlayer;
@@ -131,17 +131,17 @@ public class ProjectileItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
 
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             NeoForge.EVENT_BUS.post(new ProjectileWeaponUseEvent(player));
         }
 
-        return InteractionResultHolder.fail(stack);
+        return InteractionResult.FAIL;
     }
 
     public boolean fireServer(ServerPlayer player, ItemStack expectedStack, boolean mainHand, boolean burstFollowup) {
@@ -292,8 +292,8 @@ public class ProjectileItem extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.NONE;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.NONE;
     }
 
     @Override
@@ -304,10 +304,6 @@ public class ProjectileItem extends Item {
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
-    }
-
-    private void initializeFiringMode(ItemStack itemStack) {
-        itemStack.set(ModDataComponentTypes.FIRING_MODE.get(), new FiringModeData(defaultFiringMode.toString()));
     }
 
     private void fireBolt(Level level, Player player, ItemStack stack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode, int shot) {
@@ -435,7 +431,7 @@ public class ProjectileItem extends Item {
         Vec3 cameraUp = right.cross(forward).normalize();
         Vec3 direction = applyShotSpread(player, currentAmmoType, currentStats, shot, forward, right, cameraUp);
 
-        projectile.setDeltaMovement(direction.scale(projectileSpeed));
+        WeaponAimRules.setProjectileMotion(projectile, direction.scale(projectileSpeed));
     }
 
     private Vec3 applyShotSpread(Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, int shot, Vec3 forward, Vec3 right, Vec3 cameraUp) {
@@ -463,8 +459,8 @@ public class ProjectileItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (level.isClientSide || !(entity instanceof Player player)) {
+    public void inventoryTick(ItemStack stack, net.minecraft.server.level.ServerLevel level, Entity entity, net.minecraft.world.entity.EquipmentSlot slot) {
+        if (level.isClientSide() || !(entity instanceof Player player)) {
             return;
         }
 
@@ -613,41 +609,29 @@ public class ProjectileItem extends Item {
     }
 
     private ReloadNSwitchCoolDownData getReloadNSwitchCooldownData(ItemStack stack) {
-        ReloadNSwitchCoolDownData data = stack.get(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN);
-        if (data == null) {
-            data = new ReloadNSwitchCoolDownData(0);
-            stack.set(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN, data);
-        }
-        return data;
+        return stack.getOrDefault(
+                ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN,
+                new ReloadNSwitchCoolDownData(0)
+        );
     }
 
     private FireCoolDownData getFireCoolDownData(ItemStack stack) {
-        FireCoolDownData data = stack.get(ModDataComponentTypes.FIRE_COOLDOWN);
-        if (data == null) {
-            data = new FireCoolDownData(0);
-            stack.set(ModDataComponentTypes.FIRE_COOLDOWN, data);
-        }
-        return data;
+        return stack.getOrDefault(ModDataComponentTypes.FIRE_COOLDOWN, new FireCoolDownData(0));
     }
 
     public void setAmmo(ItemStack stack, int ammo) {
         stack.set(ModDataComponentTypes.AMMO.get(), new AmmoData(ammo));
-        if (stack.getEntityRepresentation() instanceof Player player) {
-            player.inventoryMenu.broadcastChanges();
-        }
     }
 
     public static AmmoType getAmmoType(ItemStack stack) {
         AmmoTypeData data = stack.get(ModDataComponentTypes.AMMO_TYPE.get());
         if (data == null || data.ammoType() == null || data.ammoType().isBlank()) {
-            stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.NONE.name()));
             return AmmoType.NONE;
         }
 
         try {
             return AmmoType.valueOf(data.ammoType());
         } catch (IllegalArgumentException e) {
-            stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.NONE.name()));
             return AmmoType.NONE;
         }
     }
@@ -655,7 +639,6 @@ public class ProjectileItem extends Item {
     public FiringMode getFiringMode(ItemStack stack) {
         FiringModeData data = stack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (data == null || data.firingMode() == null || data.firingMode().isBlank()) {
-            initializeFiringMode(stack);
             return defaultFiringMode;
         }
 
@@ -667,7 +650,6 @@ public class ProjectileItem extends Item {
         } catch (IllegalArgumentException ignored) {
         }
 
-        initializeFiringMode(stack);
         return defaultFiringMode;
     }
 
@@ -733,8 +715,8 @@ public class ProjectileItem extends Item {
     }
 
     private boolean tryReloadFromInventory(Player player, ItemStack weaponStack, int currentAmmo, AmmoType currentAmmoType) {
-        for (int slotIndex = 0; slotIndex < player.getInventory().items.size(); slotIndex++) {
-            ItemStack ammoStack = player.getInventory().items.get(slotIndex);
+        for (int slotIndex = 0; slotIndex < net.minecraft.world.entity.player.Inventory.INVENTORY_SIZE; slotIndex++) {
+            ItemStack ammoStack = player.getInventory().getItem(slotIndex);
             Item item = ammoStack.getItem();
 
             if (classification == WeaponClassification.SLUGTHROWER && item instanceof SlugItem slugItem) {
@@ -845,7 +827,7 @@ public class ProjectileItem extends Item {
         AmmoType currentAmmoType = getAmmoType(stack);
 
         if (currentAmmo <= 0) {
-            player.displayClientMessage(Component.translatable("item.knightfall.projectileWeapon.no_ammo_to_unload"), true);
+            player.sendSystemMessage(Component.translatable("item.knightfall.projectileWeapon.no_ammo_to_unload"), true);
             return false;
         }
 
@@ -952,8 +934,7 @@ public class ProjectileItem extends Item {
         }
 
         FiringMode nextMode = firingModes.get((index + 1) % firingModes.size());
-        FiringModeData newData = stack.get(ModDataComponentTypes.FIRING_MODE.get()).withFiringMode(nextMode.toString());
-        stack.set(ModDataComponentTypes.FIRING_MODE.get(), newData);
+        stack.set(ModDataComponentTypes.FIRING_MODE.get(), new FiringModeData(nextMode.name()));
 
         startCooldown(player, stack, WeaponCooldownAction.SWITCH);
         SoundEvent switchSound = WeaponSoundsUtil.getWeaponSwitchFireMode(projectileWeaponName, currentFiringMode);
@@ -1003,11 +984,9 @@ public class ProjectileItem extends Item {
         };
     }
 
-    @Override
-    public void appendHoverText(ItemStack weaponStack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("Ammo: " + getAmmo(weaponStack) + "/" + maxAmmo));
-        tooltip.add(Component.translatable("tooltip.knightfall.blaster.shift"));
-        super.appendHoverText(weaponStack, context, tooltip, flag);
+    public void appendBaseTooltip(ItemStack weaponStack, java.util.function.Consumer<Component> tooltip) {
+        tooltip.accept(Component.literal("Ammo: " + getAmmo(weaponStack) + "/" + maxAmmo));
+        tooltip.accept(Component.translatable("tooltip.knightfall.blaster.shift"));
     }
 
     public void appendAmmoTypeTooltip(ItemStack weaponStack, List<Component> tooltip) {

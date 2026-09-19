@@ -5,14 +5,14 @@ import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import org.jetbrains.annotations.Nullable;
 
-public class ExplosiveShotSigParticles extends TextureSheetParticle {
+public class ExplosiveShotSigParticles extends SingleQuadParticle {
     private final SpriteSet sprites;
     private static final int FRAME_COUNT = 4;
     private static final int FRAME_DURATION_TICKS = 1;
 
     protected ExplosiveShotSigParticles(ClientLevel level, double x, double y, double z,
                                         SpriteSet spriteSet, double xSpeed, double ySpeed, double zSpeed) {
-        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet.get(0, 1));
         this.sprites = spriteSet;
         this.friction = 0.98f;
         this.gravity = 0.0f;
@@ -36,12 +36,12 @@ public class ExplosiveShotSigParticles extends TextureSheetParticle {
 
 
     @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_LIT;
+    protected SingleQuadParticle.Layer getLayer() {
+        return SingleQuadParticle.Layer.OPAQUE;
     }
 
     @Override
-    public int getLightColor(float partialTicks) {
+    public int getLightCoords(float partialTicks) {
         return 15728880;
     }
 
@@ -56,7 +56,7 @@ public class ExplosiveShotSigParticles extends TextureSheetParticle {
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level,
                                        double x, double y, double z,
-                                       double xSpeed, double ySpeed, double zSpeed) {
+                                       double xSpeed, double ySpeed, double zSpeed, net.minecraft.util.RandomSource random) {
             return new ExplosiveShotSigParticles(level, x, y, z, this.spriteSet, xSpeed, ySpeed, zSpeed);
         }
     }

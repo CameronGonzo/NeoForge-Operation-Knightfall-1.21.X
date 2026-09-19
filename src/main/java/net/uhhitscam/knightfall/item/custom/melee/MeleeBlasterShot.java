@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.custom.BlasterBoltEntity;
+import net.uhhitscam.knightfall.util.WeaponAimRules;
 
 import java.util.Objects;
 
@@ -29,7 +30,8 @@ public record MeleeBlasterShot(BlasterBoltEntity.BoltType type, float speed, int
         bolt.setMeleeWeapon(weaponStack);
         // Start at the eye so the first collision check cannot skip a wall beside the muzzle.
         bolt.setPos(player.getEyePosition());
-        player.serverLevel().addFreshEntity(bolt);
+        WeaponAimRules.setProjectileMotion(bolt, bolt.getDeltaMovement());
+        player.level().addFreshEntity(bolt);
         if (sound != null) sound.play(player.level(), player.position());
     }
 }

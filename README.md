@@ -1,5 +1,7 @@
 # Operation Knightfall
 
+Development target: **Minecraft 26.2 / NeoForge 26.2.0.87 / Java 25**. See the [26.2 migration and IntelliJ setup guide](docs/MIGRATION_26_2.md) for local setup, launch tasks, and testing.
+
 Operation Knightfall is a large-scale Star Wars themed Minecraft mod built using NeoForge.  
 The goal of this project is to provide a "mostly" lore accurate and open world experience, allowing players to choose from many progression paths (i.e. bounty hunter, sith, jedi, imperial/rebel/republic/seperatist trooper, etc.) 
 

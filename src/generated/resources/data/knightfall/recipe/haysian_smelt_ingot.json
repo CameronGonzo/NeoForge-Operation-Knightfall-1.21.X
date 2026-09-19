@@ -1,10 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "#": {
-      "item": "knightfall:haysian_smelt_nugget"
-    }
+    "#": "knightfall:haysian_smelt_nugget"
   },
   "pattern": [
     "###",
@@ -12,7 +9,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "knightfall:haysian_smelt_ingot"
   }
 }

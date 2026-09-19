@@ -1,8 +1,7 @@
 package net.uhhitscam.knightfall.item.client;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +11,7 @@ import net.uhhitscam.knightfall.item.custom.grenade.GrenadeItem;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeVisualState;
 
 public final class GrenadeItemModelProperties {
-    public static final ResourceLocation GRENADE_STATE = ResourceLocation.fromNamespaceAndPath(
+    public static final Identifier GRENADE_STATE = Identifier.fromNamespaceAndPath(
             OperationKnightfall.MODID,
             "grenade_state"
     );
@@ -21,7 +20,7 @@ public final class GrenadeItemModelProperties {
     }
 
     public static void register(Item item) {
-        ItemProperties.register(item, GRENADE_STATE, GrenadeItemModelProperties::getGrenadeState);
+        KnightfallItemModelProperties.register(item, GRENADE_STATE, GrenadeItemModelProperties::getGrenadeState);
     }
 
     private static float getGrenadeState(

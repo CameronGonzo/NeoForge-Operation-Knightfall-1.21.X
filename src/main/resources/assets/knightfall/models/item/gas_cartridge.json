@@ -2,6 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
+		"particle": "knightfall:item/gas_cartridge",
 		"1": "knightfall:item/empty",
 		"8": "knightfall:item/gas_cartridge"
 	},

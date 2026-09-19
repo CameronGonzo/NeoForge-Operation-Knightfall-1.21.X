@@ -17,7 +17,16 @@ public final class ProjectileWeaponTooltipEvents {
 
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
-        if (!Screen.hasShiftDown()
+        if (event.getItemStack().getOrDefault(net.minecraft.core.component.DataComponents.TOOLTIP_DISPLAY,
+                net.minecraft.world.item.component.TooltipDisplay.DEFAULT).hideTooltip()) return;
+        var base = new java.util.ArrayList<Component>();
+        if (event.getItemStack().getItem() instanceof ProjectileItem weapon) {
+            weapon.appendBaseTooltip(event.getItemStack(), base::add);
+        } else if (event.getItemStack().getItem() instanceof net.uhhitscam.knightfall.item.custom.projectile.GasItem gas) {
+            gas.appendBaseTooltip(event.getItemStack(), base::add);
+        }
+        event.getToolTip().addAll(Math.min(1, event.getToolTip().size()), base);
+        if (!net.minecraft.client.Minecraft.getInstance().hasShiftDown()
                 || !(event.getItemStack().getItem() instanceof ProjectileItem weapon)) {
             return;
         }

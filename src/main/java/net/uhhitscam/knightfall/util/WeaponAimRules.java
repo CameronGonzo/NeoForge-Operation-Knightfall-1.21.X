@@ -1,7 +1,8 @@
 package net.uhhitscam.knightfall.util;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
@@ -99,13 +100,13 @@ public final class WeaponAimRules {
     }
 
     @Nullable
-    public static ResourceLocation getCrosshairTexture(Player player) {
+    public static Identifier getCrosshairTexture(Player player) {
         WeaponSelection selection = getUiWeapon(player);
         return selection == null ? null : selection.weapon().getUI().crosshair().texture();
     }
 
     @Nullable
-    public static ResourceLocation getScopeTexture(Player player) {
+    public static Identifier getScopeTexture(Player player) {
         if (!isAiming(player)) {
             return null;
         }
@@ -141,6 +142,23 @@ public final class WeaponAimRules {
                 ? new MuzzleOffset(0.0, 0.0)
                 : new MuzzleOffset(DEFAULT_BEAM_SIDE_OFFSET, DEFAULT_MUZZLE_HEIGHT_OFFSET);
         return getMuzzlePosition(player, mainHand, partialTick, offset);
+    }
+
+    public static void setProjectileMotion(Entity projectile, Vec3 velocity) {
+        projectile.setDeltaMovement(velocity);
+        if (velocity.lengthSqr() < 1.0E-8) {
+            return;
+        }
+
+        float yaw = (float) Math.toDegrees(Math.atan2(velocity.x, velocity.z));
+        float pitch = (float) Math.toDegrees(Math.atan2(
+                velocity.y,
+                Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z)
+        ));
+        projectile.setYRot(yaw);
+        projectile.setXRot(pitch);
+        projectile.yRotO = yaw;
+        projectile.xRotO = pitch;
     }
 
     private static boolean isScopedAiming(Player player, boolean mainHand) {

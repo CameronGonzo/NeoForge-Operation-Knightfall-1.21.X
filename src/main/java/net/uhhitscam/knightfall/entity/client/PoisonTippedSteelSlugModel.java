@@ -1,16 +1,19 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.PoisonTippedSteelSlugEntity;
 import net.uhhitscam.knightfall.entity.custom.RazorSteelSlugEntity;
 
-public class PoisonTippedSteelSlugModel extends HierarchicalModel<PoisonTippedSteelSlugEntity> {
+public class PoisonTippedSteelSlugModel extends Model<Unit> {
     private final ModelPart poisonTippedSteelSlug;
 
     public PoisonTippedSteelSlugModel(ModelPart root) {
+        super(root.getChild("poisonTippedSteelSlug"), RenderTypes::entityCutout);
         this.poisonTippedSteelSlug = root.getChild("poisonTippedSteelSlug");
     }
 
@@ -30,15 +33,5 @@ public class PoisonTippedSteelSlugModel extends HierarchicalModel<PoisonTippedSt
                 .texOffs(6, 13).addBox(-1.0F, -5.6F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
-    }
-
-    @Override
-    public void setupAnim(PoisonTippedSteelSlugEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }
-
-    @Override
-    public ModelPart root() {
-        return poisonTippedSteelSlug;
     }
 }

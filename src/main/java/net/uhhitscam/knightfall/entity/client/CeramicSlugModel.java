@@ -1,15 +1,18 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.CeramicSlugEntity;
 
-public class CeramicSlugModel extends HierarchicalModel<CeramicSlugEntity> {
+public class CeramicSlugModel extends Model<Unit> {
     private final ModelPart ceramicSlug;
 
     public CeramicSlugModel(ModelPart root) {
+        super(root.getChild("ceramicSlug"), RenderTypes::entityCutout);
         this.ceramicSlug = root.getChild("ceramicSlug");
     }
 
@@ -26,13 +29,7 @@ public class CeramicSlugModel extends HierarchicalModel<CeramicSlugEntity> {
         return LayerDefinition.create(meshdefinition, 16, 16);
     }
 
-    @Override
-    public void setupAnim(CeramicSlugEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
-    }
 
-    @Override
-    public ModelPart root() {
-        return ceramicSlug;
-    }
+
 }

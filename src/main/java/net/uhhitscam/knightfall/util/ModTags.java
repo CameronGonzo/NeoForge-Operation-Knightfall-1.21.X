@@ -1,6 +1,6 @@
 package net.uhhitscam.knightfall.util;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -22,14 +22,14 @@ public class ModTags {
         public static final TagKey<Block> BLASTER_IMPACT_WOOD = createTag("blaster_impact_wood");
 
         private static TagKey<Block> createTag(String name) {
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, name));
+            return BlockTags.create(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, name));
         }
     }
 
     public static class Items {
 
         private static TagKey<Item> createTag(String name) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, name));
+            return ItemTags.create(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, name));
         }
     }
 }

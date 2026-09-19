@@ -37,9 +37,9 @@ public class MeleeWeaponItem extends Item {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         // Configured attacks apply effects only after confirmed damage in the combat controller
-        if (getForm(stack) != null) return true;
+        if (getForm(stack) != null) return;
         if (attacker.level() instanceof ServerLevel serverLevel) {
             boolean effectApplied = definition.hitEffect().apply(new MeleeHitContext(
                     serverLevel,
@@ -52,6 +52,5 @@ public class MeleeWeaponItem extends Item {
                 stack.consume(1, attacker);
             }
         }
-        return true;
     }
 }

@@ -1,15 +1,18 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.FlechetteToxicEntity;
 
-public class FlechetteToxicModel extends HierarchicalModel<FlechetteToxicEntity> {
+public class FlechetteToxicModel extends Model<Unit> {
     private final ModelPart flechetteToxic;
 
     public FlechetteToxicModel(ModelPart root) {
+        super(root.getChild("flechetteToxic"), RenderTypes::entityCutout);
         this.flechetteToxic = root.getChild("flechetteToxic");
     }
 
@@ -27,15 +30,5 @@ public class FlechetteToxicModel extends HierarchicalModel<FlechetteToxicEntity>
         PartDefinition flechetteToxic_r1 = flechette.addOrReplaceChild("flechetteToxic_r1", CubeListBuilder.create().texOffs(4, 7).addBox(0.0F, -1.0F, -1.0F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.001F)), PartPose.offsetAndRotation(-0.5F, -5.5F, 2.0F, 0.0F, 0.0F, -1.5708F));
 
         return LayerDefinition.create(meshdefinition, 16, 16);
-    }
-
-    @Override
-    public void setupAnim(FlechetteToxicEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }
-
-    @Override
-    public ModelPart root() {
-        return flechetteToxic;
     }
 }

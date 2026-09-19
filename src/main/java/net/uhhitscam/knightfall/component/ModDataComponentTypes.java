@@ -2,6 +2,7 @@ package net.uhhitscam.knightfall.component;
 
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -9,8 +10,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.UnaryOperator;
 
 public class ModDataComponentTypes {
-    public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
-            DeferredRegister.createDataComponents(OperationKnightfall.MODID);
+    public static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES =
+            DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, OperationKnightfall.MODID);
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> MELEE_ALTERNATE_FORM =
             register("melee_alternate_form", builder -> builder.persistent(com.mojang.serialization.Codec.BOOL)
@@ -42,7 +43,7 @@ public class ModDataComponentTypes {
                     .networkSynchronized(RemoteDetonatorState.STREAM_CODEC));
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
-        return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());
+        return DATA_COMPONENT_TYPES.registerComponentType(name, builderOperator);
     }
 
     public static void register(IEventBus eventBus) {

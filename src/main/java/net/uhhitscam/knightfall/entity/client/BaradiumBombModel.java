@@ -1,6 +1,8 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -10,10 +12,11 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 
-public class BaradiumBombModel extends HierarchicalModel<GrenadeEntity> {
+public class BaradiumBombModel extends Model<Unit> {
     private final ModelPart baradiumBomb;
 
     public BaradiumBombModel(ModelPart root) {
+        super(root.getChild("baradiumBomb"), RenderTypes::entityCutout);
         this.baradiumBomb = root.getChild("baradiumBomb");
     }
 
@@ -46,19 +49,7 @@ public class BaradiumBombModel extends HierarchicalModel<GrenadeEntity> {
         return LayerDefinition.create(meshDefinition, 64, 64);
     }
 
-    @Override
-    public void setupAnim(
-            GrenadeEntity entity,
-            float limbSwing,
-            float limbSwingAmount,
-            float ageInTicks,
-            float netHeadYaw,
-            float headPitch
-    ) {
-    }
 
-    @Override
-    public ModelPart root() {
-        return baradiumBomb;
-    }
+
+
 }

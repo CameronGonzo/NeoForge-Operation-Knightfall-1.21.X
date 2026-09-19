@@ -3,20 +3,16 @@ package net.uhhitscam.knightfall.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PostChain;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.uhhitscam.knightfall.mixin.GameRendererAccessorMixin;
 import net.uhhitscam.knightfall.util.BlurRequests;
 
 @EventBusSubscriber(modid = "knightfall", value = net.neoforged.api.distmarker.Dist.CLIENT)
 public final class BlurEffectEventHandler {
-    private static final ResourceLocation VANILLA_BLUR =
-            ResourceLocation.fromNamespaceAndPath("minecraft", "shaders/post/blur.json");
 
-    private static boolean loaded = false;
 
     private static int ageTicks = 0;
     private static int holdTicks = 0;
@@ -94,25 +90,24 @@ public final class BlurEffectEventHandler {
         }
     }
 
+    private static float activeRadius;
+
     private static void apply(Minecraft mc, float radiusNow) {
-        GameRenderer gr = mc.gameRenderer;
-
-        if (!loaded) {
-            gr.loadEffect(VANILLA_BLUR);
-            loaded = true;
-        }
-
-        PostChain chain = ((GameRendererAccessorMixin) gr).operation_knightfall$getPostEffect();
-        if (chain != null) {
-            chain.setUniform("Radius", radiusNow);
-        }
+        activeRadius = radiusNow;
     }
 
     private static void stop(Minecraft mc) {
-        if (!loaded) return;
-        loaded = false;
+        activeRadius = 0;
+    }
 
-        mc.gameRenderer.shutdownEffect();
+    @SubscribeEvent
+    public static void extractBlur(net.neoforged.neoforge.client.event.RenderGuiEvent.Pre event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (activeRadius > 0.001F && mc.level != null && mc.gui.screen() == null) {
+            mc.gameRenderer.gameRenderState().optionsRenderState.menuBackgroundBlurriness =
+                    Math.max(1, Math.round(activeRadius));
+            event.getGuiGraphics().blurBeforeThisStratum();
+        }
     }
 
     private static float clamp01(float v) {

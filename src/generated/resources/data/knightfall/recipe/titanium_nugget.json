@@ -1,10 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
-    {
-      "item": "knightfall:titanium_ingot"
-    }
+    "knightfall:titanium_ingot"
   ],
   "result": {
     "count": 9,

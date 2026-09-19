@@ -5,7 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.uhhitscam.knightfall.OperationKnightfall;
@@ -14,7 +14,7 @@ import net.uhhitscam.knightfall.item.custom.projectile.WeaponAction;
 
 public record SSProjectileWeaponActionPacket(boolean mainHand, WeaponAction action) implements Packet {
     public static final Type<SSProjectileWeaponActionPacket> TYPE = new Type<>(
-            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "projectile_weapon_action")
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "projectile_weapon_action")
     );
 
     private static final StreamCodec<ByteBuf, WeaponAction> ACTION_CODEC =

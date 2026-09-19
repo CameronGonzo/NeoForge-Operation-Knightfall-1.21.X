@@ -5,11 +5,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.neoforged.neoforge.client.event.ExtractLevelRenderStateEvent;
+import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -31,7 +34,8 @@ public final class FaceAlignedParticleClient {
     }
 
     public static void register(IEventBus eventBus) {
-        eventBus.addListener(FaceAlignedParticleClient::onRenderLevelStage);
+        eventBus.addListener(FaceAlignedParticleClient::extract);
+        eventBus.addListener(FaceAlignedParticleClient::submit);
     }
 
     public static void add(
@@ -57,46 +61,36 @@ public final class FaceAlignedParticleClient {
         ));
     }
 
-    public static void onRenderLevelStage(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-            return;
-        }
+    private static final ContextKey<List<EffectInstance>> RENDER_EFFECTS = new ContextKey<>(
+            Identifier.fromNamespaceAndPath("knightfall", "impact_marks"));
+    private static final ContextKey<Float> PARTIAL_TICK = new ContextKey<>(
+            Identifier.fromNamespaceAndPath("knightfall", "impact_partial_tick"));
 
-        if (EFFECTS.isEmpty()) {
-            return;
-        }
-
-        Minecraft minecraft = Minecraft.getInstance();
-        Camera camera = minecraft.gameRenderer.getMainCamera();
-        Vec3 cameraPosition = camera.getPosition();
-
-        PoseStack poseStack = event.getPoseStack();
-        MultiBufferSource.BufferSource buffer = minecraft.renderBuffers().bufferSource();
-
+    public static void extract(ExtractLevelRenderStateEvent event) {
+        List<EffectInstance> snapshots = new ArrayList<>();
         Iterator<EffectInstance> iterator = EFFECTS.iterator();
-
         while (iterator.hasNext()) {
             EffectInstance effect = iterator.next();
-
-            EffectVisual visual = EffectVisual.forEffect(effect);
-            if (effect.age >= visual.totalLifetime()) {
+            if (effect.age >= EffectVisual.forEffect(effect).totalLifetime()) {
                 iterator.remove();
-                continue;
+            } else {
+                snapshots.add(new EffectInstance(effect.position, effect.direction, effect.effectType,
+                        effect.variant, effect.depthOffset, effect.age));
+                effect.age++;
             }
-
-            renderEffect(
-                    effect,
-                    visual,
-                    event.getPartialTick().getGameTimeDeltaPartialTick(false),
-                    cameraPosition,
-                    poseStack,
-                    buffer
-            );
-
-            effect.age++;
         }
+        event.getRenderState().setRenderData(RENDER_EFFECTS, List.copyOf(snapshots));
+        event.getRenderState().setRenderData(PARTIAL_TICK, event.getDeltaTracker().getGameTimeDeltaPartialTick(false));
+    }
 
-        buffer.endBatch();
+    public static void submit(SubmitCustomGeometryEvent event) {
+        List<EffectInstance> effects = event.getLevelRenderState().getRenderData(RENDER_EFFECTS);
+        if (effects == null) return;
+        Float partialTick = event.getLevelRenderState().getRenderData(PARTIAL_TICK);
+        for (EffectInstance effect : effects) {
+            renderEffect(effect, EffectVisual.forEffect(effect), partialTick == null ? 0 : partialTick,
+                    event.getLevelRenderState().cameraRenderState.pos, event.getPoseStack(), event.getSubmitNodeCollector());
+        }
     }
 
     private static void renderEffect(
@@ -105,19 +99,23 @@ public final class FaceAlignedParticleClient {
             float partialTick,
             Vec3 cameraPosition,
             PoseStack poseStack,
-            MultiBufferSource.BufferSource buffer
+            SubmitNodeCollector buffer
     ) {
         float age = effect.age + partialTick;
         float progress = age / visual.totalLifetime();
 
-        double renderX = effect.position.x - cameraPosition.x;
-        double renderY = effect.position.y - cameraPosition.y;
-        double renderZ = effect.position.z - cameraPosition.z;
+        Vec3 renderPosition = effect.position.add(
+                effect.direction.getStepX() * effect.depthOffset,
+                effect.direction.getStepY() * effect.depthOffset,
+                effect.direction.getStepZ() * effect.depthOffset
+        );
+        double renderX = renderPosition.x - cameraPosition.x;
+        double renderY = renderPosition.y - cameraPosition.y;
+        double renderZ = renderPosition.z - cameraPosition.z;
 
         poseStack.pushPose();
         poseStack.translate(renderX, renderY, renderZ);
         rotateToFaceDirection(poseStack, effect.direction);
-        poseStack.translate(0.0F, 0.0F, effect.depthOffset);
 
         switch (effect.effectType) {
             case SONIC_RIPPLE -> renderSonicRipple(effect, visual, progress, poseStack, buffer);
@@ -132,13 +130,12 @@ public final class FaceAlignedParticleClient {
             EffectVisual visual,
             float progress,
             PoseStack poseStack,
-            MultiBufferSource.BufferSource buffer
+            SubmitNodeCollector buffer
     ) {
         float size = lerp(visual.startSize(), visual.endSize(), progress);
         float alpha = 1.0F - progress;
 
-        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(visual.primaryTexture()));
-        renderQuad(poseStack, consumer, size, alpha);
+        buffer.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(visual.primaryTexture()), (pose, vertices) -> renderQuad(pose, vertices, size, alpha));
     }
 
     private static void renderBlasterBurnMark(
@@ -146,7 +143,7 @@ public final class FaceAlignedParticleClient {
             EffectVisual visual,
             float age,
             PoseStack poseStack,
-            MultiBufferSource.BufferSource buffer
+            SubmitNodeCollector buffer
     ) {
         float size = visual.endSize();
 
@@ -154,23 +151,20 @@ public final class FaceAlignedParticleClient {
         int darkenTicks = 150;
         int fadeTicks = visual.totalLifetime() - burnTicks - darkenTicks;
 
-        ResourceLocation burnTexture = blasterBurnTexture(effect.variant);
-        ResourceLocation markTexture = blasterMarkTexture(effect.variant);
+        Identifier burnTexture = blasterBurnTexture(effect.variant);
+        Identifier markTexture = blasterMarkTexture(effect.variant);
 
         if (age <= burnTicks) {
-            VertexConsumer burnConsumer = buffer.getBuffer(RenderType.entityTranslucent(burnTexture));
-            renderQuad(poseStack, burnConsumer, size, 1.0F);
+            buffer.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(burnTexture), (pose, vertices) -> renderQuad(pose, vertices, size, 1.0F));
             return;
         }
 
         if (age <= burnTicks + darkenTicks) {
             float darkenProgress = (age - burnTicks) / darkenTicks;
 
-            VertexConsumer burnConsumer = buffer.getBuffer(RenderType.entityTranslucent(burnTexture));
-            renderQuad(poseStack, burnConsumer, size, 1.0F - darkenProgress);
+            buffer.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(burnTexture), (pose, vertices) -> renderQuad(pose, vertices, size, 1.0F - darkenProgress));
 
-            VertexConsumer markConsumer = buffer.getBuffer(RenderType.entityTranslucent(markTexture));
-            renderQuad(poseStack, markConsumer, size, darkenProgress);
+            buffer.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(markTexture), (pose, vertices) -> renderQuad(pose, vertices, size, darkenProgress));
 
             return;
         }
@@ -178,18 +172,16 @@ public final class FaceAlignedParticleClient {
         float fadeProgress = (age - burnTicks - darkenTicks) / Math.max(1, fadeTicks);
         float alpha = 1.0F - fadeProgress;
 
-        VertexConsumer markConsumer = buffer.getBuffer(RenderType.entityTranslucent(markTexture));
-        renderQuad(poseStack, markConsumer, size, alpha);
+        buffer.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(markTexture), (pose, vertices) -> renderQuad(pose, vertices, size, alpha));
     }
 
     private static void renderQuad(
-            PoseStack poseStack,
+            PoseStack.Pose pose,
             VertexConsumer consumer,
             float size,
             float alpha
     ) {
         float halfSize = size * 0.5F;
-        PoseStack.Pose pose = poseStack.last();
 
         addVertex(consumer, pose, -halfSize, -halfSize, 0.0F, 0.0F, 1.0F, alpha);
         addVertex(consumer, pose, halfSize, -halfSize, 0.0F, 1.0F, 1.0F, alpha);
@@ -227,15 +219,15 @@ public final class FaceAlignedParticleClient {
         }
     }
 
-    private static ResourceLocation blasterBurnTexture(int variant) {
-        return ResourceLocation.fromNamespaceAndPath(
+    private static Identifier blasterBurnTexture(int variant) {
+        return Identifier.fromNamespaceAndPath(
                 OperationKnightfall.MODID,
                 "textures/particle/blaster_burn_" + twoDigitVariant(variant) + ".png"
         );
     }
 
-    private static ResourceLocation blasterMarkTexture(int variant) {
-        return ResourceLocation.fromNamespaceAndPath(
+    private static Identifier blasterMarkTexture(int variant) {
+        return Identifier.fromNamespaceAndPath(
                 OperationKnightfall.MODID,
                 "textures/particle/blaster_mark_" + twoDigitVariant(variant) + ".png"
         );
@@ -251,7 +243,7 @@ public final class FaceAlignedParticleClient {
     }
 
     private record EffectVisual(
-            ResourceLocation primaryTexture,
+            Identifier primaryTexture,
             float startSize,
             float endSize,
             int totalLifetime
@@ -259,7 +251,7 @@ public final class FaceAlignedParticleClient {
         private static EffectVisual forEffect(EffectInstance effect) {
             return switch (effect.effectType) {
                 case SONIC_RIPPLE -> new EffectVisual(
-                        ResourceLocation.fromNamespaceAndPath(
+                        Identifier.fromNamespaceAndPath(
                                 OperationKnightfall.MODID,
                                 "textures/particle/sonic_bolt_ripple.png"
                         ),

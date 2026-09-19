@@ -10,17 +10,23 @@ import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.FunctionGameTestInstance;
+import net.minecraft.gametest.framework.TestData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityTypes;
+import net.neoforged.neoforge.event.RegisterGameTestsEvent;
+import java.util.function.Consumer;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,12 +35,16 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.entity.custom.MeleeProjectileEntity;
 import net.uhhitscam.knightfall.event.MeleeWeaponServerEvents;
+import net.uhhitscam.knightfall.event.ProjectileWeaponServerEvents;
+import net.uhhitscam.knightfall.item.ModItems;
+import net.uhhitscam.knightfall.item.custom.projectile.AmmoType;
+import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
+import net.uhhitscam.knightfall.component.AmmoTypeData;
+import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 import net.uhhitscam.knightfall.network.SSMeleeInputPacket;
 
 import java.util.HashMap;
@@ -44,15 +54,58 @@ import java.util.UUID;
 import static net.uhhitscam.knightfall.item.custom.melee.MeleeAttackTrait.*;
 import static net.uhhitscam.knightfall.item.custom.melee.MeleeInput.*;
 
-@GameTestHolder(OperationKnightfall.MODID)
-@PrefixGameTestTemplate(false)
-@EventBusSubscriber(modid = OperationKnightfall.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = OperationKnightfall.MODID)
 public final class MeleeGameTests {
     private static final Map<String, Item> ITEMS = new HashMap<>();
+
+
+    private static final Map<String, Consumer<GameTestHelper>> TESTS = Map.ofEntries(
+            Map.entry("thrust_reach_and_walls", MeleeGameTests::thrustReachAndWalls),
+            Map.entry("mixed_tap_and_hold", MeleeGameTests::mixedTapAndHold),
+            Map.entry("sweep_hits_behind", MeleeGameTests::sweepHitsBehind),
+            Map.entry("custom_block_breaks", MeleeGameTests::customBlockBreaks),
+            Map.entry("vanilla_shield_breaks", MeleeGameTests::vanillaShieldBreaks),
+            Map.entry("parry_counters_once", MeleeGameTests::parryCountersOnce),
+            Map.entry("throws_preserve_inventory_rules", MeleeGameTests::throwsPreserveInventoryRules),
+            Map.entry("cancelled_hold_does_not_attack", MeleeGameTests::cancelledHoldDoesNotAttack),
+            Map.entry("stagger_and_fire", MeleeGameTests::staggerAndFire),
+            Map.entry("flurry_and_duplicate_packets", MeleeGameTests::flurryAndDuplicatePackets),
+            Map.entry("whip_attaches_pulls_and_detaches", MeleeGameTests::whipAttachesPullsAndDetaches),
+            Map.entry("form_switch_persists", MeleeGameTests::formSwitchPersists),
+            Map.entry("landing_fires_only_once", MeleeGameTests::landingFiresOnlyOnce),
+            Map.entry("levitate_tracks_and_cancels", MeleeGameTests::levitateTracksAndCancels),
+            Map.entry("steady_and_spin_contact", MeleeGameTests::steadyAndSpinContact),
+            Map.entry("slash_and_shove", MeleeGameTests::slashAndShove),
+             Map.entry("charged_blaster_fires_once", MeleeGameTests::chargedBlasterFiresOnce),
+             Map.entry("burst_completes_after_release", MeleeGameTests::burstCompletesAfterRelease),
+             Map.entry("projectile_read_and_drop_keeps_single_stack", MeleeGameTests::projectileReadAndDropKeepsSingleStack),
+             Map.entry("dash_checks_travel_path", MeleeGameTests::dashChecksTravelPath),
+            Map.entry("charge_requires_movement", MeleeGameTests::chargeRequiresMovement),
+            Map.entry("electric_hooks_are_callable", MeleeGameTests::electricHooksAreCallable),
+            Map.entry("material_blade_contact", MeleeGameTests::materialBladeContact),
+            Map.entry("expired_parry_and_player_stagger", MeleeGameTests::expiredParryAndPlayerStagger));
+
+    @SubscribeEvent
+    public static void registerTests(RegisterGameTestsEvent event) {
+        if (!Boolean.getBoolean("knightfall.gameTests")) return;
+        var environment = event.registerEnvironment(id("melee"));
+        TESTS.forEach((name, test) -> event.registerTest(id(name),
+                new FunctionGameTestInstance(ResourceKey.create(Registries.TEST_FUNCTION, id(name)),
+                        new TestData<>(environment, id("melee_empty"), 100, 0, true))));
+    }
+
+    private static Identifier id(String name) {
+        return Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, name);
+    }
+
+    private static Item.Properties fixtureProperties(String name, Item.Properties properties) {
+        return properties.setId(ResourceKey.create(Registries.ITEM, id(name)));
+    }
 
     @SubscribeEvent
     public static void register(RegisterEvent event) {
         if (!Boolean.getBoolean("knightfall.gameTests")) return;
+        event.register(Registries.TEST_FUNCTION, registry -> TESTS.forEach((name, test) -> registry.register(id(name), test)));
         event.register(Registries.ITEM, registry -> {
             fixture(registry, "thrust", MeleeWeaponForm.builder(6, 1.6).bind(LEFT_CLICK, THRUST).properties(MeleeProperty.FLURRY).build());
             fixture(registry, "simple", MeleeWeaponForm.builder(6, 1.6).bind(LEFT_CLICK, SIMPLE_HIT).build());
@@ -77,8 +130,8 @@ public final class MeleeGameTests {
             var base = MeleeWeaponForm.builder(3, 2).bind(LEFT_CLICK, SIMPLE_HIT).bind(RIGHT_CLICK, SWITCH).build();
             var extended = MeleeWeaponForm.builder(8, 1).bind(LEFT_CLICK, THRUST).bind(RIGHT_CLICK, SWITCH).build();
             var definition = MeleeWeaponDefinition.builder("melee_test_switch").form(base).alternateForm(extended).build();
-            Item item = new MeleeWeaponItem(definition.itemProperties(), definition);
-            registry.register(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, definition.registryName()), item);
+            Item item = new MeleeWeaponItem(fixtureProperties(definition.registryName(), definition.itemProperties()), definition);
+            registry.register(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, definition.registryName()), item);
             ITEMS.put("switch", item);
             fixture(registry, "resistant", MeleeWeaponForm.builder(6, 1.6).bind(HOLD_RIGHT_CLICK, BLOCK)
                     .properties(MeleeProperty.LIGHTSABER_RESISTANT).build());
@@ -93,7 +146,7 @@ public final class MeleeGameTests {
                         .electricEffect(context -> { context.target().getPersistentData().putBoolean("test_shocked", true); return true; }).build());
             }
             Item saber = new TestSaber();
-            registry.register(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "melee_test_saber"), saber);
+            registry.register(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "melee_test_saber"), saber);
             ITEMS.put("saber", saber);
         });
     }
@@ -104,13 +157,13 @@ public final class MeleeGameTests {
     }
 
     private static void fixtureDefinition(RegisterEvent.RegisterHelper<Item> registry, String name, MeleeWeaponDefinition definition) {
-        Item item = new MeleeWeaponItem(definition.itemProperties(), definition);
-        registry.register(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, definition.registryName()), item);
+        Item item = new MeleeWeaponItem(fixtureProperties(definition.registryName(), definition.itemProperties()), definition);
+        registry.register(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, definition.registryName()), item);
         ITEMS.put(name, item);
     }
 
     private static ServerPlayer player(GameTestHelper helper, String weapon) {
-        helper.getLevel().getServer().setPvpAllowed(true);
+        helper.getLevel().getGameRules().set(net.minecraft.world.level.gamerules.GameRules.PVP, true, helper.getLevel().getServer());
         var cookie = CommonListenerCookie.createInitial(new com.mojang.authlib.GameProfile(UUID.randomUUID(), "melee-test"), false);
         var player = new ServerPlayer(helper.getLevel().getServer(), helper.getLevel(), cookie.gameProfile(), cookie.clientInformation());
         var connection = new Connection(PacketFlow.SERVERBOUND);
@@ -135,7 +188,7 @@ public final class MeleeGameTests {
     }
 
     private static LivingEntity target(GameTestHelper helper, float x, float z) {
-        var target = helper.spawn(EntityType.HUSK, x, 2, z);
+        var target = helper.spawn(EntityTypes.HUSK, x, 2, z);
         target.setNoAi(true);
         target.setNoGravity(true);
         return target;
@@ -150,7 +203,6 @@ public final class MeleeGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "melee_empty")
     public static void thrustReachAndWalls(GameTestHelper h) {
         ServerPlayer p = player(h, "thrust");
         LivingEntity target = target(h, 4, 7.7F);
@@ -169,7 +221,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void mixedTapAndHold(GameTestHelper h) {
         ServerPlayer p = player(h, "mixed");
         LivingEntity target = target(h, 4, 6);
@@ -194,7 +245,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void sweepHitsBehind(GameTestHelper h) {
         ServerPlayer p = player(h, "sweep");
         LivingEntity front = target(h, 4, 6), back = target(h, 4, 2);
@@ -205,7 +255,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void customBlockBreaks(GameTestHelper h) {
         ServerPlayer p = player(h, "break"), defender = player(h, "block");
         defender.setPos(h.absoluteVec(new Vec3(4, 2, 6)));
@@ -214,16 +263,15 @@ public final class MeleeGameTests {
         h.runAfterDelay(70, () -> {
             MeleeWeaponServerEvents.handleInput(defender, SSMeleeInputPacket.PRESS);
             float health = defender.getHealth();
-            defender.hurt(p.damageSources().playerAttack(p), 4);
+            defender.hurtServer(h.getLevel(), p.damageSources().playerAttack(p), 4);
             h.assertTrue(defender.getHealth() == health, "Blocking stops incoming front damage");
             MeleeWeaponServerEvents.handleInput(p, SSMeleeInputPacket.ATTACK);
-            h.assertTrue(defender.getCooldowns().isOnCooldown(ITEMS.get("block")), "Break block disables the melee weapon");
+            h.assertTrue(defender.getCooldowns().isOnCooldown(new ItemStack(ITEMS.get("block"))), "Break block disables the melee weapon");
             h.assertTrue(defender.getHealth() < health, "Breaker damages the unblocked defender");
             done(h, p, defender);
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void vanillaShieldBreaks(GameTestHelper h) {
         ServerPlayer p = player(h, "break"), defender = player(h, "simple");
         defender.setPos(h.absoluteVec(new Vec3(4, 2, 6)));
@@ -233,25 +281,23 @@ public final class MeleeGameTests {
         defender.startUsingItem(InteractionHand.OFF_HAND);
         h.runAfterDelay(70, () -> {
             MeleeWeaponServerEvents.handleInput(p, SSMeleeInputPacket.ATTACK);
-            h.assertTrue(defender.getCooldowns().isOnCooldown(Items.SHIELD), "Break block disables vanilla shields");
+            h.assertTrue(defender.getCooldowns().isOnCooldown(new ItemStack(Items.SHIELD)), "Break block disables vanilla shields");
             done(h, p, defender);
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void parryCountersOnce(GameTestHelper h) {
         ServerPlayer defender = player(h, "parry");
         LivingEntity attacker = target(h, 4, 6);
         h.runAfterDelay(70, () -> {
             MeleeWeaponServerEvents.handleInput(defender, SSMeleeInputPacket.PRESS);
             float health = defender.getHealth();
-            defender.hurt(attacker.damageSources().mobAttack(attacker), 4);
+            defender.hurtServer(h.getLevel(), attacker.damageSources().mobAttack(attacker), 4);
             h.assertTrue(defender.getHealth() == health && attacker.getHealth() < 20, "Parry cancels and counters incoming damage");
             done(h, defender);
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void throwsPreserveInventoryRules(GameTestHelper h) {
         ServerPlayer thrower = player(h, "throw"), quick = player(h, "quick");
         quick.setPos(h.absoluteVec(new Vec3(2, 2, 4)));
@@ -262,13 +308,12 @@ public final class MeleeGameTests {
             MeleeWeaponServerEvents.handleInput(thrower, SSMeleeInputPacket.RELEASE);
             h.assertTrue(thrower.getMainHandItem().isEmpty(), "Charged throw removes one inventory item");
             var projectiles = h.getLevel().getEntitiesOfClass(MeleeProjectileEntity.class, h.getBounds().inflate(32));
-            h.assertTrue(projectiles.stream().anyMatch(e -> e.getOwner() == thrower && e.pickup == net.minecraft.world.entity.projectile.AbstractArrow.Pickup.ALLOWED), "Thrown weapon is recoverable");
-            h.assertTrue(projectiles.stream().filter(e -> e.getOwner() == quick).allMatch(e -> e.pickup == net.minecraft.world.entity.projectile.AbstractArrow.Pickup.DISALLOWED), "Quick throws cannot duplicate items through pickup");
+            h.assertTrue(projectiles.stream().anyMatch(e -> e.getOwner() == thrower && e.pickup == net.minecraft.world.entity.projectile.arrow.AbstractArrow.Pickup.ALLOWED), "Thrown weapon is recoverable");
+            h.assertTrue(projectiles.stream().filter(e -> e.getOwner() == quick).allMatch(e -> e.pickup == net.minecraft.world.entity.projectile.arrow.AbstractArrow.Pickup.DISALLOWED), "Quick throws cannot duplicate items through pickup");
             done(h, thrower, quick);
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void cancelledHoldDoesNotAttack(GameTestHelper h) {
         ServerPlayer p = player(h, "mixed");
         LivingEntity target = target(h, 4, 6);
@@ -280,7 +325,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void staggerAndFire(GameTestHelper h) {
         ServerPlayer p = player(h, "stagger");
         LivingEntity target = target(h, 4, 6);
@@ -292,7 +336,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void flurryAndDuplicatePackets(GameTestHelper h) {
         ServerPlayer p = player(h, "thrust");
         LivingEntity target = target(h, 4, 6);
@@ -316,7 +359,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void whipAttachesPullsAndDetaches(GameTestHelper h) {
         ServerPlayer p = player(h, "whip");
         LivingEntity target = target(h, 4, 6);
@@ -338,13 +380,13 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void formSwitchPersists(GameTestHelper h) {
         ServerPlayer p = player(h, "switch");
         ItemStack stack = p.getMainHandItem();
         MeleeWeaponServerEvents.handleInput(p, SSMeleeInputPacket.PRESS);
         MeleeWeaponServerEvents.handleInput(p, SSMeleeInputPacket.RELEASE);
-        ItemStack restored = ItemStack.parseOptional(h.getLevel().registryAccess(), (net.minecraft.nbt.CompoundTag) stack.save(h.getLevel().registryAccess()));
+        var ops = h.getLevel().registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        ItemStack restored = ItemStack.CODEC.parse(ops, ItemStack.CODEC.encodeStart(ops, stack).getOrThrow()).getOrThrow();
         h.assertTrue(((MeleeWeaponItem) restored.getItem()).getForm(restored).damage() == 8, "Alternate form must survive save/load");
         h.runAfterDelay(12, () -> {
             MeleeWeaponServerEvents.handleInput(p, SSMeleeInputPacket.PRESS);
@@ -353,7 +395,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void landingFiresOnlyOnce(GameTestHelper h) {
         ServerPlayer p = player(h, "fall");
         LivingEntity target = target(h, 4, 6);
@@ -376,11 +417,10 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void levitateTracksAndCancels(GameTestHelper h) {
         ServerPlayer p = player(h, "levitate");
         // Unlike stationary collision fixtures, keep normal mob movement enabled here.
-        LivingEntity target = h.spawn(EntityType.HUSK, 4.0F, 2.0F, 6.0F);
+        LivingEntity target = h.spawn(EntityTypes.HUSK, 4.0F, 2.0F, 6.0F);
         target.setNoGravity(true);
         h.assertTrue(net.uhhitscam.knightfall.util.MeleeTargeting.ray(p, 12) == target, "Levitation fixture starts under the crosshair");
         double initialY = target.getY();
@@ -397,7 +437,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void steadyAndSpinContact(GameTestHelper h) {
         ServerPlayer p = player(h, "steady"), spinner = player(h, "spin");
         spinner.setPos(h.absoluteVec(new Vec3(8, 2, 4)));
@@ -411,7 +450,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void slashAndShove(GameTestHelper h) {
         ServerPlayer p = player(h, "slash"), shield = player(h, "knockback");
         shield.setPos(h.absoluteVec(new Vec3(8, 2, 4)));
@@ -425,7 +463,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void chargedBlasterFiresOnce(GameTestHelper h) {
         ServerPlayer p = player(h, "blaster");
         MeleeWeaponServerEvents.handleInput(p, SSMeleeInputPacket.PRESS);
@@ -438,7 +475,67 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
+    public static void burstCompletesAfterRelease(GameTestHelper h) {
+        ServerPlayer p = player(h, "simple");
+        ItemStack stack = new ItemStack(ModItems.A280CFE.get());
+        ProjectileItem weapon = (ProjectileItem) stack.getItem();
+        weapon.setAmmo(stack, 10);
+        stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.TIBANNA.name()));
+        p.setItemInHand(InteractionHand.MAIN_HAND, stack);
+
+        ProjectileWeaponServerEvents.handleInput(p, true, true);
+        ProjectileWeaponServerEvents.handleInput(p, true, false);
+
+        h.runAfterDelay(8, () -> {
+            h.assertTrue(weapon.getAmmo(stack) == 7,
+                    "Releasing a burst trigger must still fire all three shots");
+            done(h, p);
+        });
+    }
+
+    public static void projectileReadAndDropKeepsSingleStack(GameTestHelper h) {
+        ServerPlayer p = player(h, "simple");
+        p.getInventory().clearContent();
+
+        ItemStack stack = new ItemStack(ModItems.A280CFE.get());
+        ProjectileItem weapon = (ProjectileItem) stack.getItem();
+        p.setItemInHand(InteractionHand.MAIN_HAND, stack);
+
+        var componentsBeforeRead = stack.getComponentsPatch();
+        weapon.getAmmo(stack);
+        ProjectileItem.getAmmoType(stack);
+        weapon.getFiringMode(stack);
+        weapon.isActionOnCooldown(p.level(), stack);
+
+        h.assertTrue(componentsBeforeRead.equals(stack.getComponentsPatch()),
+                "Reading projectile weapon state must not modify the inventory stack");
+
+        p.drop(false);
+        var droppedWeapons = h.getLevel().getEntitiesOfClass(
+                ItemEntity.class,
+                p.getBoundingBox().inflate(4),
+                entity -> entity.getItem().is(ModItems.A280CFE.get())
+        );
+
+        h.assertTrue(p.getMainHandItem().isEmpty(), "Dropping the blaster must empty its inventory slot");
+        h.assertTrue(droppedWeapons.size() == 1, "Dropping one blaster must create exactly one ground item");
+
+        ItemEntity droppedWeapon = droppedWeapons.getFirst();
+        droppedWeapon.setNoPickUpDelay();
+        droppedWeapon.playerTouch(p);
+
+        int inventoryCount = 0;
+        for (int slot = 0; slot < net.minecraft.world.entity.player.Inventory.INVENTORY_SIZE; slot++) {
+            if (p.getInventory().getItem(slot).is(ModItems.A280CFE.get())) {
+                inventoryCount += p.getInventory().getItem(slot).getCount();
+            }
+        }
+
+        h.assertTrue(inventoryCount == 1, "Picking up the dropped blaster must restore exactly one inventory item");
+        h.assertTrue(droppedWeapon.isRemoved(), "The collected ground item must be removed");
+        done(h, p);
+    }
+
     public static void dashChecksTravelPath(GameTestHelper h) {
         ServerPlayer p = player(h, "dash");
         LivingEntity target = target(h, 4, 6);
@@ -452,7 +549,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void chargeRequiresMovement(GameTestHelper h) {
         ServerPlayer p = player(h, "charge");
         LivingEntity target = target(h, 4, 4.9F);
@@ -468,7 +564,6 @@ public final class MeleeGameTests {
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void electricHooksAreCallable(GameTestHelper h) {
         ServerPlayer p = player(h, "electric"), whip = player(h, "shockwhip");
         whip.setPos(h.absoluteVec(new Vec3(8, 2, 4)));
@@ -476,13 +571,12 @@ public final class MeleeGameTests {
         MeleeWeaponServerEvents.handleInput(whip, SSMeleeInputPacket.PRESS);
         h.runAfterDelay(20, () -> {
             MeleeWeaponServerEvents.handleInput(p, SSMeleeInputPacket.ATTACK);
-            h.assertTrue(target.getPersistentData().getBoolean("test_shocked"), "Electric inherent property calls the future effect hook");
-            h.assertTrue(whipped.getPersistentData().getBoolean("test_shocked"), "Held whip shock calls the same effect hook");
+            h.assertTrue(target.getPersistentData().getBooleanOr("test_shocked", false), "Electric inherent property calls the future effect hook");
+            h.assertTrue(whipped.getPersistentData().getBooleanOr("test_shocked", false), "Held whip shock calls the same effect hook");
             done(h, p, whip);
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void materialBladeContact(GameTestHelper h) {
         ServerPlayer plain = player(h, "block"), resistant = player(h, "resistant"), cortosis = player(h, "cortosis"), attacker = player(h, "saber");
         plain.setPos(h.absoluteVec(new Vec3(2, 2, 4)));
@@ -492,17 +586,16 @@ public final class MeleeGameTests {
             for (ServerPlayer defender : new ServerPlayer[]{plain, resistant, cortosis}) {
                 MeleeWeaponServerEvents.handleInput(defender, SSMeleeInputPacket.PRESS);
                 attacker.setPos(defender.position().add(0, 0, 2));
-                defender.hurt(attacker.damageSources().playerAttack(attacker), 4);
+                defender.hurtServer(h.getLevel(), attacker.damageSources().playerAttack(attacker), 4);
             }
             h.assertTrue(plain.getHealth() < 20, "Ordinary melee blocking does not resist an active lightsaber");
             h.assertTrue(resistant.getHealth() == 20 && cortosis.getHealth() == 20, "Resistant materials permit blocking");
             var data = attacker.getMainHandItem().get(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
-            h.assertTrue(data != null && data.copyTag().getInt("disabled_ticks") == 60, "Cortosis calls the lightsaber shutdown contract");
+            h.assertTrue(data != null && data.copyTag().getIntOr("disabled_ticks", 0) == 60, "Cortosis calls the lightsaber shutdown contract");
             done(h, plain, resistant, cortosis, attacker);
         });
     }
 
-    @GameTest(template = "melee_empty")
     public static void expiredParryAndPlayerStagger(GameTestHelper h) {
         ServerPlayer defender = player(h, "parry"), stagger = player(h, "stagger");
         defender.setPos(h.absoluteVec(new Vec3(4, 2, 6)));
@@ -519,7 +612,7 @@ public final class MeleeGameTests {
     }
 
     private static final class TestSaber extends Item implements MeleeLightsaber {
-        TestSaber() { super(new Item.Properties().stacksTo(1)); }
+        TestSaber() { super(fixtureProperties("melee_test_saber", new Item.Properties().stacksTo(1))); }
         public boolean isBladeActive(ItemStack stack, LivingEntity holder) {
             return !stack.has(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
         }

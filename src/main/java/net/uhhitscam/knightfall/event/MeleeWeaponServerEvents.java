@@ -16,7 +16,7 @@ import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
@@ -27,7 +27,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
@@ -60,7 +60,7 @@ import static net.uhhitscam.knightfall.item.custom.melee.MeleeInput.*;
 
 @EventBusSubscriber(modid = OperationKnightfall.MODID)
 public final class MeleeWeaponServerEvents {
-    private static final ResourceLocation FLURRY = ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "melee_flurry");
+    private static final Identifier FLURRY = Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "melee_flurry");
     private static final Map<UUID, State> STATES = new HashMap<>();
     private static final ThreadLocal<Hit> CURRENT_HIT = new ThreadLocal<>();
     private static final String STAGGER_UNTIL = "knightfall:melee_stagger_until";
@@ -101,7 +101,7 @@ public final class MeleeWeaponServerEvents {
         if (hand == null) return;
         ItemStack stack = player.getItemInHand(hand);
         if (!(stack.getItem() instanceof MeleeWeaponItem weapon) || weapon.getForm(stack) == null
-                || player.getCooldowns().isOnCooldown(stack.getItem())) return;
+                || player.getCooldowns().isOnCooldown(stack)) return;
         state = STATES.computeIfAbsent(player.getUUID(), id -> new State());
         long now = player.level().getGameTime();
         if (state.down || state.dashTicks > 0 || now < state.readyAt) return;
@@ -121,8 +121,8 @@ public final class MeleeWeaponServerEvents {
         state.form = weapon.getForm(stack);
         state.definition = weapon.getDefinition();
         state.hand = hand;
-        state.slot = player.getInventory().selected;
-        state.dimension = player.level().dimension().location();
+        state.slot = player.getInventory().getSelectedSlot();
+        state.dimension = player.level().dimension().identifier();
         state.down = true;
         state.pressAt = now;
         state.consumed = false;
@@ -152,10 +152,10 @@ public final class MeleeWeaponServerEvents {
 
     private static boolean valid(ServerPlayer player, State state) {
         return canAct(player) && !player.isUsingItem() && state.stack == player.getItemInHand(state.hand)
-                && !state.stack.isEmpty() && state.slot == player.getInventory().selected
-                && state.dimension.equals(player.level().dimension().location())
+                && !state.stack.isEmpty() && state.slot == player.getInventory().getSelectedSlot()
+                && state.dimension.equals(player.level().dimension().identifier())
                 && state.stack.getItem() instanceof MeleeWeaponItem weapon && weapon.getForm(state.stack) == state.form
-                && !player.getCooldowns().isOnCooldown(state.stack.getItem());
+                && !player.getCooldowns().isOnCooldown(state.stack);
     }
 
     private static void release(ServerPlayer player, State state) {
@@ -252,7 +252,7 @@ public final class MeleeWeaponServerEvents {
 
     private static boolean falling(ServerPlayer player) {
         return !player.onGround() && !player.getAbilities().flying && !player.isFallFlying()
-                && !player.isInWaterOrBubble() && !player.onClimbable() && player.getDeltaMovement().y < -0.08;
+                && !player.isInWater() && !player.onClimbable() && player.getDeltaMovement().y < -0.08;
     }
 
     private static void activateHold(ServerPlayer player, State state, MeleeInput input) {
@@ -283,7 +283,7 @@ public final class MeleeWeaponServerEvents {
                 for (LivingEntity target : MeleeTargeting.area(player, attack.radius(), attack.trait() == SLASH)) {
                     success |= hit(player, state.stack, state.hand, target, attack, false);
                 }
-                player.serverLevel().sendParticles(ParticleTypes.SWEEP_ATTACK, player.getX(), player.getY() + 0.4,
+                player.level().sendParticles(ParticleTypes.SWEEP_ATTACK, player.getX(), player.getY() + 0.4,
                         player.getZ(), 5, attack.radius() / 2, 0, attack.radius() / 2, 0);
             }
             case BLASTER_SHOT -> definition(state).blasterShot().fire(player, state.hand, state.stack);
@@ -361,9 +361,9 @@ public final class MeleeWeaponServerEvents {
                 // A shield shove can move a target without inventing damage or on-hit effects.
                 var source = player.damageSources().playerAttack(player);
                 State defense = STATES.get(target.getUUID());
-                boolean blocked = target.isDamageSourceBlocked(source) || defense != null && defense.down
+                boolean blocked = net.uhhitscam.knightfall.util.WeaponDamage.isBlocked(target, source) || defense != null && defense.down
                         && defense.attack != null && defense.attack.trait() == BLOCK && faces(target, source);
-                current.success = !target.isInvulnerableTo(source) && !blocked;
+                current.success = !target.isInvulnerableTo(player.level(), source) && !blocked;
             } else if (vanilla) player.attack(target);
             else {
                 DamageSource source = player.damageSources().playerAttack(player);
@@ -371,9 +371,9 @@ public final class MeleeWeaponServerEvents {
                 float base = (float) (hand == InteractionHand.MAIN_HAND ? player.getAttributeValue(Attributes.ATTACK_DAMAGE)
                         : ((MeleeWeaponItem) stack.getItem()).getForm(stack).damage());
                 float damage = base * (0.2F + strength * strength * 0.8F);
-                damage = EnchantmentHelper.modifyDamage(player.serverLevel(), stack, target, source, damage);
-                target.hurt(source, damage);
-                if (current.success) EnchantmentHelper.doPostAttackEffectsWithItemSource(player.serverLevel(), target, source, stack);
+                damage = EnchantmentHelper.modifyDamage(player.level(), stack, target, source, damage);
+                net.uhhitscam.knightfall.util.WeaponDamage.hurt(target, source, damage);
+                if (current.success) EnchantmentHelper.doPostAttackEffectsWithItemSource(player.level(), target, source, stack);
             }
         } finally { if (previous == null) CURRENT_HIT.remove(); else CURRENT_HIT.set(previous); }
         if (!current.success) return false;
@@ -394,13 +394,14 @@ public final class MeleeWeaponServerEvents {
         if (hit != null && hit.target == event.getEntity() && event.getSource().getEntity() == hit.player) {
             event.setAmount(event.getAmount() * hit.attack.damageMultiplier());
         }
+        blockMelee(event);
     }
 
     @SubscribeEvent
     public static void damaged(LivingDamageEvent.Post event) {
         Hit hit = CURRENT_HIT.get();
         if (hit != null && hit.target == event.getEntity() && event.getSource().getEntity() == hit.player
-                && (event.getNewDamage() > 0 || event.getReduction(
+                && (event.getHealthDamage() > 0 || event.getReduction(
                 net.neoforged.neoforge.common.damagesource.DamageContainer.Reduction.ABSORPTION) > 0)) hit.success = true;
     }
 
@@ -420,7 +421,7 @@ public final class MeleeWeaponServerEvents {
     }
 
     public static boolean isStaggered(LivingEntity entity) {
-        return entity.getPersistentData().getLong(STAGGER_UNTIL) > entity.level().getGameTime();
+        return entity.getPersistentData().getLongOr(STAGGER_UNTIL, 0L) > entity.level().getGameTime();
     }
 
     private static void finishRecovery(ServerPlayer player, State state, boolean success) {
@@ -455,20 +456,29 @@ public final class MeleeWeaponServerEvents {
         state.flurryStack = ItemStack.EMPTY;
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void block(LivingShieldBlockEvent event) {
+    // In 26.2 the shield event only fires for items with BLOCKS_ATTACKS.
+    // Our timed parries and form-specific blocks run before vanilla item blocking.
+    private static void blockMelee(LivingIncomingDamageEvent event) {
         if (event.getEntity().level().isClientSide()) return;
         LivingEntity defender = event.getEntity();
-        DamageSource source = event.getDamageSource();
+        DamageSource source = event.getSource();
         State state = STATES.get(defender.getUUID());
         boolean customBlock = defender instanceof ServerPlayer player && state != null && state.down && valid(player, state)
                 && state.attack != null && state.attack.trait() == BLOCK;
         boolean parry = state != null && state.parryUntil > defender.level().getGameTime()
                 && defender.getItemInHand(state.hand) == state.parryStack && defender instanceof ServerPlayer player && canAct(player)
-                && !player.getCooldowns().isOnCooldown(state.parryStack.getItem());
+                && !player.getCooldowns().isOnCooldown(state.parryStack);
         if ((customBlock || parry) && faces(defender, source)) {
-            event.setBlocked(true);
-            event.setShieldDamage(0);
+            ItemStack offense = source.getDirectEntity() instanceof LivingEntity attacker
+                    ? CURRENT_HIT.get() != null && CURRENT_HIT.get().player == attacker
+                    ? CURRENT_HIT.get().stack : attacker.getMainHandItem() : ItemStack.EMPTY;
+            if (source.getDirectEntity() instanceof LivingEntity attacker && activeSaber(offense, attacker)) {
+                var form = ((MeleeWeaponItem) state.stack.getItem()).getForm(state.stack);
+                if (!form.has(MeleeProperty.LIGHTSABER_RESISTANT) && !form.has(MeleeProperty.DISABLE_LIGHTSABERS)) return;
+                cortosis(state.stack, offense, attacker);
+            }
+            if (activeSaber(state.stack, defender)) cortosis(offense, state.stack, defender);
+            event.setCanceled(true);
             if (source.getDirectEntity() instanceof LivingEntity attacker && parry && defender instanceof ServerPlayer player
                     && MeleeTargeting.canHit(player, attacker) && player.hasLineOfSight(attacker)
                     && player.distanceTo(attacker) <= player.entityInteractionRange()) {
@@ -476,14 +486,21 @@ public final class MeleeWeaponServerEvents {
                 hit(player, state.parryStack, state.hand, attacker, state.parryAttack, false);
             }
             if (customBlock) {
-                state.stack.hurtAndBreak(Math.max(1, (int) event.getOriginalBlockedDamage()), defender,
+                state.stack.hurtAndBreak(Math.max(1, (int) event.getAmount()), defender,
                         state.hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
-                if (source.getDirectEntity() instanceof LivingEntity attacker && attacker.canDisableShield()) {
+                if (source.getDirectEntity() instanceof LivingEntity attacker && attacker.getSecondsToDisableBlocking() > 0.0F) {
                     disableBlock(defender, definition(state).tuning().blockDisableTicks());
                 }
             }
         }
-        ItemStack defense = customBlock || parry ? state.stack : defender.getUseItem();
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void block(LivingShieldBlockEvent event) {
+        LivingEntity defender = event.getEntity();
+        if (defender.level().isClientSide()) return;
+        DamageSource source = event.getDamageSource();
+        ItemStack defense = defender.getUseItem();
         if (source.getDirectEntity() instanceof LivingEntity attacker && event.getBlocked()) {
             ItemStack offense = CURRENT_HIT.get() != null && CURRENT_HIT.get().player == attacker
                     ? CURRENT_HIT.get().stack : attacker.getMainHandItem();
@@ -522,7 +539,7 @@ public final class MeleeWeaponServerEvents {
         ItemStack blocking = target.getUseItem();
         if (state != null && state.down && state.attack != null && state.attack.trait() == BLOCK) blocking = state.stack;
         if (blocking.isEmpty()) return;
-        if (target instanceof Player player) player.getCooldowns().addCooldown(blocking.getItem(), ticks);
+        if (target instanceof Player player) player.getCooldowns().addCooldown(blocking, ticks);
         target.stopUsingItem();
         if (state != null) { state.parryUntil = 0; stopUse(state); }
         target.level().broadcastEntityEvent(target, (byte) 30);
@@ -542,7 +559,7 @@ public final class MeleeWeaponServerEvents {
     private static MeleeWeaponDefinition definition(State state) { return state.definition; }
     private static MeleeWeaponDefinition definition(ItemStack stack) { return ((MeleeWeaponItem) stack.getItem()).getDefinition(); }
     private static MeleeHitContext context(ServerPlayer player, LivingEntity target, ItemStack stack) {
-        return new MeleeHitContext(player.serverLevel(), player, target, stack, definition(stack));
+        return new MeleeHitContext(player.level(), player, target, stack, definition(stack));
     }
 
     private static void setAction(State state, MeleeAttackTrait trait) {
@@ -586,7 +603,7 @@ public final class MeleeWeaponServerEvents {
         InteractionHand hand = InteractionHand.MAIN_HAND;
         MeleeInput input;
         MeleeAttack attack, dashAttack, parryAttack;
-        ResourceLocation dimension;
+        Identifier dimension;
         int slot, dashTicks;
         boolean down, consumed, dashSuccess, continuousGesture;
         long pressAt, readyAt, nextPulse, parryUntil, lastLeftTick = Long.MIN_VALUE;

@@ -3,6 +3,7 @@ package net.uhhitscam.knightfall;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -13,6 +14,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -24,6 +26,7 @@ import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.client.*;
 import net.uhhitscam.knightfall.event.FaceAlignedParticleClient;
 import net.uhhitscam.knightfall.event.ProjectileWeaponZoomEventHandler;
+import net.uhhitscam.knightfall.gui.HudClient;
 import net.uhhitscam.knightfall.item.ModCreativeModeTabs;
 import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.item.client.GrenadeItemModelProperties;
@@ -47,7 +50,7 @@ public class OperationKnightfall {
     public OperationKnightfall(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
 
-        if (net.neoforged.fml.loading.FMLEnvironment.dist == Dist.CLIENT) {
+        if (net.neoforged.fml.loading.FMLEnvironment.getDist() == Dist.CLIENT) {
             KeyBinding.register(modEventBus);
         }
         ModCreativeModeTabs.register(modEventBus);
@@ -78,8 +81,10 @@ public class OperationKnightfall {
         LOGGER.info("Where Am I?");
     }
 
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
     public static class ClientModEvents {
+        private static final Identifier HUD_LAYER = Identifier.fromNamespaceAndPath(MODID, "hud");
+
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             EntityRenderers.register(ModEntities.BLASTER_BOLT.get(), BlasterBoltRenderer::new);
@@ -119,6 +124,11 @@ public class OperationKnightfall {
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 FaceAlignedParticleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
             });
+        }
+
+        @SubscribeEvent
+        public static void registerGuiLayers(RegisterGuiLayersEvent event) {
+            event.registerAboveAll(HUD_LAYER, (guiGraphics, deltaTracker) -> HudClient.onRenderHUD(guiGraphics));
         }
 
         @SubscribeEvent

@@ -1,6 +1,8 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -10,10 +12,11 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 
-public class GravChargeModel extends HierarchicalModel<GrenadeEntity> {
+public class GravChargeModel extends Model<Unit> {
     private final ModelPart gravCharge;
 
     public GravChargeModel(ModelPart root) {
+        super(root.getChild("gravCharge"), RenderTypes::entityCutout);
         this.gravCharge = root.getChild("gravCharge");
     }
 
@@ -34,21 +37,5 @@ public class GravChargeModel extends HierarchicalModel<GrenadeEntity> {
         );
 
         return LayerDefinition.create(meshDefinition, 16, 16);
-    }
-
-    @Override
-    public void setupAnim(
-            GrenadeEntity entity,
-            float limbSwing,
-            float limbSwingAmount,
-            float ageInTicks,
-            float netHeadYaw,
-            float headPitch
-    ) {
-    }
-
-    @Override
-    public ModelPart root() {
-        return gravCharge;
     }
 }

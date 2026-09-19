@@ -1,6 +1,6 @@
 package net.uhhitscam.knightfall.event;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -27,8 +27,8 @@ import java.util.UUID;
 public final class ProjectileWeaponServerEvents {
     private static final int BURST_SHOT_COUNT = 3;
     private static final int BURST_FOLLOWUP_DELAY_TICKS = 2;
-    private static final ResourceLocation HELD_WEAPON_SPEED_MODIFIER_ID =
-            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "held_projectile_weapon_speed");
+    private static final Identifier HELD_WEAPON_SPEED_MODIFIER_ID =
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "held_projectile_weapon_speed");
     private static final Map<UUID, PlayerWeaponState> PLAYER_STATES = new HashMap<>();
 
     private ProjectileWeaponServerEvents() {}
@@ -43,7 +43,7 @@ public final class ProjectileWeaponServerEvents {
             return;
         }
 
-        if (handState.inputDown || !canAct(player)) {
+        if (handState.inputDown || handState.hasPendingBurst() || !canAct(player)) {
             return;
         }
 
@@ -54,7 +54,7 @@ public final class ProjectileWeaponServerEvents {
         }
 
         FiringMode firingMode = weapon.getFiringMode(stack);
-        handState.start(stack, mainHand ? player.getInventory().selected : -1, firingMode, player.level().getGameTime());
+        handState.start(stack, mainHand ? player.getInventory().getSelectedSlot() : -1, firingMode, player.level().getGameTime());
 
         switch (firingMode) {
             case FULL_AUTO -> weapon.fireServer(player, stack, mainHand, false);
@@ -144,7 +144,7 @@ public final class ProjectileWeaponServerEvents {
     }
 
     private static void tickHand(ServerPlayer player, HandState state, boolean mainHand) {
-        if (!state.inputDown) {
+        if (!state.inputDown && !state.hasPendingBurst()) {
             return;
         }
 
@@ -162,6 +162,10 @@ public final class ProjectileWeaponServerEvents {
             case BEAM -> tickBeam(player, state, weapon, mainHand);
             default -> {
             }
+        }
+
+        if (!state.inputDown && !state.hasPendingBurst()) {
+            state.reset();
         }
     }
 
@@ -223,7 +227,7 @@ public final class ProjectileWeaponServerEvents {
 
         ItemStack currentStack = getHeldStack(player, mainHand);
         if (currentStack != state.stack
-                || mainHand && player.getInventory().selected != state.selectedSlot
+                || mainHand && player.getInventory().getSelectedSlot() != state.selectedSlot
                 || !(currentStack.getItem() instanceof ProjectileItem weapon)
                 || weapon.getFiringMode(currentStack) != state.firingMode
                 || weapon.isActionOnCooldown(player, currentStack)
@@ -235,7 +239,12 @@ public final class ProjectileWeaponServerEvents {
     }
 
     private static void stopInput(ServerPlayer player, HandState state, boolean mainHand, boolean fireOnRelease) {
-        if (!state.inputDown) {
+        if (!state.inputDown && !state.hasPendingBurst()) {
+            return;
+        }
+
+        if (fireOnRelease && state.hasPendingBurst()) {
+            state.inputDown = false;
             return;
         }
 
@@ -255,7 +264,7 @@ public final class ProjectileWeaponServerEvents {
 
     private static void detectHeldWeaponChange(ServerPlayer player, PlayerWeaponState state, boolean mainHand) {
         ItemStack currentStack = getHeldStack(player, mainHand);
-        int currentSlot = mainHand ? player.getInventory().selected : -1;
+        int currentSlot = mainHand ? player.getInventory().getSelectedSlot() : -1;
         HeldWeaponSnapshot snapshot = mainHand ? state.mainSnapshot : state.offSnapshot;
 
         if (!snapshot.initialized) {
@@ -371,6 +380,12 @@ public final class ProjectileWeaponServerEvents {
             inputDown = false;
             chargeTriggered = false;
             beamActive = false;
+        }
+
+        private boolean hasPendingBurst() {
+            return firingMode == FiringMode.BURST
+                    && burstShotsFired > 0
+                    && burstShotsFired < BURST_SHOT_COUNT;
         }
     }
 

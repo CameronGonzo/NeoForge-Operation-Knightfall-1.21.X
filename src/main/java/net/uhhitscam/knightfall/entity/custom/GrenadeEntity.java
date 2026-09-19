@@ -16,7 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.stats.Stats;
@@ -89,13 +89,13 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level level, LivingEntity owner) {
-        super(entityType, owner, level);
+        super(entityType, owner, level, net.minecraft.world.item.ItemStack.EMPTY);
     }
 
     @Override
     public void onAddedToLevel() {
         super.onAddedToLevel();
-        if (level().isClientSide || remoteRegistered) {
+        if (level().isClientSide() || remoteRegistered) {
             return;
         }
 
@@ -109,7 +109,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
     @Override
     public void remove(RemovalReason reason) {
-        if (!level().isClientSide && remoteRegistered && reason.shouldDestroy()) {
+        if (!level().isClientSide() && remoteRegistered && reason.shouldDestroy()) {
             GrenadeRemoteLink link = getItem().get(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
             if (link != null) {
                 GrenadeRemoteDetonations detonations = GrenadeRemoteDetonations.get(((ServerLevel) level()).getServer());
@@ -195,19 +195,19 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected AABB makeBoundingBox() {
+    protected AABB makeBoundingBox(Vec3 position) {
         GrenadeDefinition definition = getGrenadeDefinition();
         Direction stuckFace = getStuckFace();
         if (definition == null || stuckFace == null) {
-            return super.makeBoundingBox();
+            return super.makeBoundingBox(position);
         }
 
         double halfWidth = definition.hitboxWidth() * 0.5;
         double halfDepth = definition.hitboxDepth() * 0.5;
         double height = definition.hitboxHeight();
-        double x = getX();
-        double y = getY();
-        double z = getZ();
+        double x = position.x;
+        double y = position.y;
+        double z = position.z;
 
         return switch (stuckFace.getAxis()) {
             case Y -> new AABB(
@@ -266,7 +266,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         restoreVelocityAfterImpact();
 
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
 
@@ -381,7 +381,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         GrenadeDefinition definition = getGrenadeDefinition();
         if (definition == null) {
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 discard();
             }
             return;
@@ -389,7 +389,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         if (definition.trigger().detonatesOnImpact()) {
             stopAtImpact(result.getLocation());
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 detonate();
             }
             return;
@@ -404,7 +404,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         }
 
         Direction direction = result.getDirection();
-        Vec3 normal = Vec3.atLowerCornerOf(direction.getNormal());
+        Vec3 normal = Vec3.atLowerCornerOf(direction.getUnitVec3i());
         bounce(result.getLocation(), normal, definition, direction == Direction.UP);
     }
 
@@ -423,14 +423,14 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         GrenadeDefinition definition = getGrenadeDefinition();
         if (detonated || isRemoteDetonationActivated() || isRemoved() || player.isSpectator()
                 || definition == null || definition.remoteProfile() == null) {
             return InteractionResult.PASS;
         }
 
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
 
@@ -454,8 +454,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (level().isClientSide || detonated || isRemoved()) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source, float amount) {
+        if (level().isClientSide() || detonated || isRemoved()) {
             return false;
         }
 
@@ -474,7 +474,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         GrenadeDefinition definition = getGrenadeDefinition();
         if (definition == null) {
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 discard();
             }
             return;
@@ -485,7 +485,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         }
 
         stopAtImpact(result.getLocation());
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             detonate();
         }
     }
@@ -542,7 +542,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         velocityAfterImpact = reflectedVelocity;
 
         long gameTime = level().getGameTime();
-        if (!level().isClientSide
+        if (!level().isClientSide()
                 && Math.abs(normalSpeed) > normalSettleSpeed
                 && !wasResting
                 && (lastBounceSoundTick == Long.MIN_VALUE
@@ -554,7 +554,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
     private void stickToBlock(BlockHitResult result, GrenadeDefinition definition) {
         Direction direction = result.getDirection();
-        Vec3 normal = Vec3.atLowerCornerOf(direction.getNormal());
+        Vec3 normal = Vec3.atLowerCornerOf(direction.getUnitVec3i());
         setPos(result.getLocation().add(normal.scale(surfaceAttachmentDistance(direction, definition))));
         setDeltaMovement(Vec3.ZERO);
         velocityAfterImpact = null;
@@ -562,7 +562,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         setStuckFace(direction);
         startFuseIfNeeded(definition);
 
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             definition.audio().bounceSound().play(level(), result.getLocation());
             GrenadeRemoteProfile remoteProfile = definition.remoteProfile();
             if (remoteProfile != null && remoteProfile.activationSoundOnStick()) {
@@ -576,7 +576,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     public void placeOnSurface(Vec3 location, Direction direction) {
-        Vec3 normal = Vec3.atLowerCornerOf(direction.getNormal());
+        Vec3 normal = Vec3.atLowerCornerOf(direction.getUnitVec3i());
         GrenadeDefinition definition = getGrenadeDefinition();
         double attachmentDistance = definition != null
                 ? surfaceAttachmentDistance(direction, definition)
@@ -708,7 +708,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     public void detonate() {
-        if (level().isClientSide || detonated) {
+        if (level().isClientSide() || detonated) {
             return;
         }
 
@@ -804,7 +804,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     public void activateRemoteDetonation() {
-        if (level().isClientSide || detonated || isRemoteDetonationActivated()) {
+        if (level().isClientSide() || detonated || isRemoteDetonationActivated()) {
             return;
         }
 
@@ -839,7 +839,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt(FUSE_TAG, getFuseTicks());
         tag.putBoolean(FUSE_RUNNING_TAG, isFuseRunning());
@@ -857,29 +857,29 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains(FUSE_TAG)) {
-            setFuseTicks(tag.getInt(FUSE_TAG));
+        if (tag.read(FUSE_TAG, com.mojang.serialization.Codec.INT).isPresent()) {
+            setFuseTicks(tag.getIntOr(FUSE_TAG, 0));
         }
-        if (tag.contains(FUSE_RUNNING_TAG)) {
-            setFuseRunning(tag.getBoolean(FUSE_RUNNING_TAG));
+        if (tag.read(FUSE_RUNNING_TAG, com.mojang.serialization.Codec.BOOL).isPresent()) {
+            setFuseRunning(tag.getBooleanOr(FUSE_RUNNING_TAG, false));
         }
-        setResting(tag.getBoolean(RESTING_TAG));
-        setStuckFace(tag.contains(STUCK_FACE_TAG)
-                ? Direction.from3DDataValue(tag.getInt(STUCK_FACE_TAG))
+        setResting(tag.getBooleanOr(RESTING_TAG, false));
+        setStuckFace(tag.read(STUCK_FACE_TAG, com.mojang.serialization.Codec.INT).isPresent()
+                ? Direction.from3DDataValue(tag.getIntOr(STUCK_FACE_TAG, 0))
                 : null);
-        detonated = tag.getBoolean(DETONATED_TAG);
-        setBeepFlashTicks(tag.getInt(BEEP_FLASH_TAG));
-        remoteRegistered = tag.getBoolean(REMOTE_REGISTERED_TAG);
+        detonated = tag.getBooleanOr(DETONATED_TAG, false);
+        setBeepFlashTicks(tag.getIntOr(BEEP_FLASH_TAG, 0));
+        remoteRegistered = tag.getBooleanOr(REMOTE_REGISTERED_TAG, false);
         entityData.set(
                 DATA_REMOTE_DETONATION_TICKS,
-                tag.contains(REMOTE_DETONATION_TICKS_TAG) ? tag.getInt(REMOTE_DETONATION_TICKS_TAG) : -1
+                tag.read(REMOTE_DETONATION_TICKS_TAG, com.mojang.serialization.Codec.INT).isPresent() ? tag.getIntOr(REMOTE_DETONATION_TICKS_TAG, 0) : -1
         );
-        oneShotFuseSoundPlayed = tag.getBoolean(ONE_SHOT_FUSE_SOUND_PLAYED_TAG);
+        oneShotFuseSoundPlayed = tag.getBooleanOr(ONE_SHOT_FUSE_SOUND_PLAYED_TAG, false);
         entityData.set(
                 DATA_IMPLOSION_TICKS,
-                tag.contains(IMPLOSION_TICKS_TAG) ? tag.getInt(IMPLOSION_TICKS_TAG) : -1
+                tag.read(IMPLOSION_TICKS_TAG, com.mojang.serialization.Codec.INT).isPresent() ? tag.getIntOr(IMPLOSION_TICKS_TAG, 0) : -1
         );
     }
 }

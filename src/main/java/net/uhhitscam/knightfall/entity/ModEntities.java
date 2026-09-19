@@ -1,6 +1,9 @@
 package net.uhhitscam.knightfall.entity;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -19,64 +22,63 @@ public class ModEntities {
 
     public static final Supplier<EntityType<BlasterBoltEntity>> BLASTER_BOLT =
             ENTITY_TYPES.register("blaster_bolt", () -> EntityType.Builder.<BlasterBoltEntity>of(BlasterBoltEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("blaster_bolt"));
-    public static final Supplier<EntityType<net.uhhitscam.knightfall.entity.custom.MeleeProjectileEntity>> MELEE_PROJECTILE =
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "blaster_bolt"))));
+    public static final Supplier<EntityType<MeleeProjectileEntity>> MELEE_PROJECTILE =
             ENTITY_TYPES.register("melee_projectile", () -> EntityType.Builder
-                    .<net.uhhitscam.knightfall.entity.custom.MeleeProjectileEntity>of(
-                            net.uhhitscam.knightfall.entity.custom.MeleeProjectileEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F).clientTrackingRange(64).updateInterval(1).build("melee_projectile"));
+                    .<MeleeProjectileEntity>of(MeleeProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F).clientTrackingRange(64).updateInterval(1).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "melee_projectile"))));
     public static final Supplier<EntityType<SonicBoltEntity>> SONIC_BOLT =
             ENTITY_TYPES.register("sonic_bolt", () -> EntityType.Builder.<SonicBoltEntity>of(SonicBoltEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("sonic_bolt"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "sonic_bolt"))));
     public static final Supplier<EntityType<StunBlasterBoltEntity>> STUN_BLASTER_BOLT =
             ENTITY_TYPES.register("stun_blaster_bolt", () -> EntityType.Builder.<StunBlasterBoltEntity>of(StunBlasterBoltEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("stun_blaster_bolt"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "stun_blaster_bolt"))));
     public static final Supplier<EntityType<SteelSlugEntity>> STEEL_SLUG =
             ENTITY_TYPES.register("steel_slug", () -> EntityType.Builder.<SteelSlugEntity>of(SteelSlugEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("steel_slug"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "steel_slug"))));
     public static final Supplier<EntityType<RazorSteelSlugEntity>> RAZOR_STEEL_SLUG =
             ENTITY_TYPES.register("razor_steel_slug", () -> EntityType.Builder.<RazorSteelSlugEntity>of(RazorSteelSlugEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("razor_steel_slug"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "razor_steel_slug"))));
     public static final Supplier<EntityType<PoisonTippedSteelSlugEntity>> POISON_TIPPED_STEEL_SLUG =
             ENTITY_TYPES.register("poison_tipped_steel_slug", () -> EntityType.Builder.<PoisonTippedSteelSlugEntity>of(PoisonTippedSteelSlugEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("poison_tipped_steel_slug"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "poison_tipped_steel_slug"))));
     public static final Supplier<EntityType<ExplosiveTippedSteelSlugEntity>> EXPLOSIVE_TIPPED_STEEL_SLUG =
             ENTITY_TYPES.register("explosive_tipped_steel_slug", () -> EntityType.Builder.<ExplosiveTippedSteelSlugEntity>of(ExplosiveTippedSteelSlugEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("explosive_tipped_steel_slug"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "explosive_tipped_steel_slug"))));
     public static final Supplier<EntityType<IonTippedSteelSlugEntity>> ION_TIPPED_STEEL_SLUG =
             ENTITY_TYPES.register("ion_tipped_steel_slug", () -> EntityType.Builder.<IonTippedSteelSlugEntity>of(IonTippedSteelSlugEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("ion_tipped_steel_slug"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "ion_tipped_steel_slug"))));
     public static final Supplier<EntityType<PlasticSlugEntity>> PLASTIC_SLUG =
             ENTITY_TYPES.register("plastic_slug", () -> EntityType.Builder.<PlasticSlugEntity>of(PlasticSlugEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("plastic_slug"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "plastic_slug"))));
     public static final Supplier<EntityType<CeramicSlugEntity>> CERAMIC_SLUG =
             ENTITY_TYPES.register("ceramic_slug", () -> EntityType.Builder.<CeramicSlugEntity>of(CeramicSlugEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("ceramic_slug"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "ceramic_slug"))));
     public static final Supplier<EntityType<FlechetteEntity>> FLECHETTE =
             ENTITY_TYPES.register("flechette", () -> EntityType.Builder.<FlechetteEntity>of(FlechetteEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("flechette"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "flechette"))));
     public static final Supplier<EntityType<FlechetteToxicEntity>> FLECHETTE_TOXIC =
             ENTITY_TYPES.register("flechette_toxic", () -> EntityType.Builder.<FlechetteToxicEntity>of(FlechetteToxicEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("flechette_toxic"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "flechette_toxic"))));
     public static final Supplier<EntityType<FlechetteSpreadCanEntity>> FLECHETTE_SPREAD_CAN =
             ENTITY_TYPES.register("flechette_spread_can", () -> EntityType.Builder.<FlechetteSpreadCanEntity>of(FlechetteSpreadCanEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("flechette_spread_can"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "flechette_spread_can"))));
     public static final Supplier<EntityType<FlechetteToxicSpreadCanEntity>> FLECHETTE_TOXIC_SPREAD_CAN =
             ENTITY_TYPES.register("flechette_toxic_spread_can", () -> EntityType.Builder.<FlechetteToxicSpreadCanEntity>of(FlechetteToxicSpreadCanEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("flechette_toxic_spread_can"));
+                    .sized(0.5f, 0.5f).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "flechette_toxic_spread_can"))));
     public static final Supplier<EntityType<GrenadeEntity>> GRENADE =
             ENTITY_TYPES.register("grenade", () -> EntityType.Builder.<GrenadeEntity>of(GrenadeEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(64)
                     .updateInterval(1)
-                    .build("grenade"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "grenade"))));
     public static final Supplier<EntityType<ExplosiveKnifeEntity>> EXPLOSIVE_KNIFE =
             ENTITY_TYPES.register("explosive_knife", () -> EntityType.Builder.<ExplosiveKnifeEntity>of(ExplosiveKnifeEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(64)
                     .updateInterval(1)
                     .setShouldReceiveVelocityUpdates(false)
-                    .build("explosive_knife"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "explosive_knife"))));
     public static final DeferredHolder<EntityType<?>, EntityType<BlasterBeamEndpointEntity>> BLASTER_BEAM =
             ENTITY_TYPES.register("blaster_beam", () ->
                     EntityType.Builder.<BlasterBeamEndpointEntity>of(BlasterBeamEndpointEntity::new, MobCategory.MISC)
@@ -84,7 +86,7 @@ public class ModEntities {
                             .clientTrackingRange(128)
                             .updateInterval(1)
                             .setShouldReceiveVelocityUpdates(false)
-                            .build("blaster_beam")
+                            .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MODID, "blaster_beam")))
             );
 
     public static boolean isGrenadeTriggeringProjectile(Entity entity) {

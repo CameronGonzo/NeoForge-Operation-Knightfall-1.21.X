@@ -1,6 +1,8 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -10,10 +12,11 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.uhhitscam.knightfall.entity.custom.ExplosiveKnifeEntity;
 
-public class ExplosiveKnifeModel extends HierarchicalModel<ExplosiveKnifeEntity> {
+public class ExplosiveKnifeModel extends Model<Unit> {
 	private final ModelPart bb_main;
 
 	public ExplosiveKnifeModel(ModelPart root) {
+        super(root.getChild("bb_main"), RenderTypes::entityCutout);
 		this.bb_main = root.getChild("bb_main");
 	}
 
@@ -58,15 +61,5 @@ public class ExplosiveKnifeModel extends HierarchicalModel<ExplosiveKnifeEntity>
 		.texOffs(22, 11).addBox(-2.5F, -16.25F, -1.0F, 5.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.ZERO);
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
-	}
-
-	@Override
-	public void setupAnim(ExplosiveKnifeEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public ModelPart root() {
-		return bb_main;
 	}
 }

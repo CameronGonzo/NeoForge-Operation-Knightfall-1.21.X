@@ -1,5 +1,12 @@
 package net.uhhitscam.knightfall.item;
 
+import net.uhhitscam.knightfall.component.AmmoData;
+import net.uhhitscam.knightfall.component.AmmoTypeData;
+import net.uhhitscam.knightfall.component.FireCoolDownData;
+import net.uhhitscam.knightfall.component.FiringModeData;
+import net.uhhitscam.knightfall.component.ModDataComponentTypes;
+import net.uhhitscam.knightfall.component.OverheatData;
+import net.uhhitscam.knightfall.component.ReloadNSwitchCoolDownData;
 import net.uhhitscam.knightfall.item.custom.projectile.AmmoType;
 import net.uhhitscam.knightfall.item.custom.melee.AttachedExplosiveSpec;
 import net.uhhitscam.knightfall.item.custom.projectile.CrosshairTexture;
@@ -57,18 +64,29 @@ public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(OperationKnightfall.MODID);
 
     private static DeferredItem<Item> registerProjectile(ProjectileWeaponDefinition definition) {
-        return ITEMS.register(definition.registryName(),
-                () -> new ProjectileItem(definition.itemProperties(), definition));
+        return ITEMS.registerItem(definition.registryName(),
+                properties -> new ProjectileItem(properties, definition),
+                () -> projectileProperties(definition));
+    }
+
+    private static Item.Properties projectileProperties(ProjectileWeaponDefinition definition) {
+        return definition.itemProperties()
+                .component(ModDataComponentTypes.AMMO.get(), new AmmoData(0))
+                .component(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.NONE.name()))
+                .component(ModDataComponentTypes.FIRING_MODE.get(), new FiringModeData(definition.defaultFiringMode().name()))
+                .component(ModDataComponentTypes.FIRE_COOLDOWN.get(), new FireCoolDownData(0))
+                .component(ModDataComponentTypes.RELOAD_N_SWITCH_COOLDOWN.get(), new ReloadNSwitchCoolDownData(0))
+                .component(ModDataComponentTypes.OVERHEAT.get(), new OverheatData(0, 0));
     }
 
     private static DeferredItem<Item> registerGrenade(GrenadeDefinition definition) {
-        return ITEMS.register(definition.registryName(),
-                () -> new GrenadeItem(definition.itemProperties(), definition));
+        return ITEMS.registerItem(definition.registryName(),
+                properties -> new GrenadeItem(properties, definition), definition::itemProperties);
     }
 
     private static DeferredItem<Item> registerMeleeWeapon(MeleeWeaponDefinition definition) {
-        return ITEMS.register(definition.registryName(),
-                () -> new MeleeWeaponItem(definition.itemProperties(), definition));
+        return ITEMS.registerItem(definition.registryName(),
+                properties -> new MeleeWeaponItem(properties, definition), definition::itemProperties);
     }
 
     public static void register(IEventBus eventBus) {
@@ -110,19 +128,19 @@ public class ModItems {
     // Gas items
     public static final DeferredItem<Item> GAS_CARTRIDGE = ITEMS.registerSimpleItem("gas_cartridge");
     public static final DeferredItem<Item> TIBANNA_GAS = ITEMS.registerItem("tibanna_gas",
-            properties -> new GasItem(properties, 6400, 500, AmmoType.TIBANNA), new Item.Properties().stacksTo(1));
+            properties -> new GasItem(properties, 6400, 500, AmmoType.TIBANNA), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> IONIZED_TIBANNA_GAS = ITEMS.registerItem("ionized_tibanna_gas",
-            properties -> new GasItem(properties, 5200, 500, AmmoType.IONIZED_TIBANNA), new Item.Properties().stacksTo(1));
+            properties -> new GasItem(properties, 5200, 500, AmmoType.IONIZED_TIBANNA), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> SPIN_SEALED_TIBANNA_GAS = ITEMS.registerItem("spin_sealed_tibanna_gas",
-            properties -> new GasItem(properties, 10000, 500, AmmoType.SPIN_SEALED_TIBANNA), new Item.Properties().stacksTo(1));
+            properties -> new GasItem(properties, 10000, 500, AmmoType.SPIN_SEALED_TIBANNA), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> TIBANNAX_GAS = ITEMS.registerItem("tibannax_gas",
-            properties -> new GasItem(properties, 2800, 50, AmmoType.TIBANNAX), new Item.Properties().stacksTo(1));
+            properties -> new GasItem(properties, 2800, 50, AmmoType.TIBANNAX), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> SIG_GAS = ITEMS.registerItem("sig_gas",
-            properties -> new GasItem(properties, 8000, 500, AmmoType.SIG), new Item.Properties().stacksTo(1));
+            properties -> new GasItem(properties, 8000, 500, AmmoType.SIG), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> MAGNETIZED_SIG_GAS = ITEMS.registerItem("magnetized_sig_gas",
-            properties -> new GasItem(properties, 12800, 500, AmmoType.MAGNETIZED_SIG), new Item.Properties().stacksTo(1));
+            properties -> new GasItem(properties, 12800, 500, AmmoType.MAGNETIZED_SIG), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> SKEVON = ITEMS.registerItem("skevon_gas",
-            properties -> new GasItem(properties, 2000, 200, AmmoType.SKEVON), new Item.Properties().stacksTo(1));
+            properties -> new GasItem(properties, 2000, 200, AmmoType.SKEVON), () -> new Item.Properties().stacksTo(1));
 
     // Projectile items
     public static final DeferredItem<Item> STEEL_SLUG = ITEMS.registerItem("steel_slug",
@@ -143,13 +161,13 @@ public class ModItems {
     public static final DeferredItem<Item> FLECHETTE_TOXIC = ITEMS.registerSimpleItem("flechette_toxic");
     public static final DeferredItem<Item> CANISTER = ITEMS.registerSimpleItem("canister");
     public static final DeferredItem<Item> FLECHETTE_CANISTER = ITEMS.registerItem("flechette_canister",
-            properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_CAN), new Item.Properties().stacksTo(16));
+            properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_CAN), () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> FLECHETTE_TOXIC_CANISTER = ITEMS.registerItem("flechette_toxic_canister",
-            properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_TOXIC_CAN), new Item.Properties().stacksTo(16));
+            properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_TOXIC_CAN), () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> FLECHETTE_SPREAD_CANISTER = ITEMS.registerItem("flechette_spread_canister",
-            properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_SPREAD_CAN), new Item.Properties().stacksTo(16));
+            properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_SPREAD_CAN), () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> FLECHETTE_TOXIC_SPREAD_CANISTER = ITEMS.registerItem("flechette_toxic_spread_canister",
-            properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_TOXIC_SPREAD_CAN), new Item.Properties().stacksTo(16));
+            properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_TOXIC_SPREAD_CAN), () -> new Item.Properties().stacksTo(16));
 
     // Grenades
     public static final DeferredItem<Item> THERMAL_DETONATOR = registerGrenade(
@@ -261,10 +279,10 @@ public class ModItems {
                                             24, 0.8, 0.5, 0.8, 0.03))
                                     .build())).build()
     );
-    public static final DeferredItem<Item> DETONITE_CHARGE_DETONATOR = ITEMS.register(
+    public static final DeferredItem<Item> DETONITE_CHARGE_DETONATOR = ITEMS.registerItem(
             "detonite_charge_detonator",
-            () -> new GrenadeDetonatorItem(
-                    new Item.Properties().stacksTo(1),
+            properties -> new GrenadeDetonatorItem(
+                    properties.stacksTo(1),
                     new GrenadeSound(
                             () -> ModSounds.EQUIPMENT_DETONATOR.get(),
                             SoundSource.PLAYERS,
@@ -273,10 +291,10 @@ public class ModItems {
                     )
             )
     );
-    public static final DeferredItem<Item> BARADIUM_BOMB_DETONATOR = ITEMS.register(
+    public static final DeferredItem<Item> BARADIUM_BOMB_DETONATOR = ITEMS.registerItem(
             "baradium_bomb_detonator",
-            () -> new GrenadeDetonatorItem(
-                    new Item.Properties().stacksTo(1),
+            properties -> new GrenadeDetonatorItem(
+                    properties.stacksTo(1),
                     new GrenadeSound(
                             () -> ModSounds.EQUIPMENT_DETONATOR.get(),
                             SoundSource.PLAYERS,
@@ -285,10 +303,10 @@ public class ModItems {
                     )
             )
     );
-    public static final DeferredItem<Item> PYRO_DENTON_EXPLOSIVE_DETONATOR = ITEMS.register(
+    public static final DeferredItem<Item> PYRO_DENTON_EXPLOSIVE_DETONATOR = ITEMS.registerItem(
             "pyro_denton_explosive_detonator",
-            () -> new GrenadeDetonatorItem(
-                    new Item.Properties().stacksTo(1),
+            properties -> new GrenadeDetonatorItem(
+                    properties.stacksTo(1),
                     new GrenadeSound(
                             () -> ModSounds.EQUIPMENT_DETONATOR.get(),
                             SoundSource.PLAYERS,
@@ -425,7 +443,7 @@ public class ModItems {
                                     .knockback(2.0)
                                     .forceKnockback()
                                     .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
-                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.FLASH,
+                                    .particle(new GrenadeParticleBurst(() -> net.minecraft.core.particles.ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFFFFF),
                                             1, 0.0, 0.0, 0.0, 0.0))
                                     .build(),
                             new GrenadeConcussionProfile(5.0F, 40, 40, 30.0F))).build()
@@ -521,7 +539,9 @@ public class ModItems {
             MeleeWeaponDefinition.builder("explosive_knife")
                     .itemProperties(new Item.Properties()
                             .stacksTo(1)
-                            .attributes(SwordItem.createAttributes(Tiers.IRON, 2, -2.4F)))
+                            .attributes(net.minecraft.world.item.component.ItemAttributeModifiers.builder()
+                        .add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE, new net.minecraft.world.entity.ai.attributes.AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 4.0, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE), net.minecraft.world.entity.EquipmentSlotGroup.MAINHAND)
+                        .add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_SPEED, new net.minecraft.world.entity.ai.attributes.AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.4, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE), net.minecraft.world.entity.EquipmentSlotGroup.MAINHAND).build()))
                     .audio(new MeleeWeaponAudioProfile(
                             new MeleeWeaponSound(() -> ModSounds.EXPLOSIVE_KNIFE_EQUIP.get(), SoundSource.PLAYERS, 0.7F, 1.0F),
                             new MeleeWeaponSound(() -> ModSounds.EXPLOSIVE_KNIFE_UNEQUIP.get(), SoundSource.PLAYERS, 0.7F, 1.0F)))

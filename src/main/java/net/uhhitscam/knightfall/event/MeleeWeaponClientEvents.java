@@ -29,7 +29,7 @@ public final class MeleeWeaponClientEvents {
     public static void input(InputEvent.InteractionKeyMappingTriggered event) {
         Minecraft mc = Minecraft.getInstance();
         var player = mc.player;
-        if (player == null || mc.screen != null) return;
+        if (player == null || mc.gui.screen() != null) return;
         if (event.isAttack() && player.getMainHandItem().getItem() instanceof MeleeWeaponItem weapon
                 && weapon.getForm(player.getMainHandItem()) != null) {
             // Keep normal block mining
@@ -53,7 +53,7 @@ public final class MeleeWeaponClientEvents {
                 useDown = true;
                 hand = useHand;
                 held = player.getItemInHand(hand).copy();
-                slot = player.getInventory().selected;
+                slot = player.getInventory().getSelectedSlot();
                 PayloadRegister.sendToServer(new SSMeleeInputPacket(SSMeleeInputPacket.PRESS));
             }
         }
@@ -65,8 +65,8 @@ public final class MeleeWeaponClientEvents {
         Minecraft mc = Minecraft.getInstance();
         var player = mc.player;
         if (player == null) { clear(); return; }
-        boolean cancel = mc.screen != null || !mc.isWindowActive() || !player.isAlive() || player.isSpectator()
-                || StunEffect.isStunned(player) || slot != player.getInventory().selected
+        boolean cancel = mc.gui.screen() != null || !mc.isWindowActive() || !player.isAlive() || player.isSpectator()
+                || StunEffect.isStunned(player) || slot != player.getInventory().getSelectedSlot()
                 || player.getItemInHand(hand).getItem() != held.getItem();
         if (cancel || !mc.options.keyUse.isDown()) {
             PayloadRegister.sendToServer(new SSMeleeInputPacket(cancel ? SSMeleeInputPacket.CANCEL : SSMeleeInputPacket.RELEASE));

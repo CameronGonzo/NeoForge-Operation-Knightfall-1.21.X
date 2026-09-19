@@ -5,10 +5,10 @@ import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import org.jetbrains.annotations.Nullable;
 
-public class RepulseShotSmallParticles extends TextureSheetParticle {
+public class RepulseShotSmallParticles extends SingleQuadParticle {
     protected RepulseShotSmallParticles(ClientLevel level, double x, double y, double z,
                                          SpriteSet spriteSet, double xSpeed, double ySpeed, double zSpeed) {
-        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet.get(0, 1));
 
         this.friction = 0.9f;
         this.gravity = -0.15f;
@@ -28,12 +28,12 @@ public class RepulseShotSmallParticles extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_LIT;
+    protected SingleQuadParticle.Layer getLayer() {
+        return SingleQuadParticle.Layer.OPAQUE;
     }
 
     @Override
-    public int getLightColor(float partialTicks) {
+    public int getLightCoords(float partialTicks) {
         return 15728880;
     }
 
@@ -48,7 +48,7 @@ public class RepulseShotSmallParticles extends TextureSheetParticle {
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level,
                                        double x, double y, double z,
-                                       double xSpeed, double ySpeed, double zSpeed) {
+                                       double xSpeed, double ySpeed, double zSpeed, net.minecraft.util.RandomSource random) {
             return new RepulseShotSmallParticles(level, x, y, z, this.spriteSet, xSpeed, ySpeed, zSpeed);
         }
     }

@@ -1,6 +1,6 @@
 package net.uhhitscam.knightfall.item.custom.projectile;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.uhhitscam.knightfall.OperationKnightfall;
 
 public enum ScopeTexture {
@@ -41,16 +41,16 @@ public enum ScopeTexture {
     OVAL_SMALL_X("oval_small_x_scope.png"),
     OVAL_SMALL_VERT_DOT("oval_small_vert_dot_scope.png");
 
-    private final ResourceLocation texture;
+    private final Identifier texture;
 
     ScopeTexture(String fileName) {
-        this.texture = ResourceLocation.fromNamespaceAndPath(
+        this.texture = Identifier.fromNamespaceAndPath(
                 OperationKnightfall.MODID,
                 "textures/gui/" + fileName
         );
     }
 
-    public ResourceLocation texture() {
+    public Identifier texture() {
         return texture;
     }
 }

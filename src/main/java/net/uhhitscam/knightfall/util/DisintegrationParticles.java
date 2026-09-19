@@ -13,7 +13,7 @@ public final class DisintegrationParticles {
     }
 
     public static void spawn(Level level, Entity entity) {
-        if (level.isClientSide || !(level instanceof ServerLevel serverLevel)) {
+        if (level.isClientSide() || !(level instanceof ServerLevel serverLevel)) {
             return;
         }
 

@@ -1,7 +1,7 @@
 package net.uhhitscam.knightfall.sound;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -598,7 +598,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> BLASTER_IMPACT_WOOD = registerSoundEvent("blaster_impact_wood");
 
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, name);
+        Identifier id = Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
 

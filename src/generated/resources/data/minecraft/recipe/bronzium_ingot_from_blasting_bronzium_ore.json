@@ -1,14 +1,9 @@
 {
   "type": "minecraft:blasting",
-  "category": "misc",
-  "cookingtime": 100,
   "experience": 0.25,
   "group": "bronzium",
-  "ingredient": {
-    "item": "knightfall:bronzium_ore"
-  },
+  "ingredient": "knightfall:bronzium_ore",
   "result": {
-    "count": 1,
     "id": "knightfall:bronzium_ingot"
   }
 }

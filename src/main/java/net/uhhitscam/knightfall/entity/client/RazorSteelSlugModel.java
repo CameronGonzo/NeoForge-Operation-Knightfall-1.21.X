@@ -1,15 +1,18 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.RazorSteelSlugEntity;
 
-public class RazorSteelSlugModel extends HierarchicalModel<RazorSteelSlugEntity> {
+public class RazorSteelSlugModel extends Model<Unit> {
     private final ModelPart RazorSteelSlug;
 
     public RazorSteelSlugModel(ModelPart root) {
+        super(root.getChild("razorSteelSlug"), RenderTypes::entityCutout);
         this.RazorSteelSlug = root.getChild("razorSteelSlug");
     }
 
@@ -29,15 +32,5 @@ public class RazorSteelSlugModel extends HierarchicalModel<RazorSteelSlugEntity>
                 .texOffs(6, 13).addBox(-1.0F, -5.6F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
-    }
-
-    @Override
-    public void setupAnim(RazorSteelSlugEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }
-
-    @Override
-    public ModelPart root() {
-        return RazorSteelSlug;
     }
 }

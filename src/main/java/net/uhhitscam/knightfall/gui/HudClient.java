@@ -2,11 +2,11 @@ package net.uhhitscam.knightfall.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
@@ -14,21 +14,22 @@ import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
 import net.uhhitscam.knightfall.util.KeyBinding;
 
 public class HudClient {
-    public static final int WHITE = 0xffffff;
-    public static final int RED = 0xdb3559;
-    public static final int OUTLINE_COLOR = 0x0b2347;
-    public static final int TRANSPARENT = -1;
+    public static final int WHITE = 0xffffffff;
+    public static final int RED = 0xffdb3559;
+    public static final int OUTLINE_COLOR = 0xff0b2347;
+    public static final int TRANSPARENT = 0x00000000;
 
     public static boolean enabled = true;
+    private static int successfulExtractions;
 
     public static void init() {
         KeyBinding.init();
     }
 
-    public static void onRenderHUD(GuiGraphics guiGraphics) {
+    public static void onRenderHUD(GuiGraphicsExtractor guiGraphics) {
         Minecraft mc = Minecraft.getInstance();
 
-        if (mc.getDebugOverlay().showDebugScreen() || mc.options.hideGui || !enabled) {
+        if (mc.debugEntries.isOverlayVisible() || mc.gui.hud.isHidden() || !enabled) {
             return;
         }
 
@@ -84,18 +85,18 @@ public class HudClient {
             }
 
             FiringMode offhandFiringMode = offhandBlasterItem.getFiringMode(player.getOffhandItem());
-            ResourceLocation texture = switch (offhandFiringMode) {
-                case FiringMode.BURST -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
-                case FiringMode.STUN -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
-                case FiringMode.SCATTER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
-                case FiringMode.FULL_AUTO -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
-                case FiringMode.LAUNCHER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/launcher_icon.png");
-                case FiringMode.CHARGENSHOOT, FiringMode.CHARGENSHOOTONRELEASE -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
-                case FiringMode.SNIPER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/sniper_icon.png");
-                case FiringMode.REPULSE -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
-                default -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/semi_auto_icon.png");
+            Identifier texture = switch (offhandFiringMode) {
+                case FiringMode.BURST -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
+                case FiringMode.STUN -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
+                case FiringMode.SCATTER -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
+                case FiringMode.FULL_AUTO -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
+                case FiringMode.LAUNCHER -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/launcher_icon.png");
+                case FiringMode.CHARGENSHOOT, FiringMode.CHARGENSHOOTONRELEASE -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
+                case FiringMode.SNIPER -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/sniper_icon.png");
+                case FiringMode.REPULSE -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
+                default -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/semi_auto_icon.png");
             };
-            guiGraphics.blit(texture, guiMidWidth - 195, guiHeight - 17, 0, 0, 12, 12, 12, 12);
+            guiGraphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, texture, guiMidWidth - 195, guiHeight - 17, 0, 0, 12, 12, 12, 12);
         }
 
         if (player.getMainHandItem().getItem() instanceof ProjectileItem mainHandBlasterItem) {
@@ -127,36 +128,37 @@ public class HudClient {
             }
 
             FiringMode mainHandFiringMode = mainHandBlasterItem.getFiringMode(player.getMainHandItem());
-            ResourceLocation texture = switch (mainHandFiringMode) {
-                case FiringMode.BURST -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
-                case FiringMode.STUN -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
-                case FiringMode.SCATTER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
-                case FiringMode.FULL_AUTO -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
-                case FiringMode.LAUNCHER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/launcher_icon.png");
-                case FiringMode.CHARGENSHOOT, FiringMode.CHARGENSHOOTONRELEASE -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
-                case FiringMode.SNIPER -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/sniper_icon.png");
-                case FiringMode.REPULSE -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
-                default -> ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/semi_auto_icon.png");
+            Identifier texture = switch (mainHandFiringMode) {
+                case FiringMode.BURST -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/burst_icon.png");
+                case FiringMode.STUN -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/stun_icon.png");
+                case FiringMode.SCATTER -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/scatter_icon.png");
+                case FiringMode.FULL_AUTO -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/full_auto_icon.png");
+                case FiringMode.LAUNCHER -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/launcher_icon.png");
+                case FiringMode.CHARGENSHOOT, FiringMode.CHARGENSHOOTONRELEASE -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/charged_icon.png");
+                case FiringMode.SNIPER -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/sniper_icon.png");
+                case FiringMode.REPULSE -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/repulse_icon.png");
+                default -> Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/gui/semi_auto_icon.png");
             };
-            guiGraphics.blit(texture, guiMidWidth + 100, guiHeight - 17, 0, 0, 12, 12, 12, 12);
+            guiGraphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, texture, guiMidWidth + 100, guiHeight - 17, 0, 0, 12, 12, 12, 12);
         }
+
+        successfulExtractions++;
     }
 
-    private static void text(GuiGraphics context, Font font, Component message, int x, int y, int color, int outlineColor) {
+    public static boolean hasExtractedHud() {
+        return successfulExtractions > 0;
+    }
+
+    private static void text(GuiGraphicsExtractor context, Font font, Component message, int x, int y, int color, int outlineColor) {
         if (outlineColor == TRANSPARENT) {
-            context.drawString(font, message, x, y, color, false);
+            context.text(font, message, x, y, color, false);
         } else {
-            font.drawInBatch8xOutline(
-                    message.getVisualOrderText(),
-                    x,
-                    y,
-                    color,
-                    outlineColor,
-                    context.pose().last().pose(),
-                    context.bufferSource(),
-                    15728880
-            );
-            context.flush();
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    if (dx != 0 || dy != 0) context.text(font, message, x + dx, y + dy, outlineColor, false);
+                }
+            }
+            context.text(font, message, x, y, color, false);
         }
     }
 

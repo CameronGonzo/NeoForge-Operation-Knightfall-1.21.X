@@ -6,7 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -15,6 +15,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.item.ModItems;
+import net.uhhitscam.knightfall.util.WeaponAimRules;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class FlechetteSpreadCanEntity extends Snowball {
         int i = (-1 * flechetteDamage) + 1;
         int canisterDamage = i + flechetteDamage;
 
-        if (entity.hurt(this.damageSources().thrown(this, this.getOwner()), canisterDamage)) {
+        if (net.uhhitscam.knightfall.util.WeaponDamage.hurt(entity, this.damageSources().thrown(this, this.getOwner()), canisterDamage)) {
             if (entity instanceof LivingEntity livingEntity) {
                 livingEntity.invulnerableTime = 0;
 //                level().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), blasterFireSound, SoundSource.NEUTRAL, 0.5F, 1.0F);
@@ -62,7 +63,7 @@ public class FlechetteSpreadCanEntity extends Snowball {
         super.onHit(result);
         this.level().broadcastEntityEvent(this, (byte) 3);
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.discard();
         }
     }
@@ -70,12 +71,12 @@ public class FlechetteSpreadCanEntity extends Snowball {
     @Override
     public void handleEntityEvent(byte id) {
         if (id == 3) {
-//            for (int i = 0; i < 1 + level().random.nextInt(3); i++) {
+//            for (int i = 0; i < 1 + level().getRandom().nextInt(3); i++) {
 //                this.level().addParticle(ParticleTypes.SMOKE,
 //                        this.getX(), this.getY(), this.getZ(),
-//                        (this.level().random.nextDouble() - 0.5) * 0.01,
-//                        (this.level().random.nextDouble() * 0.1) + 0.05, // Small upward motion
-//                        (this.level().random.nextDouble() - 0.5) * 0.01
+//                        (this.level().getRandom().nextDouble() - 0.5) * 0.01,
+//                        (this.level().getRandom().nextDouble() * 0.1) + 0.05, // Small upward motion
+//                        (this.level().getRandom().nextDouble() - 0.5) * 0.01
 //                );
 //            }
         }
@@ -109,7 +110,7 @@ public class FlechetteSpreadCanEntity extends Snowball {
 
         this.setDeltaMovement(velocity.normalize().scale(this.flechetteSpeed));
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(
                     LivingEntity.class,
                     this.getBoundingBox().inflate(3),
@@ -129,7 +130,7 @@ public class FlechetteSpreadCanEntity extends Snowball {
             }
         }
 
-        if (!this.level().isClientSide && this.tickCount > 50) {
+        if (!this.level().isClientSide() && this.tickCount > 50) {
             this.discard();
         }
     }
@@ -150,7 +151,7 @@ public class FlechetteSpreadCanEntity extends Snowball {
             );
             Vec3 direction = canisterDirection.scale(0.5).add(randomSpread.scale(0.5)).normalize().scale(this.flechetteSpeed);
 
-            flechette.setDeltaMovement(direction);
+            WeaponAimRules.setProjectileMotion(flechette, direction);
             flechette.setOwner(this.getOwner());
 
             serverLevel.addFreshEntity(flechette);
@@ -169,8 +170,12 @@ public class FlechetteSpreadCanEntity extends Snowball {
         return 0.002F;
     }
 
-    @Override
     public AABB getBoundingBoxForCulling() {
         return this.getBoundingBox().inflate(0.5);
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return this.tickCount < 2 && distance < 12.25 || super.shouldRenderAtSqrDistance(distance);
     }
 }

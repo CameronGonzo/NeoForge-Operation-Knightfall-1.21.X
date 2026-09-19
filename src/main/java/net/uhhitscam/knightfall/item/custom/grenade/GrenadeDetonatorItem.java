@@ -3,7 +3,7 @@ package net.uhhitscam.knightfall.item.custom.grenade;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,17 +27,17 @@ public class GrenadeDetonatorItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         GrenadeRemoteLink link = stack.get(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
         if (link == null || stack.has(ModDataComponentTypes.REMOTE_DETONATOR_STATE.get())) {
-            return InteractionResultHolder.fail(stack);
+            return InteractionResult.FAIL;
         }
 
         if (level instanceof ServerLevel serverLevel) {
             if (GrenadeRemoteDetonations.get(serverLevel.getServer()).isActivated(link)) {
                 stack.setCount(0);
-                return InteractionResultHolder.consume(stack);
+                return InteractionResult.CONSUME;
             }
 
             stack.set(
@@ -49,13 +49,14 @@ public class GrenadeDetonatorItem extends Item {
             player.awardStat(Stats.ITEM_USED.get(this));
         }
 
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        super.inventoryTick(stack, level, entity, slotId, isSelected);
-        if (level instanceof ServerLevel serverLevel) {
+    public void inventoryTick(ItemStack stack, net.minecraft.server.level.ServerLevel level, Entity entity, net.minecraft.world.entity.EquipmentSlot slot) {
+        super.inventoryTick(stack, level, entity, slot);
+        {
+            ServerLevel serverLevel = level;
             GrenadeRemoteLink link = stack.get(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
             if ((link != null
                     && !stack.has(ModDataComponentTypes.REMOTE_DETONATOR_STATE.get())

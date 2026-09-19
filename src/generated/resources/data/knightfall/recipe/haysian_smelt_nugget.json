@@ -1,10 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
-    {
-      "item": "knightfall:haysian_smelt_ingot"
-    }
+    "knightfall:haysian_smelt_ingot"
   ],
   "result": {
     "count": 9,

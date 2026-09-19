@@ -27,7 +27,7 @@ public final class BlasterImpactSoundUtil {
                 impactSound,
                 SoundSource.NEUTRAL,
                 0.45F,
-                0.9F + level.random.nextFloat() * 0.2F
+                0.9F + level.getRandom().nextFloat() * 0.2F
         );
     }
 

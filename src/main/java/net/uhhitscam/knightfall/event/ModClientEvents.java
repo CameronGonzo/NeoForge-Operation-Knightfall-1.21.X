@@ -6,12 +6,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.effect.custom.StunEffect;
 import net.uhhitscam.knightfall.gui.HudClient;
@@ -40,11 +38,6 @@ public final class ModClientEvents {
     private static long offEquipReadyTime;
 
     private ModClientEvents() {}
-
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onRenderGui(RenderGuiEvent.Post event) {
-        HudClient.onRenderHUD(event.getGuiGraphics());
-    }
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -128,7 +121,7 @@ public final class ModClientEvents {
     }
 
     private static boolean canStartInput(LocalPlayer player) {
-        return Minecraft.getInstance().screen == null && !StunEffect.isStunned(player);
+        return Minecraft.getInstance().gui.screen() == null && !StunEffect.isStunned(player);
     }
 
     private static void releaseStoppedInputs(Minecraft minecraft, LocalPlayer player) {
@@ -181,7 +174,7 @@ public final class ModClientEvents {
         resetState(state, true);
         state.inputDown = true;
         state.heldStack = stack;
-        state.selectedSlot = state.side.isMainHand() ? player.getInventory().selected : -1;
+        state.selectedSlot = state.side.isMainHand() ? player.getInventory().getSelectedSlot() : -1;
         state.activeMode = weapon.getFiringMode(stack);
 
         PayloadRegister.sendToServer(new SSProjectileWeaponInputPacket(state.side.isMainHand(), true));
@@ -215,7 +208,7 @@ public final class ModClientEvents {
         }
 
         ItemStack currentStack = state.side.getStack(player);
-        if (state.side.isMainHand() && player.getInventory().selected != state.selectedSlot
+        if (state.side.isMainHand() && player.getInventory().getSelectedSlot() != state.selectedSlot
                 || currentStack.getItem() != state.heldStack.getItem()
                 || !(currentStack.getItem() instanceof ProjectileItem weapon)
                 || weapon.getFiringMode(currentStack) != state.activeMode) {
@@ -303,7 +296,7 @@ public final class ModClientEvents {
         }
 
         Entity target = entityHitResult.getEntity();
-        return !player.isShiftKeyDown() && player.canInteractWithEntity(target, 0.0);
+        return !player.isShiftKeyDown() && player.isWithinEntityInteractionRange(target, 0.0);
     }
 
     private static void tickHeldWeaponEquipSounds(LocalPlayer player) {
@@ -478,10 +471,10 @@ public final class ModClientEvents {
         private static HeldWeaponSnapshot fromMainHand(LocalPlayer player) {
             ItemStack stack = player.getMainHandItem();
             if (stack.getItem() instanceof ProjectileItem weapon) {
-                return new HeldWeaponSnapshot(true, weapon.getProjectileWeaponName(), null, player.getInventory().selected);
+                return new HeldWeaponSnapshot(true, weapon.getProjectileWeaponName(), null, player.getInventory().getSelectedSlot());
             }
             if (stack.getItem() instanceof MeleeWeaponItem weapon) {
-                return new HeldWeaponSnapshot(false, null, weapon.getDefinition(), player.getInventory().selected);
+                return new HeldWeaponSnapshot(false, null, weapon.getDefinition(), player.getInventory().getSelectedSlot());
             }
             return EMPTY;
         }

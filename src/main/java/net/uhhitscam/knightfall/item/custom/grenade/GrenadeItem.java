@@ -9,13 +9,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.uhhitscam.knightfall.entity.ModEntities;
@@ -38,27 +37,27 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (definition.deployment() == GrenadeDeployment.PLACE) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
 
-        if (player.getCooldowns().isOnCooldown(this)) {
-            return InteractionResultHolder.fail(stack);
+        if (player.getCooldowns().isOnCooldown(stack)) {
+            return InteractionResult.FAIL;
         }
 
         player.startUsingItem(hand);
         GrenadeRemoteProfile remoteProfile = definition.remoteProfile();
-        if (!level.isClientSide && (remoteProfile == null || !remoteProfile.activationSoundOnStick())) {
+        if (!level.isClientSide() && (remoteProfile == null || !remoteProfile.activationSoundOnStick())) {
             definition.audio().activationSound().play(level, player.position());
         }
-        return InteractionResultHolder.consume(stack);
+        return InteractionResult.CONSUME;
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseDuration) {
-        if (level.isClientSide
+        if (level.isClientSide()
                 || !definition.trigger().fuseRunsWhileHeld()
                 || definition.fuseSoundMode() != GrenadeFuseSoundMode.SCHEDULED_BEEPS) {
             return;
@@ -77,7 +76,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
 
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
-        if (player == null || stack.isEmpty() || player.getCooldowns().isOnCooldown(this)) {
+        if (player == null || stack.isEmpty() || player.getCooldowns().isOnCooldown(stack)) {
             return InteractionResult.FAIL;
         }
 
@@ -104,13 +103,13 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
             }
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity user, int timeLeft) {
-        if (level.isClientSide) {
-            return;
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity user, int timeLeft) {
+        if (level.isClientSide()) {
+            return false;
         }
 
         int remainingFuseTicks = definition.trigger().fuseRunsWhileHeld()
@@ -124,6 +123,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
                 remainingFuseTicks,
                 definition.throwVelocity(useTicks)
         );
+        return true;
     }
 
     @Override
@@ -252,7 +252,7 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
         if (user instanceof Player player) {
             player.awardStat(Stats.ITEM_USED.get(this));
             if (definition.cooldownTicks() > 0) {
-                player.getCooldowns().addCooldown(this, definition.cooldownTicks());
+                player.getCooldowns().addCooldown(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(this), definition.cooldownTicks());
             }
         }
     }
@@ -265,8 +265,8 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.SPEAR;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.SPEAR;
     }
 
     @Override

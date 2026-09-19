@@ -1,16 +1,10 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
-    {
-      "item": "knightfall:durasteel_ingot"
-    },
-    {
-      "item": "knightfall:titanium_ingot"
-    }
+    "knightfall:durasteel_ingot",
+    "knightfall:titanium_ingot"
   ],
   "result": {
-    "count": 1,
     "id": "knightfall:duranium_ingot"
   }
 }

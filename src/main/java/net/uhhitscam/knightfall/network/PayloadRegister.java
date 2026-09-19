@@ -42,7 +42,7 @@ public class PayloadRegister {
     }
 
     public static void sendToServer(Packet packet) {
-        PacketDistributor.sendToServer(packet);
+        net.neoforged.neoforge.client.network.ClientPacketDistributor.sendToServer(packet);
     }
 
     public static void sendToPlayer(ServerPlayer player, Packet packet) {

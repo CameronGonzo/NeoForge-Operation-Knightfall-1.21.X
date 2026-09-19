@@ -1,6 +1,6 @@
 # Melee weapon foundation
 
-The system targets the project's Minecraft 1.21.1 / NeoForge 21.1.115 environment. No new gameplay weapons, models, textures, or sounds are registered. The existing explosive knife keeps its original attached-explosive behavior because it does not opt into a combat form.
+The system targets the project's Minecraft 26.2 / NeoForge 26.2.0.87 environment. No new gameplay weapons, models, textures, or sounds are registered by this framework. The existing explosive knife keeps its original attached-explosive behavior because it does not opt into a combat form. See [the migration guide](MIGRATION_26_2.md) for Java 25 and IntelliJ setup.
 
 ## Adding a weapon
 
@@ -106,7 +106,7 @@ Subscribe to `MeleeActionEvent` on the game event bus to add attack/charging sou
 
 ## Verification and handoff
 
-`gradlew.bat check` includes `meleeContractTest`, which validates all 105 cells in the attack/input matrix, invalid definitions, gesture precedence, and immutability. `gradlew.bat runGameTestServer` runs real combat tests with fixtures under the standard `src/test` tree; those fixtures and the test structure are excluded from the shipped jar. The test world lives under `build/gametest`.
+`gradlew.bat check` includes `meleeContractTest`, which validates all 105 cells in the attack/input matrix, invalid definitions, gesture precedence, and immutability. `gradlew.bat runGameTestServer` runs real combat tests with fixtures under the standard `src/test` tree; those fixtures and the test structure are excluded from the shipped jar. The test world lives under `build/gametest-26.2`. Tests now register their functions and instances through the 26.2 registries and `RegisterGameTestsEvent`.
 
 The engine is split between the existing item definitions, `MeleeWeaponClientEvents` for input edges, `MeleeWeaponServerEvents` for live actions, `MeleeTargeting` for collision queries, and `MeleeProjectileEntity` for throws/hooks. The normal blaster firing controller and grenade behavior remain separate. Dedicated-server verification also required guarding the existing client-only key bindings, render-layer subscriber, and GameRenderer accessor.
 

@@ -1,11 +1,3 @@
 {
-  "parent": "knightfall:item/explosive_knife_item",
-  "overrides": [
-    {
-      "predicate": {
-        "knightfall:held": 1.0
-      },
-      "model": "knightfall:item/explosive_knife_item_held"
-    }
-  ]
+  "parent": "knightfall:item/explosive_knife_item"
 }

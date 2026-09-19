@@ -4,7 +4,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -13,9 +13,9 @@ import net.uhhitscam.knightfall.particle.ModParticles;
 import org.joml.Vector3f;
 
 public record CSDisintegrationParticlesPacket(Vector3f origin, float entityWidth, float entityHeight, int largeNum, int mediumNum, int smallNum) implements Packet {
-    public static final Type<CSDisintegrationParticlesPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("knightfall", "disintegration_particles"));
+    public static final Type<CSDisintegrationParticlesPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath("knightfall", "disintegration_particles"));
     public static final StreamCodec<RegistryFriendlyByteBuf, CSDisintegrationParticlesPacket> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.VECTOR3F,
+            ByteBufCodecs.VECTOR3F.map(org.joml.Vector3f::new, value -> value),
             CSDisintegrationParticlesPacket::origin,
             ByteBufCodecs.FLOAT,
             CSDisintegrationParticlesPacket::entityWidth,
@@ -60,9 +60,9 @@ public record CSDisintegrationParticlesPacket(Vector3f origin, float entityWidth
     private Vec3 randomBodyOffset(Level level) {
         double radius = Math.max(0.15F, entityWidth * 0.45F);
 
-        double x = (level.random.nextDouble() - 0.3D) * radius;
-        double y = (level.random.nextDouble() - 0.3D) * entityHeight;
-        double z = (level.random.nextDouble() - 0.3D) * radius;
+        double x = (level.getRandom().nextDouble() - 0.3D) * radius;
+        double y = (level.getRandom().nextDouble() - 0.3D) * entityHeight;
+        double z = (level.getRandom().nextDouble() - 0.3D) * radius;
 
         return new Vec3(x, y, z);
     }
@@ -71,9 +71,9 @@ public record CSDisintegrationParticlesPacket(Vector3f origin, float entityWidth
         double horizontalSpread = size.horizontalSpread;
         double upwardSpeed = size.upwardSpeed;
 
-        double x = level.random.nextGaussian() * horizontalSpread;
-        double y = upwardSpeed + level.random.nextDouble() * upwardSpeed;
-        double z = level.random.nextGaussian() * horizontalSpread;
+        double x = level.getRandom().nextGaussian() * horizontalSpread;
+        double y = upwardSpeed + level.getRandom().nextDouble() * upwardSpeed;
+        double z = level.getRandom().nextGaussian() * horizontalSpread;
 
         return new Vec3(x, y, z);
     }

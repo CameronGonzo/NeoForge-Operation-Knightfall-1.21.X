@@ -19,7 +19,7 @@ import net.uhhitscam.knightfall.network.SSProjectileWeaponActionPacket;
 import org.lwjgl.glfw.GLFW;
 
 public final class KeyBinding {
-    private static final String CATEGORY = "key.categories.knightfall";
+    private static final KeyMapping.Category CATEGORY = new KeyMapping.Category(net.minecraft.resources.Identifier.fromNamespaceAndPath("knightfall", "knightfall"));
     private static final int RELOAD_KEY_HOLD_THRESHOLD = 40;
 
     public static final KeyMapping RELOAD_KEY = new KeyMapping(
@@ -51,6 +51,7 @@ public final class KeyBinding {
     }
 
     private static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+        event.registerCategory(CATEGORY);
         event.register(RELOAD_KEY);
         event.register(SWITCH_FIRING_MODE_KEY);
     }
@@ -58,7 +59,7 @@ public final class KeyBinding {
     private static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
-        if (player == null || minecraft.screen != null) {
+        if (player == null || minecraft.gui.screen() != null) {
             resetReloadKeyState();
             return;
         }

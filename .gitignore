@@ -24,3 +24,6 @@ runs
 run-data
 
 repo
+# Version-specific development worlds
+run-26.2/
+src/generated/resources/.cache/

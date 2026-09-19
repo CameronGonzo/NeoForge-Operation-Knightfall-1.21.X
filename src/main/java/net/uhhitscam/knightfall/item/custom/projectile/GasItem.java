@@ -41,10 +41,6 @@ public class GasItem extends Item {
 
     public void setAmmo(ItemStack stack, int ammo) {
         stack.set(ModDataComponentTypes.AMMO.get(), new AmmoData(ammo));
-
-        if (stack.getEntityRepresentation() instanceof Player player) {
-            player.inventoryMenu.broadcastChanges();
-        }
     }
 
     @Override
@@ -63,14 +59,12 @@ public class GasItem extends Item {
         return super.getName(stack).copy().withStyle(style -> style.withColor(color));
     }
 
-    @Override
-    public void appendHoverText(ItemStack pStack,TooltipContext pContext, List<Component> pTooltip, TooltipFlag pFlag) {
-        pTooltip.add(Component.literal("Gas Ammo: " + getAmmo(pStack) + "/" + maxAmmo));
-        super.appendHoverText(pStack, pContext, pTooltip, pFlag);
+    public void appendBaseTooltip(ItemStack pStack, java.util.function.Consumer<Component> pTooltip) {
+        pTooltip.accept(Component.literal("Gas Ammo: " + getAmmo(pStack) + "/" + maxAmmo));
     }
 
     @Override
-    public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
+    public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType, net.minecraft.world.level.block.entity.FuelValues fuelValues) {
         return this.burnTime;
     }
 }

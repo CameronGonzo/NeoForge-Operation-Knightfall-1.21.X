@@ -1,10 +1,9 @@
 package net.uhhitscam.knightfall.effect.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
@@ -14,7 +13,7 @@ import net.uhhitscam.knightfall.effect.ModEffects;
 import java.util.UUID;
 
 public final class StunEffectRenderer {
-    private static final ResourceLocation STUN_HIT_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+    private static final Identifier STUN_HIT_TEXTURE = Identifier.fromNamespaceAndPath(
             OperationKnightfall.MODID,
             "textures/gui/stun_hit_effect.png"
     );
@@ -59,18 +58,15 @@ public final class StunEffectRenderer {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
 
-        GuiGraphics guiGraphics = event.getGuiGraphics();
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        GuiGraphicsExtractor guiGraphics = event.getGuiGraphics();
 
         renderHitAnimation(guiGraphics, screenWidth, screenHeight, elapsedTicks);
         renderBlueTint(guiGraphics, screenWidth, screenHeight, elapsedTicks);
 
-        RenderSystem.disableBlend();
     }
 
     private static void renderHitAnimation(
-            GuiGraphics guiGraphics,
+            GuiGraphicsExtractor guiGraphics,
             int screenWidth,
             int screenHeight,
             int elapsedTicks
@@ -80,14 +76,14 @@ public final class StunEffectRenderer {
             return;
         }
 
-        guiGraphics.blit(
+        guiGraphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED,
                 STUN_HIT_TEXTURE,
                 0,
                 0,
-                screenWidth,
-                screenHeight,
                 0.0F,
                 (float) (frame * FRAME_SIZE),
+                screenWidth,
+                screenHeight,
                 FRAME_SIZE,
                 FRAME_SIZE,
                 TEXTURE_WIDTH,
@@ -96,7 +92,7 @@ public final class StunEffectRenderer {
     }
 
     private static void renderBlueTint(
-            GuiGraphics guiGraphics,
+            GuiGraphicsExtractor guiGraphics,
             int screenWidth,
             int screenHeight,
             int elapsedTicks

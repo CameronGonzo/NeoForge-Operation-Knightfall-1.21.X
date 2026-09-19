@@ -1,15 +1,18 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.FlechetteSpreadCanEntity;
 
-public class FlechetteSpreadCanModel extends HierarchicalModel<FlechetteSpreadCanEntity> {
+public class FlechetteSpreadCanModel extends Model<Unit> {
     private final ModelPart flechetteSpreadCan;
 
     public FlechetteSpreadCanModel(ModelPart root) {
+        super(root.getChild("flechetteSpreadCan"), RenderTypes::entityCutout);
         this.flechetteSpreadCan = root.getChild("flechetteSpreadCan");
     }
 
@@ -22,15 +25,5 @@ public class FlechetteSpreadCanModel extends HierarchicalModel<FlechetteSpreadCa
                 .texOffs(0, 0).addBox(-1.5F, -6.5F, -3.5F, 2.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
-    }
-
-    @Override
-    public void setupAnim(FlechetteSpreadCanEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }
-
-    @Override
-    public ModelPart root() {
-        return flechetteSpreadCan;
     }
 }

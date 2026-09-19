@@ -5,7 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.event.FaceAlignedParticleClient;
@@ -19,12 +19,12 @@ public record CSFaceAlignedParticlePacket(
         int variant
 ) implements Packet {
     public static final Type<CSFaceAlignedParticlePacket> TYPE = new Type<>(
-            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "face_aligned_particle")
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "face_aligned_particle")
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CSFaceAlignedParticlePacket> STREAM_CODEC =
             StreamCodec.composite(
-                    ByteBufCodecs.VECTOR3F,
+                    ByteBufCodecs.VECTOR3F.map(org.joml.Vector3f::new, value -> value),
                     CSFaceAlignedParticlePacket::position,
                     ByteBufCodecs.INT,
                     CSFaceAlignedParticlePacket::directionId,

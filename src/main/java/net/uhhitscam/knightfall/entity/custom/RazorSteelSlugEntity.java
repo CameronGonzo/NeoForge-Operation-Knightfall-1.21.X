@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -65,19 +65,19 @@ public class RazorSteelSlugEntity extends Snowball {
         }
         this.level().broadcastEntityEvent(this, (byte) 3);
 
-        if (entity instanceof Creeper creeper && weaponName.equals(WeaponName.BERSERKER) && level().random.nextInt(2) == 1) {
+        if (entity instanceof Creeper creeper && weaponName.equals(WeaponName.BERSERKER) && level().getRandom().nextInt(2) == 1) {
             creeper.ignite();
         }
 
         int i = 1;
         int razorSteelSlugDamage = i + slugDamage;
 
-        if (entity.hurt(this.damageSources().thrown(this, this.getOwner()), razorSteelSlugDamage)) {
+        if (net.uhhitscam.knightfall.util.WeaponDamage.hurt(entity, this.damageSources().thrown(this, this.getOwner()), razorSteelSlugDamage)) {
             if (entity instanceof LivingEntity livingEntity) {
                 livingEntity.invulnerableTime = 0;
 //                level().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), blasterFireSound, SoundSource.NEUTRAL, 0.5F, 1.0F);
 
-                if (weaponName.equals(WeaponName.BERSERKER) && level().random.nextInt(2) == 1) {
+                if (weaponName.equals(WeaponName.BERSERKER) && level().getRandom().nextInt(2) == 1) {
                     entity.setRemainingFireTicks(10 + this.random.nextInt(71));
                 }
             }
@@ -93,13 +93,13 @@ public class RazorSteelSlugEntity extends Snowball {
         int numParticles = 12;
         this.level().broadcastEntityEvent(this, (byte) 3);
 
-        if (!this.level().isClientSide) {
-            if (result.getType() == HitResult.Type.BLOCK && weaponName.equals(WeaponName.BERSERKER) && level().random.nextInt(2) == 1) {
+        if (!this.level().isClientSide()) {
+            if (result.getType() == HitResult.Type.BLOCK && weaponName.equals(WeaponName.BERSERKER) && level().getRandom().nextInt(2) == 1) {
                 BlockHitResult blockHit = (BlockHitResult) result;
                 BlockPos pos = blockHit.getBlockPos().relative(blockHit.getDirection());
 
                 // Only set fire if the space is air
-                if (level().getBlockState(pos).isAir() && level().getBlockState(pos.below()).isSolidRender(level(), pos.below())) {
+                if (level().getBlockState(pos).isAir() && level().getBlockState(pos.below()).isSolidRender()) {
                     level().setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
                 }
             }
@@ -122,7 +122,7 @@ public class RazorSteelSlugEntity extends Snowball {
         BlockPos hitPos = result.getBlockPos();
         BlockState hitState = level.getBlockState(hitPos);
 
-        if (hitState.is(Blocks.TNT) && weaponName.equals(WeaponName.BERSERKER) && level().random.nextInt(2) == 1) {
+        if (hitState.is(Blocks.TNT) && weaponName.equals(WeaponName.BERSERKER) && level().getRandom().nextInt(2) == 1) {
             level.removeBlock(hitPos, false);
 
             PrimedTnt primedTnt = new PrimedTnt(level, hitPos.getX() + 0.5, hitPos.getY(), hitPos.getZ() + 0.5, (LivingEntity) this.getOwner());
@@ -137,12 +137,12 @@ public class RazorSteelSlugEntity extends Snowball {
     @Override
     public void handleEntityEvent(byte id) {
         if (id == 3) {
-//            for (int i = 0; i < 1 + level().random.nextInt(3); i++) {
+//            for (int i = 0; i < 1 + level().getRandom().nextInt(3); i++) {
 //                this.level().addParticle(ParticleTypes.SMOKE,
 //                        this.getX(), this.getY(), this.getZ(),
-//                        (this.level().random.nextDouble() - 0.5) * 0.01,
-//                        (this.level().random.nextDouble() * 0.1) + 0.05, // Small upward motion
-//                        (this.level().random.nextDouble() - 0.5) * 0.01
+//                        (this.level().getRandom().nextDouble() - 0.5) * 0.01,
+//                        (this.level().getRandom().nextDouble() * 0.1) + 0.05, // Small upward motion
+//                        (this.level().getRandom().nextDouble() - 0.5) * 0.01
 //                );
 //            }
         }
@@ -206,7 +206,7 @@ public class RazorSteelSlugEntity extends Snowball {
             this.onHitEntity(hitResult);
         }
 
-        if (!this.level().isClientSide && this.tickCount > 50) {
+        if (!this.level().isClientSide() && this.tickCount > 50) {
             this.discard();
         }
     }
@@ -221,8 +221,12 @@ public class RazorSteelSlugEntity extends Snowball {
         return 0.002F;
     }
 
-    @Override
     public AABB getBoundingBoxForCulling() {
         return this.getBoundingBox().inflate(0.5);
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return this.tickCount < 2 && distance < 12.25 || super.shouldRenderAtSqrDistance(distance);
     }
 }

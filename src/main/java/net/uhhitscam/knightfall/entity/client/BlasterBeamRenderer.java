@@ -3,12 +3,14 @@ package net.uhhitscam.knightfall.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,13 +22,13 @@ import net.uhhitscam.knightfall.util.WeaponTargeting;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntity> {
+public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntity, BlasterBeamRenderer.State> {
 
-    private static final ResourceLocation CORE_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/beam_core.png");
+    private static final Identifier CORE_TEXTURE =
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/beam_core.png");
 
-    private static final ResourceLocation GLOW_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/beam_exterior.png");
+    private static final Identifier GLOW_TEXTURE =
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "textures/entity/beam_exterior.png");
 
 
     public BlasterBeamRenderer(EntityRendererProvider.Context ctx) {
@@ -39,9 +41,22 @@ public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntit
         return true;
     }
 
+    public static class State extends EntityRenderState {
+        public Vec3 start = Vec3.ZERO;
+        public Vec3 end = Vec3.ZERO;
+        public Vec3 origin = Vec3.ZERO;
+        public float partialTick;
+        public long gameTime;
+        public boolean visible;
+    }
+
     @Override
-    public void render(BlasterBeamEndpointEntity beam, float entityYaw, float partialTick,
-                       PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public State createRenderState() { return new State(); }
+
+    @Override
+    public void extractRenderState(BlasterBeamEndpointEntity beam, State state, float partialTick) {
+        super.extractRenderState(beam, state, partialTick);
+        state.visible = false;
         LivingEntity owner = beam.getOwnerLiving();
         if (owner == null) return;
 
@@ -61,6 +76,20 @@ public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntit
                 Mth.lerp(partialTick, beam.zo, beam.getZ())
         );
 
+        state.start = start;
+        state.end = end;
+        state.origin = entityOrigin;
+        state.gameTime = owner.level().getGameTime();
+        state.partialTick = partialTick;
+        state.visible = true;
+    }
+
+    @Override
+    public void submit(State state, PoseStack poseStack, SubmitNodeCollector buffer, CameraRenderState camera) {
+        if (!state.visible) return;
+        Vec3 start = state.start;
+        Vec3 end = state.end;
+        Vec3 entityOrigin = state.origin;
         Vec3 dir = end.subtract(start);
         float len = (float) dir.length();
         if (len < 0.01F) return;
@@ -78,14 +107,14 @@ public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntit
         );
         poseStack.mulPose(q);
 
-        long t = owner.level().getGameTime();
-        renderSpinningBeam(poseStack, buffer, partialTick, t, len);
+        long t = state.gameTime;
+        renderSpinningBeam(poseStack, buffer, state.partialTick, t, len);
 
         poseStack.popPose();
-        super.render(beam, entityYaw, partialTick, poseStack, buffer, packedLight);
+        super.submit(state, poseStack, buffer, camera);
     }
 
-    private static void renderSpinningBeam(PoseStack poseStack, MultiBufferSource buffer,
+    private static void renderSpinningBeam(PoseStack poseStack, SubmitNodeCollector buffer,
                                            float partialTick, long gameTime, float height) {
 
         float beamRadius = 0.01F;
@@ -103,19 +132,16 @@ public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntit
         float v0 = -1.0F + f2;
         float v1 = height * (0.5F / beamRadius) + v0;
 
-        VertexConsumer depth = buffer.getBuffer(RenderType.entityCutoutNoCull(CORE_TEXTURE));
-        renderTube(poseStack.last(), depth, coreColor, 0.0F, height, beamRadius, v0, v1);
+        buffer.submitCustomGeometry(poseStack, RenderTypes.entityCutout(CORE_TEXTURE), (pose, vertices) -> renderTube(pose, vertices, coreColor, 0.0F, height, beamRadius, v0, v1));
 
-        VertexConsumer core = buffer.getBuffer(RenderType.entityTranslucentEmissive(CORE_TEXTURE));
-        renderTube(poseStack.last(), core, coreColor, 0.0F, height, beamRadius, v0, v1);
+        buffer.submitCustomGeometry(poseStack, RenderTypes.entityTranslucentEmissive(CORE_TEXTURE), (pose, vertices) -> renderTube(pose, vertices, coreColor, 0.0F, height, beamRadius, v0, v1));
 
         poseStack.popPose();
 
         float gv0 = -1.0F + f2;
         float gv1 = height + gv0;
 
-        VertexConsumer glow = buffer.getBuffer(RenderType.entityTranslucentEmissive(GLOW_TEXTURE));
-        renderTube(poseStack.last(), glow, glowColor, 0.0F, height, glowRadius, gv0, gv1);
+        buffer.submitCustomGeometry(poseStack, RenderTypes.entityTranslucentEmissive(GLOW_TEXTURE), (pose, vertices) -> renderTube(pose, vertices, glowColor, 0.0F, height, glowRadius, gv0, gv1));
     }
 
     private static void renderTube(PoseStack.Pose pose, VertexConsumer vc, int color,
@@ -153,8 +179,11 @@ public class BlasterBeamRenderer extends EntityRenderer<BlasterBeamEndpointEntit
                 .setNormal(pose, nx, ny, nz);
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(BlasterBeamEndpointEntity entity) {
+    public Identifier getTextureLocation(BlasterBeamEndpointEntity entity) {
         return GLOW_TEXTURE;
+    }
+    @Override
+    protected net.minecraft.world.phys.AABB getBoundingBoxForCulling(BlasterBeamEndpointEntity entity) {
+        return entity.getBoundingBoxForCulling();
     }
 }

@@ -43,13 +43,6 @@ public final class StunEffectEventHandler {
     }
 
     @SubscribeEvent
-    public static void onEntityInteractSpecific(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (cancelIfStunned(event.getEntity(), event)) {
-            event.setCancellationResult(InteractionResult.FAIL);
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerAttack(AttackEntityEvent event) {
         cancelIfStunned(event.getEntity(), event);
     }

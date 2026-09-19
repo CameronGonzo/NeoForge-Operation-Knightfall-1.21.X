@@ -1,14 +1,9 @@
 {
   "type": "minecraft:blasting",
-  "category": "misc",
-  "cookingtime": 100,
   "experience": 0.25,
   "group": "durasteel",
-  "ingredient": {
-    "item": "knightfall:raw_durasteel"
-  },
+  "ingredient": "knightfall:raw_durasteel",
   "result": {
-    "count": 1,
     "id": "knightfall:durasteel_ingot"
   }
 }

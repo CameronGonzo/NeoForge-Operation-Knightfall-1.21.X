@@ -3570,8 +3570,8 @@
     "subtitle": "sounds.knightfall.rd2b_fire",
     "sounds": [
       "knightfall:blaster/rd2b/weapons_blaster_rd2b_fire_01",
-      "knightfall:blaster/rd2b/weapons_blaster_rd2b_fire_02",
-      "knightfall:blaster/rd2b/weapons_blaster_rd2b_fire_03"
+      "knightfall:blaster/rd2b/weapons_blaster_rd6_fire_02",
+      "knightfall:blaster/rd2b/weapons_blaster_rd6_fire_03"
     ]
   },
   "rd6_fire": {
@@ -5104,7 +5104,7 @@
   "foley_equipment_launch": {
     "subtitle": "sounds.knightfall.foley_equipment_launch",
     "sounds": [
-      "knightfall:blaster/foley/weapons_blaster_foley_equipment_launch_01"
+      { "name": "minecraft:item.crossbow.shoot", "type": "event" }
     ]
   },
   "foley_no_ammo": {
@@ -5600,8 +5600,7 @@
       "knightfall:blaster/impact/weapons_blaster_impact_default_04",
       "knightfall:blaster/impact/weapons_blaster_impact_default_05",
       "knightfall:blaster/impact/weapons_blaster_impact_default_06",
-      "knightfall:blaster/impact/weapons_blaster_impact_default_07",
-      "knightfall:blaster/impact/weapons_blaster_impact_default_08"
+      "knightfall:blaster/impact/weapons_blaster_impact_default_07"
     ]
   },
   "blaster_impact_dirt": {

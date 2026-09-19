@@ -1,68 +1,26 @@
 package net.uhhitscam.knightfall.datagen;
 
-import net.minecraft.data.PackOutput;
-import net.minecraft.world.level.block.*;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.uhhitscam.knightfall.OperationKnightfall;
+import net.minecraft.client.data.models.BlockModelGenerators;
 import net.uhhitscam.knightfall.block.ModBlocks;
 
-public class ModBlockStateProvider extends BlockStateProvider {
+public final class ModBlockStateProvider {
+    private ModBlockStateProvider() {}
 
-    public ModBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
-        super(output, OperationKnightfall.MODID, exFileHelper);
-    }
-
-    @Override
-    protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.BESKAR_ORE);
-        blockWithItem(ModBlocks.BRONZIUM_ORE);
-        blockWithItem(ModBlocks.CINNABAR_ORE);
-        blockWithItem(ModBlocks.CORTOSIS_ORE);
-        blockWithItem(ModBlocks.DEDLANITE_ORE);
-        blockWithItem(ModBlocks.DIATIUM_ORE);
-        blockWithItem(ModBlocks.DURASTEEL_ORE);
-        blockWithItem(ModBlocks.DURITE_ORE);
-        blockWithItem(ModBlocks.EXONIUM_ORE);
-        blockWithItem(ModBlocks.HAYSIAN_SMELT_ORE);
-        blockWithItem(ModBlocks.IPSIUM_ORE);
-        blockWithItem(ModBlocks.KALKITE_ORE);
-        blockWithItem(ModBlocks.MALSARR_ORE);
-        blockWithItem(ModBlocks.PHRIK_ORE);
-        blockWithItem(ModBlocks.TITANIUM_ORE);
-//
-//        stairsBlock(((StairBlock) ModBlocks.BLACK_OPAL_STAIRS.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));
-//        slabBlock(((SlabBlock) ModBlocks.BLACK_OPAL_SLAB.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));
-//
-//        pressurePlateBlock(((PressurePlateBlock) ModBlocks.BLACK_OPAL_PRESSURE_PLATE.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));
-//        buttonBlock(((ButtonBlock) ModBlocks.BLACK_OPAL_BUTTON.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));
-//
-//        fenceBlock(((FenceBlock) ModBlocks.BLACK_OPAL_FENCE.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));
-//        fenceGateBlock(((FenceGateBlock) ModBlocks.BLACK_OPAL_FENCE_GATE.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));
-//        wallBlock(((WallBlock) ModBlocks.BLACK_OPAL_WALL.get()), blockTexture(ModBlocks.BLACK_OPAL_BLOCK.get()));
-//
-//        doorBlockWithRenderType(((DoorBlock) ModBlocks.BLACK_OPAL_DOOR.get()), modLoc("block/black_opal_door_bottom"), modLoc("block/black_opal_door_top"), "cutout");
-//        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.BLACK_OPAL_TRAPDOOR.get()), modLoc("block/black_opal_trapdoor"), true, "cutout");
-//
-//        blockItem(ModBlocks.BLACK_OPAL_STAIRS);
-//        blockItem(ModBlocks.BLACK_OPAL_SLAB);
-//        blockItem(ModBlocks.BLACK_OPAL_PRESSURE_PLATE);
-//        blockItem(ModBlocks.BLACK_OPAL_FENCE_GATE);
-//
-//        blockItem(ModBlocks.BLACK_OPAL_TRAPDOOR, "_bottom");
-    }
-
-    private void blockWithItem(DeferredBlock<Block> deferredBlock) {
-        simpleBlockWithItem(deferredBlock.get(), cubeAll(deferredBlock.get()));
-    }
-
-    private void blockItem(DeferredBlock<Block> deferredBlock) {
-        simpleBlockItem(deferredBlock.get(), new ModelFile.UncheckedModelFile("knightfall:block/" + deferredBlock.getId().getPath()));
-    }
-
-    private void blockItem(DeferredBlock<Block> deferredBlock, String appendix) {
-        simpleBlockItem(deferredBlock.get(), new ModelFile.UncheckedModelFile("knightfall:block/" + deferredBlock.getId().getPath() + appendix));
+    public static void registerModels(BlockModelGenerators models) {
+        models.createTrivialCube(ModBlocks.BESKAR_ORE.get());
+        models.createTrivialCube(ModBlocks.BRONZIUM_ORE.get());
+        models.createTrivialCube(ModBlocks.CINNABAR_ORE.get());
+        models.createTrivialCube(ModBlocks.CORTOSIS_ORE.get());
+        models.createTrivialCube(ModBlocks.DEDLANITE_ORE.get());
+        models.createTrivialCube(ModBlocks.DIATIUM_ORE.get());
+        models.createTrivialCube(ModBlocks.DURASTEEL_ORE.get());
+        models.createTrivialCube(ModBlocks.DURITE_ORE.get());
+        models.createTrivialCube(ModBlocks.EXONIUM_ORE.get());
+        models.createTrivialCube(ModBlocks.HAYSIAN_SMELT_ORE.get());
+        models.createTrivialCube(ModBlocks.IPSIUM_ORE.get());
+        models.createTrivialCube(ModBlocks.KALKITE_ORE.get());
+        models.createTrivialCube(ModBlocks.MALSARR_ORE.get());
+        models.createTrivialCube(ModBlocks.PHRIK_ORE.get());
+        models.createTrivialCube(ModBlocks.TITANIUM_ORE.get());
     }
 }

@@ -2,12 +2,12 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.uhhitscam.knightfall.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
     "LivingEntityMixin",
     "MeleeAttackGoalMixin"
   ],
-  "client": ["GameRendererAccessorMixin"],
+  "client": ["LivingEntityRendererMixin"],
   "injectors": {
     "defaultRequire": 1
   }

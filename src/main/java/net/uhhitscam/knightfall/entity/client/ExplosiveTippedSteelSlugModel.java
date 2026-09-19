@@ -1,16 +1,19 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.ExplosiveTippedSteelSlugEntity;
 import net.uhhitscam.knightfall.entity.custom.PoisonTippedSteelSlugEntity;
 
-public class ExplosiveTippedSteelSlugModel extends HierarchicalModel<ExplosiveTippedSteelSlugEntity> {
+public class ExplosiveTippedSteelSlugModel extends Model<Unit> {
     private final ModelPart explosiveTippedSteelSlug;
 
     public ExplosiveTippedSteelSlugModel(ModelPart root) {
+        super(root.getChild("explosiveTippedSteelSlug"), RenderTypes::entityCutout);
         this.explosiveTippedSteelSlug = root.getChild("explosiveTippedSteelSlug");
     }
 
@@ -30,15 +33,5 @@ public class ExplosiveTippedSteelSlugModel extends HierarchicalModel<ExplosiveTi
                 .texOffs(6, 13).addBox(-1.0F, -5.6F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
-    }
-
-    @Override
-    public void setupAnim(ExplosiveTippedSteelSlugEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }
-
-    @Override
-    public ModelPart root() {
-        return explosiveTippedSteelSlug;
     }
 }

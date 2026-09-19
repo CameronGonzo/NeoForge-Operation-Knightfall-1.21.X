@@ -42,7 +42,7 @@ public class CustomExplosion {
                               double entityRadius, float damage, double knockback, boolean forceKnockback,
                               float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire) {
 
-        if (sourceEntity.level().isClientSide) return;
+        if (sourceEntity.level().isClientSide()) return;
         ServerLevel serverLevel = (ServerLevel) sourceEntity.level();
 
         final double x = location.x;
@@ -65,7 +65,7 @@ public class CustomExplosion {
             double dist2 = target.distanceToSqr(x, y, z);
             if (dist2 > r2) continue;
 
-            target.hurt(dmgSrc, damage);
+            net.uhhitscam.knightfall.util.WeaponDamage.hurt(target, dmgSrc, damage);
 
             Vec3 delta = target.position().subtract(x, y, z);
             if (delta.lengthSqr() > 1.0e-6) {
@@ -93,7 +93,7 @@ public class CustomExplosion {
                 }
 
                 @Override
-                public float getEntityDamageAmount(Explosion explosion, Entity entity) {
+                public float getEntityDamageAmount(Explosion explosion, Entity entity, float exposure) {
                     return 0.0F;
                 }
 
@@ -111,9 +111,9 @@ public class CustomExplosion {
                     blockBreakRadius,
                     causesFire,
                     interaction,
-                    false,
                     ParticleTypes.EXPLOSION,
                     ParticleTypes.EXPLOSION_EMITTER,
+                    net.minecraft.util.random.WeightedList.of(),
                     BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.GENERIC_EXPLODE.value())
             );
         }

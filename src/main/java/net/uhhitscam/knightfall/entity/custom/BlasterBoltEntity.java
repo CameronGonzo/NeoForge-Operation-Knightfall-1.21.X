@@ -7,13 +7,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -107,7 +107,7 @@ public class BlasterBoltEntity extends Snowball {
         int damage = calculateDamage(entity);
         float healthBefore = entity instanceof LivingEntity living ? living.getHealth() + living.getAbsorptionAmount() : 0;
 
-        if (entity.hurt(this.damageSources().thrown(this, this.getOwner()), damage)
+        if (net.uhhitscam.knightfall.util.WeaponDamage.hurt(entity, this.damageSources().thrown(this, this.getOwner()), damage)
                 && entity instanceof LivingEntity livingEntity) {
             if (!meleeWeapon.isEmpty() && getOwner() instanceof net.minecraft.server.level.ServerPlayer player
                     && livingEntity.getHealth() + livingEntity.getAbsorptionAmount() < healthBefore) {
@@ -144,7 +144,7 @@ public class BlasterBoltEntity extends Snowball {
     protected void onHit(HitResult result) {
         super.onHit(result);
 
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             return;
         }
 
@@ -180,15 +180,15 @@ public class BlasterBoltEntity extends Snowball {
         }
 
         int numParticles = switch (classification) {
-            case PISTOL -> 5 + level().random.nextInt(5);
-            case CARBINE -> 5 + level().random.nextInt(8);
-            case RIFLE -> 8 + level().random.nextInt(10);
-            case REPEATER -> 6 + level().random.nextInt(3);
-            case SCATTER -> 10 + level().random.nextInt(5);
-            case SNIPER -> 10 + level().random.nextInt(20);
-            case SLUGTHROWER -> 10 + level().random.nextInt(15);
-            case DISRUPTOR -> 15 + level().random.nextInt(20);
-            default -> 7 + level().random.nextInt(7);
+            case PISTOL -> 5 + level().getRandom().nextInt(5);
+            case CARBINE -> 5 + level().getRandom().nextInt(8);
+            case RIFLE -> 8 + level().getRandom().nextInt(10);
+            case REPEATER -> 6 + level().getRandom().nextInt(3);
+            case SCATTER -> 10 + level().getRandom().nextInt(5);
+            case SNIPER -> 10 + level().getRandom().nextInt(20);
+            case SLUGTHROWER -> 10 + level().getRandom().nextInt(15);
+            case DISRUPTOR -> 15 + level().getRandom().nextInt(20);
+            default -> 7 + level().getRandom().nextInt(7);
         };
 
         ServerLevel serverLevel = (ServerLevel) this.level();
@@ -214,7 +214,7 @@ public class BlasterBoltEntity extends Snowball {
     }
 
     private void playEntityImpactSound(Entity entity) {
-        if (this.level().isClientSide || classification != WeaponClassification.DISRUPTOR) {
+        if (this.level().isClientSide() || classification != WeaponClassification.DISRUPTOR) {
             return;
         }
 
@@ -226,7 +226,7 @@ public class BlasterBoltEntity extends Snowball {
                 ModSounds.BLASTER_IMPACT_DISINTEGRATION.get(),
                 SoundSource.NEUTRAL,
                 0.7F,
-                0.95F + this.level().random.nextFloat() * 0.1F
+                0.95F + this.level().getRandom().nextFloat() * 0.1F
         );
     }
 
@@ -271,15 +271,15 @@ public class BlasterBoltEntity extends Snowball {
             this.setDeltaMovement(velocity.normalize().scale(this.boltSpeed));
         }
 
-        if (!this.level().isClientSide && this.tickCount > 50) {
+        if (!this.level().isClientSide() && this.tickCount > 50) {
             this.discard();
         }
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput tag) {
         super.addAdditionalSaveData(tag);
-        if (!meleeWeapon.isEmpty()) tag.put("MeleeWeapon", meleeWeapon.save(registryAccess()));
+        if (!meleeWeapon.isEmpty()) tag.store("MeleeWeapon", net.minecraft.world.item.ItemStack.CODEC, meleeWeapon);
         tag.putString("BoltType", getBoltType().name());
         tag.putFloat("BoltSpeed", this.boltSpeed);
         tag.putInt("BlasterDamage", this.blasterDamage);
@@ -289,27 +289,27 @@ public class BlasterBoltEntity extends Snowball {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        meleeWeapon = net.minecraft.world.item.ItemStack.parseOptional(registryAccess(), tag.getCompound("MeleeWeapon"));
-        this.setBoltType(BoltType.fromName(tag.getString("BoltType")));
+        meleeWeapon = tag.read("MeleeWeapon", net.minecraft.world.item.ItemStack.CODEC).orElse(net.minecraft.world.item.ItemStack.EMPTY);
+        this.setBoltType(BoltType.fromName(tag.getStringOr("BoltType", "")));
 
-        if (tag.contains("BoltSpeed")) {
-            this.boltSpeed = tag.getFloat("BoltSpeed");
+        if (tag.read("BoltSpeed", com.mojang.serialization.Codec.FLOAT).isPresent()) {
+            this.boltSpeed = tag.getFloatOr("BoltSpeed", 0.0F);
         }
-        if (tag.contains("BlasterDamage")) {
-            this.blasterDamage = tag.getInt("BlasterDamage");
+        if (tag.read("BlasterDamage", com.mojang.serialization.Codec.INT).isPresent()) {
+            this.blasterDamage = tag.getIntOr("BlasterDamage", 0);
         }
-        if (tag.contains("WeaponClassification")) {
+        if (tag.read("WeaponClassification", com.mojang.serialization.Codec.STRING).isPresent()) {
             try {
-                this.classification = WeaponClassification.valueOf(tag.getString("WeaponClassification"));
+                this.classification = WeaponClassification.valueOf(tag.getStringOr("WeaponClassification", ""));
             } catch (IllegalArgumentException ignored) {
                 this.classification = WeaponClassification.PISTOL;
             }
         }
 
-        this.explosiveShot = tag.getBoolean("ExplosiveShot");
-        this.concussiveShot = tag.getBoolean("ConcussiveShot");
+        this.explosiveShot = tag.getBooleanOr("ExplosiveShot", false);
+        this.concussiveShot = tag.getBooleanOr("ConcussiveShot", false);
     }
 
     @Override
@@ -322,9 +322,13 @@ public class BlasterBoltEntity extends Snowball {
         return 0.002F;
     }
 
-    @Override
     public AABB getBoundingBoxForCulling() {
         return this.getBoundingBox().inflate(0.5);
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return this.tickCount < 2 && distance < 12.25 || super.shouldRenderAtSqrDistance(distance);
     }
 
     public enum BoltType {
@@ -374,8 +378,8 @@ public class BlasterBoltEntity extends Snowball {
         private static final BoltType[] VALUES = values();
 
         private final int damageBonus;
-        private final ResourceLocation coreTexture;
-        private final ResourceLocation glowTexture;
+        private final Identifier coreTexture;
+        private final Identifier glowTexture;
         private final Supplier<SimpleParticleType> explosiveParticle;
 
         BoltType(
@@ -385,8 +389,8 @@ public class BlasterBoltEntity extends Snowball {
                 Supplier<SimpleParticleType> explosiveParticle
         ) {
             this.damageBonus = damageBonus;
-            this.coreTexture = ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, coreTexture);
-            this.glowTexture = ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, glowTexture);
+            this.coreTexture = Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, coreTexture);
+            this.glowTexture = Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, glowTexture);
             this.explosiveParticle = explosiveParticle;
         }
 
@@ -394,11 +398,11 @@ public class BlasterBoltEntity extends Snowball {
             return damageBonus;
         }
 
-        public ResourceLocation coreTexture() {
+        public Identifier coreTexture() {
             return coreTexture;
         }
 
-        public ResourceLocation glowTexture() {
+        public Identifier glowTexture() {
             return glowTexture;
         }
 

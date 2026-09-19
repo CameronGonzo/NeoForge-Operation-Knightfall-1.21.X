@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -42,7 +42,7 @@ public class FlechetteEntity extends Snowball {
         Entity entity = result.getEntity();
         this.level().broadcastEntityEvent(this, (byte) 3);
 
-        if (entity.hurt(this.damageSources().thrown(this, this.getOwner()), flechetteDamage)) {
+        if (net.uhhitscam.knightfall.util.WeaponDamage.hurt(entity, this.damageSources().thrown(this, this.getOwner()), flechetteDamage)) {
             if (entity instanceof LivingEntity livingEntity) {
                 livingEntity.invulnerableTime = 0;
 //                level().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), blasterFireSound, SoundSource.NEUTRAL, 0.5F, 1.0F);
@@ -55,7 +55,7 @@ public class FlechetteEntity extends Snowball {
         int numParticles = 7;
         this.level().broadcastEntityEvent(this, (byte) 3);
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.level() instanceof ServerLevel serverLevel) {
                 serverLevel.sendParticles(ModParticles.SPARK_PARTICLES.get(),
                         this.getX(), this.getY(), this.getZ(),
@@ -69,12 +69,12 @@ public class FlechetteEntity extends Snowball {
     @Override
     public void handleEntityEvent(byte id) {
         if (id == 3) {
-//            for (int i = 0; i < 1 + level().random.nextInt(3); i++) {
+//            for (int i = 0; i < 1 + level().getRandom().nextInt(3); i++) {
 //                this.level().addParticle(ParticleTypes.SMOKE,
 //                        this.getX(), this.getY(), this.getZ(),
-//                        (this.level().random.nextDouble() - 0.5) * 0.01,
-//                        (this.level().random.nextDouble() * 0.1) + 0.05, // Small upward motion
-//                        (this.level().random.nextDouble() - 0.5) * 0.01
+//                        (this.level().getRandom().nextDouble() - 0.5) * 0.01,
+//                        (this.level().getRandom().nextDouble() * 0.1) + 0.05, // Small upward motion
+//                        (this.level().getRandom().nextDouble() - 0.5) * 0.01
 //                );
 //            }
         }
@@ -106,7 +106,7 @@ public class FlechetteEntity extends Snowball {
             this.xRotO = this.getXRot(); // Synchronize previous X rotation
         }
 
-        if (!this.level().isClientSide && this.tickCount > lifeSpan) {
+        if (!this.level().isClientSide() && this.tickCount > lifeSpan) {
             this.discard();
         }
     }
@@ -121,8 +121,12 @@ public class FlechetteEntity extends Snowball {
         return 0.002F;
     }
 
-    @Override
     public AABB getBoundingBoxForCulling() {
         return this.getBoundingBox().inflate(0.5);
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return this.tickCount < 2 && distance < 12.25 || super.shouldRenderAtSqrDistance(distance);
     }
 }

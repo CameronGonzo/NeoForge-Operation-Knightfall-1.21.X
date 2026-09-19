@@ -2,16 +2,19 @@ package net.uhhitscam.knightfall.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.StunBlasterBoltEntity;
 
-public class StunBlasterBoltModel extends HierarchicalModel<StunBlasterBoltEntity> {
+public class StunBlasterBoltModel extends Model<Unit> {
     private final ModelPart stun_blaster_bolt;
 
     public StunBlasterBoltModel(ModelPart root) {
+        super(root.getChild("stun_blaster_bolt"), RenderTypes::entityCutout);
         this.stun_blaster_bolt = root.getChild("stun_blaster_bolt");
     }
 
@@ -119,20 +122,5 @@ public class StunBlasterBoltModel extends HierarchicalModel<StunBlasterBoltEntit
                 .texOffs(26, 3).addBox(-2.5F, -1.75F, -0.5F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -10.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
-    }
-
-    @Override
-    public void setupAnim(StunBlasterBoltEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        stun_blaster_bolt.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-    }
-
-    @Override
-    public ModelPart root() {
-        return stun_blaster_bolt;
     }
 }

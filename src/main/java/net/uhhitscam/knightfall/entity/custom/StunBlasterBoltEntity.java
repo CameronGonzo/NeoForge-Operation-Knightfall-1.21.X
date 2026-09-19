@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -26,12 +26,12 @@ public class StunBlasterBoltEntity extends Snowball {
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
 
-        if (!this.level().isClientSide && result.getEntity() instanceof GrenadeEntity grenade) {
-            grenade.hurt(this.damageSources().thrown(this, this.getOwner()), 0.0F);
+        if (!this.level().isClientSide() && result.getEntity() instanceof GrenadeEntity grenade) {
+            net.uhhitscam.knightfall.util.WeaponDamage.hurt(grenade, this.damageSources().thrown(this, this.getOwner()), 0.0F);
             return;
         }
 
-        if (!this.level().isClientSide && result.getEntity() instanceof LivingEntity livingEntity) {
+        if (!this.level().isClientSide() && result.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.addEffect(
                     new MobEffectInstance(ModEffects.STUN_EFFECT, StunEffect.DURATION_TICKS),
                     this.getOwner()
@@ -42,7 +42,7 @@ public class StunBlasterBoltEntity extends Snowball {
     @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             return;
         }
 
@@ -52,7 +52,7 @@ public class StunBlasterBoltEntity extends Snowball {
                 this.getX(),
                 this.getY(),
                 this.getZ(),
-                15 + this.level().random.nextInt(5),
+                15 + this.level().getRandom().nextInt(5),
                 0,
                 0,
                 0,
@@ -78,7 +78,7 @@ public class StunBlasterBoltEntity extends Snowball {
             this.setDeltaMovement(velocity.normalize().scale(BOLT_SPEED));
         }
 
-        if (!this.level().isClientSide && this.tickCount > MAX_LIFETIME_TICKS) {
+        if (!this.level().isClientSide() && this.tickCount > MAX_LIFETIME_TICKS) {
             this.discard();
         }
     }
@@ -93,7 +93,6 @@ public class StunBlasterBoltEntity extends Snowball {
         return 0.002F;
     }
 
-    @Override
     public AABB getBoundingBoxForCulling() {
         return this.getBoundingBox().inflate(0.5);
     }

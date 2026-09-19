@@ -1,11 +1,3 @@
 {
-  "parent": "knightfall:item/magnetic_thermal_detonator_item_base",
-  "overrides": [
-    {
-      "predicate": {
-        "knightfall:grenade_state": 2.0
-      },
-      "model": "knightfall:item/magnetic_thermal_detonator_item_1"
-    }
-  ]
+  "parent": "knightfall:item/magnetic_thermal_detonator_item_base"
 }

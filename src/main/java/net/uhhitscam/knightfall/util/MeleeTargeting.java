@@ -19,7 +19,7 @@ public final class MeleeTargeting {
                 && !attacker.isAlliedTo(target)
                 && !(target instanceof Player p && (p.getAbilities().invulnerable
                 || attacker instanceof Player a && (!a.canHarmPlayer(p)
-                || a.getServer() != null && !a.getServer().isPvpAllowed())));
+                || a instanceof ServerPlayer serverPlayer && !serverPlayer.level().getGameRules().get(net.minecraft.world.level.gamerules.GameRules.PVP))));
     }
 
     public static LivingEntity ray(Player player, double reach) {

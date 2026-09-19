@@ -2,7 +2,9 @@ package net.uhhitscam.knightfall.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -12,12 +14,13 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.uhhitscam.knightfall.entity.custom.BlasterBoltEntity;
 
-public class BlasterBoltModel extends HierarchicalModel<BlasterBoltEntity> {
+public class BlasterBoltModel extends Model<Unit> {
     private final ModelPart bolt;
     private final ModelPart boltExterior;
     private final ModelPart boltCore;
 
     public BlasterBoltModel(ModelPart root) {
+        super(root.getChild("bolt"), RenderTypes::entityCutout);
         this.bolt = root.getChild("bolt");
         this.boltExterior = this.bolt.getChild("bolt_exterior");
         this.boltCore = this.bolt.getChild("bolt_core");
@@ -52,27 +55,15 @@ public class BlasterBoltModel extends HierarchicalModel<BlasterBoltEntity> {
         return LayerDefinition.create(meshDefinition, 64, 64);
     }
 
-    @Override
-    public void setupAnim(
-            BlasterBoltEntity entity,
-            float limbSwing,
-            float limbSwingAmount,
-            float ageInTicks,
-            float netHeadYaw,
-            float headPitch
-    ) {
+
+
+    public void submitCore(PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector collector, net.minecraft.client.renderer.rendertype.RenderType renderType, int packedLight, int packedOverlay) {
+        collector.submitModelPart(boltCore, poseStack, renderType, packedLight, packedOverlay, null);
     }
 
-    public void renderCore(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay) {
-        boltCore.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+    public void submitGlow(PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector collector, net.minecraft.client.renderer.rendertype.RenderType renderType, int packedLight, int packedOverlay) {
+        collector.submitModelPart(boltExterior, poseStack, renderType, packedLight, packedOverlay, null);
     }
 
-    public void renderGlow(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay) {
-        boltExterior.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-    }
 
-    @Override
-    public ModelPart root() {
-        return bolt;
-    }
 }

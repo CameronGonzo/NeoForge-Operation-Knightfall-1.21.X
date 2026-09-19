@@ -3,19 +3,20 @@ package net.uhhitscam.knightfall.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.entity.custom.ExplosiveKnifeEntity;
 
-public class ExplosiveKnifeRenderer extends EntityRenderer<ExplosiveKnifeEntity> {
-    private static final ResourceLocation BASE_TEXTURE = texture("explosive_knife");
-    private static final ResourceLocation BEEP_TEXTURE = texture("explosive_knife_1");
+public class ExplosiveKnifeRenderer extends EntityRenderer<ExplosiveKnifeEntity, ProjectileRenderState> {
+    private static final Identifier BASE_TEXTURE = texture("explosive_knife");
+    private static final Identifier BEEP_TEXTURE = texture("explosive_knife_1");
 
     private final ExplosiveKnifeModel model;
 
@@ -26,35 +27,40 @@ public class ExplosiveKnifeRenderer extends EntityRenderer<ExplosiveKnifeEntity>
     }
 
     @Override
-    public void render(
-            ExplosiveKnifeEntity entity,
-            float entityYaw,
-            float partialTicks,
-            PoseStack poseStack,
-            MultiBufferSource bufferSource,
-            int packedLight
-    ) {
+    public void submit(ProjectileRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        int packedLight = state.lightCoords;
         poseStack.pushPose();
-        float yaw = Mth.rotLerp(partialTicks, entity.yRotO, entity.getYRot());
+        float yaw = state.yaw;
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
         poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
         poseStack.scale(-0.3F, -0.3F, -0.3F);
 
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(entity)));
-        model.renderToBuffer(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY);
+        collector.submitModelPart(model.root(), poseStack, RenderTypes.entityCutout(state.texture), packedLight, OverlayTexture.NO_OVERLAY, null);
         poseStack.popPose();
-        super.render(entity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
+        super.submit(state, poseStack, collector, camera);
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(ExplosiveKnifeEntity entity) {
+    public Identifier getTextureLocation(ExplosiveKnifeEntity entity) {
         return entity.isBeepLightOn() ? BEEP_TEXTURE : BASE_TEXTURE;
     }
 
-    private static ResourceLocation texture(String name) {
-        return ResourceLocation.fromNamespaceAndPath(
+    private static Identifier texture(String name) {
+        return Identifier.fromNamespaceAndPath(
                 OperationKnightfall.MODID,
                 "textures/entity/" + name + ".png"
         );
+    }
+
+    @Override
+    public ProjectileRenderState createRenderState() {
+        return new ProjectileRenderState();
+    }
+
+    @Override
+    public void extractRenderState(ExplosiveKnifeEntity entity, ProjectileRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.yaw = net.minecraft.util.Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
+        state.pitch = net.minecraft.util.Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
+        state.texture = getTextureLocation(entity);
     }
 }

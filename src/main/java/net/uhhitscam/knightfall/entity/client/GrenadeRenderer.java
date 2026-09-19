@@ -4,14 +4,18 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.core.Direction;
-import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
+
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.uhhitscam.knightfall.OperationKnightfall;
@@ -20,7 +24,7 @@ import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeVisualState;
 
-public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
+public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRenderer.State> {
     private static final float DEFAULT_MODEL_SCALE = 0.8F;
     private static final float THERMAL_IMPLODER_MODEL_SCALE = 0.85F;
     private static final GrenadeTextures THERMAL_DETONATOR_TEXTURES = textures("thermal_detonator");
@@ -60,7 +64,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
     private final StunnerModel stunnerModel;
     private final ThermalImploderModel thermalImploderModel;
     private final FirebombModel firebombModel;
-    private final ItemRenderer itemRenderer;
+    private final ItemModelResolver itemModelResolver;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -86,79 +90,59 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         this.firebombModel = new FirebombModel(
                 context.bakeLayer(ModModelLayers.FIREBOMB)
         );
-        this.itemRenderer = context.getItemRenderer();
+        this.itemModelResolver = context.getItemModelResolver();
         this.shadowRadius = 0.15F;
     }
 
+    public static class State extends ProjectileRenderState {
+        public Model<Unit> model;
+        public float height;
+        public float scale;
+        public Direction stuckFace;
+        public boolean resting;
+        public final ItemStackRenderState item = new ItemStackRenderState();
+    }
+
     @Override
-    public void render(
-            GrenadeEntity entity,
-            float entityYaw,
-            float partialTicks,
-            PoseStack poseStack,
-            MultiBufferSource bufferSource,
-            int packedLight
-    ) {
-        HierarchicalModel<GrenadeEntity> model = getModel(entity);
-        if (model == null) {
-            renderFallbackItem(entity, poseStack, bufferSource, packedLight);
-            super.render(entity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
-            return;
-        }
+    public State createRenderState() { return new State(); }
 
+    @Override
+    public void extractRenderState(GrenadeEntity entity, State state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.model = getModel(entity);
+        state.height = (float) entity.getBoundingBox().getYsize();
+        state.scale = DEFAULT_MODEL_SCALE * getModelScale(entity);
+        state.stuckFace = entity.getStuckFace();
+        state.resting = entity.isResting();
+        state.yaw = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
+        state.pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
+        state.texture = getTextureLocation(entity);
+        itemModelResolver.updateForNonLiving(state.item, entity.getItem(), ItemDisplayContext.GROUND, entity);
+    }
+
+    @Override
+    public void submit(State state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
         poseStack.pushPose();
-        poseStack.translate(0.0F, entity.getBoundingBox().getYsize() * 0.5F, 0.0F);
-        float modelScale = DEFAULT_MODEL_SCALE * getModelScale(entity);
-        poseStack.scale(modelScale, -modelScale, modelScale);
-
-        float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
-        Direction stuckFace = entity.getStuckFace();
-        if (stuckFace != null) {
-            applyStuckRotation(poseStack, stuckFace, yaw);
+        if (state.model == null) {
+            poseStack.mulPose(camera.orientation);
+            state.item.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         } else {
-            float pitch = entity.isResting()
-                    ? 0.0F
-                    : Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
-            poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
-            poseStack.mulPose(Axis.XP.rotationDegrees(-pitch));
+            poseStack.translate(0.0F, state.height * 0.5F, 0.0F);
+            poseStack.scale(state.scale, -state.scale, state.scale);
+            if (state.stuckFace != null) {
+                applyStuckRotation(poseStack, state.stuckFace, state.yaw);
+            } else {
+                poseStack.mulPose(Axis.YP.rotationDegrees(state.yaw));
+                poseStack.mulPose(Axis.XP.rotationDegrees(state.resting ? 0.0F : -state.pitch));
+            }
+            collector.submitModelPart(state.model.root(), poseStack, RenderTypes.entityCutout(state.texture),
+                    state.lightCoords, OverlayTexture.NO_OVERLAY, null);
         }
-
-        ResourceLocation texture = getTextureLocation(entity);
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(texture));
-        model.renderToBuffer(
-                poseStack,
-                consumer,
-                packedLight,
-                OverlayTexture.NO_OVERLAY
-        );
-
         poseStack.popPose();
-        super.render(entity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
+        super.submit(state, poseStack, collector, camera);
     }
 
-    private void renderFallbackItem(
-            GrenadeEntity entity,
-            PoseStack poseStack,
-            MultiBufferSource bufferSource,
-            int packedLight
-    ) {
-        poseStack.pushPose();
-        poseStack.mulPose(entityRenderDispatcher.cameraOrientation());
-        itemRenderer.renderStatic(
-                entity.getItem(),
-                ItemDisplayContext.GROUND,
-                packedLight,
-                OverlayTexture.NO_OVERLAY,
-                poseStack,
-                bufferSource,
-                entity.level(),
-                entity.getId()
-        );
-        poseStack.popPose();
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(GrenadeEntity entity) {
+    public Identifier getTextureLocation(GrenadeEntity entity) {
         GrenadeTextures textures = getTextures(entity);
         if (textures == null) {
             return THERMAL_DETONATOR_TEXTURES.base();
@@ -187,7 +171,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
         };
     }
 
-    private HierarchicalModel<GrenadeEntity> getModel(GrenadeEntity entity) {
+    private Model<Unit> getModel(GrenadeEntity entity) {
         if (entity.getItem().is(ModItems.THERMAL_DETONATOR.get())) {
             return thermalDetonatorModel;
         }
@@ -283,21 +267,21 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity> {
     }
 
     private static GrenadeTextures singleTexture(String name) {
-        ResourceLocation base = texture(name);
+        Identifier base = texture(name);
         return new GrenadeTextures(base, base, base);
     }
 
-    private static ResourceLocation texture(String name) {
-        return ResourceLocation.fromNamespaceAndPath(
+    private static Identifier texture(String name) {
+        return Identifier.fromNamespaceAndPath(
                 OperationKnightfall.MODID,
                 "textures/entity/" + name + ".png"
         );
     }
 
     private record GrenadeTextures(
-            ResourceLocation base,
-            ResourceLocation active,
-            ResourceLocation beep
+            Identifier base,
+            Identifier active,
+            Identifier beep
     ) {
     }
 }

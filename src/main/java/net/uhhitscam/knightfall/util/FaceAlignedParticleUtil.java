@@ -19,11 +19,11 @@ public final class FaceAlignedParticleUtil {
     }
 
     public static void spawnBlasterBurn(Level level, BlockHitResult blockHitResult) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return;
         }
 
-        int variant = 1 + level.random.nextInt(4);
+        int variant = 1 + level.getRandom().nextInt(4);
         spawn(level, blockHitResult, FaceAlignedParticleType.BLASTER_BURN_MARK, variant);
     }
 
@@ -33,7 +33,7 @@ public final class FaceAlignedParticleUtil {
             FaceAlignedParticleType effectType,
             int variant
     ) {
-        if (level.isClientSide || !(level instanceof ServerLevel serverLevel)) {
+        if (level.isClientSide() || !(level instanceof ServerLevel serverLevel)) {
             return;
         }
 

@@ -1,6 +1,8 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -10,10 +12,11 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 
-public class MagneticThermalDetonatorModel extends HierarchicalModel<GrenadeEntity> {
+public class MagneticThermalDetonatorModel extends Model<Unit> {
     private final ModelPart magneticThermalDetonator;
 
     public MagneticThermalDetonatorModel(ModelPart root) {
+        super(root.getChild("magneticThermalDetonator"), RenderTypes::entityCutout);
         this.magneticThermalDetonator = root.getChild("magneticThermalDetonator");
     }
 
@@ -32,21 +35,5 @@ public class MagneticThermalDetonatorModel extends HierarchicalModel<GrenadeEnti
         );
 
         return LayerDefinition.create(meshDefinition, 32, 32);
-    }
-
-    @Override
-    public void setupAnim(
-            GrenadeEntity entity,
-            float limbSwing,
-            float limbSwingAmount,
-            float ageInTicks,
-            float netHeadYaw,
-            float headPitch
-    ) {
-    }
-
-    @Override
-    public ModelPart root() {
-        return magneticThermalDetonator;
     }
 }

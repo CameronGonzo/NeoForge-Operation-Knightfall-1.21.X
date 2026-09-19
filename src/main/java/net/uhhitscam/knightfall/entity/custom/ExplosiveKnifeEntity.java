@@ -1,5 +1,7 @@
 package net.uhhitscam.knightfall.entity.custom;
 
+import net.minecraft.world.damagesource.DamageSource;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -142,7 +144,7 @@ public class ExplosiveKnifeEntity extends Entity {
             updateAttachment(target);
         }
 
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
 
@@ -243,16 +245,16 @@ public class ExplosiveKnifeEntity extends Entity {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput tag) {
         if (!getWeaponStack().isEmpty()) {
-            tag.put(ITEM_TAG, getWeaponStack().save(registryAccess()));
+            tag.store(ITEM_TAG, net.minecraft.world.item.ItemStack.CODEC, getWeaponStack());
         }
         tag.putInt(FUSE_TAG, getFuseTicks());
         if (targetUuid != null) {
-            tag.putUUID(TARGET_UUID_TAG, targetUuid);
+            tag.store(TARGET_UUID_TAG, net.minecraft.core.UUIDUtil.CODEC, targetUuid);
         }
         if (ownerUuid != null) {
-            tag.putUUID(OWNER_UUID_TAG, ownerUuid);
+            tag.store(OWNER_UUID_TAG, net.minecraft.core.UUIDUtil.CODEC, ownerUuid);
         }
         tag.putFloat(LOCAL_X_TAG, entityData.get(DATA_LOCAL_X));
         tag.putFloat(LOCAL_Y_TAG, entityData.get(DATA_LOCAL_Y));
@@ -260,20 +262,24 @@ public class ExplosiveKnifeEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        if (tag.contains(ITEM_TAG)) {
-            setWeaponStack(ItemStack.parseOptional(registryAccess(), tag.getCompound(ITEM_TAG)));
+    protected void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput tag) {
+        if (tag.read(ITEM_TAG, net.minecraft.world.item.ItemStack.CODEC).isPresent()) {
+            setWeaponStack(tag.read(ITEM_TAG, net.minecraft.world.item.ItemStack.CODEC).orElse(net.minecraft.world.item.ItemStack.EMPTY));
         }
-        setFuseTicks(tag.getInt(FUSE_TAG));
-        targetUuid = tag.hasUUID(TARGET_UUID_TAG) ? tag.getUUID(TARGET_UUID_TAG) : null;
-        ownerUuid = tag.hasUUID(OWNER_UUID_TAG) ? tag.getUUID(OWNER_UUID_TAG) : null;
-        entityData.set(DATA_LOCAL_X, tag.getFloat(LOCAL_X_TAG));
-        entityData.set(DATA_LOCAL_Y, tag.getFloat(LOCAL_Y_TAG));
-        entityData.set(DATA_LOCAL_Z, tag.getFloat(LOCAL_Z_TAG));
+        setFuseTicks(tag.getIntOr(FUSE_TAG, 0));
+        targetUuid = tag.read(TARGET_UUID_TAG, net.minecraft.core.UUIDUtil.CODEC).orElse(null);
+        ownerUuid = tag.read(OWNER_UUID_TAG, net.minecraft.core.UUIDUtil.CODEC).orElse(null);
+        entityData.set(DATA_LOCAL_X, tag.getFloatOr(LOCAL_X_TAG, 0.0F));
+        entityData.set(DATA_LOCAL_Y, tag.getFloatOr(LOCAL_Y_TAG, 0.0F));
+        entityData.set(DATA_LOCAL_Z, tag.getFloatOr(LOCAL_Z_TAG, 0.0F));
     }
 
     @Override
     public boolean isPickable() {
+        return false;
+    }
+    @Override
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float damage) {
         return false;
     }
 }

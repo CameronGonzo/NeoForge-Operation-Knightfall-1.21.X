@@ -1,6 +1,6 @@
 package net.uhhitscam.knightfall.item.custom.projectile;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.uhhitscam.knightfall.OperationKnightfall;
 
 public enum CrosshairTexture {
@@ -39,16 +39,16 @@ public enum CrosshairTexture {
     _X("x_crosshair.png"),
     EYE("eye_crosshair.png");
 
-    private final ResourceLocation texture;
+    private final Identifier texture;
 
     CrosshairTexture(String fileName) {
-        this.texture = ResourceLocation.fromNamespaceAndPath(
+        this.texture = Identifier.fromNamespaceAndPath(
                 OperationKnightfall.MODID,
                 "textures/gui/" + fileName
         );
     }
 
-    public ResourceLocation texture() {
+    public Identifier texture() {
         return texture;
     }
 }

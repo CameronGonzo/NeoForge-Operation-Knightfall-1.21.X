@@ -31,10 +31,11 @@ public final class GrenadeRemoteDetonations extends SavedData {
     private static final String DEPLOYED_COUNTS_TAG = "DeployedCounts";
     private static final String LINK_ID_TAG = "Id";
     private static final String COUNT_TAG = "Count";
-    private static final Factory<GrenadeRemoteDetonations> FACTORY = new Factory<>(
-            GrenadeRemoteDetonations::new,
-            GrenadeRemoteDetonations::load
-    );
+    private static final net.minecraft.world.level.saveddata.SavedDataType<GrenadeRemoteDetonations> TYPE =
+            new net.minecraft.world.level.saveddata.SavedDataType<>(
+                    net.minecraft.resources.Identifier.fromNamespaceAndPath("knightfall", "remote_grenade_detonations"),
+                    GrenadeRemoteDetonations::new,
+                    CompoundTag.CODEC.xmap(GrenadeRemoteDetonations::load, data -> data.save(new CompoundTag())));
 
     private final Set<UUID> activatedLinks = new HashSet<>();
     private final Map<UUID, Integer> deployedCounts = new HashMap<>();
@@ -43,7 +44,25 @@ public final class GrenadeRemoteDetonations extends SavedData {
     }
 
     public static GrenadeRemoteDetonations get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(FACTORY, DATA_NAME);
+        var storage = server.overworld().getDataStorage();
+        var existing = storage.get(TYPE);
+        if (existing != null) return existing;
+        var dataDirectory = server.getWorldPath(net.minecraft.world.level.storage.LevelResource.DATA);
+        // Older worlds used a flat file name. Preserve linked charges when first opened in 26.2.
+        for (var path : List.of(dataDirectory.resolve(DATA_NAME + ".dat"),
+                dataDirectory.resolve("minecraft").resolve(DATA_NAME + ".dat"))) {
+            if (!java.nio.file.Files.isRegularFile(path)) continue;
+            try {
+                var tag = net.minecraft.nbt.NbtIo.readCompressed(path, net.minecraft.nbt.NbtAccounter.unlimitedHeap());
+                var migrated = load(tag.getCompoundOrEmpty("data"));
+                storage.set(TYPE, migrated);
+                migrated.setDirty();
+                return migrated;
+            } catch (java.io.IOException exception) {
+                throw new IllegalStateException("Cannot migrate remote grenade links from " + path, exception);
+            }
+        }
+        return storage.computeIfAbsent(TYPE);
     }
 
     public boolean isActivated(GrenadeRemoteLink link) {
@@ -184,35 +203,34 @@ public final class GrenadeRemoteDetonations extends SavedData {
                 && !stack.has(ModDataComponentTypes.REMOTE_DETONATOR_STATE.get());
     }
 
-    private static GrenadeRemoteDetonations load(CompoundTag tag, HolderLookup.Provider provider) {
+    private static GrenadeRemoteDetonations load(CompoundTag tag) {
         GrenadeRemoteDetonations data = new GrenadeRemoteDetonations();
-        ListTag links = tag.getList(LINKS_TAG, Tag.TAG_COMPOUND);
+        ListTag links = tag.getListOrEmpty(LINKS_TAG);
         for (int index = 0; index < links.size(); index++) {
-            CompoundTag linkTag = links.getCompound(index);
-            if (linkTag.hasUUID(LINK_ID_TAG)) {
-                data.activatedLinks.add(linkTag.getUUID(LINK_ID_TAG));
+            CompoundTag linkTag = links.getCompoundOrEmpty(index);
+            if (linkTag.read(LINK_ID_TAG, net.minecraft.core.UUIDUtil.CODEC).isPresent()) {
+                data.activatedLinks.add(linkTag.read(LINK_ID_TAG, net.minecraft.core.UUIDUtil.CODEC).orElseThrow());
             }
         }
 
-        ListTag deployedCounts = tag.getList(DEPLOYED_COUNTS_TAG, Tag.TAG_COMPOUND);
+        ListTag deployedCounts = tag.getListOrEmpty(DEPLOYED_COUNTS_TAG);
         for (int index = 0; index < deployedCounts.size(); index++) {
-            CompoundTag countTag = deployedCounts.getCompound(index);
-            if (countTag.hasUUID(LINK_ID_TAG)) {
-                int count = countTag.getInt(COUNT_TAG);
+            CompoundTag countTag = deployedCounts.getCompoundOrEmpty(index);
+            if (countTag.read(LINK_ID_TAG, net.minecraft.core.UUIDUtil.CODEC).isPresent()) {
+                int count = countTag.getIntOr(COUNT_TAG, 0);
                 if (count > 0) {
-                    data.deployedCounts.put(countTag.getUUID(LINK_ID_TAG), count);
+                    data.deployedCounts.put(countTag.read(LINK_ID_TAG, net.minecraft.core.UUIDUtil.CODEC).orElseThrow(), count);
                 }
             }
         }
         return data;
     }
 
-    @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
+    private CompoundTag save(CompoundTag tag) {
         ListTag links = new ListTag();
         for (UUID linkId : activatedLinks) {
             CompoundTag linkTag = new CompoundTag();
-            linkTag.putUUID(LINK_ID_TAG, linkId);
+            linkTag.store(LINK_ID_TAG, net.minecraft.core.UUIDUtil.CODEC, linkId);
             links.add(linkTag);
         }
         tag.put(LINKS_TAG, links);
@@ -220,7 +238,7 @@ public final class GrenadeRemoteDetonations extends SavedData {
         ListTag deployedCounts = new ListTag();
         for (Map.Entry<UUID, Integer> entry : this.deployedCounts.entrySet()) {
             CompoundTag countTag = new CompoundTag();
-            countTag.putUUID(LINK_ID_TAG, entry.getKey());
+            countTag.store(LINK_ID_TAG, net.minecraft.core.UUIDUtil.CODEC, entry.getKey());
             countTag.putInt(COUNT_TAG, entry.getValue());
             deployedCounts.add(countTag);
         }

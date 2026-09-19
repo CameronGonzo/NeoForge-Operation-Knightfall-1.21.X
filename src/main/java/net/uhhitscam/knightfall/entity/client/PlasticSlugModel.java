@@ -1,15 +1,18 @@
 package net.uhhitscam.knightfall.entity.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.PlasticSlugEntity;
 
-public class PlasticSlugModel extends HierarchicalModel<PlasticSlugEntity> {
+public class PlasticSlugModel extends Model<Unit> {
     private final ModelPart plasticSlug;
 
     public PlasticSlugModel(ModelPart root) {
+        super(root.getChild("plasticSlug"), RenderTypes::entityCutout);
         this.plasticSlug = root.getChild("plasticSlug");
     }
 
@@ -24,15 +27,5 @@ public class PlasticSlugModel extends HierarchicalModel<PlasticSlugEntity> {
                 .texOffs(6, 4).addBox(-1.0F, -5.7F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 16, 16);
-    }
-
-    @Override
-    public void setupAnim(PlasticSlugEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }
-
-    @Override
-    public ModelPart root() {
-        return plasticSlug;
     }
 }

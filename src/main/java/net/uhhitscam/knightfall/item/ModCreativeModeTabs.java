@@ -2,7 +2,7 @@ package net.uhhitscam.knightfall.item;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
@@ -168,7 +168,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("carbine_blasters", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.carbine_blasters"))
                     .icon(() -> new ItemStack(ModItems.EE3.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "hand_blasters"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "hand_blasters"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.CH60);
                         pOutput.accept(ModItems.CP5);
@@ -194,7 +194,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("rifle_blasters", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.rifle_blasters"))
                     .icon(() -> new ItemStack(ModItems.A280.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "carbine_blasters"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "carbine_blasters"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.A280);
                         pOutput.accept(ModItems.A280C);
@@ -284,7 +284,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("repeating_blasters", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.repeating_blasters"))
                     .icon(() -> new ItemStack(ModItems.RT97C.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "rifle_blasters"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "rifle_blasters"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.ACP_ARRAY);
                         pOutput.accept(ModItems.ACP_REPEATER);
@@ -315,7 +315,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("scattershot_blasters", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.scattershot_blasters"))
                     .icon(() -> new ItemStack(ModItems.CA87.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "repeating_blasters"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "repeating_blasters"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.BARMST12);
                         pOutput.accept(ModItems.BLNDRBUS);
@@ -335,7 +335,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("sniper_blasters", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.sniper_blasters"))
                     .icon(() -> new ItemStack(ModItems.CYCLER_RIFLE.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "scattershot_blasters"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "scattershot_blasters"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems._84U_HUNTING_RIFLE);
                         pOutput.accept(ModItems._773_FIREPUNCHER);
@@ -375,7 +375,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("slugthrowers", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.slugthrowers"))
                     .icon(() -> new ItemStack(ModItems.BERSERKER.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "sniper_blasters"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "sniper_blasters"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems._62AUG2_HUNTING_RIFLE);
                         pOutput.accept(ModItems.BERSERKER);
@@ -399,7 +399,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("disruptors", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.disruptors"))
                     .icon(() -> new ItemStack(ModItems.AMBAN_DISRUPTOR.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "slugthrowers"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "slugthrowers"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.AMBAN_DISRUPTOR);
                         pOutput.accept(ModItems.DN_BOLT_CASTER);
@@ -413,7 +413,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("misc_weapons", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.misc_weapons"))
                     .icon(() -> new ItemStack(ModItems.GAS_CARTRIDGE.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "disruptors"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "disruptors"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.BATON_BLASTER);
                         pOutput.accept(ModItems.BOWCASTER);
@@ -457,7 +457,7 @@ public class ModCreativeModeTabs {
             CREATIVE_MODE_TABS.register("materials", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.knightfall.materials"))
                     .icon(() -> new ItemStack(ModItems.BRONZIUM_INGOT.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(OperationKnightfall.MODID, "misc_weapons"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "misc_weapons"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModBlocks.BESKAR_ORE);
                         pOutput.accept(ModItems.BESKAR_FRAGMENT);

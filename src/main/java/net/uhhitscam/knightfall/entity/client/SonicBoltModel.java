@@ -2,18 +2,21 @@ package net.uhhitscam.knightfall.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.util.Unit;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.uhhitscam.knightfall.entity.custom.SonicBoltEntity;
 
-public class SonicBoltModel extends HierarchicalModel<SonicBoltEntity> {
+public class SonicBoltModel extends Model<Unit> {
     private final ModelPart sonic_bolt;
     private final ModelPart sonic_bolt_exterior;
     private final ModelPart sonic_bolt_core;
 
     public SonicBoltModel(ModelPart root) {
+        super(root.getChild("sonic_bolt"), RenderTypes::entityCutout);
         this.sonic_bolt = root.getChild("sonic_bolt");
         this.sonic_bolt_exterior = this.sonic_bolt.getChild("sonic_bolt_exterior");
         this.sonic_bolt_core = this.sonic_bolt.getChild("sonic_bolt_core");
@@ -32,21 +35,11 @@ public class SonicBoltModel extends HierarchicalModel<SonicBoltEntity> {
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
 
-    @Override
-    public void setupAnim(SonicBoltEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+    public void submitCore(PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector collector, net.minecraft.client.renderer.rendertype.RenderType renderType, int packedLight, int packedOverlay) {
+        collector.submitModelPart(sonic_bolt_core, poseStack, renderType, packedLight, packedOverlay, null);
     }
 
-    public void renderCore(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay) {
-        sonic_bolt_core.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-    }
-
-    public void renderGlow(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay) {
-        sonic_bolt_exterior.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-    }
-
-    @Override
-    public ModelPart root() {
-        return sonic_bolt;
+    public void submitGlow(PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector collector, net.minecraft.client.renderer.rendertype.RenderType renderType, int packedLight, int packedOverlay) {
+        collector.submitModelPart(sonic_bolt_exterior, poseStack, renderType, packedLight, packedOverlay, null);
     }
 }

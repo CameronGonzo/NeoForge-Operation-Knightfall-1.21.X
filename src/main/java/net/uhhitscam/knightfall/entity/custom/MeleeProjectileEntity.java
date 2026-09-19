@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -56,7 +56,7 @@ public class MeleeProjectileEntity extends AbstractArrow implements ItemSupplier
 
     public static MeleeProjectileEntity launch(ServerPlayer owner, ItemStack stack, MeleeAttack attack, boolean hook, boolean recoverable) {
         MeleeProjectileEntity projectile = new MeleeProjectileEntity(owner, stack, attack, hook, recoverable);
-        return owner.serverLevel().addFreshEntity(projectile) ? projectile : null;
+        return owner.level().addFreshEntity(projectile) ? projectile : null;
     }
 
     @Override protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -84,12 +84,12 @@ public class MeleeProjectileEntity extends AbstractArrow implements ItemSupplier
             return;
         }
         var source = damageSources().thrown(this, owner);
-        float amount = EnchantmentHelper.modifyDamage(owner.serverLevel(), getItem(), target, source, damage);
+        float amount = EnchantmentHelper.modifyDamage(owner.level(), getItem(), target, source, damage);
         float before = target.getHealth() + target.getAbsorptionAmount();
-        if (target.hurt(source, amount) && target.getHealth() + target.getAbsorptionAmount() < before) {
+        if (net.uhhitscam.knightfall.util.WeaponDamage.hurt(target, source, amount) && target.getHealth() + target.getAbsorptionAmount() < before) {
             MeleeWeaponServerEvents.applyProperties(owner, target, getItem());
             MeleeWeaponServerEvents.projectileHit(owner, getItem());
-            EnchantmentHelper.doPostAttackEffectsWithItemSource(owner.serverLevel(), target, source, getItem());
+            EnchantmentHelper.doPostAttackEffectsWithItemSource(owner.level(), target, source, getItem());
         }
         if (!recoverable || getItem().isEmpty()) discard();
         else {
@@ -122,7 +122,7 @@ public class MeleeProjectileEntity extends AbstractArrow implements ItemSupplier
                 int count = Math.max(1, (int) (span.length() * 2));
                 for (int i = 1; i <= count; i++) {
                     Vec3 point = start.add(span.scale((double) i / count));
-                    owner.serverLevel().sendParticles(ParticleTypes.ELECTRIC_SPARK, point.x, point.y, point.z, 1, 0, 0, 0, 0);
+                    owner.level().sendParticles(ParticleTypes.ELECTRIC_SPARK, point.x, point.y, point.z, 1, 0, 0, 0, 0);
                 }
             }
         }
@@ -133,22 +133,22 @@ public class MeleeProjectileEntity extends AbstractArrow implements ItemSupplier
     @Override public boolean shouldBeSaved() { return !hook && super.shouldBeSaved(); }
     @Override protected void tickDespawn() {}
 
-    @Override public void addAdditionalSaveData(CompoundTag tag) {
+    @Override public void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("MeleeRecoverable", recoverable);
         tag.putBoolean("MeleeHit", hitTarget);
         tag.putFloat("MeleeDamage", damage);
         tag.putInt("MeleeAge", age);
-        if (!getItem().isEmpty()) tag.put("MeleeItem", getItem().save(registryAccess()));
+        if (!getItem().isEmpty()) tag.store("MeleeItem", net.minecraft.world.item.ItemStack.CODEC, getItem());
     }
 
-    @Override public void readAdditionalSaveData(CompoundTag tag) {
+    @Override public void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        recoverable = tag.getBoolean("MeleeRecoverable");
-        hitTarget = tag.getBoolean("MeleeHit");
-        damage = tag.getFloat("MeleeDamage");
-        age = tag.getInt("MeleeAge");
-        entityData.set(ITEM, ItemStack.parseOptional(registryAccess(), tag.getCompound("MeleeItem")));
+        recoverable = tag.getBooleanOr("MeleeRecoverable", false);
+        hitTarget = tag.getBooleanOr("MeleeHit", false);
+        damage = tag.getFloatOr("MeleeDamage", 0.0F);
+        age = tag.getIntOr("MeleeAge", 0);
+        entityData.set(ITEM, tag.read("MeleeItem", net.minecraft.world.item.ItemStack.CODEC).orElse(net.minecraft.world.item.ItemStack.EMPTY));
         pickup = recoverable ? Pickup.ALLOWED : Pickup.DISALLOWED;
     }
 }

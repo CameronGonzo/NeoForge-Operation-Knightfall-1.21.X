@@ -1,14 +1,9 @@
 {
   "type": "minecraft:smelting",
-  "category": "misc",
-  "cookingtime": 200,
   "experience": 0.25,
   "group": "titanium",
-  "ingredient": {
-    "item": "knightfall:raw_titanium"
-  },
+  "ingredient": "knightfall:raw_titanium",
   "result": {
-    "count": 1,
     "id": "knightfall:titanium_ingot"
   }
 }

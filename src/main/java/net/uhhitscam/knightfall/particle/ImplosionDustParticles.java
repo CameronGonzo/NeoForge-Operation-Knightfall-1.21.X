@@ -5,11 +5,11 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import org.jetbrains.annotations.Nullable;
 
-public class ImplosionDustParticles extends TextureSheetParticle {
+public class ImplosionDustParticles extends SingleQuadParticle {
     protected ImplosionDustParticles(
             ClientLevel level,
             double x,
@@ -20,16 +20,16 @@ public class ImplosionDustParticles extends TextureSheetParticle {
             double ySpeed,
             double zSpeed
     ) {
-        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet.get(0, 1));
 
         this.friction = 1.0F;
         this.gravity = 0.0F;
-        this.lifetime = 4 + level.random.nextInt(3);
-        this.quadSize = 0.025F + level.random.nextFloat() * 0.015F;
+        this.lifetime = 4 + level.getRandom().nextInt(3);
+        this.quadSize = 0.025F + level.getRandom().nextFloat() * 0.015F;
         this.alpha = 0.7F;
         this.hasPhysics = false;
 
-        float shade = 0.28F + level.random.nextFloat() * 0.12F;
+        float shade = 0.28F + level.getRandom().nextFloat() * 0.12F;
         this.setColor(shade * 1.05F, shade, shade * 0.9F);
         this.setSpriteFromAge(spriteSet);
 
@@ -39,8 +39,8 @@ public class ImplosionDustParticles extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    protected SingleQuadParticle.Layer getLayer() {
+        return SingleQuadParticle.Layer.TRANSLUCENT;
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
@@ -61,7 +61,7 @@ public class ImplosionDustParticles extends TextureSheetParticle {
                 double xSpeed,
                 double ySpeed,
                 double zSpeed
-        ) {
+        , net.minecraft.util.RandomSource random) {
             return new ImplosionDustParticles(
                     level,
                     x,

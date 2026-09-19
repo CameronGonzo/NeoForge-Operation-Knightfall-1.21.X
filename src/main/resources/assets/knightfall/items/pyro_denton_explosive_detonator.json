@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "knightfall:activated",
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "knightfall:item/pyro_denton_explosive_detonator"
+    },
+    "entries": [
+      {
+        "threshold": 1.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "knightfall:item/pyro_denton_explosive_detonator_item_1"
+        }
+      }
+    ]
+  }
+}

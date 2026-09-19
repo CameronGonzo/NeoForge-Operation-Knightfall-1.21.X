@@ -24,7 +24,7 @@ import net.uhhitscam.knightfall.sound.ModSounds;
 import net.uhhitscam.knightfall.util.WeaponAimRules;
 import net.uhhitscam.knightfall.util.WeaponTargeting;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,8 +34,8 @@ public class BlasterBeamEndpointEntity extends Entity {
     private static final EntityDataAccessor<Boolean> MAIN_HAND =
             SynchedEntityData.defineId(BlasterBeamEndpointEntity.class, EntityDataSerializers.BOOLEAN);
 
-    private static final EntityDataAccessor<java.util.Optional<java.util.UUID>> OWNER_UUID =
-            SynchedEntityData.defineId(BlasterBeamEndpointEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<java.util.Optional<net.minecraft.world.entity.EntityReference<LivingEntity>>> OWNER_UUID =
+            SynchedEntityData.defineId(BlasterBeamEndpointEntity.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
 
     private float damagePerPulse = 2.0F;
     private double range = DEFAULT_RANGE;
@@ -55,22 +55,22 @@ public class BlasterBeamEndpointEntity extends Entity {
     }
 
     public java.util.Optional<java.util.UUID> getOwnerUUID() {
-        return this.entityData.get(OWNER_UUID);
+        return this.entityData.get(OWNER_UUID).map(net.minecraft.world.entity.EntityReference::getUUID);
     }
 
     public void setOwner(LivingEntity owner) {
-        this.entityData.set(OWNER_UUID, java.util.Optional.of(owner.getUUID()));
+        this.entityData.set(OWNER_UUID, java.util.Optional.of(net.minecraft.world.entity.EntityReference.of(owner)));
     }
 
     public boolean isOwnedBy(Player player) {
         return this.entityData.get(OWNER_UUID)
-                .map(uuid -> uuid.equals(player.getUUID()))
+                .map(reference -> reference.matches(player))
                 .orElse(false);
     }
 
     @Nullable
     public LivingEntity getOwnerLiving() {
-        Optional<UUID> opt = this.entityData.get(OWNER_UUID);
+        Optional<UUID> opt = getOwnerUUID();
         if (opt.isEmpty()) return null;
 
         Player p = this.level().getPlayerByUUID(opt.get());
@@ -96,7 +96,7 @@ public class BlasterBeamEndpointEntity extends Entity {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide) return;
+        if (this.level().isClientSide()) return;
 
         LivingEntity owner = getOwnerLiving();
         if (!(owner instanceof Player player)
@@ -157,7 +157,7 @@ public class BlasterBeamEndpointEntity extends Entity {
                         ? p.damageSources().playerAttack(p)
                         : owner.damageSources().mobAttack(owner);
 
-                if (target.hurt(src, damagePerPulse)) {
+                if (net.uhhitscam.knightfall.util.WeaponDamage.hurt(target, src, damagePerPulse)) {
                     target.invulnerableTime = 0;
                 }
             }
@@ -169,18 +169,17 @@ public class BlasterBeamEndpointEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) { }
+    protected void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput tag) { }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) { }
+    protected void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput tag) { }
 
     @Override
     public boolean isPickable() { return false; }
 
     @Override
-    public boolean canBeCollidedWith() { return false; }
+    public boolean canBeCollidedWith(@org.jspecify.annotations.Nullable Entity other) { return false; }
 
-    @Override
     public AABB getBoundingBoxForCulling() {
         LivingEntity owner = getOwnerLiving();
         if (owner != null) {
@@ -188,7 +187,11 @@ public class BlasterBeamEndpointEntity extends Entity {
             Vec3 end = this.position();
             return new AABB(start, end).inflate(1.0);
         }
-        return super.getBoundingBoxForCulling().inflate(1.0);
+        return super.getBoundingBox().inflate(1.0);
     }
 
+    @Override
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float damage) {
+        return false;
+    }
 }

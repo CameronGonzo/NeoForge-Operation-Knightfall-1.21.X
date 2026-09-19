@@ -4,7 +4,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.uhhitscam.knightfall.util.BlurRequests;
@@ -17,11 +17,11 @@ public record CSConcussionBlurPacket(Vector3f impactPos,
                                      float maxShaderRadius) implements Packet {
 
     public static final Type<CSConcussionBlurPacket> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath("knightfall", "concussion_blur"));
+            new Type<>(Identifier.fromNamespaceAndPath("knightfall", "concussion_blur"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CSConcussionBlurPacket> STREAM_CODEC =
             StreamCodec.composite(
-                    ByteBufCodecs.VECTOR3F, CSConcussionBlurPacket::impactPos,
+                    ByteBufCodecs.VECTOR3F.map(org.joml.Vector3f::new, value -> value), CSConcussionBlurPacket::impactPos,
                     ByteBufCodecs.FLOAT,    CSConcussionBlurPacket::effectRadiusBlocks,
                     ByteBufCodecs.INT,      CSConcussionBlurPacket::holdTicks,
                     ByteBufCodecs.INT,      CSConcussionBlurPacket::fadeOutTicks,

@@ -12,7 +12,7 @@ public final class Hud {
     public Hud() {
         OperationKnightfall.init();
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             HudClient.init();
         }
     }

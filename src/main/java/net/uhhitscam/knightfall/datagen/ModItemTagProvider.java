@@ -1,23 +1,19 @@
 package net.uhhitscam.knightfall.datagen;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.item.Item;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.concurrent.CompletableFuture;
 
-public class ModItemTagProvider extends ItemTagsProvider {
-    public ModItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
-                              CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, blockTags, OperationKnightfall.MODID, existingFileHelper);
+public class ModItemTagProvider extends TagsProvider<Item> {
+    public ModItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, Registries.ITEM, lookupProvider, OperationKnightfall.MODID);
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider pProvider) {
-
+    protected void addTags(HolderLookup.Provider provider) {
     }
 }

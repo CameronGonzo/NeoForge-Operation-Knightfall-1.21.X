@@ -12,7 +12,7 @@ public final class BeamLogic {
     private BeamLogic() {}
 
     public static void startOrUpdateBeam(ServerPlayer player, ProjectileItem weapon, ItemStack stack, boolean mainHand) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
 
         BeamWeaponStats beamStats = weapon.getBeamStats();
         if (beamStats == null) {
@@ -35,7 +35,7 @@ public final class BeamLogic {
     }
 
     public static void stopBeam(ServerPlayer player, boolean mainHand) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         BlasterBeamEndpointEntity beam = findExisting(level, player, mainHand);
         if (beam != null) beam.discard();
     }
