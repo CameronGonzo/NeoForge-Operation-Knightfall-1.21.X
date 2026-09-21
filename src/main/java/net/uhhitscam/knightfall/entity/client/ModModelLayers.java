@@ -51,8 +51,12 @@ public class ModModelLayers {
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "stunner"), "main");
     public static final ModelLayerLocation THERMAL_IMPLODER = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "thermal_imploder"), "main");
+    public static final ModelLayerLocation SONIC_IMPLODER = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "sonic_imploder"), "main");
     public static final ModelLayerLocation FIREBOMB = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "firebomb"), "main");
+    public static final ModelLayerLocation CRYOBAN_GRENADE = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "cryoban_grenade"), "main");
     public static final ModelLayerLocation EXPLOSIVE_KNIFE = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "explosive_knife"), "main");
 }

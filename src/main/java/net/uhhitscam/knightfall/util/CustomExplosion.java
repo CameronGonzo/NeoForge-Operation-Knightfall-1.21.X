@@ -54,6 +54,8 @@ public class CustomExplosion {
                 x + entityRadius, y + entityRadius, z + entityRadius
         );
 
+        destroyGroundItems(serverLevel, location, Math.max(entityRadius, blockBreakRadius));
+
         List<LivingEntity> entities = serverLevel.getEntitiesOfClass(LivingEntity.class, box);
         DamageSource dmgSrc = sourceEntity.damageSources().explosion(sourceEntity, causingEntity);
 
@@ -117,8 +119,6 @@ public class CustomExplosion {
                     BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.GENERIC_EXPLODE.value())
             );
         }
-
-        destroyGroundItems(serverLevel, location, Math.max(entityRadius, blockBreakRadius));
     }
 
     private static void destroyGroundItems(ServerLevel level, Vec3 location, double radius) {

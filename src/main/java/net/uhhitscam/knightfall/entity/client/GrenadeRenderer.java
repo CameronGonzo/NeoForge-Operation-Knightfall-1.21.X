@@ -27,8 +27,15 @@ import net.uhhitscam.knightfall.item.custom.grenade.GrenadeVisualState;
 public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRenderer.State> {
     private static final float DEFAULT_MODEL_SCALE = 0.8F;
     private static final float THERMAL_IMPLODER_MODEL_SCALE = 0.85F;
+    private static final float FIREBOMB_MODEL_SCALE = 0.85F;
+    private static final float SONIC_IMPLODER_MODEL_SCALE = 0.75F;
+    private static final float CRYOBAN_GRENADE_MODEL_SCALE = 0.55F;
     private static final GrenadeTextures THERMAL_DETONATOR_TEXTURES = textures("thermal_detonator");
-    private static final GrenadeTextures IMPACT_THERMAL_DETONATOR_TEXTURES = textures("impact_thermal_detonator");
+    private static final GrenadeTextures IMPACT_THERMAL_DETONATOR_TEXTURES = new GrenadeTextures(
+            texture("impact_thermal_detonator"),
+            texture("impact_thermal_detonator"),
+            texture("impact_thermal_detonator_1")
+    );
     private static final GrenadeTextures MAGNETIC_THERMAL_DETONATOR_TEXTURES = new GrenadeTextures(
             texture("magnetic_thermal_detonator"),
             texture("magnetic_thermal_detonator"),
@@ -52,7 +59,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     );
     private static final GrenadeTextures STUNNER_TEXTURES = textures("stunner");
     private static final GrenadeTextures THERMAL_IMPLODER_TEXTURES = singleTexture("thermal_imploder");
+    private static final GrenadeTextures SONIC_IMPLODER_TEXTURES = singleTexture("sonic_imploder");
     private static final GrenadeTextures FIREBOMB_TEXTURES = singleTexture("firebomb");
+    private static final GrenadeTextures CRYOBAN_GRENADE_TEXTURES = singleTexture("cryoban_grenade");
 
     private final ThermalDetonatorModel thermalDetonatorModel;
     private final ImpactThermalDetonatorModel impactThermalDetonatorModel;
@@ -63,7 +72,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     private final PyroDentonExplosiveModel pyroDentonExplosiveModel;
     private final StunnerModel stunnerModel;
     private final ThermalImploderModel thermalImploderModel;
+    private final SonicImploderModel sonicImploderModel;
     private final FirebombModel firebombModel;
+    private final CryobanGrenadeModel cryobanGrenadeModel;
     private final ItemModelResolver itemModelResolver;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -87,8 +98,14 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         this.thermalImploderModel = new ThermalImploderModel(
                 context.bakeLayer(ModModelLayers.THERMAL_IMPLODER)
         );
+        this.sonicImploderModel = new SonicImploderModel(
+                context.bakeLayer(ModModelLayers.SONIC_IMPLODER)
+        );
         this.firebombModel = new FirebombModel(
                 context.bakeLayer(ModModelLayers.FIREBOMB)
+        );
+        this.cryobanGrenadeModel = new CryobanGrenadeModel(
+                context.bakeLayer(ModModelLayers.CRYOBAN_GRENADE)
         );
         this.itemModelResolver = context.getItemModelResolver();
         this.shadowRadius = 0.15F;
@@ -199,8 +216,14 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.THERMAL_IMPLODER.get())) {
             return thermalImploderModel;
         }
+        if (entity.getItem().is(ModItems.SONIC_IMPLODER.get())) {
+            return sonicImploderModel;
+        }
         if (entity.getItem().is(ModItems.FIREBOMB.get())) {
             return firebombModel;
+        }
+        if (entity.getItem().is(ModItems.CRYOBAN_GRENADE.get())) {
+            return cryobanGrenadeModel;
         }
         return null;
     }
@@ -233,8 +256,14 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.THERMAL_IMPLODER.get())) {
             return THERMAL_IMPLODER_TEXTURES;
         }
+        if (entity.getItem().is(ModItems.SONIC_IMPLODER.get())) {
+            return SONIC_IMPLODER_TEXTURES;
+        }
         if (entity.getItem().is(ModItems.FIREBOMB.get())) {
             return FIREBOMB_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.CRYOBAN_GRENADE.get())) {
+            return CRYOBAN_GRENADE_TEXTURES;
         }
         return null;
     }
@@ -253,9 +282,19 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     }
 
     private static float getModelScale(GrenadeEntity entity) {
-        return entity.getItem().is(ModItems.THERMAL_IMPLODER.get())
-                ? THERMAL_IMPLODER_MODEL_SCALE
-                : 1.0F;
+        if (entity.getItem().is(ModItems.THERMAL_IMPLODER.get())) {
+            return THERMAL_IMPLODER_MODEL_SCALE;
+        }
+        if (entity.getItem().is(ModItems.FIREBOMB.get())) {
+            return FIREBOMB_MODEL_SCALE;
+        }
+        if (entity.getItem().is(ModItems.SONIC_IMPLODER.get())) {
+            return SONIC_IMPLODER_MODEL_SCALE;
+        }
+        if (entity.getItem().is(ModItems.CRYOBAN_GRENADE.get())) {
+            return CRYOBAN_GRENADE_MODEL_SCALE;
+        }
+        return 1.0F;
     }
 
     private static GrenadeTextures textures(String name) {

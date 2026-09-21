@@ -33,7 +33,9 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.PYRO_DENTON_EXPLOSIVE, PyroDentonExplosiveModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.STUNNER, StunnerModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.THERMAL_IMPLODER, ThermalImploderModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SONIC_IMPLODER, SonicImploderModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.FIREBOMB, FirebombModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.CRYOBAN_GRENADE, CryobanGrenadeModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.EXPLOSIVE_KNIFE, ExplosiveKnifeModel::createBodyLayer);
     }
 

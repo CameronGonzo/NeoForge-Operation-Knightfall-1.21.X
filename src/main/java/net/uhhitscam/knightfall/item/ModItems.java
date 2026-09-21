@@ -15,6 +15,7 @@ import net.uhhitscam.knightfall.item.custom.projectile.FlechetteCanisterItem;
 import net.uhhitscam.knightfall.item.custom.projectile.GasItem;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeAudioProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeConcussionProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeCryobanProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDeployment;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonatorDelivery;
@@ -458,7 +459,7 @@ public class ModItems {
                     .throwInaccuracy(1.0F)
                     .cooldownTicks(10)
                     .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
-                    .hitbox(0.25F, 0.5F)
+                    .hitbox(0.5F, 0.25F)
                     .fuseSoundMode(GrenadeFuseSoundMode.ONCE_WHEN_THROWN)
                     .audio(new GrenadeAudioProfile(
                             new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
@@ -492,6 +493,42 @@ public class ModItems {
                                             36, 1.2, 0.8, 1.2, 0.04))
                                     .build())).build()
     );
+    public static final DeferredItem<Item> SONIC_IMPLODER = registerGrenade(
+            GrenadeDefinition.builder("sonic_imploder")
+                    .fuseTicks(90)
+                    .trigger(GrenadeTrigger.FUSE_AFTER_THROW)
+                    .throwVelocity(1.5F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .hitbox(0.5F, 0.25F)
+                    .fuseSoundMode(GrenadeFuseSoundMode.ONCE_WHEN_THROWN)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.SONIC_IMPLODER_IMPACT.get(), SoundSource.BLOCKS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.SONIC_IMPLODER_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.SONIC_IMPLODER_BEEP.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
+                            90, 90, 0))
+                    .implosionProfile(new GrenadeImplosionProfile(
+                            20,
+                            7.0,
+                            0.2,
+                            new GrenadeSound(() -> ModSounds.SONIC_IMPLODER_EXPLOSION.get(),
+                                    SoundSource.BLOCKS, 1.2F, 1.0F)
+                    ))
+                    .effect(GrenadeEffects.sonicImplosionExplosion(GrenadeExplosionSpec.builder(
+                                            7.0, 30.0F,
+                                            new GrenadeSound(() -> ModSounds.SONIC_IMPLODER_EXPLOSION.get(),
+                                                    SoundSource.BLOCKS, 1.2F, 1.0F))
+                                    .knockback(1.4)
+                                    .silentDetonation()
+                                    .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .build())).build()
+    );
     public static final DeferredItem<Item> FIREBOMB = registerGrenade(
             GrenadeDefinition.builder("firebomb")
                     .fuseTicks(50)
@@ -502,7 +539,7 @@ public class ModItems {
                     .throwInaccuracy(1.0F)
                     .cooldownTicks(10)
                     .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
-                    .hitbox(0.25F, 0.5F)
+                    .hitbox(0.5F, 0.25F)
                     .fuseSoundMode(GrenadeFuseSoundMode.ONCE_WHEN_THROWN)
                     .audio(new GrenadeAudioProfile(
                             new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
@@ -531,6 +568,39 @@ public class ModItems {
                                     28,
                                     2
                             )
+                    )).build()
+    );
+    public static final DeferredItem<Item> CRYOBAN_GRENADE = registerGrenade(
+            GrenadeDefinition.builder("cryoban_grenade")
+                    .fuseTicks(100)
+                    .trigger(GrenadeTrigger.FUSE_AFTER_THROW)
+                    .throwVelocity(1.5F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .hitbox(0.6F, 0.25F)
+                    .fuseSoundMode(GrenadeFuseSoundMode.ONCE_WHEN_THROWN)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.CRYOBAN_GRENADE_IMPACT.get(), SoundSource.BLOCKS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.CRYOBAN_GRENADE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.CRYOBAN_GRENADE_BEEP.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
+                            100, 100, 0))
+                    .effect(GrenadeEffects.cryobanExplosion(
+                            GrenadeExplosionSpec.builder(
+                                            4.0, 6.0F,
+                                            new GrenadeSound(() -> ModSounds.CRYOBAN_GRENADE_EXPLOSION.get(),
+                                                    SoundSource.BLOCKS, 1.1F, 1.0F))
+                                    .knockback(0.6)
+                                    .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.SNOWFLAKE,
+                                            80, 1.4, 0.8, 1.4, 0.08))
+                                    .build(),
+                            new GrenadeCryobanProfile(4.0, 200)
                     )).build()
     );
 

@@ -11,6 +11,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
 import net.uhhitscam.knightfall.util.CustomExplosion;
+import net.uhhitscam.knightfall.util.FaceAlignedParticleUtil;
 import org.joml.Vector3f;
 
 import java.util.Objects;
@@ -25,10 +26,7 @@ public final class GrenadeEffects {
         return context -> detonateExplosion(context, spec);
     }
 
-    public static GrenadeEffect concussiveExplosion(
-            GrenadeExplosionSpec explosionSpec,
-            GrenadeConcussionProfile concussionProfile
-    ) {
+    public static GrenadeEffect concussiveExplosion(GrenadeExplosionSpec explosionSpec, GrenadeConcussionProfile concussionProfile) {
         Objects.requireNonNull(explosionSpec, "Grenade explosion specification cannot be null.");
         Objects.requireNonNull(concussionProfile, "Grenade concussion profile cannot be null.");
 
@@ -57,10 +55,16 @@ public final class GrenadeEffects {
         };
     }
 
-    public static GrenadeEffect firebombExplosion(
-            GrenadeExplosionSpec explosionSpec,
-            GrenadeFirebombProfile firebombProfile
-    ) {
+    public static GrenadeEffect sonicImplosionExplosion(GrenadeExplosionSpec explosionSpec) {
+        Objects.requireNonNull(explosionSpec, "Sonic Imploder explosion specification cannot be null.");
+
+        return context -> {
+            FaceAlignedParticleUtil.spawnSonicImploderRipple(context.level(), context.position());
+            detonateExplosion(context, explosionSpec);
+        };
+    }
+
+    public static GrenadeEffect firebombExplosion(GrenadeExplosionSpec explosionSpec, GrenadeFirebombProfile firebombProfile) {
         Objects.requireNonNull(explosionSpec, "Grenade explosion specification cannot be null.");
         Objects.requireNonNull(firebombProfile, "Grenade Firebomb profile cannot be null.");
 
@@ -68,6 +72,16 @@ public final class GrenadeEffects {
             detonateExplosion(context, explosionSpec);
             igniteNearbyEntities(context, firebombProfile);
             placeFirePatches(context, firebombProfile);
+        };
+    }
+
+    public static GrenadeEffect cryobanExplosion(GrenadeExplosionSpec explosionSpec, GrenadeCryobanProfile cryobanProfile) {
+        Objects.requireNonNull(explosionSpec, "Grenade explosion specification cannot be null.");
+        Objects.requireNonNull(cryobanProfile, "Grenade Cryoban profile cannot be null.");
+
+        return context -> {
+            detonateExplosion(context, explosionSpec);
+            freezeNearbyEntities(context, cryobanProfile);
         };
     }
 
@@ -82,8 +96,7 @@ public final class GrenadeEffects {
                 spec.forceKnockback(),
                 spec.blockBreakRadius(),
                 spec.blockInteraction(),
-                spec.causesFire()
-        );
+                spec.causesFire());
 
         if (spec.playsDetonationSound()) {
             spec.detonationSound().play(context.level(), context.position());
@@ -108,10 +121,7 @@ public final class GrenadeEffects {
         }
     }
 
-    private static void igniteNearbyEntities(
-            GrenadeDetonationContext context,
-            GrenadeFirebombProfile profile
-    ) {
+    private static void igniteNearbyEntities(GrenadeDetonationContext context, GrenadeFirebombProfile profile) {
         double radiusSquared = profile.entityIgnitionRadius() * profile.entityIgnitionRadius();
         AABB bounds = new AABB(context.position(), context.position()).inflate(profile.entityIgnitionRadius());
 
@@ -122,10 +132,24 @@ public final class GrenadeEffects {
         }
     }
 
-    private static void placeFirePatches(
-            GrenadeDetonationContext context,
-            GrenadeFirebombProfile profile
-    ) {
+    private static void freezeNearbyEntities(GrenadeDetonationContext context, GrenadeCryobanProfile profile) {
+        double radiusSquared = profile.freezeRadius() * profile.freezeRadius();
+        AABB bounds = new AABB(context.position(), context.position()).inflate(profile.freezeRadius());
+
+        for (LivingEntity target : context.level().getEntitiesOfClass(LivingEntity.class, bounds)) {
+            if (!target.isAlive()
+                    || !target.canFreeze()
+                    || target.distanceToSqr(context.position()) > radiusSquared) {
+                continue;
+            }
+
+            int fullyFrozenTicks = target.getTicksRequiredToFreeze();
+            int timedFreezeTicks = fullyFrozenTicks + profile.freezeDurationTicks() * 2;
+            target.setTicksFrozen(Math.max(target.getTicksFrozen(), timedFreezeTicks));
+        }
+    }
+
+    private static void placeFirePatches(GrenadeDetonationContext context, GrenadeFirebombProfile profile) {
         RandomSource random = context.level().getRandom();
         BlockPos origin = BlockPos.containing(context.position());
         BlockState fire = Blocks.FIRE.defaultBlockState();

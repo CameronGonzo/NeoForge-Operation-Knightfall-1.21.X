@@ -2,7 +2,8 @@ package net.uhhitscam.knightfall.event;
 
 public enum FaceAlignedParticleType {
     SONIC_RIPPLE(0),
-    BLASTER_BURN_MARK(1);
+    BLASTER_BURN_MARK(1),
+    SONIC_IMPLODER_RIPPLE(2);
 
     private final int id;
 

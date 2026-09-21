@@ -118,7 +118,8 @@ public final class FaceAlignedParticleClient {
         rotateToFaceDirection(poseStack, effect.direction);
 
         switch (effect.effectType) {
-            case SONIC_RIPPLE -> renderSonicRipple(effect, visual, progress, poseStack, buffer);
+            case SONIC_RIPPLE, SONIC_IMPLODER_RIPPLE ->
+                    renderSonicRipple(effect, visual, progress, poseStack, buffer);
             case BLASTER_BURN_MARK -> renderBlasterBurnMark(effect, visual, age, poseStack, buffer);
         }
 
@@ -257,6 +258,15 @@ public final class FaceAlignedParticleClient {
                         ),
                         0.2F,
                         2.8F,
+                        20
+                );
+                case SONIC_IMPLODER_RIPPLE -> new EffectVisual(
+                        Identifier.fromNamespaceAndPath(
+                                OperationKnightfall.MODID,
+                                "textures/particle/sonic_imploder_ripple.png"
+                        ),
+                        0.6F,
+                        8.0F,
                         20
                 );
                 case BLASTER_BURN_MARK -> new EffectVisual(

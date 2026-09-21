@@ -18,6 +18,27 @@ public final class FaceAlignedParticleUtil {
         spawn(level, blockHitResult, FaceAlignedParticleType.SONIC_RIPPLE, 0);
     }
 
+    public static void spawnSonicImploderRipple(Level level, Vec3 position) {
+        if (level.isClientSide() || !(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        PacketDistributor.sendToPlayersNear(
+                serverLevel,
+                null,
+                position.x,
+                position.y,
+                position.z,
+                48.0D,
+                new CSFaceAlignedParticlePacket(
+                        new Vector3f((float) position.x, (float) position.y, (float) position.z),
+                        Direction.UP.get3DDataValue(),
+                        FaceAlignedParticleType.SONIC_IMPLODER_RIPPLE.id(),
+                        0
+                )
+        );
+    }
+
     public static void spawnBlasterBurn(Level level, BlockHitResult blockHitResult) {
         if (level.isClientSide()) {
             return;
