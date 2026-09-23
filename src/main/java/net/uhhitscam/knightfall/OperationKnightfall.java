@@ -108,13 +108,15 @@ public class OperationKnightfall {
 
             event.enqueueWork(() -> {
                 GrenadeItemModelProperties.register(ModItems.THERMAL_DETONATOR.get());
-                GrenadeItemModelProperties.register(ModItems.IMPACT_THERMAL_DETONATOR.get());
+                GrenadeItemModelProperties.register(ModItems.IMPACT_BOMB.get());
                 GrenadeItemModelProperties.register(ModItems.MAGNETIC_THERMAL_DETONATOR.get());
                 GrenadeItemModelProperties.register(ModItems.GRAV_CHARGE.get());
                 GrenadeItemModelProperties.register(ModItems.DETONITE_CHARGE.get());
                 RemoteDetonatorItemModelProperties.register(ModItems.DETONITE_CHARGE_DETONATOR.get());
                 RemoteDetonatorItemModelProperties.register(ModItems.PYRO_DENTON_EXPLOSIVE_DETONATOR.get());
                 GrenadeItemModelProperties.register(ModItems.STUNNER.get());
+                GrenadeItemModelProperties.register(ModItems.BACTA_BOMB.get());
+                GrenadeItemModelProperties.register(ModItems.DIOXIS_GRENADE.get());
                 ModItems.ITEMS.getEntries().forEach(entry -> {
                     if (entry.get() instanceof net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem) {
                         MeleeWeaponItemModelProperties.register(entry.get());
@@ -133,6 +135,9 @@ public class OperationKnightfall {
 
         @SubscribeEvent
         public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
+            event.registerSpriteSet(ModParticles.BACTA_GAS_01_PARTICLES.get(), BactaGas01Particles.Provider::new);
+            event.registerSpriteSet(ModParticles.BACTA_GAS_02_PARTICLES.get(), BactaGas02Particles.Provider::new);
+            event.registerSpriteSet(ModParticles.BACTA_GAS_03_PARTICLES.get(), BactaGas03Particles.Provider::new);
             event.registerSpriteSet(ModParticles.SPARK_PARTICLES.get(), SparkParticles.Provider::new);
             event.registerSpriteSet(ModParticles.STUN_SPARK_PARTICLES.get(), StunSparkParticles.Provider::new);
             event.registerSpriteSet(ModParticles.EXPLOSIVE_SHOT_TIBANNA_PARTICLES.get(), ExplosiveShotTibannaParticles.Provider::new);

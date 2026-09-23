@@ -11,20 +11,20 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.util.Unit;
 
-public class ImpactThermalDetonatorModel extends Model<Unit> {
-    private final ModelPart impactThermalDetonator;
+public class ImpactBombModel extends Model<Unit> {
+    private final ModelPart impactBomb;
 
-    public ImpactThermalDetonatorModel(ModelPart root) {
-        super(root.getChild("impactThermalDetonator"), RenderTypes::entityCutout);
-        this.impactThermalDetonator = root.getChild("impactThermalDetonator");
+    public ImpactBombModel(ModelPart root) {
+        super(root.getChild("impactBomb"), RenderTypes::entityCutout);
+        this.impactBomb = root.getChild("impactBomb");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshDefinition = new MeshDefinition();
         PartDefinition root = meshDefinition.getRoot();
 
-        PartDefinition impactThermalDetonator = root.addOrReplaceChild(
-                "impactThermalDetonator",
+        PartDefinition impactBomb = root.addOrReplaceChild(
+                "impactBomb",
                 CubeListBuilder.create()
                         .texOffs(0, 0).addBox(-2.5F, -4.25F, -2.5F, 5.0F, 3.0F, 5.0F, new CubeDeformation(0.0F))
                         .texOffs(0, 8).addBox(-2.0F, -5.25F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
@@ -39,7 +39,7 @@ public class ImpactThermalDetonatorModel extends Model<Unit> {
                 PartPose.offset(0.0F, 3.625F, 0.0F)
         );
 
-        impactThermalDetonator.addOrReplaceChild(
+        impactBomb.addOrReplaceChild(
                 "cube_r1",
                 CubeListBuilder.create()
                         .texOffs(20, 2).addBox(0.75F, -1.75F, -2.75F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))

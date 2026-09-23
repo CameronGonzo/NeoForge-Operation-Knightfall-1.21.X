@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/bacta_bomb_item",
+  "textures": {
+    "0": "knightfall:item/bacta_bomb_item_1",
+    "particle": "knightfall:item/bacta_bomb_item_1"
+  }
+}

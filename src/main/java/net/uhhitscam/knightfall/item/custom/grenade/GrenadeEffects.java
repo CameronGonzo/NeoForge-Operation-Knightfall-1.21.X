@@ -1,15 +1,23 @@
 package net.uhhitscam.knightfall.item.custom.grenade;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
+import net.uhhitscam.knightfall.network.CSBactaGasParticlesPacket;
 import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
+import net.uhhitscam.knightfall.util.ColorUtil;
 import net.uhhitscam.knightfall.util.CustomExplosion;
 import net.uhhitscam.knightfall.util.FaceAlignedParticleUtil;
 import org.joml.Vector3f;
@@ -81,8 +89,123 @@ public final class GrenadeEffects {
 
         return context -> {
             detonateExplosion(context, explosionSpec);
+            extinguishNearbyFire(context, explosionSpec.entityRadius());
             freezeNearbyEntities(context, cryobanProfile);
         };
+    }
+
+    public static GrenadeEffect bactaGas(GrenadeBactaProfile profile, GrenadeSound releaseSound) {
+        Objects.requireNonNull(profile, "Bacta Bomb profile cannot be null.");
+        Objects.requireNonNull(releaseSound, "Bacta Bomb release sound cannot be null.");
+
+        return context -> {
+            releaseSound.play(context.level(), context.position());
+            spawnBactaGasBurst(context, profile);
+
+            double radiusSquared = profile.radius() * profile.radius();
+            AABB bounds = new AABB(context.position(), context.position()).inflate(profile.radius());
+            for (LivingEntity target : context.level().getEntitiesOfClass(LivingEntity.class, bounds)) {
+                if (!target.isAlive() || target.distanceToSqr(context.position()) > radiusSquared) {
+                    continue;
+                }
+
+                if (profile.instantHealing() > 0.0F) {
+                    target.heal(profile.instantHealing());
+                }
+                if (profile.regenerationDurationTicks() > 0) {
+                    target.addEffect(new MobEffectInstance(
+                            MobEffects.REGENERATION,
+                            profile.regenerationDurationTicks(),
+                            profile.regenerationAmplifier()
+                    ));
+                }
+            }
+
+            detonateNearbyGrenades(context, profile.radius());
+        };
+    }
+
+    private static void spawnBactaGasBurst(
+            GrenadeDetonationContext context,
+            GrenadeBactaProfile profile
+    ) {
+        PacketDistributor.sendToPlayersNear(
+                context.level(),
+                null,
+                context.position().x,
+                context.position().y,
+                context.position().z,
+                48.0,
+                new CSBactaGasParticlesPacket(
+                        new Vector3f(
+                                (float) context.position().x,
+                                (float) context.position().y,
+                                (float) context.position().z
+                        ),
+                        profile.gasParticleCount(),
+                        (float) profile.minimumGasParticleSpeed(),
+                        (float) profile.maximumGasParticleSpeed()
+                )
+        );
+    }
+
+    public static GrenadeEffect dioxisGas(GrenadeDioxisProfile profile, GrenadeSound releaseSound) {
+        Objects.requireNonNull(profile, "Dioxis Grenade profile cannot be null.");
+        Objects.requireNonNull(releaseSound, "Dioxis Grenade release sound cannot be null.");
+
+        return context -> {
+            releaseSound.play(context.level(), context.position());
+            spawnGasBurst(context, profile.gasColor(), profile.gasParticleCount(), profile.radius());
+
+            AreaEffectCloud cloud = new AreaEffectCloud(
+                    context.level(),
+                    context.position().x,
+                    context.position().y,
+                    context.position().z
+            );
+            if (context.owner() != null) {
+                cloud.setOwner(context.owner());
+            }
+            cloud.setRadius(profile.radius());
+            cloud.setDuration(profile.cloudDurationTicks());
+            cloud.setWaitTime(0);
+            cloud.setRadiusOnUse(0.0F);
+            cloud.setRadiusPerTick(0.0F);
+            cloud.setDurationOnUse(0);
+            cloud.setCustomParticle(gasParticle(profile.gasColor()));
+            cloud.addEffect(new MobEffectInstance(
+                    MobEffects.POISON,
+                    profile.poisonDurationTicks(),
+                    profile.poisonAmplifier()
+            ));
+            context.level().addFreshEntity(cloud);
+
+            detonateNearbyGrenades(context, profile.radius());
+        };
+    }
+
+    private static void spawnGasBurst(
+            GrenadeDetonationContext context,
+            int color,
+            int particleCount,
+            double radius
+    ) {
+        double spread = radius * 0.45;
+        context.level().sendParticles(
+                gasParticle(color),
+                context.position().x,
+                context.position().y,
+                context.position().z,
+                particleCount,
+                spread,
+                spread * 0.65,
+                spread,
+                0.04
+        );
+    }
+
+    private static ColorParticleOption gasParticle(int color) {
+        return ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, ColorUtil.argb(255, color));
     }
 
     private static void detonateExplosion(GrenadeDetonationContext context, GrenadeExplosionSpec spec) {
@@ -146,6 +269,38 @@ public final class GrenadeEffects {
             int fullyFrozenTicks = target.getTicksRequiredToFreeze();
             int timedFreezeTicks = fullyFrozenTicks + profile.freezeDurationTicks() * 2;
             target.setTicksFrozen(Math.max(target.getTicksFrozen(), timedFreezeTicks));
+        }
+    }
+
+    private static void extinguishNearbyFire(GrenadeDetonationContext context, double radius) {
+        double radiusSquared = radius * radius;
+        AABB bounds = new AABB(context.position(), context.position()).inflate(radius);
+
+        for (LivingEntity target : context.level().getEntitiesOfClass(LivingEntity.class, bounds)) {
+            if (target.distanceToSqr(context.position()) <= radiusSquared) {
+                target.setRemainingFireTicks(0);
+            }
+        }
+
+        BlockPos min = BlockPos.containing(
+                context.position().x - radius,
+                context.position().y - radius,
+                context.position().z - radius
+        );
+        BlockPos max = BlockPos.containing(
+                context.position().x + radius,
+                context.position().y + radius,
+                context.position().z + radius
+        );
+
+        for (BlockPos position : BlockPos.betweenClosed(min, max)) {
+            double x = position.getX() + 0.5 - context.position().x;
+            double y = position.getY() + 0.5 - context.position().y;
+            double z = position.getZ() + 0.5 - context.position().z;
+            if (x * x + y * y + z * z <= radiusSquared
+                    && context.level().getBlockState(position).is(BlockTags.FIRE)) {
+                context.level().removeBlock(position, false);
+            }
         }
     }
 

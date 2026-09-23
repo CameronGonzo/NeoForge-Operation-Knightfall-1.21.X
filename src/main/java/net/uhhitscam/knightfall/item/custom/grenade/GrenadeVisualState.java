@@ -27,7 +27,11 @@ public enum GrenadeVisualState {
         }
 
         if (definition.visualFlashIntervalTicks() > 0) {
-            return isPeriodicFlashActive(useTicks, definition.visualFlashIntervalTicks())
+            boolean repeatWhileHeld = definition.fuseSoundMode()
+                    != GrenadeFuseSoundMode.LOOP_UNTIL_REMOVED;
+            return (useTicks < BEEP_FLASH_TICKS
+                    || repeatWhileHeld
+                    && isPeriodicFlashActive(useTicks, definition.visualFlashIntervalTicks()))
                     ? BEEP
                     : ACTIVE;
         }

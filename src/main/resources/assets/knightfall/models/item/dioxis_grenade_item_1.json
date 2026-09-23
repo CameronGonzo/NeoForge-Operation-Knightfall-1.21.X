@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/dioxis_grenade_item",
+  "textures": {
+    "0": "knightfall:item/dioxis_grenade_item_1",
+    "particle": "knightfall:item/dioxis_grenade_item_1"
+  }
+}

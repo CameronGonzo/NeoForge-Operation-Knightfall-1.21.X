@@ -22,6 +22,7 @@ import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeFuseSoundMode;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeVisualState;
 
 public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRenderer.State> {
@@ -30,11 +31,13 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     private static final float FIREBOMB_MODEL_SCALE = 0.85F;
     private static final float SONIC_IMPLODER_MODEL_SCALE = 0.75F;
     private static final float CRYOBAN_GRENADE_MODEL_SCALE = 0.55F;
+    private static final float BACTA_BOMB_MODEL_SCALE = 0.75F;
+    private static final float DIOXIS_GRENADE_MODEL_SCALE = 0.75F;
     private static final GrenadeTextures THERMAL_DETONATOR_TEXTURES = textures("thermal_detonator");
-    private static final GrenadeTextures IMPACT_THERMAL_DETONATOR_TEXTURES = new GrenadeTextures(
-            texture("impact_thermal_detonator"),
-            texture("impact_thermal_detonator"),
-            texture("impact_thermal_detonator_1")
+    private static final GrenadeTextures IMPACT_BOMB_TEXTURES = new GrenadeTextures(
+            texture("impact_bomb"),
+            texture("impact_bomb"),
+            texture("impact_bomb_1")
     );
     private static final GrenadeTextures MAGNETIC_THERMAL_DETONATOR_TEXTURES = new GrenadeTextures(
             texture("magnetic_thermal_detonator"),
@@ -62,9 +65,19 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     private static final GrenadeTextures SONIC_IMPLODER_TEXTURES = singleTexture("sonic_imploder");
     private static final GrenadeTextures FIREBOMB_TEXTURES = singleTexture("firebomb");
     private static final GrenadeTextures CRYOBAN_GRENADE_TEXTURES = singleTexture("cryoban_grenade");
+    private static final GrenadeTextures BACTA_BOMB_TEXTURES = new GrenadeTextures(
+            texture("bacta_bomb"),
+            texture("bacta_bomb"),
+            texture("bacta_bomb_1")
+    );
+    private static final GrenadeTextures DIOXIS_GRENADE_TEXTURES = new GrenadeTextures(
+            texture("dioxis_grenade"),
+            texture("dioxis_grenade"),
+            texture("dioxis_grenade_1")
+    );
 
     private final ThermalDetonatorModel thermalDetonatorModel;
-    private final ImpactThermalDetonatorModel impactThermalDetonatorModel;
+    private final ImpactBombModel impactBombModel;
     private final MagneticThermalDetonatorModel magneticThermalDetonatorModel;
     private final GravChargeModel gravChargeModel;
     private final DetoniteChargeModel detoniteChargeModel;
@@ -75,6 +88,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     private final SonicImploderModel sonicImploderModel;
     private final FirebombModel firebombModel;
     private final CryobanGrenadeModel cryobanGrenadeModel;
+    private final BactaBombModel bactaBombModel;
+    private final DioxisGrenadeModel dioxisGrenadeModel;
     private final ItemModelResolver itemModelResolver;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -82,8 +97,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         this.thermalDetonatorModel = new ThermalDetonatorModel(
                 context.bakeLayer(ModModelLayers.THERMAL_DETONATOR)
         );
-        this.impactThermalDetonatorModel = new ImpactThermalDetonatorModel(
-                context.bakeLayer(ModModelLayers.IMPACT_THERMAL_DETONATOR)
+        this.impactBombModel = new ImpactBombModel(
+                context.bakeLayer(ModModelLayers.IMPACT_BOMB)
         );
         this.magneticThermalDetonatorModel = new MagneticThermalDetonatorModel(
                 context.bakeLayer(ModModelLayers.MAGNETIC_THERMAL_DETONATOR)
@@ -107,6 +122,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         this.cryobanGrenadeModel = new CryobanGrenadeModel(
                 context.bakeLayer(ModModelLayers.CRYOBAN_GRENADE)
         );
+        this.bactaBombModel = new BactaBombModel(context.bakeLayer(ModModelLayers.BACTA_BOMB));
+        this.dioxisGrenadeModel = new DioxisGrenadeModel(context.bakeLayer(ModModelLayers.DIOXIS_GRENADE));
         this.itemModelResolver = context.getItemModelResolver();
         this.shadowRadius = 0.15F;
     }
@@ -177,6 +194,10 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
             return entity.isBeepFlashActive() ? textures.beep() : textures.base();
         }
 
+        if (definition.fuseSoundMode() == GrenadeFuseSoundMode.REPEATED_AFTER_THROW) {
+            return entity.isBeepFlashActive() ? textures.beep() : textures.active();
+        }
+
         return switch (GrenadeVisualState.forThrownGrenade(
                 definition,
                 entity.getFuseTicks(),
@@ -192,8 +213,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.THERMAL_DETONATOR.get())) {
             return thermalDetonatorModel;
         }
-        if (entity.getItem().is(ModItems.IMPACT_THERMAL_DETONATOR.get())) {
-            return impactThermalDetonatorModel;
+        if (entity.getItem().is(ModItems.IMPACT_BOMB.get())) {
+            return impactBombModel;
         }
         if (entity.getItem().is(ModItems.MAGNETIC_THERMAL_DETONATOR.get())) {
             return magneticThermalDetonatorModel;
@@ -225,6 +246,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.CRYOBAN_GRENADE.get())) {
             return cryobanGrenadeModel;
         }
+        if (entity.getItem().is(ModItems.BACTA_BOMB.get())) {
+            return bactaBombModel;
+        }
+        if (entity.getItem().is(ModItems.DIOXIS_GRENADE.get())) {
+            return dioxisGrenadeModel;
+        }
         return null;
     }
 
@@ -232,8 +259,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.THERMAL_DETONATOR.get())) {
             return THERMAL_DETONATOR_TEXTURES;
         }
-        if (entity.getItem().is(ModItems.IMPACT_THERMAL_DETONATOR.get())) {
-            return IMPACT_THERMAL_DETONATOR_TEXTURES;
+        if (entity.getItem().is(ModItems.IMPACT_BOMB.get())) {
+            return IMPACT_BOMB_TEXTURES;
         }
         if (entity.getItem().is(ModItems.MAGNETIC_THERMAL_DETONATOR.get())) {
             return MAGNETIC_THERMAL_DETONATOR_TEXTURES;
@@ -265,6 +292,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.CRYOBAN_GRENADE.get())) {
             return CRYOBAN_GRENADE_TEXTURES;
         }
+        if (entity.getItem().is(ModItems.BACTA_BOMB.get())) {
+            return BACTA_BOMB_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.DIOXIS_GRENADE.get())) {
+            return DIOXIS_GRENADE_TEXTURES;
+        }
         return null;
     }
 
@@ -293,6 +326,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         }
         if (entity.getItem().is(ModItems.CRYOBAN_GRENADE.get())) {
             return CRYOBAN_GRENADE_MODEL_SCALE;
+        }
+        if (entity.getItem().is(ModItems.BACTA_BOMB.get())) {
+            return BACTA_BOMB_MODEL_SCALE;
+        }
+        if (entity.getItem().is(ModItems.DIOXIS_GRENADE.get())) {
+            return DIOXIS_GRENADE_MODEL_SCALE;
         }
         return 1.0F;
     }

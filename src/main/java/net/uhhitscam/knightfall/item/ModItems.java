@@ -14,12 +14,14 @@ import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
 import net.uhhitscam.knightfall.item.custom.projectile.FlechetteCanisterItem;
 import net.uhhitscam.knightfall.item.custom.projectile.GasItem;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeAudioProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeBactaProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeConcussionProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeCryobanProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDeployment;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonatorDelivery;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonatorItem;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDioxisProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeEffects;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeExplosionSpec;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeFirebombProfile;
@@ -57,12 +59,16 @@ import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
 import net.uhhitscam.knightfall.particle.ModParticles;
 import net.uhhitscam.knightfall.sound.ModSounds;
+import net.uhhitscam.knightfall.util.ColorUtil;
 import net.uhhitscam.knightfall.util.ModTags;
 
 import java.util.Map;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(OperationKnightfall.MODID);
+    private static final int BACTA_BOMB_BEEP_INTERVAL_TICKS = 23;
+    private static final int DIOXIS_GRENADE_BEEP_INTERVAL_TICKS = 18;
+    private static final int DIOXIS_GRENADE_BEEP_COUNT = 4;
 
     private static DeferredItem<Item> registerProjectile(ProjectileWeaponDefinition definition) {
         return ITEMS.registerItem(definition.registryName(),
@@ -198,8 +204,8 @@ public class ModItems {
                                             24, 0.8, 0.5, 0.8, 0.03))
                                     .build())).build()
     );
-    public static final DeferredItem<Item> IMPACT_THERMAL_DETONATOR = registerGrenade(
-            GrenadeDefinition.builder("impact_thermal_detonator")
+    public static final DeferredItem<Item> IMPACT_BOMB = registerGrenade(
+            GrenadeDefinition.builder("impact_bomb")
                     .fuseTicks(100)
                     .trigger(GrenadeTrigger.IMPACT_OR_FUSE)
                     .throwVelocity(1.5F)
@@ -210,9 +216,9 @@ public class ModItems {
                     .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
                     .audio(new GrenadeAudioProfile(
                             new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
-                            new GrenadeSound(() -> ModSounds.IMPACT_THERMAL_DETONATOR_IMPACT.get(), SoundSource.BLOCKS, 0.4F, 1.2F),
-                            new GrenadeSound(() -> ModSounds.IMPACT_THERMAL_DETONATOR_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.4F),
-                            new GrenadeSound(() -> ModSounds.IMPACT_THERMAL_DETONATOR_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.4F),
+                            new GrenadeSound(() -> ModSounds.IMPACT_BOMB_IMPACT.get(), SoundSource.BLOCKS, 0.4F, 1.2F),
+                            new GrenadeSound(() -> ModSounds.IMPACT_BOMB_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.4F),
+                            new GrenadeSound(() -> ModSounds.IMPACT_BOMB_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.4F),
                             20, 5, 100))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             4.0, 8.0F,
@@ -601,6 +607,70 @@ public class ModItems {
                                             80, 1.4, 0.8, 1.4, 0.08))
                                     .build(),
                             new GrenadeCryobanProfile(4.0, 200)
+                    )).build()
+    );
+    public static final DeferredItem<Item> BACTA_BOMB = registerGrenade(
+            GrenadeDefinition.builder("bacta_bomb")
+                    .fuseTicks(72000)
+                    .trigger(GrenadeTrigger.IMPACT)
+                    .throwVelocity(1.5F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .hitbox(0.55F, 0.3F)
+                    .fuseSoundMode(GrenadeFuseSoundMode.LOOP_UNTIL_REMOVED)
+                    .visualFlashIntervalTicks(BACTA_BOMB_BEEP_INTERVAL_TICKS)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> SoundEvents.EMPTY, SoundSource.BLOCKS, 0.0F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.BACTA_BOMB_ACTIVATE.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.BACTA_BOMB_BEEP.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
+                            BACTA_BOMB_BEEP_INTERVAL_TICKS, BACTA_BOMB_BEEP_INTERVAL_TICKS, 0))
+                    .effect(GrenadeEffects.bactaGas(
+                            new GrenadeBactaProfile(
+                                    4.0,
+                                    6.0F,
+                                    100,
+                                    1,
+                                    120,
+                                    0.1,
+                                    0.4
+                            ),
+                            new GrenadeSound(() -> ModSounds.BACTA_BOMB_EXPLOSION.get(),
+                                    SoundSource.BLOCKS, 1.0F, 1.0F)
+                    )).build()
+    );
+    public static final DeferredItem<Item> DIOXIS_GRENADE = registerGrenade(
+            GrenadeDefinition.builder("dioxis_grenade")
+                    .fuseTicks(1 + DIOXIS_GRENADE_BEEP_INTERVAL_TICKS * DIOXIS_GRENADE_BEEP_COUNT)
+                    .trigger(GrenadeTrigger.FUSE_AFTER_THROW)
+                    .throwVelocity(1.5F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .hitbox(0.55F, 0.3F)
+                    .fuseSoundMode(GrenadeFuseSoundMode.REPEATED_AFTER_THROW)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.DIOXIS_GRENADE_IMPACT.get(), SoundSource.BLOCKS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.DIOXIS_GRENADE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.DIOXIS_GRENADE_BEEP.get(), SoundSource.NEUTRAL, 0.8F, 1.0F),
+                            DIOXIS_GRENADE_BEEP_INTERVAL_TICKS, DIOXIS_GRENADE_BEEP_INTERVAL_TICKS, 0))
+                    .effect(GrenadeEffects.dioxisGas(
+                            new GrenadeDioxisProfile(
+                                    4.0F,
+                                    280,
+                                    120,
+                                    1,
+                                    120,
+                                    ColorUtil.rgb(134, 174, 59)
+                            ),
+                            new GrenadeSound(() -> ModSounds.DIOXIS_GRENADE_EXPLOSION.get(),
+                                    SoundSource.BLOCKS, 1.0F, 1.0F)
                     )).build()
     );
 

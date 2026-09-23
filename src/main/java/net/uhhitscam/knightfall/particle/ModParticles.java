@@ -13,6 +13,12 @@ public class ModParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
             DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, OperationKnightfall.MODID);
 
+    public static final Supplier<SimpleParticleType> BACTA_GAS_01_PARTICLES =
+            PARTICLE_TYPES.register("bacta_gas_01_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> BACTA_GAS_02_PARTICLES =
+            PARTICLE_TYPES.register("bacta_gas_02_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> BACTA_GAS_03_PARTICLES =
+            PARTICLE_TYPES.register("bacta_gas_03_particles", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> SPARK_PARTICLES =
             PARTICLE_TYPES.register("spark_particles", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> STUN_SPARK_PARTICLES =

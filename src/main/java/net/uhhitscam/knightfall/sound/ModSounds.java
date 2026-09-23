@@ -20,9 +20,9 @@ public class ModSounds {
     public static final Supplier<SoundEvent> THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("thermal_detonator_activate");
     public static final Supplier<SoundEvent> THERMAL_DETONATOR_BEEP = registerSoundEvent("thermal_detonator_beep");
     public static final Supplier<SoundEvent> THERMAL_DETONATOR_IMPACT = registerSoundEvent("thermal_detonator_impact");
-    public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("impact_thermal_detonator_activate");
-    public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_BEEP = registerSoundEvent("impact_thermal_detonator_beep");
-    public static final Supplier<SoundEvent> IMPACT_THERMAL_DETONATOR_IMPACT = registerSoundEvent("impact_thermal_detonator_impact");
+    public static final Supplier<SoundEvent> IMPACT_BOMB_ACTIVATE = registerSoundEvent("impact_bomb_activate");
+    public static final Supplier<SoundEvent> IMPACT_BOMB_BEEP = registerSoundEvent("impact_bomb_beep");
+    public static final Supplier<SoundEvent> IMPACT_BOMB_IMPACT = registerSoundEvent("impact_bomb_impact");
     public static final Supplier<SoundEvent> MAGNETIC_THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("magnetic_thermal_detonator_activate");
     public static final Supplier<SoundEvent> MAGNETIC_THERMAL_DETONATOR_BEEP = registerSoundEvent("magnetic_thermal_detonator_beep");
     public static final Supplier<SoundEvent> MAGNETIC_THERMAL_DETONATOR_IMPACT = registerSoundEvent("magnetic_thermal_detonator_impact");
@@ -59,6 +59,13 @@ public class ModSounds {
     public static final Supplier<SoundEvent> CRYOBAN_GRENADE_BEEP = registerSoundEvent("cryoban_grenade_beep");
     public static final Supplier<SoundEvent> CRYOBAN_GRENADE_EXPLOSION = registerSoundEvent("cryoban_grenade_explosion");
     public static final Supplier<SoundEvent> CRYOBAN_GRENADE_IMPACT = registerSoundEvent("cryoban_grenade_impact");
+    public static final Supplier<SoundEvent> BACTA_BOMB_ACTIVATE = registerSoundEvent("bacta_bomb_activate");
+    public static final Supplier<SoundEvent> BACTA_BOMB_BEEP = registerSoundEvent("bacta_bomb_beep");
+    public static final Supplier<SoundEvent> BACTA_BOMB_EXPLOSION = registerSoundEvent("bacta_bomb_explosion");
+    public static final Supplier<SoundEvent> DIOXIS_GRENADE_ACTIVATE = registerSoundEvent("dioxis_grenade_activate");
+    public static final Supplier<SoundEvent> DIOXIS_GRENADE_BEEP = registerSoundEvent("dioxis_grenade_beep");
+    public static final Supplier<SoundEvent> DIOXIS_GRENADE_EXPLOSION = registerSoundEvent("dioxis_grenade_explosion");
+    public static final Supplier<SoundEvent> DIOXIS_GRENADE_IMPACT = registerSoundEvent("dioxis_grenade_impact");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_EQUIP = registerSoundEvent("explosive_knife_equip");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_UNEQUIP = registerSoundEvent("explosive_knife_unequip");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_BEEP = registerSoundEvent("explosive_knife_beep");

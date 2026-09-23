@@ -4,14 +4,14 @@
     "property": "knightfall:grenade_state",
     "fallback": {
       "type": "minecraft:model",
-      "model": "knightfall:item/impact_thermal_detonator"
+      "model": "knightfall:item/bacta_bomb"
     },
     "entries": [
       {
         "threshold": 2.0,
         "model": {
           "type": "minecraft:model",
-          "model": "knightfall:item/impact_thermal_detonator_item_1"
+          "model": "knightfall:item/bacta_bomb_item_1"
         }
       }
     ]

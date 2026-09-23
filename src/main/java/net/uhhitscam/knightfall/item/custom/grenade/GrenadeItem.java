@@ -57,13 +57,13 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
 
     @Override
     public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseDuration) {
-        if (level.isClientSide()
-                || !definition.trigger().fuseRunsWhileHeld()
-                || definition.fuseSoundMode() != GrenadeFuseSoundMode.SCHEDULED_BEEPS) {
+        if (level.isClientSide()) {
             return;
         }
 
-        if (definition.audio().shouldPlayBeep(remainingUseDuration, definition.fuseTicks())) {
+        if (definition.trigger().fuseRunsWhileHeld()
+                && definition.fuseSoundMode() == GrenadeFuseSoundMode.SCHEDULED_BEEPS
+                && definition.audio().shouldPlayBeep(remainingUseDuration, definition.fuseTicks())) {
             definition.audio().playBeep(level, user.position(), remainingUseDuration, definition.fuseTicks());
         }
     }

@@ -23,22 +23,22 @@
       "knightfall:equipment/thermal_detonator/equipment_grenade_thermal_detonator_impact_01"
     ]
   },
-  "impact_thermal_detonator_activate": {
-    "subtitle": "sounds.knightfall.impact_thermal_detonator_activate",
+  "impact_bomb_activate": {
+    "subtitle": "sounds.knightfall.impact_bomb_activate",
     "sounds": [
-      "knightfall:equipment/impact_thermal_detonator/equipment_grenade_impact_thermal_detonator_activate_01"
+      "knightfall:equipment/impact_bomb/equipment_grenade_impact_bomb_activate_01"
     ]
   },
-  "impact_thermal_detonator_beep": {
-    "subtitle": "sounds.knightfall.impact_thermal_detonator_beep",
+  "impact_bomb_beep": {
+    "subtitle": "sounds.knightfall.impact_bomb_beep",
     "sounds": [
-      "knightfall:equipment/impact_thermal_detonator/equipment_grenade_impact_thermal_detonator_beep_01"
+      "knightfall:equipment/impact_bomb/equipment_grenade_impact_bomb_beep_01"
     ]
   },
-  "impact_thermal_detonator_impact": {
-    "subtitle": "sounds.knightfall.impact_thermal_detonator_impact",
+  "impact_bomb_impact": {
+    "subtitle": "sounds.knightfall.impact_bomb_impact",
     "sounds": [
-      "knightfall:equipment/impact_thermal_detonator/equipment_grenade_impact_thermal_detonator_impact_01"
+      "knightfall:equipment/impact_bomb/equipment_grenade_impact_bomb_impact_01"
     ]
   },
   "equipment_detonator": {
@@ -263,6 +263,63 @@
     "subtitle": "sounds.knightfall.cryoban_grenade_impact",
     "sounds": [
       "knightfall:equipment/cryoban_grenade/equipment_grenade_cryoban_grenade_impact_01"
+    ]
+  },
+  "bacta_bomb_activate": {
+    "subtitle": "sounds.knightfall.bacta_bomb_activate",
+    "sounds": [
+      "knightfall:equipment/bacta_bomb/equipment_grenade_bacta_bomb_activation_01"
+    ]
+  },
+  "bacta_bomb_beep": {
+    "subtitle": "sounds.knightfall.bacta_bomb_beep",
+    "sounds": [
+      "knightfall:equipment/bacta_bomb/equipment_grenade_bacta_bomb_beep_01"
+    ]
+  },
+  "bacta_bomb_explosion": {
+    "subtitle": "sounds.knightfall.bacta_bomb_explosion",
+    "sounds": [
+      "knightfall:equipment/bacta_bomb/equipment_grenade_bacta_bomb_explosion_01",
+      "knightfall:equipment/bacta_bomb/equipment_grenade_bacta_bomb_explosion_02",
+      "knightfall:equipment/bacta_bomb/equipment_grenade_bacta_bomb_explosion_03",
+      "knightfall:equipment/bacta_bomb/equipment_grenade_bacta_bomb_explosion_04",
+      "knightfall:equipment/bacta_bomb/equipment_grenade_bacta_bomb_explosion_05",
+      "knightfall:equipment/bacta_bomb/equipment_grenade_bacta_bomb_explosion_06"
+    ]
+  },
+  "dioxis_grenade_activate": {
+    "subtitle": "sounds.knightfall.dioxis_grenade_activate",
+    "sounds": [
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_activation_01"
+    ]
+  },
+  "dioxis_grenade_beep": {
+    "subtitle": "sounds.knightfall.dioxis_grenade_beep",
+    "sounds": [
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_beep_01"
+    ]
+  },
+  "dioxis_grenade_explosion": {
+    "subtitle": "sounds.knightfall.dioxis_grenade_explosion",
+    "sounds": [
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_01",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_02",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_03",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_04",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_05",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_06",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_07",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_08",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_09",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_10",
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_explosion_11"
+    ]
+  },
+  "dioxis_grenade_impact": {
+    "subtitle": "sounds.knightfall.dioxis_grenade_impact",
+    "sounds": [
+      "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_impact_01"
     ]
   },
   "grav_charge_beep_01": {

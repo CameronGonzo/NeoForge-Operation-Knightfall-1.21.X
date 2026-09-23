@@ -51,6 +51,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     private static final String REMOTE_REGISTERED_TAG = "RemoteRegistered";
     private static final String REMOTE_DETONATION_TICKS_TAG = "RemoteDetonationTicks";
     private static final String ONE_SHOT_FUSE_SOUND_PLAYED_TAG = "OneShotFuseSoundPlayed";
+    private static final String SOUND_LOOP_TICKS_TAG = "SoundLoopTicks";
     private static final String IMPLOSION_TICKS_TAG = "ImplosionTicks";
     private static final double HIT_POSITION_EPSILON = 0.01;
     private static final double GROUND_PROBE_START_OFFSET = 0.02;
@@ -83,6 +84,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     private boolean detonated;
     private boolean remoteRegistered;
     private boolean oneShotFuseSoundPlayed;
+    private int soundLoopTicks;
 
     public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level level) {
         super(entityType, level);
@@ -229,6 +231,10 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         return entityData.get(DATA_BEEP_FLASH_TICKS) > 0;
     }
 
+    public void setSoundLoopTicks(int ticks) {
+        soundLoopTicks = Math.max(0, ticks);
+    }
+
     public boolean isRemoteDetonationActivated() {
         return entityData.get(DATA_REMOTE_DETONATION_TICKS) >= 0;
     }
@@ -312,17 +318,32 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         playOneShotFuseSoundIfNeeded(definition);
 
-        int remainingFuseTicks = getFuseTicks() - 1;
+        int currentFuseTicks = getFuseTicks();
+        int remainingFuseTicks = currentFuseTicks - 1;
         setFuseTicks(remainingFuseTicks);
-        boolean shouldPlayBeep = definition.fuseSoundMode() == GrenadeFuseSoundMode.SCHEDULED_BEEPS
-                && definition.audio().shouldPlayBeep(
-                remainingFuseTicks,
-                definition.fuseTicks()
-        );
+        boolean shouldPlayBeep;
+        if (definition.fuseSoundMode() == GrenadeFuseSoundMode.REPEATED_AFTER_THROW) {
+            boolean firstFuseTick = currentFuseTicks == definition.fuseTicks();
+            if (!firstFuseTick) {
+                soundLoopTicks++;
+            }
+            shouldPlayBeep = firstFuseTick
+                    || soundLoopTicks >= definition.audio().normalBeepIntervalTicks();
+            if (shouldPlayBeep) {
+                soundLoopTicks = 0;
+            }
+        } else {
+            shouldPlayBeep = definition.fuseSoundMode() == GrenadeFuseSoundMode.SCHEDULED_BEEPS
+                    && definition.audio().shouldPlayBeep(
+                    remainingFuseTicks,
+                    definition.fuseTicks()
+            );
+        }
 
         if (remainingFuseTicks <= 0) {
             if (definition.trigger().detonatesOnFuse()) {
-                if (shouldPlayBeep) {
+                if (shouldPlayBeep
+                        && definition.fuseSoundMode() == GrenadeFuseSoundMode.SCHEDULED_BEEPS) {
                     definition.audio().playBeep(level(), position(), remainingFuseTicks, definition.fuseTicks());
                 }
                 detonate();
@@ -333,7 +354,12 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         }
 
         if (shouldPlayBeep) {
-            definition.audio().playBeep(level(), position(), remainingFuseTicks, definition.fuseTicks());
+            if (definition.fuseSoundMode() == GrenadeFuseSoundMode.REPEATED_AFTER_THROW) {
+                definition.audio().beepSound().play(level(), position());
+                setBeepFlashTicks(3);
+            } else {
+                definition.audio().playBeep(level(), position(), remainingFuseTicks, definition.fuseTicks());
+            }
         }
     }
 
@@ -390,6 +416,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         if (definition.trigger().detonatesOnImpact()) {
             stopAtImpact(result.getLocation());
             if (!level().isClientSide()) {
+                definition.audio().bounceSound().play(level(), result.getLocation());
                 detonate();
             }
             return;
@@ -486,6 +513,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         stopAtImpact(result.getLocation());
         if (!level().isClientSide()) {
+            definition.audio().bounceSound().play(level(), result.getLocation());
             detonate();
         }
     }
@@ -853,6 +881,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         tag.putBoolean(REMOTE_REGISTERED_TAG, remoteRegistered);
         tag.putInt(REMOTE_DETONATION_TICKS_TAG, entityData.get(DATA_REMOTE_DETONATION_TICKS));
         tag.putBoolean(ONE_SHOT_FUSE_SOUND_PLAYED_TAG, oneShotFuseSoundPlayed);
+        tag.putInt(SOUND_LOOP_TICKS_TAG, soundLoopTicks);
         tag.putInt(IMPLOSION_TICKS_TAG, entityData.get(DATA_IMPLOSION_TICKS));
     }
 
@@ -877,6 +906,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
                 tag.read(REMOTE_DETONATION_TICKS_TAG, com.mojang.serialization.Codec.INT).isPresent() ? tag.getIntOr(REMOTE_DETONATION_TICKS_TAG, 0) : -1
         );
         oneShotFuseSoundPlayed = tag.getBooleanOr(ONE_SHOT_FUSE_SOUND_PLAYED_TAG, false);
+        soundLoopTicks = Math.max(0, tag.getIntOr(SOUND_LOOP_TICKS_TAG, 0));
         entityData.set(
                 DATA_IMPLOSION_TICKS,
                 tag.read(IMPLOSION_TICKS_TAG, com.mojang.serialization.Codec.INT).isPresent() ? tag.getIntOr(IMPLOSION_TICKS_TAG, 0) : -1

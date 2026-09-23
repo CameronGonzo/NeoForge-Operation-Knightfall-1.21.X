@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "knightfall:grenade_state",
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "knightfall:item/impact_bomb"
+    },
+    "entries": [
+      {
+        "threshold": 2.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "knightfall:item/impact_bomb_item_1"
+        }
+      }
+    ]
+  }
+}

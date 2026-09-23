@@ -10,9 +10,13 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.effect.custom.StunEffect;
+import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 import net.uhhitscam.knightfall.gui.HudClient;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeFuseSoundMode;
 import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
 import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponDefinition;
 import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem;
@@ -24,7 +28,12 @@ import net.uhhitscam.knightfall.network.SSProjectileWeaponInputPacket;
 import net.uhhitscam.knightfall.sound.BeamSoundInstance;
 import net.uhhitscam.knightfall.sound.ChargingSoundInstance;
 import net.uhhitscam.knightfall.sound.FullyChargedSoundInstance;
+import net.uhhitscam.knightfall.sound.GrenadeLoopSoundInstance;
 import net.uhhitscam.knightfall.util.WeaponSoundsUtil;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 @EventBusSubscriber(modid = OperationKnightfall.MODID, value = Dist.CLIENT)
 public final class ModClientEvents {
@@ -36,6 +45,7 @@ public final class ModClientEvents {
     private static boolean heldWeaponSoundTrackerInitialized;
     private static long mainEquipReadyTime;
     private static long offEquipReadyTime;
+    private static final Map<Integer, GrenadeEntity> PENDING_GRENADE_SOUNDS = new HashMap<>();
 
     private ModClientEvents() {}
 
@@ -44,6 +54,7 @@ public final class ModClientEvents {
         HudClient.onClientTick();
 
         Minecraft minecraft = Minecraft.getInstance();
+        tickPendingGrenadeSounds(minecraft);
         LocalPlayer player = minecraft.player;
         if (player == null) {
             resetState(MAIN_STATE, true);
@@ -56,6 +67,39 @@ public final class ModClientEvents {
         releaseStoppedInputs(minecraft, player);
         tickWeaponState(player, MAIN_STATE);
         tickWeaponState(player, OFF_STATE);
+    }
+
+    @SubscribeEvent
+    public static void onEntityJoin(EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide() && event.getEntity() instanceof GrenadeEntity grenade) {
+            PENDING_GRENADE_SOUNDS.put(grenade.getId(), grenade);
+        }
+    }
+
+    private static void tickPendingGrenadeSounds(Minecraft minecraft) {
+        if (minecraft.level == null) {
+            PENDING_GRENADE_SOUNDS.clear();
+            return;
+        }
+
+        Iterator<GrenadeEntity> pending = PENDING_GRENADE_SOUNDS.values().iterator();
+        while (pending.hasNext()) {
+            GrenadeEntity grenade = pending.next();
+            if (grenade.isRemoved() || grenade.level() != minecraft.level) {
+                pending.remove();
+                continue;
+            }
+
+            if (!grenade.getItem().isEmpty()) {
+                GrenadeDefinition definition = grenade.getGrenadeDefinition();
+                if (definition != null
+                        && definition.fuseSoundMode() == GrenadeFuseSoundMode.LOOP_UNTIL_REMOVED) {
+                    minecraft.getSoundManager().play(new GrenadeLoopSoundInstance(
+                            definition.audio().beepSound(), grenade));
+                }
+                pending.remove();
+            }
+        }
     }
 
     @SubscribeEvent
