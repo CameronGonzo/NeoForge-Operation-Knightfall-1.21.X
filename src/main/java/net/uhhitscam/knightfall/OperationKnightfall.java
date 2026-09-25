@@ -117,6 +117,7 @@ public class OperationKnightfall {
                 GrenadeItemModelProperties.register(ModItems.STUNNER.get());
                 GrenadeItemModelProperties.register(ModItems.BACTA_BOMB.get());
                 GrenadeItemModelProperties.register(ModItems.DIOXIS_GRENADE.get());
+                GrenadeItemModelProperties.register(ModItems.SMOKE_GRENADE.get());
                 ModItems.ITEMS.getEntries().forEach(entry -> {
                     if (entry.get() instanceof net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem) {
                         MeleeWeaponItemModelProperties.register(entry.get());
@@ -152,6 +153,7 @@ public class OperationKnightfall {
             event.registerSpriteSet(ModParticles.REPULSE_SHOT_SMALL_PARTICLES.get(), RepulseShotSmallParticles.Provider::new);
             event.registerSpriteSet(ModParticles.CONCUSSIVE_SHOT_EXPLOSION_PARTICLES.get(), ConcussiveShotExplosionParticles.Provider::new);
             event.registerSpriteSet(ModParticles.IMPLOSION_DUST_PARTICLES.get(), ImplosionDustParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.SMOKE_SCREEN_PARTICLES.get(), SmokeScreenParticles.Provider::new);
             event.registerSpriteSet(ModParticles.DISINTEGRATION_LARGE_PARTICLES.get(), DisintegrationLargeParticles.Provider::new);
             event.registerSpriteSet(ModParticles.DISINTEGRATION_MEDIUM_PARTICLES.get(), DisintegrationMediumParticles.Provider::new);
             event.registerSpriteSet(ModParticles.DISINTEGRATION_SMALL_PARTICLES.get(), DisintegrationSmallParticles.Provider::new);

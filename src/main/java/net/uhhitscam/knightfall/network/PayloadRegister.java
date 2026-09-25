@@ -27,6 +27,7 @@ public class PayloadRegister {
         client(CSBactaGasParticlesPacket.TYPE, CSBactaGasParticlesPacket.STREAM_CODEC);
         client(CSDisintegrationParticlesPacket.TYPE, CSDisintegrationParticlesPacket.STREAM_CODEC);
         client(CSConcussionBlurPacket.TYPE, CSConcussionBlurPacket.STREAM_CODEC);
+        client(CSFlashEffectPacket.TYPE, CSFlashEffectPacket.STREAM_CODEC);
         client(CSFaceAlignedParticlePacket.TYPE, CSFaceAlignedParticlePacket.STREAM_CODEC);
     }
 

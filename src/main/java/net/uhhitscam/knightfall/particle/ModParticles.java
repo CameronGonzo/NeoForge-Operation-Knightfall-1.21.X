@@ -47,6 +47,8 @@ public class ModParticles {
             PARTICLE_TYPES.register("concussive_shot_explosion_particles", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> IMPLOSION_DUST_PARTICLES =
             PARTICLE_TYPES.register("implosion_dust_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> SMOKE_SCREEN_PARTICLES =
+            PARTICLE_TYPES.register("smoke_screen_particles", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> DISINTEGRATION_LARGE_PARTICLES =
             PARTICLE_TYPES.register("disintegration_large_particles", () -> new SimpleParticleType(false));
     public static final Supplier<SimpleParticleType> DISINTEGRATION_MEDIUM_PARTICLES =

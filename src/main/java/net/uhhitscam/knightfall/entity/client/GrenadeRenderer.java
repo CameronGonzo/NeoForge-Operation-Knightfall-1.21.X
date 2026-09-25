@@ -44,6 +44,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
             texture("magnetic_thermal_detonator"),
             texture("magnetic_thermal_detonator_1")
     );
+    private static final GrenadeTextures BARADIUM_THERMAL_DETONATOR_TEXTURES =
+            singleTexture("baradium_thermal_detonator");
     private static final GrenadeTextures GRAV_CHARGE_TEXTURES = new GrenadeTextures(
             texture("grav_charge"),
             texture("grav_charge"),
@@ -75,10 +77,17 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
             texture("dioxis_grenade"),
             texture("dioxis_grenade_1")
     );
+    private static final GrenadeTextures SMOKE_GRENADE_TEXTURES = new GrenadeTextures(
+            texture("smoke_grenade"),
+            texture("smoke_grenade_1"),
+            texture("smoke_grenade_1")
+    );
+    private static final GrenadeTextures FLASH_GRENADE_TEXTURES = singleTexture("flash_grenade");
 
     private final ThermalDetonatorModel thermalDetonatorModel;
     private final ImpactBombModel impactBombModel;
     private final MagneticThermalDetonatorModel magneticThermalDetonatorModel;
+    private final BaradiumThermalDetonatorModel baradiumThermalDetonatorModel;
     private final GravChargeModel gravChargeModel;
     private final DetoniteChargeModel detoniteChargeModel;
     private final BaradiumBombModel baradiumBombModel;
@@ -90,6 +99,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     private final CryobanGrenadeModel cryobanGrenadeModel;
     private final BactaBombModel bactaBombModel;
     private final DioxisGrenadeModel dioxisGrenadeModel;
+    private final SmokeGrenadeModel smokeGrenadeModel;
+    private final FlashGrenadeModel flashGrenadeModel;
     private final ItemModelResolver itemModelResolver;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -102,6 +113,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         );
         this.magneticThermalDetonatorModel = new MagneticThermalDetonatorModel(
                 context.bakeLayer(ModModelLayers.MAGNETIC_THERMAL_DETONATOR)
+        );
+        this.baradiumThermalDetonatorModel = new BaradiumThermalDetonatorModel(
+                context.bakeLayer(ModModelLayers.BARADIUM_THERMAL_DETONATOR)
         );
         this.gravChargeModel = new GravChargeModel(context.bakeLayer(ModModelLayers.GRAV_CHARGE));
         this.detoniteChargeModel = new DetoniteChargeModel(context.bakeLayer(ModModelLayers.DETONITE_CHARGE));
@@ -124,6 +138,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         );
         this.bactaBombModel = new BactaBombModel(context.bakeLayer(ModModelLayers.BACTA_BOMB));
         this.dioxisGrenadeModel = new DioxisGrenadeModel(context.bakeLayer(ModModelLayers.DIOXIS_GRENADE));
+        this.smokeGrenadeModel = new SmokeGrenadeModel(context.bakeLayer(ModModelLayers.SMOKE_GRENADE));
+        this.flashGrenadeModel = new FlashGrenadeModel(context.bakeLayer(ModModelLayers.FLASH_GRENADE));
         this.itemModelResolver = context.getItemModelResolver();
         this.shadowRadius = 0.15F;
     }
@@ -219,6 +235,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.MAGNETIC_THERMAL_DETONATOR.get())) {
             return magneticThermalDetonatorModel;
         }
+        if (entity.getItem().is(ModItems.BARADIUM_THERMAL_DETONATOR.get())) {
+            return baradiumThermalDetonatorModel;
+        }
         if (entity.getItem().is(ModItems.GRAV_CHARGE.get())) {
             return gravChargeModel;
         }
@@ -252,6 +271,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.DIOXIS_GRENADE.get())) {
             return dioxisGrenadeModel;
         }
+        if (entity.getItem().is(ModItems.SMOKE_GRENADE.get())) {
+            return smokeGrenadeModel;
+        }
+        if (entity.getItem().is(ModItems.FLASH_GRENADE.get())) {
+            return flashGrenadeModel;
+        }
         return null;
     }
 
@@ -264,6 +289,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         }
         if (entity.getItem().is(ModItems.MAGNETIC_THERMAL_DETONATOR.get())) {
             return MAGNETIC_THERMAL_DETONATOR_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.BARADIUM_THERMAL_DETONATOR.get())) {
+            return BARADIUM_THERMAL_DETONATOR_TEXTURES;
         }
         if (entity.getItem().is(ModItems.GRAV_CHARGE.get())) {
             return GRAV_CHARGE_TEXTURES;
@@ -297,6 +325,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         }
         if (entity.getItem().is(ModItems.DIOXIS_GRENADE.get())) {
             return DIOXIS_GRENADE_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.SMOKE_GRENADE.get())) {
+            return SMOKE_GRENADE_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.FLASH_GRENADE.get())) {
+            return FLASH_GRENADE_TEXTURES;
         }
         return null;
     }

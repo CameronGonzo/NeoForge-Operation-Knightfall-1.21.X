@@ -27,6 +27,7 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.THERMAL_DETONATOR, ThermalDetonatorModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.IMPACT_BOMB, ImpactBombModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.MAGNETIC_THERMAL_DETONATOR, MagneticThermalDetonatorModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.BARADIUM_THERMAL_DETONATOR, BaradiumThermalDetonatorModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.GRAV_CHARGE, GravChargeModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.DETONITE_CHARGE, DetoniteChargeModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.BARADIUM_BOMB, BaradiumBombModel::createBodyLayer);
@@ -38,6 +39,8 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.CRYOBAN_GRENADE, CryobanGrenadeModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.BACTA_BOMB, BactaBombModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.DIOXIS_GRENADE, DioxisGrenadeModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SMOKE_GRENADE, SmokeGrenadeModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.FLASH_GRENADE, FlashGrenadeModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.EXPLOSIVE_KNIFE, ExplosiveKnifeModel::createBodyLayer);
     }
 

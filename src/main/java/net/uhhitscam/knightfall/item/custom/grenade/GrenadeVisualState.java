@@ -22,6 +22,10 @@ public enum GrenadeVisualState {
             int useTicks,
             int remainingUseTicks
     ) {
+        if (definition.smokeProfile() != null) {
+            return ACTIVE;
+        }
+
         if (definition.trigger().sticksToBlocks()) {
             return INACTIVE;
         }
@@ -54,7 +58,7 @@ public enum GrenadeVisualState {
             boolean fuseRunning
     ) {
         if (!fuseRunning) {
-            return INACTIVE;
+            return definition.smokeProfile() != null ? ACTIVE : INACTIVE;
         }
 
         return isBeepFlashActive(definition, remainingFuseTicks) ? BEEP : ACTIVE;

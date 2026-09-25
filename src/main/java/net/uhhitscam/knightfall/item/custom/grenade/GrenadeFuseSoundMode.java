@@ -1,6 +1,7 @@
 package net.uhhitscam.knightfall.item.custom.grenade;
 
 public enum GrenadeFuseSoundMode {
+    NONE,
     SCHEDULED_BEEPS,
     ONCE_WHEN_THROWN,
     REPEATED_AFTER_THROW,

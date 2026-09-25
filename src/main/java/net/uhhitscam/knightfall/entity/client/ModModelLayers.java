@@ -39,6 +39,8 @@ public class ModModelLayers {
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "impact_bomb"), "main");
     public static final ModelLayerLocation MAGNETIC_THERMAL_DETONATOR = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "magnetic_thermal_detonator"), "main");
+    public static final ModelLayerLocation BARADIUM_THERMAL_DETONATOR = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "baradium_thermal_detonator"), "main");
     public static final ModelLayerLocation GRAV_CHARGE = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "grav_charge"), "main");
     public static final ModelLayerLocation DETONITE_CHARGE = new ModelLayerLocation(
@@ -61,6 +63,10 @@ public class ModModelLayers {
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "bacta_bomb"), "main");
     public static final ModelLayerLocation DIOXIS_GRENADE = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "dioxis_grenade"), "main");
+    public static final ModelLayerLocation SMOKE_GRENADE = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "smoke_grenade"), "main");
+    public static final ModelLayerLocation FLASH_GRENADE = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "flash_grenade"), "main");
     public static final ModelLayerLocation EXPLOSIVE_KNIFE = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "explosive_knife"), "main");
 }

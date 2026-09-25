@@ -30,6 +30,7 @@ public record GrenadeDefinition(
         @Nullable TagKey<Block> stickyBlockTag,
         @Nullable GrenadeRemoteProfile remoteProfile,
         @Nullable GrenadeImplosionProfile implosionProfile,
+        @Nullable GrenadeSmokeProfile smokeProfile,
         GrenadeEffect effect
 ) {
     public static Builder builder(String registryName) {
@@ -62,6 +63,8 @@ public record GrenadeDefinition(
         private GrenadeRemoteProfile remoteProfile;
         @Nullable
         private GrenadeImplosionProfile implosionProfile;
+        @Nullable
+        private GrenadeSmokeProfile smokeProfile;
         private GrenadeEffect effect;
 
         private Builder(String registryName) {
@@ -170,6 +173,11 @@ public record GrenadeDefinition(
             return this;
         }
 
+        public Builder smokeProfile(GrenadeSmokeProfile smokeProfile) {
+            this.smokeProfile = Objects.requireNonNull(smokeProfile, "Grenade smoke profile cannot be null.");
+            return this;
+        }
+
         public Builder effect(GrenadeEffect effect) {
             this.effect = Objects.requireNonNull(effect, "Grenade effect cannot be null.");
             return this;
@@ -227,6 +235,9 @@ public record GrenadeDefinition(
             if ((trigger == GrenadeTrigger.REMOTE_STICKY) != (remoteProfile != null)) {
                 throw new IllegalStateException(registryName + " must pair REMOTE_STICKY with a GrenadeRemoteProfile.");
             }
+            if (smokeProfile != null && trigger != GrenadeTrigger.STICKY_FUSE) {
+                throw new IllegalStateException(registryName + " smoke profiles require the STICKY_FUSE trigger.");
+            }
             if (effect == null) {
                 throw new IllegalStateException(registryName + " must have a GrenadeEffect.");
             }
@@ -253,6 +264,7 @@ public record GrenadeDefinition(
                     stickyBlockTag,
                     remoteProfile,
                     implosionProfile,
+                    smokeProfile,
                     effect
             );
         }

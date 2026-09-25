@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
@@ -37,8 +38,11 @@ import net.uhhitscam.knightfall.item.custom.grenade.GrenadeItem;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadePhysics;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeRemoteDetonations;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeRemoteProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeSmokeProfile;
+import net.uhhitscam.knightfall.particle.ModParticles;
 import net.uhhitscam.knightfall.component.GrenadeRemoteLink;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
+import net.uhhitscam.knightfall.util.SmokeScreenUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class GrenadeEntity extends ThrowableItemProjectile {
@@ -272,14 +276,21 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         restoreVelocityAfterImpact();
 
+        GrenadeDefinition definition = getGrenadeDefinition();
         if (level().isClientSide()) {
+            if (definition != null && definition.smokeProfile() != null) {
+                tickSmokeParticles(definition.smokeProfile());
+            }
             return;
         }
 
-        GrenadeDefinition definition = getGrenadeDefinition();
         if (definition == null || detonated) {
             discard();
             return;
+        }
+
+        if (definition.smokeProfile() != null) {
+            clearTargetsThroughSmoke(definition.smokeProfile());
         }
 
         if (isImploding()) {
@@ -359,6 +370,64 @@ public class GrenadeEntity extends ThrowableItemProjectile {
                 setBeepFlashTicks(3);
             } else {
                 definition.audio().playBeep(level(), position(), remainingFuseTicks, definition.fuseTicks());
+            }
+        }
+    }
+
+    private void tickSmokeParticles(GrenadeSmokeProfile profile) {
+        if (!SmokeScreenUtil.isActive(this)) {
+            return;
+        }
+
+        Vec3 center = SmokeScreenUtil.center(this, profile);
+        double radius = SmokeScreenUtil.activeRadius(this, profile);
+        if (radius <= 0.0) {
+            return;
+        }
+
+        for (int i = 0; i < profile.particlesPerTick(); i++) {
+            double vertical = random.nextDouble() * 2.0 - 1.0;
+            double horizontal = Math.sqrt(Math.max(0.0, 1.0 - vertical * vertical));
+            double angle = random.nextDouble() * Math.PI * 2.0;
+            double distance = radius * Math.cbrt(random.nextDouble());
+            Vec3 direction = new Vec3(
+                    Math.cos(angle) * horizontal,
+                    vertical,
+                    Math.sin(angle) * horizontal
+            );
+            Vec3 offset = direction.scale(distance);
+            Vec3 velocity = direction.scale(profile.particleDrift())
+                    .add(0.0, profile.particleDrift() * 0.35, 0.0);
+
+            level().addParticle(
+                    ModParticles.SMOKE_SCREEN_PARTICLES.get(),
+                    center.x + offset.x,
+                    center.y + offset.y,
+                    center.z + offset.z,
+                    velocity.x,
+                    velocity.y,
+                    velocity.z
+            );
+        }
+    }
+
+    private void clearTargetsThroughSmoke(GrenadeSmokeProfile profile) {
+        if (tickCount % 5 != 0 || !SmokeScreenUtil.isActive(this)) {
+            return;
+        }
+
+        Vec3 center = SmokeScreenUtil.center(this, profile);
+        double radius = SmokeScreenUtil.activeRadius(this, profile);
+        AABB searchBounds = new AABB(center, center).inflate(profile.mobTargetingRange());
+        for (Mob mob : level().getEntitiesOfClass(Mob.class, searchBounds)) {
+            LivingEntity target = mob.getTarget();
+            if (target != null && SmokeScreenUtil.segmentIntersectsSphere(
+                    mob.getEyePosition(),
+                    target.getEyePosition(),
+                    center,
+                    radius
+            )) {
+                mob.setTarget(null);
             }
         }
     }

@@ -421,6 +421,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.THERMAL_DETONATOR);
                         pOutput.accept(ModItems.IMPACT_BOMB);
                         pOutput.accept(ModItems.MAGNETIC_THERMAL_DETONATOR);
+                        pOutput.accept(ModItems.BARADIUM_THERMAL_DETONATOR);
                         pOutput.accept(ModItems.GRAV_CHARGE);
                         pOutput.accept(ModItems.DETONITE_CHARGE);
                         pOutput.accept(ModItems.BARADIUM_BOMB);
@@ -432,6 +433,8 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.CRYOBAN_GRENADE);
                         pOutput.accept(ModItems.BACTA_BOMB);
                         pOutput.accept(ModItems.DIOXIS_GRENADE);
+                        pOutput.accept(ModItems.SMOKE_GRENADE);
+                        pOutput.accept(ModItems.FLASH_GRENADE);
                         pOutput.accept(ModItems.EXPLOSIVE_KNIFE);
                         pOutput.accept(ModItems.GAS_CARTRIDGE);
                         pOutput.accept(ModItems.TIBANNA_GAS);

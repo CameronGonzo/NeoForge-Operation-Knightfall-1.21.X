@@ -65,6 +65,18 @@
       "knightfall:equipment/magnetic_thermal_detonator/equipment_grenade_magnetic_thermal_detonator_impact_01"
     ]
   },
+  "baradium_thermal_detonator_activate": {
+    "subtitle": "sounds.knightfall.baradium_thermal_detonator_activate",
+    "sounds": [
+      "knightfall:equipment/baradium_thermal_detonator/equipment_grenade_baradium_thermal_detonator_activate_01"
+    ]
+  },
+  "baradium_thermal_detonator_impact": {
+    "subtitle": "sounds.knightfall.baradium_thermal_detonator_impact",
+    "sounds": [
+      "knightfall:equipment/baradium_thermal_detonator/equipment_grenade_baradium_thermal_detonator_impact_01"
+    ]
+  },
   "grav_charge_activate": {
     "subtitle": "sounds.knightfall.grav_charge_activate",
     "sounds": [
@@ -320,6 +332,52 @@
     "subtitle": "sounds.knightfall.dioxis_grenade_impact",
     "sounds": [
       "knightfall:equipment/dioxis_grenade/equipment_grenade_dioxis_grenade_impact_01"
+    ]
+  },
+  "smoke_grenade_activate": {
+    "subtitle": "sounds.knightfall.smoke_grenade_activate",
+    "sounds": [
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_activation_01"
+    ]
+  },
+  "smoke_grenade_impact": {
+    "subtitle": "sounds.knightfall.smoke_grenade_impact",
+    "sounds": [
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_impact_01",
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_impact_02",
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_impact_03",
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_impact_04",
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_impact_05",
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_impact_06",
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_impact_07",
+      "knightfall:equipment/smoke_grenade/equipment_grenade_smoke_grenade_impact_08"
+    ]
+  },
+  "flash_grenade_activate": {
+    "subtitle": "sounds.knightfall.flash_grenade_activate",
+    "sounds": [
+      "knightfall:equipment/flash_grenade/equipment_grenade_flash_grenade_activation_01"
+    ]
+  },
+  "flash_grenade_beep": {
+    "subtitle": "sounds.knightfall.flash_grenade_beep",
+    "sounds": [
+      "knightfall:equipment/flash_grenade/equipment_grenade_flash_grenade_beep_01"
+    ]
+  },
+  "flash_grenade_explosion": {
+    "subtitle": "sounds.knightfall.flash_grenade_explosion",
+    "sounds": [
+      "knightfall:equipment/flash_grenade/equipment_grenade_flash_grenade_explosion_01",
+      "knightfall:equipment/flash_grenade/equipment_grenade_flash_grenade_explosion_02",
+      "knightfall:equipment/flash_grenade/equipment_grenade_flash_grenade_explosion_03",
+      "knightfall:equipment/flash_grenade/equipment_grenade_flash_grenade_explosion_04"
+    ]
+  },
+  "flash_grenade_impact": {
+    "subtitle": "sounds.knightfall.flash_grenade_impact",
+    "sounds": [
+      "knightfall:equipment/flash_grenade/equipment_grenade_flash_grenade_impact_01"
     ]
   },
   "grav_charge_beep_01": {

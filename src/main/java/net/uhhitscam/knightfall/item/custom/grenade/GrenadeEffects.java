@@ -3,6 +3,7 @@ package net.uhhitscam.knightfall.item.custom.grenade;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -10,16 +11,21 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 import net.uhhitscam.knightfall.network.CSBactaGasParticlesPacket;
 import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
+import net.uhhitscam.knightfall.network.CSFlashEffectPacket;
+import net.uhhitscam.knightfall.network.PayloadRegister;
 import net.uhhitscam.knightfall.util.ColorUtil;
 import net.uhhitscam.knightfall.util.CustomExplosion;
 import net.uhhitscam.knightfall.util.FaceAlignedParticleUtil;
+import net.uhhitscam.knightfall.util.FlashEffectTracker;
 import org.joml.Vector3f;
 
 import java.util.Objects;
@@ -91,6 +97,68 @@ public final class GrenadeEffects {
             detonateExplosion(context, explosionSpec);
             extinguishNearbyFire(context, explosionSpec.entityRadius());
             freezeNearbyEntities(context, cryobanProfile);
+        };
+    }
+
+    public static GrenadeEffect flash(GrenadeFlashProfile profile, GrenadeSound detonationSound) {
+        Objects.requireNonNull(profile, "Flash Grenade profile cannot be null.");
+        Objects.requireNonNull(detonationSound, "Flash Grenade detonation sound cannot be null.");
+
+        return context -> {
+            detonationSound.play(context.level(), context.position());
+            context.level().sendParticles(
+                    ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFFFFF),
+                    context.position().x,
+                    context.position().y,
+                    context.position().z,
+                    1,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+            );
+
+            AABB bounds = new AABB(context.position(), context.position()).inflate(profile.viewingRadius());
+
+            for (ServerPlayer player : context.level().getEntitiesOfClass(ServerPlayer.class, bounds)) {
+                if (isAffectedByFlash(player, context.position(), profile)) {
+                    PayloadRegister.sendToPlayer(player, new CSFlashEffectPacket(
+                            profile.fullWhiteTicks(),
+                            profile.fadeOutTicks()
+                    ));
+                }
+            }
+
+            for (Mob mob : context.level().getEntitiesOfClass(Mob.class, bounds)) {
+                if (mob.isAlive() && isAffectedByFlash(mob, context.position(), profile)) {
+                    FlashEffectTracker.apply(mob, profile.mobTargetSuppressionTicks());
+                }
+            }
+
+            detonateNearbyGrenades(context, profile.radius());
+        };
+    }
+
+    private static boolean isAffectedByFlash(
+            LivingEntity target,
+            Vec3 flashPosition,
+            GrenadeFlashProfile profile
+    ) {
+        double distanceSquared = target.distanceToSqr(flashPosition);
+        if (distanceSquared <= profile.radius() * profile.radius()) {
+            return true;
+        }
+        if (distanceSquared > profile.viewingRadius() * profile.viewingRadius()) {
+            return false;
+        }
+
+        Vec3 directionToFlash = flashPosition.subtract(target.getEyePosition());
+        return directionToFlash.lengthSqr() < 1.0e-6
+                || target.getLookAngle().normalize().dot(directionToFlash.normalize()) >= profile.minimumViewDot();
+    }
+
+    public static GrenadeEffect noEffect() {
+        return context -> {
         };
     }
 
