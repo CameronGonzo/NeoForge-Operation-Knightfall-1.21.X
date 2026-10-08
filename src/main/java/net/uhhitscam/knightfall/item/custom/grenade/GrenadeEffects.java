@@ -3,6 +3,7 @@ package net.uhhitscam.knightfall.item.custom.grenade;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
@@ -18,17 +19,23 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
+import net.uhhitscam.knightfall.effect.custom.LightningShockEffect;
 import net.uhhitscam.knightfall.network.CSBactaGasParticlesPacket;
 import net.uhhitscam.knightfall.network.CSConcussionBlurPacket;
 import net.uhhitscam.knightfall.network.CSFlashEffectPacket;
+import net.uhhitscam.knightfall.network.CSIonArcPacket;
 import net.uhhitscam.knightfall.network.PayloadRegister;
+import net.uhhitscam.knightfall.particle.IonFlashParticleOption;
 import net.uhhitscam.knightfall.util.ColorUtil;
 import net.uhhitscam.knightfall.util.CustomExplosion;
 import net.uhhitscam.knightfall.util.FaceAlignedParticleUtil;
 import net.uhhitscam.knightfall.util.FlashEffectTracker;
+import net.uhhitscam.knightfall.util.ModTags;
+import net.uhhitscam.knightfall.util.WeaponDamage;
 import org.joml.Vector3f;
 
 import java.util.Objects;
+import java.util.function.ToDoubleFunction;
 
 public final class GrenadeEffects {
     private GrenadeEffects() {
@@ -98,6 +105,96 @@ public final class GrenadeEffects {
             extinguishNearbyFire(context, explosionSpec.entityRadius());
             freezeNearbyEntities(context, cryobanProfile);
         };
+    }
+
+    public static GrenadeEffect ionExplosion(GrenadeExplosionSpec spec, GrenadeIonProfile profile) {
+        Objects.requireNonNull(spec, "Ion Grenade explosion specification cannot be null.");
+        Objects.requireNonNull(profile, "Ion Grenade profile cannot be null.");
+
+        return context -> {
+            GrenadeParticleScheduler.scheduleRandomBurst(
+                    context.level(),
+                    new IonFlashParticleOption(profile.flashSize()),
+                    context.position(),
+                    profile.flashCount(),
+                    profile.flashDurationTicks(),
+                    profile.flashHorizontalRadius(),
+                    profile.flashMinimumHeight(),
+                    profile.flashMaximumHeight()
+            );
+            PacketDistributor.sendToPlayersNear(
+                    context.level(),
+                    null,
+                    context.position().x,
+                    context.position().y,
+                    context.position().z,
+                    64.0,
+                    new CSIonArcPacket(
+                            new Vector3f((float) context.position().x,
+                                    (float) context.position().y,
+                                    (float) context.position().z),
+                            context.level().getRandom().nextLong(),
+                            profile.flashDurationTicks(),
+                            profile.arcs()
+                    )
+            );
+            detonateExplosion(
+                    context,
+                    spec,
+                    target -> BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.getType())
+                            .is(ModTags.Entities.DROID_LIKE) ? profile.droidDamageBonus() : 0.0
+            );
+            shockNearbyEntities(context, spec.entityRadius(), profile.shock());
+        };
+    }
+
+    public static GrenadeEffect droidPopper(double radius, float droidDamage,
+                                            int arcWindowTicks, GrenadeIonArcProfile arcs,
+                                            GrenadeLightningShockProfile shock) {
+        Objects.requireNonNull(arcs, "Droid Popper arcs cannot be null.");
+        Objects.requireNonNull(shock, "Droid Popper lightning shock profile cannot be null.");
+        if (!Double.isFinite(radius) || radius <= 0.0 || !Float.isFinite(droidDamage)
+                || droidDamage < 0.0F || arcWindowTicks <= 0) {
+            throw new IllegalArgumentException("Droid Popper radius, damage, or arc window is invalid.");
+        }
+
+        return context -> {
+            PacketDistributor.sendToPlayersNear(
+                    context.level(), null,
+                    context.position().x, context.position().y, context.position().z,
+                    64.0,
+                    new CSIonArcPacket(
+                            new Vector3f((float) context.position().x,
+                                    (float) context.position().y,
+                                    (float) context.position().z),
+                            context.level().getRandom().nextLong(), arcWindowTicks, arcs)
+            );
+
+            AABB bounds = new AABB(context.position(), context.position()).inflate(radius);
+            double radiusSquared = radius * radius;
+            for (LivingEntity target : context.level().getEntitiesOfClass(LivingEntity.class, bounds)) {
+                if (target.isAlive() && target.distanceToSqr(context.position()) <= radiusSquared
+                        && BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.getType())
+                        .is(ModTags.Entities.DROID_LIKE)) {
+                    WeaponDamage.hurt(target,
+                            context.grenade().damageSources().explosion(context.grenade(), context.owner()),
+                            droidDamage);
+                }
+            }
+            shockNearbyEntities(context, radius, shock);
+        };
+    }
+
+    private static void shockNearbyEntities(GrenadeDetonationContext context, double radius,
+                                            GrenadeLightningShockProfile profile) {
+        AABB bounds = new AABB(context.position(), context.position()).inflate(radius);
+        double radiusSquared = radius * radius;
+        for (LivingEntity target : context.level().getEntitiesOfClass(LivingEntity.class, bounds)) {
+            if (target.distanceToSqr(context.position()) <= radiusSquared
+                    && !BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(target.getType()).is(ModTags.Entities.DROID_LIKE)) {
+                LightningShockEffect.apply(target, profile.durationTicks());
+            }
+        }
     }
 
     public static GrenadeEffect flash(GrenadeFlashProfile profile, GrenadeSound detonationSound) {
@@ -277,6 +374,14 @@ public final class GrenadeEffects {
     }
 
     private static void detonateExplosion(GrenadeDetonationContext context, GrenadeExplosionSpec spec) {
+        detonateExplosion(context, spec, target -> 0.0);
+    }
+
+    private static void detonateExplosion(
+            GrenadeDetonationContext context,
+            GrenadeExplosionSpec spec,
+            ToDoubleFunction<LivingEntity> additionalDamage
+    ) {
         CustomExplosion.create(
                 context.grenade(),
                 context.owner(),
@@ -287,7 +392,8 @@ public final class GrenadeEffects {
                 spec.forceKnockback(),
                 spec.blockBreakRadius(),
                 spec.blockInteraction(),
-                spec.causesFire());
+                spec.causesFire(),
+                additionalDamage);
 
         if (spec.playsDetonationSound()) {
             spec.detonationSound().play(context.level(), context.position());

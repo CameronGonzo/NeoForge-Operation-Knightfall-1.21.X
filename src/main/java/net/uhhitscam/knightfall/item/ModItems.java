@@ -18,6 +18,7 @@ import net.uhhitscam.knightfall.item.custom.grenade.GrenadeBactaProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeConcussionProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeCryobanProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonationDelayProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDeployment;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonatorDelivery;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonatorItem;
@@ -29,9 +30,13 @@ import net.uhhitscam.knightfall.item.custom.grenade.GrenadeFlashProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeFuseSoundMode;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeImplosionParticleProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeImplosionProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeIonArcProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeIonProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeLightningShockProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeItem;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeParticleBurst;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadePhysics;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeProximityProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeRemoteProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeSound;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeSmokeProfile;
@@ -283,6 +288,139 @@ public class ModItems {
                             new GrenadeFlashProfile(8.0, 12.0, 0.5, 40, 100, 100),
                             new GrenadeSound(() -> ModSounds.FLASH_GRENADE_EXPLOSION.get(),
                                     SoundSource.BLOCKS, 1.0F, 1.0F)))
+                    .build()
+    );
+    public static final DeferredItem<Item> ION_GRENADE = registerGrenade(
+            GrenadeDefinition.builder("ion_grenade")
+                    .itemProperties(new Item.Properties().stacksTo(16))
+                    .fuseTicks(120)
+                    .trigger(GrenadeTrigger.FUSE)
+                    .throwVelocity(1.5F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.ION_GRENADE_IMPACT.get(), SoundSource.BLOCKS, 0.4F, 1.2F),
+                            new GrenadeSound(() -> ModSounds.ION_GRENADE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.ION_GRENADE_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            20, 5, 20))
+                    .effect(GrenadeEffects.ionExplosion(
+                            GrenadeExplosionSpec.builder(
+                                            4.0,
+                                            8.0F,
+                                            new GrenadeSound(() -> ModSounds.ION_GRENADE_EXPLOSION.get(),
+                                                    SoundSource.BLOCKS, 1.0F, 1.0F))
+                                    .knockback(0.6)
+                                    .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ModParticles.ION_SMOKE_PARTICLES.get(),
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .build(),
+                            new GrenadeIonProfile(
+                                    6.0F,
+                                    16,
+                                    15,
+                                    5.0,
+                                    0.0,
+                                    3.0,
+                                    2.0F,
+                                    new GrenadeIonArcProfile(
+                                            7,
+                                            3,
+                                            2,
+                                            6,
+                                            0.6F,
+                                            0.4F,
+                                            ColorUtil.rgb(130, 220, 255),
+                                            0.035F,
+                                            0.11F),
+                                    new GrenadeLightningShockProfile(60))))
+                    .build()
+    );
+    public static final DeferredItem<Item> SMART_ION_GRENADE = registerGrenade(
+            GrenadeDefinition.builder("smart_ion_grenade")
+                    .itemProperties(new Item.Properties().stacksTo(16))
+                    .fuseTicks(300)
+                    .trigger(GrenadeTrigger.FUSE)
+                    .throwVelocity(1.5F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .hitbox(0.65F, 0.25F)
+                    .proximityProfile(new GrenadeProximityProfile(2.5, 10))
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.SMART_ION_GRENADE_IMPACT.get(), SoundSource.BLOCKS, 0.4F, 1.2F),
+                            new GrenadeSound(() -> ModSounds.SMART_ION_GRENADE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.SMART_ION_GRENADE_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            20, 5, 20))
+                    .effect(GrenadeEffects.ionExplosion(
+                            GrenadeExplosionSpec.builder(
+                                            6.0,
+                                            10.0F,
+                                            new GrenadeSound(() -> ModSounds.SMART_ION_GRENADE_EXPLOSION.get(),
+                                                    SoundSource.BLOCKS, 1.0F, 1.0F))
+                                    .knockback(0.6)
+                                    .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ModParticles.ION_SMOKE_PARTICLES.get(),
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .build(),
+                            new GrenadeIonProfile(
+                                    6.0F,
+                                    16,
+                                    15,
+                                    5.0,
+                                    0.0,
+                                    3.0,
+                                    2.0F,
+                                    new GrenadeIonArcProfile(
+                                            7,
+                                            3,
+                                            2,
+                                            6,
+                                            0.6F,
+                                            0.4F,
+                                            ColorUtil.rgb(130, 220, 255),
+                                            0.035F,
+                                            0.11F),
+                                    new GrenadeLightningShockProfile(60))))
+                    .build()
+    );
+    public static final DeferredItem<Item> DROID_POPPER = registerGrenade(
+            GrenadeDefinition.builder("droid_popper")
+                    .itemProperties(new Item.Properties().stacksTo(16))
+                    // The sound contains a 0.657-second primer: 67 + 13 ticks = 4 seconds after throwing.
+                    .fuseTicks(47)
+                    .trigger(GrenadeTrigger.FUSE_AFTER_THROW)
+                    .throwVelocity(1.5F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .hitbox(0.3F, 0.3F)
+                    .fuseSoundMode(GrenadeFuseSoundMode.NONE)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.DROID_POPPER_IMPACT.get(), SoundSource.BLOCKS, 0.4F, 1.2F),
+                            new GrenadeSound(() -> ModSounds.DROID_POPPER_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> SoundEvents.EMPTY, SoundSource.NEUTRAL, 0.0F, 1.0F),
+                            67, 67, 0))
+                    .detonationDelayProfile(new GrenadeDetonationDelayProfile(13,
+                            new GrenadeSound(() -> ModSounds.DROID_POPPER_EXPLOSION.get(),
+                                    SoundSource.BLOCKS, 1.0F, 1.0F)))
+                    .effect(GrenadeEffects.droidPopper(5.0, 20.0F, 20,
+                            new GrenadeIonArcProfile(36, 4, 4, 6, 1.0F, 0.6F,
+                                    ColorUtil.rgb(130, 220, 255), 0.035F, 0.11F),
+                            new GrenadeLightningShockProfile(60)))
                     .build()
     );
     public static final DeferredItem<Item> BARADIUM_THERMAL_DETONATOR = registerGrenade(

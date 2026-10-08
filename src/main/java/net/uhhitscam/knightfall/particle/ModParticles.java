@@ -3,9 +3,12 @@ package net.uhhitscam.knightfall.particle;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.uhhitscam.knightfall.OperationKnightfall;
+import com.mojang.serialization.MapCodec;
 
 import java.util.function.Supplier;
 
@@ -23,6 +26,20 @@ public class ModParticles {
             PARTICLE_TYPES.register("spark_particles", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> STUN_SPARK_PARTICLES =
             PARTICLE_TYPES.register("stun_spark_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> ION_SMOKE_PARTICLES =
+            PARTICLE_TYPES.register("ion_smoke_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<ParticleType<IonFlashParticleOption>> ION_FLASH_PARTICLES =
+            PARTICLE_TYPES.register("ion_flash_particles", () -> new ParticleType<IonFlashParticleOption>(true) {
+                @Override
+                public MapCodec<IonFlashParticleOption> codec() {
+                    return IonFlashParticleOption.CODEC;
+                }
+
+                @Override
+                public StreamCodec<? super RegistryFriendlyByteBuf, IonFlashParticleOption> streamCodec() {
+                    return IonFlashParticleOption.STREAM_CODEC;
+                }
+            });
     public static final Supplier<SimpleParticleType> EXPLOSIVE_SHOT_TIBANNA_PARTICLES =
             PARTICLE_TYPES.register("explosive_shot_tibanna_particles", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> EXPLOSIVE_SHOT_IONIZED_TIBANNA_PARTICLES =

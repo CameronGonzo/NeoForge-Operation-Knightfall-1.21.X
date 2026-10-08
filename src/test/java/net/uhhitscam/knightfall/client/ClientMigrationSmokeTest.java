@@ -20,6 +20,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
+import net.uhhitscam.knightfall.effect.ModEffects;
+import net.uhhitscam.knightfall.effect.EffectActionRules;
+import net.uhhitscam.knightfall.effect.custom.LightningShockEffect;
+import net.uhhitscam.knightfall.effect.client.LightningShockEffectRenderer;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 import net.uhhitscam.knightfall.event.BlurEffectEventHandler;
@@ -94,14 +98,38 @@ public final class ClientMigrationSmokeTest {
             ThermalVisionUtil.setThermalActive(true);
             var origin = mc.player.position().add(0, 1, 3);
             for (var particle : net.uhhitscam.knightfall.particle.ModParticles.PARTICLE_TYPES.getEntries()) {
-                mc.level.addParticle((net.minecraft.core.particles.SimpleParticleType) particle.get(),
-                        origin.x, origin.y, origin.z, 0, 0.03, 0);
+                if (particle.get() instanceof net.minecraft.core.particles.SimpleParticleType simpleParticle) {
+                    mc.level.addParticle(simpleParticle, origin.x, origin.y, origin.z, 0, 0.03, 0);
+                }
             }
             net.uhhitscam.knightfall.event.FaceAlignedParticleClient.add(
                     new org.joml.Vector3f((float) origin.x, (float) origin.y, (float) origin.z),
                     net.minecraft.core.Direction.NORTH, net.uhhitscam.knightfall.event.FaceAlignedParticleType.SONIC_RIPPLE, 1);
         }
         if (worldTicks == 160) BlurEffectEventHandler.trigger(10, 20, 4);
+        if (worldTicks == 170) {
+            for (int tick = 0; tick < 32; tick++) {
+                if (LightningShockEffectRenderer.frameAt(tick) != tick / 4 % 4) {
+                    throw new IllegalStateException("Lightning shock must loop four frames every four game ticks");
+                }
+            }
+            for (int frame = 0; frame < 4; frame++) {
+                var texture = net.minecraft.resources.Identifier.fromNamespaceAndPath(OperationKnightfall.MODID,
+                        "textures/gui/lightning_shock_" + frame + ".png");
+                if (mc.getResourceManager().getResource(texture).isEmpty()) {
+                    throw new IllegalStateException("Missing lightning shock frame " + frame);
+                }
+            }
+            var server = mc.getSingleplayerServer();
+            var playerId = mc.player.getUUID();
+            server.execute(() -> LightningShockEffect.apply(server.getPlayerList().getPlayer(playerId), 30));
+        }
+        if (worldTicks == 185 && !EffectActionRules.blocksActions(mc.player)) {
+            throw new IllegalStateException("Server lightning shock did not synchronize to the client");
+        }
+        if (worldTicks == 215 && mc.player.hasEffect(ModEffects.LIGHTNING_SHOCK_EFFECT)) {
+            throw new IllegalStateException("Lightning shock overlay did not expire");
+        }
         if (worldTicks == 220) {
             if (!HudClient.hasExtractedHud()) {
                 throw new IllegalStateException("Knightfall HUD layer was never extracted");
@@ -112,7 +140,7 @@ public final class ClientMigrationSmokeTest {
             }
             ThermalVisionUtil.setThermalActive(false);
             mc.debugEntries.setStatus(DebugScreenEntries.ENTITY_HITBOXES, DebugScreenEntryStatus.NEVER);
-            LOGGER.info("CLIENT_SMOKE: PASS - world, item models, entity renderers, HUD layer, thermal overlay and blur ran without a crash");
+            LOGGER.info("CLIENT_SMOKE: PASS - world, item models, entity renderers, HUD layer, thermal overlay, blur and synchronized lightning shock animation ran without a crash");
             mc.stop();
         }
     }

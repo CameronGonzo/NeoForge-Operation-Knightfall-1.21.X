@@ -42,7 +42,7 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
-import net.uhhitscam.knightfall.effect.custom.StunEffect;
+import net.uhhitscam.knightfall.effect.EffectActionRules;
 import net.uhhitscam.knightfall.entity.custom.MeleeProjectileEntity;
 import net.uhhitscam.knightfall.network.CSMeleeRecoveryPacket;
 import net.uhhitscam.knightfall.network.PayloadRegister;
@@ -84,7 +84,7 @@ public final class MeleeWeaponServerEvents {
     }
 
     private static boolean canAct(ServerPlayer player) {
-        return player.isAlive() && !player.isSpectator() && !StunEffect.isStunned(player)
+        return player.isAlive() && !player.isSpectator() && !EffectActionRules.blocksActions(player)
                 && player.containerMenu == player.inventoryMenu;
     }
 

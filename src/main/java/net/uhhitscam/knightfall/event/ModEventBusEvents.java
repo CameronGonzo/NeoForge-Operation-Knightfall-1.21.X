@@ -41,6 +41,9 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.DIOXIS_GRENADE, DioxisGrenadeModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SMOKE_GRENADE, SmokeGrenadeModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.FLASH_GRENADE, FlashGrenadeModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.ION_GRENADE, IonGrenadeModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SMART_ION_GRENADE, SmartIonGrenadeModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.DROID_POPPER, DroidPopperModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.EXPLOSIVE_KNIFE, ExplosiveKnifeModel::createBodyLayer);
     }
 

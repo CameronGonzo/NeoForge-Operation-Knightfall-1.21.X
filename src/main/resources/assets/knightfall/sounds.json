@@ -380,6 +380,80 @@
       "knightfall:equipment/flash_grenade/equipment_grenade_flash_grenade_impact_01"
     ]
   },
+  "ion_grenade_activate": {
+    "subtitle": "sounds.knightfall.ion_grenade_activate",
+    "sounds": [
+      "knightfall:equipment/ion_grenade/equipment_grenade_ion_grenade_activation_01"
+    ]
+  },
+  "ion_grenade_beep": {
+    "subtitle": "sounds.knightfall.ion_grenade_beep",
+    "sounds": [
+      "knightfall:equipment/ion_grenade/equipment_grenade_ion_grenade_beep_01"
+    ]
+  },
+  "ion_grenade_explosion": {
+    "subtitle": "sounds.knightfall.ion_grenade_explosion",
+    "sounds": [
+      "knightfall:equipment/ion_grenade/equipment_grenade_ion_grenade_explosion_01",
+      "knightfall:equipment/ion_grenade/equipment_grenade_ion_grenade_explosion_02",
+      "knightfall:equipment/ion_grenade/equipment_grenade_ion_grenade_explosion_03",
+      "knightfall:equipment/ion_grenade/equipment_grenade_ion_grenade_explosion_04",
+      "knightfall:equipment/ion_grenade/equipment_grenade_ion_grenade_explosion_05"
+    ]
+  },
+  "ion_grenade_impact": {
+    "subtitle": "sounds.knightfall.ion_grenade_impact",
+    "sounds": [
+      "knightfall:equipment/ion_grenade/equipment_grenade_ion_grenade_impact_01"
+    ]
+  },
+  "smart_ion_grenade_activate": {
+    "subtitle": "sounds.knightfall.smart_ion_grenade_activate",
+    "sounds": [
+      "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_activation_01"
+    ]
+  },
+  "smart_ion_grenade_beep": {
+    "subtitle": "sounds.knightfall.smart_ion_grenade_beep",
+    "sounds": [
+      "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_beep_01"
+    ]
+  },
+  "smart_ion_grenade_explosion": {
+    "subtitle": "sounds.knightfall.smart_ion_grenade_explosion",
+    "sounds": [
+      "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_explosion_01",
+      "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_explosion_02",
+      "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_explosion_03",
+      "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_explosion_04",
+      "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_explosion_05"
+    ]
+  },
+  "smart_ion_grenade_impact": {
+    "subtitle": "sounds.knightfall.smart_ion_grenade_impact",
+    "sounds": [
+      "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_impact_01"
+    ]
+  },
+  "droid_popper_activate": {
+    "subtitle": "sounds.knightfall.droid_popper_activate",
+    "sounds": [
+      "knightfall:equipment/droid_popper/equipment_grenade_droid_popper_activation_01"
+    ]
+  },
+  "droid_popper_explosion": {
+    "subtitle": "sounds.knightfall.droid_popper_explosion",
+    "sounds": [
+      "knightfall:equipment/droid_popper/equipment_grenade_droid_popper_explosion_01"
+    ]
+  },
+  "droid_popper_impact": {
+    "subtitle": "sounds.knightfall.droid_popper_impact",
+    "sounds": [
+      "knightfall:equipment/droid_popper/equipment_grenade_droid_popper_impact_01"
+    ]
+  },
   "grav_charge_beep_01": {
     "subtitle": "sounds.knightfall.grav_charge_beep",
     "sounds": [

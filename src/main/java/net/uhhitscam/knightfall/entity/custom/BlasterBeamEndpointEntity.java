@@ -16,7 +16,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.knightfall.component.AmmoTypeData;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
-import net.uhhitscam.knightfall.effect.custom.StunEffect;
+import net.uhhitscam.knightfall.effect.EffectActionRules;
 import net.uhhitscam.knightfall.item.custom.projectile.AmmoType;
 import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
 import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
@@ -102,7 +102,7 @@ public class BlasterBeamEndpointEntity extends Entity {
         if (!(owner instanceof Player player)
                 || !owner.isAlive()
                 || player.isSpectator()
-                || StunEffect.isStunned(player)) {
+                || EffectActionRules.blocksActions(player)) {
             this.discard();
             return;
         }

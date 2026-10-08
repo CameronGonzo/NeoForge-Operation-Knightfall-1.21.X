@@ -7,12 +7,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.effect.custom.StunEffect;
+import net.uhhitscam.knightfall.effect.EffectActionRules;
 import net.uhhitscam.knightfall.entity.custom.GrenadeEntity;
 import net.uhhitscam.knightfall.gui.HudClient;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
@@ -109,8 +110,14 @@ public final class ModClientEvents {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteractionKeyMapping(InputEvent.InteractionKeyMappingTriggered event) {
+        var localPlayer = Minecraft.getInstance().player;
+        if (localPlayer != null && EffectActionRules.blocksActions(localPlayer)) {
+            event.setSwingHand(false);
+            event.setCanceled(true);
+            return;
+        }
         if (event.isUseItem() && isInputClaimed(MAIN_STATE)) {
             event.setSwingHand(false);
             event.setCanceled(true);
@@ -165,7 +172,7 @@ public final class ModClientEvents {
     }
 
     private static boolean canStartInput(LocalPlayer player) {
-        return Minecraft.getInstance().gui.screen() == null && !StunEffect.isStunned(player);
+        return Minecraft.getInstance().gui.screen() == null && !EffectActionRules.blocksActions(player);
     }
 
     private static void releaseStoppedInputs(Minecraft minecraft, LocalPlayer player) {

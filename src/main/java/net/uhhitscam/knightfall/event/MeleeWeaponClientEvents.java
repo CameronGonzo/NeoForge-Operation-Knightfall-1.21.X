@@ -11,7 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.effect.custom.StunEffect;
+import net.uhhitscam.knightfall.effect.EffectActionRules;
 import net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem;
 import net.uhhitscam.knightfall.network.PayloadRegister;
 import net.uhhitscam.knightfall.network.SSMeleeInputPacket;
@@ -39,7 +39,7 @@ public final class MeleeWeaponClientEvents {
             if (mc.hitResult != null && mc.hitResult.getType() == HitResult.Type.BLOCK && !extendedTarget) return;
             event.setCanceled(true);
             event.setSwingHand(false);
-            if (!StunEffect.isStunned(player) && !useDown && !player.isUsingItem()) {
+            if (!EffectActionRules.blocksActions(player) && !useDown && !player.isUsingItem()) {
                 PayloadRegister.sendToServer(new SSMeleeInputPacket(SSMeleeInputPacket.ATTACK));
                 player.swing(InteractionHand.MAIN_HAND);
                 player.resetAttackStrengthTicker();
@@ -49,7 +49,7 @@ public final class MeleeWeaponClientEvents {
             if (!useDown && useHand == null) return;
             event.setCanceled(true);
             event.setSwingHand(false);
-            if (!useDown && !StunEffect.isStunned(player) && !player.isUsingItem()) {
+            if (!useDown && !EffectActionRules.blocksActions(player) && !player.isUsingItem()) {
                 useDown = true;
                 hand = useHand;
                 held = player.getItemInHand(hand).copy();
@@ -66,7 +66,7 @@ public final class MeleeWeaponClientEvents {
         var player = mc.player;
         if (player == null) { clear(); return; }
         boolean cancel = mc.gui.screen() != null || !mc.isWindowActive() || !player.isAlive() || player.isSpectator()
-                || StunEffect.isStunned(player) || slot != player.getInventory().getSelectedSlot()
+                || EffectActionRules.blocksActions(player) || slot != player.getInventory().getSelectedSlot()
                 || player.getItemInHand(hand).getItem() != held.getItem();
         if (cancel || !mc.options.keyUse.isDown()) {
             PayloadRegister.sendToServer(new SSMeleeInputPacket(cancel ? SSMeleeInputPacket.CANCEL : SSMeleeInputPacket.RELEASE));

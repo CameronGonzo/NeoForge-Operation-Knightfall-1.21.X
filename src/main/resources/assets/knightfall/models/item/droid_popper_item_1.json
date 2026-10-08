@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/droid_popper_item",
+  "textures": {
+    "0": "knightfall:item/droid_popper_item_1",
+    "particle": "knightfall:item/droid_popper_item_1"
+  }
+}

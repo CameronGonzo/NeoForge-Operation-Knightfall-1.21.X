@@ -16,6 +16,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.ToDoubleFunction;
 
 public class CustomExplosion {
     public static void create(Entity sourceEntity, Vec3 location,
@@ -41,8 +43,17 @@ public class CustomExplosion {
     public static void create(Entity sourceEntity, @Nullable Entity causingEntity, Vec3 location,
                               double entityRadius, float damage, double knockback, boolean forceKnockback,
                               float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire) {
+        create(sourceEntity, causingEntity, location, entityRadius, damage, knockback, forceKnockback,
+                blockBreakRadius, interaction, causesFire, target -> 0.0);
+    }
+
+    public static void create(Entity sourceEntity, @Nullable Entity causingEntity, Vec3 location,
+                              double entityRadius, float damage, double knockback, boolean forceKnockback,
+                              float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire,
+                              ToDoubleFunction<LivingEntity> additionalDamage) {
 
         if (sourceEntity.level().isClientSide()) return;
+        Objects.requireNonNull(additionalDamage, "Additional explosion damage function cannot be null.");
         ServerLevel serverLevel = (ServerLevel) sourceEntity.level();
 
         final double x = location.x;
@@ -67,7 +78,8 @@ public class CustomExplosion {
             double dist2 = target.distanceToSqr(x, y, z);
             if (dist2 > r2) continue;
 
-            net.uhhitscam.knightfall.util.WeaponDamage.hurt(target, dmgSrc, damage);
+            float resolvedDamage = damage + (float) Math.max(0.0, additionalDamage.applyAsDouble(target));
+            net.uhhitscam.knightfall.util.WeaponDamage.hurt(target, dmgSrc, resolvedDamage);
 
             Vec3 delta = target.position().subtract(x, y, z);
             if (delta.lengthSqr() > 1.0e-6) {

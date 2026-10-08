@@ -67,6 +67,12 @@ public class ModModelLayers {
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "smoke_grenade"), "main");
     public static final ModelLayerLocation FLASH_GRENADE = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "flash_grenade"), "main");
+    public static final ModelLayerLocation ION_GRENADE = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "ion_grenade"), "main");
+    public static final ModelLayerLocation SMART_ION_GRENADE = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "smart_ion_grenade"), "main");
+    public static final ModelLayerLocation DROID_POPPER = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "droid_popper"), "main");
     public static final ModelLayerLocation EXPLOSIVE_KNIFE = new ModelLayerLocation(
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "explosive_knife"), "main");
 }

@@ -22,9 +22,11 @@ import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 import net.uhhitscam.knightfall.block.ModBlocks;
 import net.uhhitscam.knightfall.effect.ModEffects;
 import net.uhhitscam.knightfall.effect.client.StunEffectRenderer;
+import net.uhhitscam.knightfall.effect.client.LightningShockEffectRenderer;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.entity.client.*;
 import net.uhhitscam.knightfall.event.FaceAlignedParticleClient;
+import net.uhhitscam.knightfall.event.IonArcClient;
 import net.uhhitscam.knightfall.event.ProjectileWeaponZoomEventHandler;
 import net.uhhitscam.knightfall.gui.HudClient;
 import net.uhhitscam.knightfall.item.ModCreativeModeTabs;
@@ -118,14 +120,18 @@ public class OperationKnightfall {
                 GrenadeItemModelProperties.register(ModItems.BACTA_BOMB.get());
                 GrenadeItemModelProperties.register(ModItems.DIOXIS_GRENADE.get());
                 GrenadeItemModelProperties.register(ModItems.SMOKE_GRENADE.get());
+                GrenadeItemModelProperties.register(ModItems.ION_GRENADE.get());
+                GrenadeItemModelProperties.register(ModItems.DROID_POPPER.get());
                 ModItems.ITEMS.getEntries().forEach(entry -> {
                     if (entry.get() instanceof net.uhhitscam.knightfall.item.custom.melee.MeleeWeaponItem) {
                         MeleeWeaponItemModelProperties.register(entry.get());
                     }
                 });
                 StunEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
+                LightningShockEffectRenderer.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 ProjectileWeaponZoomEventHandler.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
                 FaceAlignedParticleClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
+                IonArcClient.register(net.neoforged.neoforge.common.NeoForge.EVENT_BUS);
             });
         }
 
@@ -141,6 +147,8 @@ public class OperationKnightfall {
             event.registerSpriteSet(ModParticles.BACTA_GAS_03_PARTICLES.get(), BactaGas03Particles.Provider::new);
             event.registerSpriteSet(ModParticles.SPARK_PARTICLES.get(), SparkParticles.Provider::new);
             event.registerSpriteSet(ModParticles.STUN_SPARK_PARTICLES.get(), StunSparkParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.ION_SMOKE_PARTICLES.get(), IonSmokeParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.ION_FLASH_PARTICLES.get(), IonFlashParticles.Provider::new);
             event.registerSpriteSet(ModParticles.EXPLOSIVE_SHOT_TIBANNA_PARTICLES.get(), ExplosiveShotTibannaParticles.Provider::new);
             event.registerSpriteSet(ModParticles.EXPLOSIVE_SHOT_IONIZED_TIBANNA_PARTICLES.get(), ExplosiveShotIonizedTibannaParticles.Provider::new);
             event.registerSpriteSet(ModParticles.EXPLOSIVE_SHOT_TIBANNAX_PARTICLES.get(), ExplosiveShotTibannaXParticles.Provider::new);

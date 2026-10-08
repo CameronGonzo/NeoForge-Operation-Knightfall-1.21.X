@@ -1,0 +1,7 @@
+{
+  "parent": "knightfall:item/ion_grenade_item",
+  "textures": {
+    "0": "knightfall:item/ion_grenade_item_1",
+    "particle": "knightfall:item/ion_grenade_item_1"
+  }
+}

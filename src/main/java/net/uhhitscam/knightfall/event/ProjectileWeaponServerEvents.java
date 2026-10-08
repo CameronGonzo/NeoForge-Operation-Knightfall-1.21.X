@@ -11,7 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.uhhitscam.knightfall.OperationKnightfall;
-import net.uhhitscam.knightfall.effect.custom.StunEffect;
+import net.uhhitscam.knightfall.effect.EffectActionRules;
 import net.uhhitscam.knightfall.item.custom.projectile.FiringMode;
 import net.uhhitscam.knightfall.item.custom.projectile.ProjectileItem;
 import net.uhhitscam.knightfall.item.custom.projectile.WeaponAction;
@@ -284,7 +284,7 @@ public final class ProjectileWeaponServerEvents {
     }
 
     private static boolean canAct(ServerPlayer player) {
-        return player.isAlive() && !player.isSpectator() && !StunEffect.isStunned(player);
+        return player.isAlive() && !player.isSpectator() && !EffectActionRules.blocksActions(player);
     }
 
     private static void updateHeldMovementSpeed(ServerPlayer player) {

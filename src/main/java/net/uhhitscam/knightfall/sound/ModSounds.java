@@ -74,6 +74,17 @@ public class ModSounds {
     public static final Supplier<SoundEvent> FLASH_GRENADE_BEEP = registerSoundEvent("flash_grenade_beep");
     public static final Supplier<SoundEvent> FLASH_GRENADE_EXPLOSION = registerSoundEvent("flash_grenade_explosion");
     public static final Supplier<SoundEvent> FLASH_GRENADE_IMPACT = registerSoundEvent("flash_grenade_impact");
+    public static final Supplier<SoundEvent> ION_GRENADE_ACTIVATE = registerSoundEvent("ion_grenade_activate");
+    public static final Supplier<SoundEvent> ION_GRENADE_BEEP = registerSoundEvent("ion_grenade_beep");
+    public static final Supplier<SoundEvent> ION_GRENADE_EXPLOSION = registerSoundEvent("ion_grenade_explosion");
+    public static final Supplier<SoundEvent> ION_GRENADE_IMPACT = registerSoundEvent("ion_grenade_impact");
+    public static final Supplier<SoundEvent> SMART_ION_GRENADE_ACTIVATE = registerSoundEvent("smart_ion_grenade_activate");
+    public static final Supplier<SoundEvent> SMART_ION_GRENADE_BEEP = registerSoundEvent("smart_ion_grenade_beep");
+    public static final Supplier<SoundEvent> SMART_ION_GRENADE_EXPLOSION = registerSoundEvent("smart_ion_grenade_explosion");
+    public static final Supplier<SoundEvent> SMART_ION_GRENADE_IMPACT = registerSoundEvent("smart_ion_grenade_impact");
+    public static final Supplier<SoundEvent> DROID_POPPER_ACTIVATE = registerSoundEvent("droid_popper_activate");
+    public static final Supplier<SoundEvent> DROID_POPPER_EXPLOSION = registerSoundEvent("droid_popper_explosion");
+    public static final Supplier<SoundEvent> DROID_POPPER_IMPACT = registerSoundEvent("droid_popper_impact");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_EQUIP = registerSoundEvent("explosive_knife_equip");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_UNEQUIP = registerSoundEvent("explosive_knife_unequip");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_BEEP = registerSoundEvent("explosive_knife_beep");

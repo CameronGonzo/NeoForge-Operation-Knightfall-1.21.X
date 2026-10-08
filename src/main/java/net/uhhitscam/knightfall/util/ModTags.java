@@ -1,14 +1,23 @@
 package net.uhhitscam.knightfall.util;
 
 import net.minecraft.resources.Identifier;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.uhhitscam.knightfall.OperationKnightfall;
 
 public class ModTags {
+    public static class Entities {
+        public static final TagKey<EntityType<?>> DROID_LIKE = TagKey.create(
+                Registries.ENTITY_TYPE,
+                Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "droid_like")
+        );
+    }
+
     public static class Blocks {
         public static final TagKey<Block> INTERACTABLE_BLOCKS = createTag("interactable_blocks");
         public static final TagKey<Block> BLASTER_IMPACT_DIRT = createTag("blaster_impact_dirt");

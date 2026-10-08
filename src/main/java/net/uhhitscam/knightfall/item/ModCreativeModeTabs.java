@@ -435,6 +435,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.DIOXIS_GRENADE);
                         pOutput.accept(ModItems.SMOKE_GRENADE);
                         pOutput.accept(ModItems.FLASH_GRENADE);
+                        pOutput.accept(ModItems.ION_GRENADE);
+                        pOutput.accept(ModItems.SMART_ION_GRENADE);
+                        pOutput.accept(ModItems.DROID_POPPER);
                         pOutput.accept(ModItems.EXPLOSIVE_KNIFE);
                         pOutput.accept(ModItems.GAS_CARTRIDGE);
                         pOutput.accept(ModItems.TIBANNA_GAS);

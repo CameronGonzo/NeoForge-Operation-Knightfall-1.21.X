@@ -83,6 +83,14 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
             texture("smoke_grenade_1")
     );
     private static final GrenadeTextures FLASH_GRENADE_TEXTURES = singleTexture("flash_grenade");
+    private static final GrenadeTextures ION_GRENADE_TEXTURES = new GrenadeTextures(
+            texture("ion_grenade"),
+            texture("ion_grenade"),
+            texture("ion_grenade_1")
+    );
+    private static final GrenadeTextures SMART_ION_GRENADE_TEXTURES = singleTexture("smart_ion_grenade");
+    private static final GrenadeTextures DROID_POPPER_TEXTURES = new GrenadeTextures(
+            texture("droid_popper"), texture("droid_popper_1"), texture("droid_popper_1"));
 
     private final ThermalDetonatorModel thermalDetonatorModel;
     private final ImpactBombModel impactBombModel;
@@ -101,6 +109,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     private final DioxisGrenadeModel dioxisGrenadeModel;
     private final SmokeGrenadeModel smokeGrenadeModel;
     private final FlashGrenadeModel flashGrenadeModel;
+    private final IonGrenadeModel ionGrenadeModel;
+    private final SmartIonGrenadeModel smartIonGrenadeModel;
+    private final DroidPopperModel droidPopperModel;
     private final ItemModelResolver itemModelResolver;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -140,6 +151,9 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         this.dioxisGrenadeModel = new DioxisGrenadeModel(context.bakeLayer(ModModelLayers.DIOXIS_GRENADE));
         this.smokeGrenadeModel = new SmokeGrenadeModel(context.bakeLayer(ModModelLayers.SMOKE_GRENADE));
         this.flashGrenadeModel = new FlashGrenadeModel(context.bakeLayer(ModModelLayers.FLASH_GRENADE));
+        this.ionGrenadeModel = new IonGrenadeModel(context.bakeLayer(ModModelLayers.ION_GRENADE));
+        this.smartIonGrenadeModel = new SmartIonGrenadeModel(context.bakeLayer(ModModelLayers.SMART_ION_GRENADE));
+        this.droidPopperModel = new DroidPopperModel(context.bakeLayer(ModModelLayers.DROID_POPPER));
         this.itemModelResolver = context.getItemModelResolver();
         this.shadowRadius = 0.15F;
     }
@@ -201,6 +215,10 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         GrenadeDefinition definition = entity.getGrenadeDefinition();
         if (definition == null) {
             return textures.base();
+        }
+
+        if (entity.isDetonationDelayed()) {
+            return textures.active();
         }
 
         if (definition.remoteProfile() != null) {
@@ -277,6 +295,15 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.FLASH_GRENADE.get())) {
             return flashGrenadeModel;
         }
+        if (entity.getItem().is(ModItems.ION_GRENADE.get())) {
+            return ionGrenadeModel;
+        }
+        if (entity.getItem().is(ModItems.SMART_ION_GRENADE.get())) {
+            return smartIonGrenadeModel;
+        }
+        if (entity.getItem().is(ModItems.DROID_POPPER.get())) {
+            return droidPopperModel;
+        }
         return null;
     }
 
@@ -331,6 +358,15 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         }
         if (entity.getItem().is(ModItems.FLASH_GRENADE.get())) {
             return FLASH_GRENADE_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.ION_GRENADE.get())) {
+            return ION_GRENADE_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.SMART_ION_GRENADE.get())) {
+            return SMART_ION_GRENADE_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.DROID_POPPER.get())) {
+            return DROID_POPPER_TEXTURES;
         }
         return null;
     }

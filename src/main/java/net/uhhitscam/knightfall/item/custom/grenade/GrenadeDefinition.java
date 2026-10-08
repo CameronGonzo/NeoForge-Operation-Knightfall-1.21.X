@@ -29,7 +29,9 @@ public record GrenadeDefinition(
         int visualFlashIntervalTicks,
         @Nullable TagKey<Block> stickyBlockTag,
         @Nullable GrenadeRemoteProfile remoteProfile,
+        @Nullable GrenadeProximityProfile proximityProfile,
         @Nullable GrenadeImplosionProfile implosionProfile,
+        @Nullable GrenadeDetonationDelayProfile detonationDelayProfile,
         @Nullable GrenadeSmokeProfile smokeProfile,
         GrenadeEffect effect
 ) {
@@ -62,7 +64,11 @@ public record GrenadeDefinition(
         @Nullable
         private GrenadeRemoteProfile remoteProfile;
         @Nullable
+        private GrenadeProximityProfile proximityProfile;
+        @Nullable
         private GrenadeImplosionProfile implosionProfile;
+        @Nullable
+        private GrenadeDetonationDelayProfile detonationDelayProfile;
         @Nullable
         private GrenadeSmokeProfile smokeProfile;
         private GrenadeEffect effect;
@@ -168,8 +174,19 @@ public record GrenadeDefinition(
             return this;
         }
 
+        public Builder proximityProfile(GrenadeProximityProfile proximityProfile) {
+            this.proximityProfile = Objects.requireNonNull(proximityProfile, "Grenade proximity profile cannot be null.");
+            return this;
+        }
+
         public Builder implosionProfile(GrenadeImplosionProfile implosionProfile) {
             this.implosionProfile = Objects.requireNonNull(implosionProfile, "Grenade implosion profile cannot be null.");
+            return this;
+        }
+
+        public Builder detonationDelayProfile(GrenadeDetonationDelayProfile detonationDelayProfile) {
+            this.detonationDelayProfile = Objects.requireNonNull(detonationDelayProfile,
+                    "Grenade detonation delay profile cannot be null.");
             return this;
         }
 
@@ -238,6 +255,9 @@ public record GrenadeDefinition(
             if (smokeProfile != null && trigger != GrenadeTrigger.STICKY_FUSE) {
                 throw new IllegalStateException(registryName + " smoke profiles require the STICKY_FUSE trigger.");
             }
+            if (implosionProfile != null && detonationDelayProfile != null) {
+                throw new IllegalStateException(registryName + " cannot use implosion and detonation delay together.");
+            }
             if (effect == null) {
                 throw new IllegalStateException(registryName + " must have a GrenadeEffect.");
             }
@@ -263,7 +283,9 @@ public record GrenadeDefinition(
                     visualFlashIntervalTicks,
                     stickyBlockTag,
                     remoteProfile,
+                    proximityProfile,
                     implosionProfile,
+                    detonationDelayProfile,
                     smokeProfile,
                     effect
             );

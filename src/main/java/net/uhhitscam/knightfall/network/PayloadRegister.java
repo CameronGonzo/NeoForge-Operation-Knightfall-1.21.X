@@ -29,6 +29,7 @@ public class PayloadRegister {
         client(CSConcussionBlurPacket.TYPE, CSConcussionBlurPacket.STREAM_CODEC);
         client(CSFlashEffectPacket.TYPE, CSFlashEffectPacket.STREAM_CODEC);
         client(CSFaceAlignedParticlePacket.TYPE, CSFaceAlignedParticlePacket.STREAM_CODEC);
+        client(CSIonArcPacket.TYPE, CSIonArcPacket.STREAM_CODEC);
     }
 
     private static <T extends Packet> void server(CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> reader) {
