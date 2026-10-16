@@ -89,6 +89,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
             texture("ion_grenade_1")
     );
     private static final GrenadeTextures SMART_ION_GRENADE_TEXTURES = singleTexture("smart_ion_grenade");
+    private static final GrenadeTextures SHOCK_GRENADE_TEXTURES = singleTexture("shock_grenade");
+    private static final GrenadeTextures PRESSURE_MINE_TEXTURES = singleTexture("pressure_mine");
     private static final GrenadeTextures DROID_POPPER_TEXTURES = new GrenadeTextures(
             texture("droid_popper"), texture("droid_popper_1"), texture("droid_popper_1"));
 
@@ -112,6 +114,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
     private final IonGrenadeModel ionGrenadeModel;
     private final SmartIonGrenadeModel smartIonGrenadeModel;
     private final DroidPopperModel droidPopperModel;
+    private final ShockGrenadeModel shockGrenadeModel;
+    private final PressureMineModel pressureMineModel;
     private final ItemModelResolver itemModelResolver;
 
     public GrenadeRenderer(EntityRendererProvider.Context context) {
@@ -154,6 +158,8 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         this.ionGrenadeModel = new IonGrenadeModel(context.bakeLayer(ModModelLayers.ION_GRENADE));
         this.smartIonGrenadeModel = new SmartIonGrenadeModel(context.bakeLayer(ModModelLayers.SMART_ION_GRENADE));
         this.droidPopperModel = new DroidPopperModel(context.bakeLayer(ModModelLayers.DROID_POPPER));
+        this.shockGrenadeModel = new ShockGrenadeModel(context.bakeLayer(ModModelLayers.SHOCK_GRENADE));
+        this.pressureMineModel = new PressureMineModel(context.bakeLayer(ModModelLayers.PRESSURE_MINE));
         this.itemModelResolver = context.getItemModelResolver();
         this.shadowRadius = 0.15F;
     }
@@ -164,6 +170,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         public float scale;
         public Direction stuckFace;
         public boolean resting;
+        public boolean shockField;
         public final ItemStackRenderState item = new ItemStackRenderState();
     }
 
@@ -178,6 +185,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         state.scale = DEFAULT_MODEL_SCALE * getModelScale(entity);
         state.stuckFace = entity.getStuckFace();
         state.resting = entity.isResting();
+        state.shockField = entity.isShockFieldActive();
         state.yaw = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
         state.pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
         state.texture = getTextureLocation(entity);
@@ -186,6 +194,10 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
 
     @Override
     public void submit(State state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        // The exploded grenade remains only as the synchronized field anchor for eight seconds.
+        if (state.shockField) {
+            return;
+        }
         poseStack.pushPose();
         if (state.model == null) {
             poseStack.mulPose(camera.orientation);
@@ -304,6 +316,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         if (entity.getItem().is(ModItems.DROID_POPPER.get())) {
             return droidPopperModel;
         }
+        if (entity.getItem().is(ModItems.SHOCK_GRENADE.get())) {
+            return shockGrenadeModel;
+        }
+        if (entity.getItem().is(ModItems.PRESSURE_MINE.get())) {
+            return pressureMineModel;
+        }
         return null;
     }
 
@@ -367,6 +385,12 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity, GrenadeRender
         }
         if (entity.getItem().is(ModItems.DROID_POPPER.get())) {
             return DROID_POPPER_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.SHOCK_GRENADE.get())) {
+            return SHOCK_GRENADE_TEXTURES;
+        }
+        if (entity.getItem().is(ModItems.PRESSURE_MINE.get())) {
+            return PRESSURE_MINE_TEXTURES;
         }
         return null;
     }

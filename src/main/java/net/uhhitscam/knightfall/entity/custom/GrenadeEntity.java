@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,21 +32,34 @@ import net.minecraft.world.phys.Vec3;
 import net.uhhitscam.knightfall.item.ModItems;
 import net.uhhitscam.knightfall.entity.ModEntities;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDefinition;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeEffects;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonationDelayProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeDetonationContext;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeFuseSoundMode;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeImplosionProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeItem;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadePhysics;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadePressureProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeProximityProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeRemoteDetonations;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeRemoteProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeSmokeProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeShockFieldProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeIonArcProfile;
+import net.uhhitscam.knightfall.effect.custom.LightningShockEffect;
+import net.uhhitscam.knightfall.effect.EffectActionRules;
+import net.uhhitscam.knightfall.network.CSIonArcPacket;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.joml.Vector3f;
 import net.uhhitscam.knightfall.particle.ModParticles;
 import net.uhhitscam.knightfall.component.GrenadeRemoteLink;
 import net.uhhitscam.knightfall.component.ModDataComponentTypes;
 import net.uhhitscam.knightfall.util.SmokeScreenUtil;
+import net.uhhitscam.knightfall.util.ModTags;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class GrenadeEntity extends ThrowableItemProjectile {
     private static final String FUSE_TAG = "Fuse";
@@ -61,12 +75,16 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     private static final String IMPLOSION_TICKS_TAG = "ImplosionTicks";
     private static final String DETONATION_DELAY_TICKS_TAG = "DetonationDelayTicks";
     private static final String PROXIMITY_AGE_TAG = "ProximityAgeTicks";
+    private static final String SHOCK_FIELD_END_TAG = "ShockFieldEndTick";
+    private static final String PRESSURE_ACTIVATED_TAG = "PressureActivated";
     private static final double HIT_POSITION_EPSILON = 0.01;
     private static final double GROUND_PROBE_START_OFFSET = 0.02;
     private static final double GROUND_PROBE_DISTANCE = 0.08;
     private static final double GROUND_PROBE_INSET = 0.02;
     private static final double NORMAL_SETTLE_GRAVITY_MULTIPLIER = 2.0;
     private static final int BOUNCE_SOUND_COOLDOWN_TICKS = 4;
+    private static final double PUNCH_HORIZONTAL_SPEED = 0.45;
+    private static final double PUNCH_UPWARD_SPEED = 0.20;
     private static final EntityDataAccessor<Integer> DATA_FUSE_TICKS =
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_RESTING =
@@ -83,6 +101,10 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_DETONATION_DELAY_TICKS =
             SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Long> DATA_SHOCK_FIELD_END_TICK =
+            SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.LONG);
+    private static final EntityDataAccessor<Boolean> DATA_PRESSURE_ACTIVATED =
+            SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Nullable
     private Vec3 velocityAfterImpact;
@@ -166,10 +188,24 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         builder.define(DATA_REMOTE_DETONATION_TICKS, -1);
         builder.define(DATA_IMPLOSION_TICKS, -1);
         builder.define(DATA_DETONATION_DELAY_TICKS, -1);
+        builder.define(DATA_SHOCK_FIELD_END_TICK, -1L);
+        builder.define(DATA_PRESSURE_ACTIVATED, false);
     }
 
     public int getFuseTicks() {
         return entityData.get(DATA_FUSE_TICKS);
+    }
+
+    public boolean isPressureActivated() {
+        return entityData.get(DATA_PRESSURE_ACTIVATED);
+    }
+
+    public boolean isShockFieldActive() {
+        return entityData.get(DATA_SHOCK_FIELD_END_TICK) >= 0L;
+    }
+
+    public int getShockFieldRemainingTicks() {
+        return (int) Math.max(0L, entityData.get(DATA_SHOCK_FIELD_END_TICK) - level().getGameTime());
     }
 
     public void setFuseTicks(int fuseTicks) {
@@ -274,7 +310,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     public void tick() {
         refreshDimensionsIfItemChanged();
 
-        if (isStuck()) {
+        if (isStuck() || isShockFieldActive()) {
             setDeltaMovement(Vec3.ZERO);
         } else {
             updateRestingMotion();
@@ -296,6 +332,11 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             return;
         }
 
+        if (definition != null && isShockFieldActive()) {
+            tickShockField(definition.shockFieldProfile());
+            return;
+        }
+
         if (definition == null || detonated) {
             discard();
             return;
@@ -312,6 +353,11 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         if (isDetonationDelayed()) {
             tickDetonationDelay(definition);
+            return;
+        }
+
+        if (definition.pressureProfile() != null) {
+            tickPressureMine(definition);
             return;
         }
 
@@ -355,7 +401,13 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         int remainingFuseTicks = currentFuseTicks - 1;
         setFuseTicks(remainingFuseTicks);
         boolean shouldPlayBeep;
-        if (definition.fuseSoundMode() == GrenadeFuseSoundMode.REPEATED_AFTER_THROW) {
+        if (definition.fuseSoundMode() == GrenadeFuseSoundMode.ONCE_BEFORE_DETONATION) {
+            shouldPlayBeep = !oneShotFuseSoundPlayed && remainingFuseTicks > 0
+                    && remainingFuseTicks <= definition.audio().urgentThresholdTicks();
+            if (shouldPlayBeep) {
+                oneShotFuseSoundPlayed = true;
+            }
+        } else if (definition.fuseSoundMode() == GrenadeFuseSoundMode.REPEATED_AFTER_THROW) {
             boolean firstFuseTick = currentFuseTicks == definition.fuseTicks();
             if (!firstFuseTick) {
                 soundLoopTicks++;
@@ -541,7 +593,8 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
         if (definition.trigger().sticksToBlocks()) {
             startFuseIfNeeded(definition);
-            if (!isStuck() && definition.canStickTo(level().getBlockState(result.getBlockPos()))) {
+            if (!isStuck() && definition.canStickTo(level().getBlockState(result.getBlockPos()))
+                    && (definition.pressureProfile() == null || result.getDirection() == Direction.UP)) {
                 stickToBlock(result, definition);
                 return;
             }
@@ -563,14 +616,53 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 
     @Override
     public boolean isPickable() {
-        return !isRemoved();
+        return !isRemoved() && !isShockFieldActive();
+    }
+
+    @Override
+    public boolean skipAttackInteraction(Entity attacker) {
+        if (!(attacker instanceof Player player)) {
+            return super.skipAttackInteraction(attacker);
+        }
+
+        // Handle punches before vanilla melee damage, sprint knockback, or projectile redirection.
+        if (!level().isClientSide() && player.isAlive() && !player.isSpectator()
+                && !EffectActionRules.blocksActions(player) && canBePunched()) {
+            knockAway(player);
+        }
+        return true;
+    }
+
+    private boolean canBePunched() {
+        return !isRemoved() && !detonated && !isStuck() && !isShockFieldActive() && !SmokeScreenUtil.isActive(this)
+                && !isImploding() && !isDetonationDelayed() && !isRemoteDetonationActivated()
+                && !isPressureActivated()
+                && getGrenadeDefinition() != null;
+    }
+
+    private void knockAway(Player player) {
+        Vec3 direction = player.getLookAngle().multiply(1.0, 0.0, 1.0);
+        if (direction.lengthSqr() < 1.0E-6) {
+            direction = position().subtract(player.position()).multiply(1.0, 0.0, 1.0);
+        }
+        if (direction.lengthSqr() < 1.0E-6) {
+            direction = Vec3.directionFromRotation(0.0F, player.getYRot());
+        }
+
+        setResting(false);
+        setOnGround(false);
+        setNoGravity(false);
+        velocityAfterImpact = null;
+        setDeltaMovement(direction.normalize().scale(PUNCH_HORIZONTAL_SPEED).add(0.0, PUNCH_UPWARD_SPEED, 0.0));
+        // Use vanilla motion synchronization without changing ownership, fuse, or remote links.
+        hurtMarked = true;
     }
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         GrenadeDefinition definition = getGrenadeDefinition();
         if (detonated || isRemoteDetonationActivated() || isRemoved() || player.isSpectator()
-                || definition == null || definition.remoteProfile() == null) {
+                || definition == null || definition.remoteProfile() == null && definition.pressureProfile() == null) {
             return InteractionResult.PASS;
         }
 
@@ -595,6 +687,25 @@ public class GrenadeEntity extends ThrowableItemProjectile {
     @Override
     public float getPickRadius() {
         return 0.0F;
+    }
+
+    public boolean disarmAndDrop() {
+        if (!(level() instanceof ServerLevel serverLevel) || isRemoved() || detonated
+                || !getItem().is(ModTags.Items.ELECTRICALLY_DISARMABLE_EXPLOSIVES)) {
+            return false;
+        }
+
+        detonated = true; // Prevent any pending fuse or remote trigger from exploding during removal.
+        setFuseRunning(false);
+        ItemStack recovered = getItem().copyWithCount(1);
+        recovered.remove(ModDataComponentTypes.GRENADE_REMOTE_LINK.get());
+        var dropped = new ItemEntity(serverLevel, getX(), getY(), getZ(), recovered);
+        dropped.setDeltaMovement(Vec3.ZERO);
+        dropped.setDefaultPickUpDelay();
+        serverLevel.addFreshEntity(dropped);
+        // Keep the original entity's link until removal so deployed counts and detonators get cleaned up.
+        discard();
+        return true;
     }
 
     @Override
@@ -731,7 +842,38 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         velocityAfterImpact = null;
         setResting(false);
         setStuckFace(direction);
-        setFuseRunning(true);
+        setFuseRunning(definition == null || definition.pressureProfile() == null);
+    }
+
+    private void tickPressureMine(GrenadeDefinition definition) {
+        if (!isStuck()) {
+            return;
+        }
+        GrenadePressureProfile profile = definition.pressureProfile();
+        AABB footprint = getBoundingBox();
+        AABB detection = new AABB(footprint.minX, footprint.minY, footprint.minZ,
+                footprint.maxX, footprint.maxY + profile.detectionHeight(), footprint.maxZ);
+        boolean pressed = !level().getEntitiesOfClass(LivingEntity.class, detection,
+                target -> target.isAlive() && !target.isSpectator()
+                        && target.getBoundingBox().minY >= footprint.minY - 0.1).isEmpty();
+        if (!pressed) {
+            Set<Item> itemTypes = new HashSet<>();
+            for (ItemEntity item : level().getEntitiesOfClass(ItemEntity.class, detection)) {
+                if (item.isAlive() && !item.getItem().isEmpty()) {
+                    itemTypes.add(item.getItem().getItem());
+                    if (itemTypes.size() >= profile.requiredItemTypes()) {
+                        pressed = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (pressed && !isPressureActivated()) {
+            entityData.set(DATA_PRESSURE_ACTIVATED, true);
+            definition.audio().activationSound().play(level(), position());
+        } else if (!pressed && isPressureActivated()) {
+            detonate();
+        }
     }
 
     private double surfaceAttachmentDistance(Direction direction, GrenadeDefinition definition) {
@@ -969,7 +1111,52 @@ public class GrenadeEntity extends ThrowableItemProjectile {
                     position()
             ));
         } finally {
+            if (!isShockFieldActive()) {
+                discard();
+            }
+        }
+    }
+
+    public void beginShockField(GrenadeShockFieldProfile profile) {
+        if (!(level() instanceof ServerLevel) || isShockFieldActive()) {
+            return;
+        }
+        setFuseRunning(false);
+        detonated = true;
+        setResting(true);
+        setNoGravity(true);
+        setDeltaMovement(Vec3.ZERO);
+        velocityAfterImpact = null;
+        entityData.set(DATA_SHOCK_FIELD_END_TICK, level().getGameTime() + profile.durationTicks());
+        profile.startSound().play(level(), position());
+        tickShockField(profile);
+    }
+
+    private void tickShockField(@Nullable GrenadeShockFieldProfile profile) {
+        int remainingTicks = getShockFieldRemainingTicks();
+        if (profile == null || remainingTicks <= 0 || !(level() instanceof ServerLevel serverLevel)) {
             discard();
+            return;
+        }
+        AABB bounds = new AABB(position(), position()).inflate(profile.radius());
+        double radiusSquared = profile.radius() * profile.radius();
+        GrenadeEffects.disarmNearbyExplosives(serverLevel, position(), profile.radius());
+        for (LivingEntity target : serverLevel.getEntitiesOfClass(LivingEntity.class, bounds)) {
+            if (target.distanceToSqr(position()) <= radiusSquared) {
+                // Refresh while inside; leaving or field expiry stops refreshing the short after-effect.
+                LightningShockEffect.apply(target, profile.shockLingerTicks());
+            }
+        }
+        int elapsedTicks = profile.durationTicks() - remainingTicks;
+        if (elapsedTicks % profile.arcIntervalTicks() == 0) {
+            GrenadeIonArcProfile arcs = profile.arcs();
+            GrenadeIonArcProfile burst = new GrenadeIonArcProfile(arcs.count(),
+                    Math.min(remainingTicks, arcs.lifetimeTicks()),
+                    arcs.minimumSegments(), arcs.maximumSegments(), arcs.segmentLength(), arcs.bend(),
+                    arcs.exteriorColor(), arcs.coreRadius(), arcs.exteriorRadius());
+            PacketDistributor.sendToPlayersNear(serverLevel, null, getX(), getY(), getZ(), 64.0,
+                    new CSIonArcPacket(new Vector3f((float) getX(), (float) getY(), (float) getZ()),
+                            serverLevel.getRandom().nextLong(), 1, burst));
         }
     }
 
@@ -1014,6 +1201,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         tag.putInt(FUSE_TAG, getFuseTicks());
         tag.putBoolean(FUSE_RUNNING_TAG, isFuseRunning());
         tag.putBoolean(RESTING_TAG, isResting());
+        tag.putBoolean(PRESSURE_ACTIVATED_TAG, isPressureActivated());
         Direction stuckFace = getStuckFace();
         if (stuckFace != null) {
             tag.putInt(STUCK_FACE_TAG, stuckFace.get3DDataValue());
@@ -1027,6 +1215,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         tag.putInt(IMPLOSION_TICKS_TAG, entityData.get(DATA_IMPLOSION_TICKS));
         tag.putInt(DETONATION_DELAY_TICKS_TAG, entityData.get(DATA_DETONATION_DELAY_TICKS));
         tag.putInt(PROXIMITY_AGE_TAG, proximityAgeTicks);
+        tag.putLong(SHOCK_FIELD_END_TAG, entityData.get(DATA_SHOCK_FIELD_END_TICK));
     }
 
     @Override
@@ -1039,6 +1228,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
             setFuseRunning(tag.getBooleanOr(FUSE_RUNNING_TAG, false));
         }
         setResting(tag.getBooleanOr(RESTING_TAG, false));
+        entityData.set(DATA_PRESSURE_ACTIVATED, tag.getBooleanOr(PRESSURE_ACTIVATED_TAG, false));
         setStuckFace(tag.read(STUCK_FACE_TAG, com.mojang.serialization.Codec.INT).isPresent()
                 ? Direction.from3DDataValue(tag.getIntOr(STUCK_FACE_TAG, 0))
                 : null);
@@ -1057,5 +1247,9 @@ public class GrenadeEntity extends ThrowableItemProjectile {
         );
         entityData.set(DATA_DETONATION_DELAY_TICKS, tag.getIntOr(DETONATION_DELAY_TICKS_TAG, -1));
         proximityAgeTicks = Math.max(0, tag.getIntOr(PROXIMITY_AGE_TAG, 0));
+        entityData.set(DATA_SHOCK_FIELD_END_TICK, tag.getLongOr(SHOCK_FIELD_END_TAG, -1L));
+        if (isShockFieldActive()) {
+            setNoGravity(true);
+        }
     }
 }

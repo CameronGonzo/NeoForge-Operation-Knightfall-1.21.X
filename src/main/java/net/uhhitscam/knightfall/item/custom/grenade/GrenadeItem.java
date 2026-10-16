@@ -79,6 +79,9 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
         if (player == null || stack.isEmpty() || player.getCooldowns().isOnCooldown(stack)) {
             return InteractionResult.FAIL;
         }
+        if (definition.pressureProfile() != null && context.getClickedFace() != Direction.UP) {
+            return InteractionResult.FAIL;
+        }
 
         Level level = context.getLevel();
         if (level instanceof ServerLevel serverLevel) {
@@ -89,7 +92,9 @@ public class GrenadeItem extends Item implements net.minecraft.world.item.Projec
             grenade.placeOnSurface(context.getClickLocation(), context.getClickedFace());
             serverLevel.addFreshEntity(grenade);
 
-            definition.audio().activationSound().play(serverLevel, grenade.position());
+            if (definition.pressureProfile() == null) {
+                definition.audio().activationSound().play(serverLevel, grenade.position());
+            }
             definition.audio().bounceSound().play(serverLevel, grenade.position());
             if (remoteLink != null
                     && definition.remoteProfile().detonatorDelivery() == GrenadeDetonatorDelivery.REPLACE_USED_STACK) {

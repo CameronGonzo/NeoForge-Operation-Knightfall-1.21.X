@@ -33,6 +33,8 @@ public record GrenadeDefinition(
         @Nullable GrenadeImplosionProfile implosionProfile,
         @Nullable GrenadeDetonationDelayProfile detonationDelayProfile,
         @Nullable GrenadeSmokeProfile smokeProfile,
+        @Nullable GrenadeShockFieldProfile shockFieldProfile,
+        @Nullable GrenadePressureProfile pressureProfile,
         GrenadeEffect effect
 ) {
     public static Builder builder(String registryName) {
@@ -71,6 +73,10 @@ public record GrenadeDefinition(
         private GrenadeDetonationDelayProfile detonationDelayProfile;
         @Nullable
         private GrenadeSmokeProfile smokeProfile;
+        @Nullable
+        private GrenadeShockFieldProfile shockFieldProfile;
+        @Nullable
+        private GrenadePressureProfile pressureProfile;
         private GrenadeEffect effect;
 
         private Builder(String registryName) {
@@ -195,6 +201,16 @@ public record GrenadeDefinition(
             return this;
         }
 
+        public Builder shockFieldProfile(GrenadeShockFieldProfile shockFieldProfile) {
+            this.shockFieldProfile = Objects.requireNonNull(shockFieldProfile, "Grenade shock field profile cannot be null.");
+            return this;
+        }
+
+        public Builder pressureProfile(GrenadePressureProfile pressureProfile) {
+            this.pressureProfile = Objects.requireNonNull(pressureProfile, "Grenade pressure profile cannot be null.");
+            return this;
+        }
+
         public Builder effect(GrenadeEffect effect) {
             this.effect = Objects.requireNonNull(effect, "Grenade effect cannot be null.");
             return this;
@@ -255,6 +271,10 @@ public record GrenadeDefinition(
             if (smokeProfile != null && trigger != GrenadeTrigger.STICKY_FUSE) {
                 throw new IllegalStateException(registryName + " smoke profiles require the STICKY_FUSE trigger.");
             }
+            if ((trigger == GrenadeTrigger.PRESSURE_RELEASE) != (pressureProfile != null)
+                    || pressureProfile != null && deployment != GrenadeDeployment.PLACE) {
+                throw new IllegalStateException(registryName + " pressure mines require PLACE and a pressure profile.");
+            }
             if (implosionProfile != null && detonationDelayProfile != null) {
                 throw new IllegalStateException(registryName + " cannot use implosion and detonation delay together.");
             }
@@ -287,6 +307,8 @@ public record GrenadeDefinition(
                     implosionProfile,
                     detonationDelayProfile,
                     smokeProfile,
+                    shockFieldProfile,
+                    pressureProfile,
                     effect
             );
         }

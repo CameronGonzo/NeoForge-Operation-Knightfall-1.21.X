@@ -438,6 +438,8 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ION_GRENADE);
                         pOutput.accept(ModItems.SMART_ION_GRENADE);
                         pOutput.accept(ModItems.DROID_POPPER);
+                        pOutput.accept(ModItems.SHOCK_GRENADE);
+                        pOutput.accept(ModItems.PRESSURE_MINE);
                         pOutput.accept(ModItems.EXPLOSIVE_KNIFE);
                         pOutput.accept(ModItems.GAS_CARTRIDGE);
                         pOutput.accept(ModItems.TIBANNA_GAS);

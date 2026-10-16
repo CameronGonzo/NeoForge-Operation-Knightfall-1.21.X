@@ -36,6 +36,7 @@ public class ModTags {
     }
 
     public static class Items {
+        public static final TagKey<Item> ELECTRICALLY_DISARMABLE_EXPLOSIVES = createTag("electrically_disarmable_explosives");
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, name));

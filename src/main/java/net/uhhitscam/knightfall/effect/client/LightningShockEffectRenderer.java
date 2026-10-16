@@ -19,7 +19,6 @@ public final class LightningShockEffectRenderer {
     };
     private static UUID trackedPlayer;
     private static long effectStartTick;
-    private static int previousRemainingTicks = -1;
 
     private LightningShockEffectRenderer() {}
 
@@ -42,18 +41,15 @@ public final class LightningShockEffectRenderer {
         MobEffectInstance effect = player == null ? null : player.getEffect(ModEffects.LIGHTNING_SHOCK_EFFECT);
         if (effect == null) {
             trackedPlayer = null;
-            previousRemainingTicks = -1;
             return;
         }
 
         long currentTick = player.level().getGameTime();
-        int remainingTicks = effect.getDuration();
-        if (!player.getUUID().equals(trackedPlayer) || currentTick < effectStartTick
-                || remainingTicks > previousRemainingTicks) {
+        // Duration refreshes must not restart the animation while the player remains shocked.
+        if (!player.getUUID().equals(trackedPlayer) || currentTick < effectStartTick) {
             trackedPlayer = player.getUUID();
             effectStartTick = currentTick;
         }
-        previousRemainingTicks = remainingTicks;
 
         event.getGuiGraphics().blit(RenderPipelines.GUI_TEXTURED,
                 FRAMES[frameAt(currentTick - effectStartTick)],

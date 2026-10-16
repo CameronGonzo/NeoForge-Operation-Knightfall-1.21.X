@@ -1,4 +1,32 @@
 {
+  "equipment_explosion": {
+    "subtitle": "sounds.knightfall.equipment_explosion",
+    "sounds": ["knightfall:equipment/equipment_explosion_01"]
+  },
+  "pressure_mine_activate": {
+    "subtitle": "sounds.knightfall.pressure_mine_activate",
+    "sounds": ["knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_activate_01"]
+  },
+  "pressure_mine_impact": {
+    "subtitle": "sounds.knightfall.pressure_mine_impact",
+    "sounds": [
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_impact_01",
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_impact_02",
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_impact_03",
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_impact_04",
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_impact_05"
+    ]
+  },
+  "pressure_mine_explosion": {
+    "subtitle": "sounds.knightfall.pressure_mine_explosion",
+    "sounds": [
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_explosion_01",
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_explosion_02",
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_explosion_03",
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_explosion_04",
+      "knightfall:equipment/pressure_mine/equipment_grenade_pressure_mine_explosion_05"
+    ]
+  },
   "equipment_throw": {
     "subtitle": "sounds.knightfall.equipment_throw",
     "sounds": [
@@ -435,6 +463,22 @@
     "sounds": [
       "knightfall:equipment/smart_ion_grenade/equipment_grenade_ion_grenade_impact_01"
     ]
+  },
+  "shock_grenade_activate": {
+    "subtitle": "sounds.knightfall.shock_grenade_activate",
+    "sounds": ["knightfall:equipment/shock_grenade/equipment_grenade_shock_grenade_activation_01"]
+  },
+  "shock_grenade_beep": {
+    "subtitle": "sounds.knightfall.shock_grenade_beep",
+    "sounds": ["knightfall:equipment/shock_grenade/equipment_grenade_shock_grenade_beep_01"]
+  },
+  "shock_grenade_explosion": {
+    "subtitle": "sounds.knightfall.shock_grenade_explosion",
+    "sounds": ["knightfall:equipment/shock_grenade/equipment_grenade_shock_grenade_explosion_01"]
+  },
+  "shock_grenade_impact": {
+    "subtitle": "sounds.knightfall.shock_grenade_impact",
+    "sounds": ["knightfall:equipment/shock_grenade/equipment_grenade_shock_grenade_impact_01"]
   },
   "droid_popper_activate": {
     "subtitle": "sounds.knightfall.droid_popper_activate",

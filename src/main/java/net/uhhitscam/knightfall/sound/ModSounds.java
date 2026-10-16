@@ -16,6 +16,10 @@ public class ModSounds {
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, OperationKnightfall.MODID);
 
     public static final Supplier<SoundEvent> EQUIPMENT_THROW = registerSoundEvent("equipment_throw");
+    public static final Supplier<SoundEvent> EQUIPMENT_EXPLOSION = registerSoundEvent("equipment_explosion");
+    public static final Supplier<SoundEvent> PRESSURE_MINE_ACTIVATE = registerSoundEvent("pressure_mine_activate");
+    public static final Supplier<SoundEvent> PRESSURE_MINE_IMPACT = registerSoundEvent("pressure_mine_impact");
+    public static final Supplier<SoundEvent> PRESSURE_MINE_EXPLOSION = registerSoundEvent("pressure_mine_explosion");
     public static final Supplier<SoundEvent> EQUIPMENT_DETONATOR = registerSoundEvent("equipment_detonator");
     public static final Supplier<SoundEvent> THERMAL_DETONATOR_ACTIVATE = registerSoundEvent("thermal_detonator_activate");
     public static final Supplier<SoundEvent> THERMAL_DETONATOR_BEEP = registerSoundEvent("thermal_detonator_beep");
@@ -85,6 +89,10 @@ public class ModSounds {
     public static final Supplier<SoundEvent> DROID_POPPER_ACTIVATE = registerSoundEvent("droid_popper_activate");
     public static final Supplier<SoundEvent> DROID_POPPER_EXPLOSION = registerSoundEvent("droid_popper_explosion");
     public static final Supplier<SoundEvent> DROID_POPPER_IMPACT = registerSoundEvent("droid_popper_impact");
+    public static final Supplier<SoundEvent> SHOCK_GRENADE_ACTIVATE = registerSoundEvent("shock_grenade_activate");
+    public static final Supplier<SoundEvent> SHOCK_GRENADE_BEEP = registerSoundEvent("shock_grenade_beep");
+    public static final Supplier<SoundEvent> SHOCK_GRENADE_EXPLOSION = registerSoundEvent("shock_grenade_explosion");
+    public static final Supplier<SoundEvent> SHOCK_GRENADE_IMPACT = registerSoundEvent("shock_grenade_impact");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_EQUIP = registerSoundEvent("explosive_knife_equip");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_UNEQUIP = registerSoundEvent("explosive_knife_unequip");
     public static final Supplier<SoundEvent> EXPLOSIVE_KNIFE_BEEP = registerSoundEvent("explosive_knife_beep");

@@ -5,6 +5,8 @@ import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -159,6 +161,7 @@ public final class GrenadeEffects {
         }
 
         return context -> {
+            disarmNearbyExplosives(context.level(), context.position(), radius);
             PacketDistributor.sendToPlayersNear(
                     context.level(), null,
                     context.position().x, context.position().y, context.position().z,
@@ -195,6 +198,21 @@ public final class GrenadeEffects {
                 LightningShockEffect.apply(target, profile.durationTicks());
             }
         }
+    }
+
+    public static void disarmNearbyExplosives(ServerLevel level, Vec3 position, double radius) {
+        AABB bounds = new AABB(position, position).inflate(radius);
+        double radiusSquared = radius * radius;
+        for (GrenadeEntity grenade : level.getEntitiesOfClass(GrenadeEntity.class, bounds)) {
+            if (grenade.distanceToSqr(position) <= radiusSquared) {
+                grenade.disarmAndDrop();
+            }
+        }
+    }
+
+    public static GrenadeEffect shockField() {
+        return context -> context.grenade().beginShockField(Objects.requireNonNull(
+                context.definition().shockFieldProfile(), "Shock grenades require a shock field profile."));
     }
 
     public static GrenadeEffect flash(GrenadeFlashProfile profile, GrenadeSound detonationSound) {
@@ -393,7 +411,7 @@ public final class GrenadeEffects {
                 spec.blockBreakRadius(),
                 spec.blockInteraction(),
                 spec.causesFire(),
-                additionalDamage);
+                additionalDamage, SoundEvents.EMPTY);
 
         if (spec.playsDetonationSound()) {
             spec.detonationSound().play(context.level(), context.position());

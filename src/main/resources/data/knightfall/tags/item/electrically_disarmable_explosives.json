@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "knightfall:baradium_bomb",
+    "knightfall:detonite_charge",
+    "knightfall:grav_charge",
+    "knightfall:pyro_denton_explosive",
+    "knightfall:magnetic_thermal_detonator"
+  ]
+}

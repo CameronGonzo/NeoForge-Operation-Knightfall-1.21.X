@@ -7,7 +7,10 @@
     "LivingEntityMixin",
     "MeleeAttackGoalMixin"
   ],
-  "client": ["LivingEntityRendererMixin"],
+  "client": [
+    "LivingEntityRendererMixin",
+    "SplashManagerMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

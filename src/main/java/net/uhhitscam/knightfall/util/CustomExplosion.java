@@ -4,6 +4,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,6 +52,15 @@ public class CustomExplosion {
                               double entityRadius, float damage, double knockback, boolean forceKnockback,
                               float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire,
                               ToDoubleFunction<LivingEntity> additionalDamage) {
+
+        create(sourceEntity, causingEntity, location, entityRadius, damage, knockback, forceKnockback,
+                blockBreakRadius, interaction, causesFire, additionalDamage, SoundEvents.GENERIC_EXPLODE.value());
+    }
+
+    public static void create(Entity sourceEntity, @Nullable Entity causingEntity, Vec3 location,
+                              double entityRadius, float damage, double knockback, boolean forceKnockback,
+                              float blockBreakRadius, Level.ExplosionInteraction interaction, boolean causesFire,
+                              ToDoubleFunction<LivingEntity> additionalDamage, SoundEvent terrainSound) {
 
         if (sourceEntity.level().isClientSide()) return;
         Objects.requireNonNull(additionalDamage, "Additional explosion damage function cannot be null.");
@@ -128,7 +138,7 @@ public class CustomExplosion {
                     ParticleTypes.EXPLOSION,
                     ParticleTypes.EXPLOSION_EMITTER,
                     net.minecraft.util.random.WeightedList.of(),
-                    BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.GENERIC_EXPLODE.value())
+                    BuiltInRegistries.SOUND_EVENT.wrapAsHolder(terrainSound)
             );
         }
     }

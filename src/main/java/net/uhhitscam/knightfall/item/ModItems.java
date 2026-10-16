@@ -33,9 +33,11 @@ import net.uhhitscam.knightfall.item.custom.grenade.GrenadeImplosionProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeIonArcProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeIonProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeLightningShockProfile;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadeShockFieldProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeItem;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeParticleBurst;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadePhysics;
+import net.uhhitscam.knightfall.item.custom.grenade.GrenadePressureProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeProximityProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeRemoteProfile;
 import net.uhhitscam.knightfall.item.custom.grenade.GrenadeSound;
@@ -184,7 +186,7 @@ public class ModItems {
     public static final DeferredItem<Item> FLECHETTE_TOXIC_SPREAD_CANISTER = ITEMS.registerItem("flechette_toxic_spread_canister",
             properties -> new FlechetteCanisterItem(properties, AmmoType.FLECHETTE_TOXIC_SPREAD_CAN), () -> new Item.Properties().stacksTo(16));
 
-    // Grenades
+    // Grenade items
     public static final DeferredItem<Item> THERMAL_DETONATOR = registerGrenade(
             GrenadeDefinition.builder("thermal_detonator")
                     .fuseTicks(120)
@@ -203,7 +205,7 @@ public class ModItems {
                             20, 5, 20))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             4.0, 8.0F,
-                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                            new GrenadeSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.0F, 1.0F))
                                     .knockback(2)
                                     .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
@@ -230,7 +232,7 @@ public class ModItems {
                             20, 5, 100))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             4.0, 8.0F,
-                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                            new GrenadeSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.0F, 1.0F))
                                     .knockback(0.6)
                                     .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
@@ -258,7 +260,7 @@ public class ModItems {
                             12, 12, 0))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             4.0, 8.0F,
-                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                            new GrenadeSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.0F, 1.0F))
                                     .knockback(0.6)
                                     .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
@@ -423,6 +425,68 @@ public class ModItems {
                             new GrenadeLightningShockProfile(60)))
                     .build()
     );
+    public static final DeferredItem<Item> SHOCK_GRENADE = registerGrenade(
+            GrenadeDefinition.builder("shock_grenade")
+                    .itemProperties(new Item.Properties().stacksTo(1))
+                    .fuseTicks(60)
+                    .trigger(GrenadeTrigger.FUSE_AFTER_THROW)
+                    .throwVelocity(1.5F)
+                    .minimumThrowVelocity(0.3F)
+                    .throwChargeTicks(10)
+                    .throwInaccuracy(1.0F)
+                    .cooldownTicks(10)
+                    .physics(new GrenadePhysics(0.04, 0.3, 0.55, 0.01))
+                    .hitbox(0.53F, 0.22F)
+                    .fuseSoundMode(GrenadeFuseSoundMode.ONCE_BEFORE_DETONATION)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> ModSounds.EQUIPMENT_THROW.get(), SoundSource.PLAYERS, 0.5F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.SHOCK_GRENADE_IMPACT.get(), SoundSource.BLOCKS, 0.4F, 1.2F),
+                            new GrenadeSound(() -> ModSounds.SHOCK_GRENADE_ACTIVATE.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            new GrenadeSound(() -> ModSounds.SHOCK_GRENADE_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
+                            // One 0.95-second beep leads into detonation (19 ticks remaining).
+                            60, 60, 19))
+                    .shockFieldProfile(new GrenadeShockFieldProfile(
+                            // Radius, field duration, shock linger time, arc interval (times in ticks).
+                            5.0, 160, 20, 1,
+                            // One new arc each tick; eight-tick lifetimes overlap instead of flashing in batches.
+                            new GrenadeIonArcProfile(1, 8, 4, 6, 1.0F, 0.6F,
+                                    ColorUtil.rgb(130, 220, 255), 0.035F, 0.11F),
+                            new GrenadeSound(() -> ModSounds.SHOCK_GRENADE_EXPLOSION.get(),
+                                    SoundSource.BLOCKS, 1.0F, 1.0F)))
+                    .effect(GrenadeEffects.shockField())
+                    .build()
+    );
+    public static final DeferredItem<Item> PRESSURE_MINE = registerGrenade(
+            GrenadeDefinition.builder("pressure_mine")
+                    .itemProperties(new Item.Properties().stacksTo(16))
+                    // Pressure mines do not count down; this value is unused by the pressure trigger.
+                    .fuseTicks(20)
+                    .trigger(GrenadeTrigger.PRESSURE_RELEASE)
+                    .deployment(GrenadeDeployment.PLACE)
+                    .cooldownTicks(10)
+                    .hitbox(0.72F, 0.065F, 0.065F)
+                    .surfaceAttachmentOffset(0.01)
+                    // Six distinct dropped item types substitute for a living entity's weight.
+                    .pressureProfile(new GrenadePressureProfile(6, 0.25))
+                    .fuseSoundMode(GrenadeFuseSoundMode.NONE)
+                    .audio(new GrenadeAudioProfile(
+                            new GrenadeSound(() -> SoundEvents.EMPTY, SoundSource.BLOCKS, 0.0F, 1.0F),
+                            new GrenadeSound(ModSounds.PRESSURE_MINE_IMPACT, SoundSource.BLOCKS, 0.8F, 1.0F),
+                            new GrenadeSound(ModSounds.PRESSURE_MINE_ACTIVATE, SoundSource.BLOCKS, 0.8F, 1.0F),
+                            new GrenadeSound(() -> SoundEvents.EMPTY, SoundSource.BLOCKS, 0.0F, 1.0F),
+                            20, 20, 0))
+                    .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
+                                            5.0, 14.0F,
+                                            new GrenadeSound(ModSounds.PRESSURE_MINE_EXPLOSION, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                    .knockback(0.8)
+                                    .terrain(3.0F, Level.ExplosionInteraction.BLOCK, false)
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
+                                            1, 0.0, 0.0, 0.0, 0.0))
+                                    .particle(new GrenadeParticleBurst(() -> ParticleTypes.SMOKE,
+                                            24, 0.8, 0.5, 0.8, 0.04))
+                                    .build()))
+                    .build()
+    );
     public static final DeferredItem<Item> BARADIUM_THERMAL_DETONATOR = registerGrenade(
             GrenadeDefinition.builder("baradium_thermal_detonator")
                     .itemProperties(new Item.Properties().stacksTo(1))
@@ -443,7 +507,7 @@ public class ModItems {
                             120, 120, 0))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             7.0, 16.0F,
-                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.2F, 0.9F))
+                                            new GrenadeSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.2F, 0.9F))
                                     .knockback(0.8)
                                     .terrain(7.0F, Level.ExplosionInteraction.BLOCK, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
@@ -470,7 +534,7 @@ public class ModItems {
                                     .toList()))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             4.0, 8.0F,
-                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                            new GrenadeSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.0F, 1.0F))
                                     .knockback(0.6)
                                     .terrain(4.0F, Level.ExplosionInteraction.BLOCK, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
@@ -535,7 +599,7 @@ public class ModItems {
                             20, 20, 0))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             4.0, 8.0F,
-                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                            new GrenadeSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.0F, 1.0F))
                                     .knockback(0.6)
                                     .terrain(0.0F, Level.ExplosionInteraction.NONE, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
@@ -566,7 +630,7 @@ public class ModItems {
                             20, 20, 0))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             7.0, 16.0F,
-                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.2F, 0.9F))
+                                            new GrenadeSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.2F, 0.9F))
                                     .knockback(0.8)
                                     .terrain(7.0F, Level.ExplosionInteraction.BLOCK, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
@@ -608,7 +672,7 @@ public class ModItems {
                             48, 48, 0))
                     .effect(GrenadeEffects.explosion(GrenadeExplosionSpec.builder(
                                             4.0, 8.0F,
-                                            new GrenadeSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F))
+                                            new GrenadeSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.0F, 1.0F))
                                     .knockback(0.6)
                                     .terrain(4.0F, Level.ExplosionInteraction.BLOCK, false)
                                     .particle(new GrenadeParticleBurst(() -> ParticleTypes.EXPLOSION_EMITTER,
@@ -915,7 +979,7 @@ public class ModItems {
                             10,
                             new MeleeWeaponSound(() -> ModSounds.EXPLOSIVE_KNIFE_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
                             new MeleeWeaponSound(() -> ModSounds.EXPLOSIVE_KNIFE_URGENT_BEEP.get(), SoundSource.NEUTRAL, 0.7F, 1.0F),
-                            new MeleeWeaponSound(SoundEvents.GENERIC_EXPLODE::value, SoundSource.BLOCKS, 1.0F, 1.0F),
+                            new MeleeWeaponSound(ModSounds.EQUIPMENT_EXPLOSION, SoundSource.BLOCKS, 1.0F, 1.0F),
                             4.0,
                             8.0F,
                             0.6,
