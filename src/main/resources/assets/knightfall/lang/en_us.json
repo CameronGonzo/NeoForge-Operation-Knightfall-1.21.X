@@ -1,4 +1,7 @@
 {
+  "item.knightfall.debug_blaster": "Debug Blaster",
+  "key.knightfall.debug_blaster_editor": "Open Debug Blaster Editor",
+  "tooltip.knightfall.debug_blaster": "Hold this blaster and press %s to edit its stats (Creative mode).",
   "item.knightfall.pressure_mine": "Pressure Mine",
   "sounds.knightfall.equipment_explosion": "Explosion",
   "sounds.knightfall.pressure_mine_activate": "Pressure Mine Arms",
@@ -7,6 +10,7 @@
   "effect.knightfall.lightning_shock": "Lightning Shock",
   "sounds.knightfall.dlt15_fire": "DLT-15 fires",
   "key.categories.knightfall": "Operation Knightfall",
+  "key.category.knightfall.knightfall": "Operation Knightfall",
   "key.knightfall.reload": "Reload Blaster",
   "key.knightfall.switch": "Switch Firing Mode",
 

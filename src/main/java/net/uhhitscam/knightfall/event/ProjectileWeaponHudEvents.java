@@ -1,8 +1,12 @@
 package net.uhhitscam.knightfall.event;
 
+import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -15,6 +19,13 @@ import net.uhhitscam.knightfall.util.WeaponAimRules;
 
 @EventBusSubscriber(modid = OperationKnightfall.MODID, value = Dist.CLIENT)
 public final class ProjectileWeaponHudEvents {
+    private static final int CROSSHAIR_SIZE = 15;
+    private static final int CROSSHAIR_TEXTURE_SIZE = 120;
+    private static final RenderPipeline SMOOTH_CROSSHAIR = RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
+            .withLocation(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "pipeline/smooth_crosshair"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "core/smooth_crosshair"))
+            .withColorTargetState(new ColorTargetState(BlendFunction.INVERT))
+            .build();
     private static final Identifier OVAL_THERMAL_SCOPE = Identifier.fromNamespaceAndPath(
             OperationKnightfall.MODID, "textures/gui/oval_long_red_scope_thermal.png"
     );
@@ -64,10 +75,11 @@ public final class ProjectileWeaponHudEvents {
     }
 
     private static void renderCrosshair(GuiGraphicsExtractor graphics, Identifier crosshair) {
-        int size = 25;
+        int size = CROSSHAIR_SIZE;
         int x = (graphics.guiWidth() - size) / 2;
         int y = (graphics.guiHeight() - size) / 2;
 
-        graphics.blit(net.minecraft.client.renderer.RenderPipelines.CROSSHAIR, crosshair, x, y, 0, 0, size, size, size, size);
+        graphics.blit(SMOOTH_CROSSHAIR, crosshair, x, y, 0, 0, size, size,
+                CROSSHAIR_TEXTURE_SIZE, CROSSHAIR_TEXTURE_SIZE, CROSSHAIR_TEXTURE_SIZE, CROSSHAIR_TEXTURE_SIZE);
     }
 }

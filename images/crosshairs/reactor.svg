@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 31 31">
+  <title>reactor crosshair</title>
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2">
+    <path d="M30 15.5 L24 15.5 M25.753048 25.753048 L21.510408 21.510408 M15.5 30 L15.5 24 M5.246952 25.753048 L9.489592 21.510408 M1 15.5 L7 15.5 M5.246952 5.246952 L9.489592 9.489592 M15.5 1 L15.5 7 M25.753048 5.246952 L21.510408 9.489592"/><circle cx="15.5" cy="15.5" r="1.35" fill="white" stroke="none"/>
+  </g>
+</svg>

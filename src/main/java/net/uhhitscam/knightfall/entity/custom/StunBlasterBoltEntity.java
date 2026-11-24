@@ -1,5 +1,12 @@
 package net.uhhitscam.knightfall.entity.custom;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.uhhitscam.knightfall.item.custom.projectile.DebugBlasterSettings;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
@@ -17,6 +24,36 @@ import net.uhhitscam.knightfall.particle.ModParticles;
 public class StunBlasterBoltEntity extends Snowball {
     private static final float BOLT_SPEED = 1.5F;
     private static final int MAX_LIFETIME_TICKS = 17;
+    private static final EntityDataAccessor<Float> DEBUG_SPEED =
+            SynchedEntityData.defineId(StunBlasterBoltEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> DEBUG_GRAVITY =
+            SynchedEntityData.defineId(StunBlasterBoltEntity.class, EntityDataSerializers.FLOAT);
+    private DebugBlasterSettings debugSettings;
+
+    public void configureDebug(DebugBlasterSettings settings) {
+        this.debugSettings = settings;
+        this.entityData.set(DEBUG_SPEED, settings.decimal("projectile_speed"));
+        this.entityData.set(DEBUG_GRAVITY, settings.decimal("projectile_gravity"));
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DEBUG_SPEED, -1.0F);
+        builder.define(DEBUG_GRAVITY, -1.0F);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(ValueOutput tag) {
+        super.addAdditionalSaveData(tag);
+        if (debugSettings != null) tag.store("DebugSettings", DebugBlasterSettings.CODEC, debugSettings);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(ValueInput tag) {
+        super.readAdditionalSaveData(tag);
+        tag.read("DebugSettings", DebugBlasterSettings.CODEC).ifPresent(this::configureDebug);
+    }
 
     public StunBlasterBoltEntity(EntityType<? extends StunBlasterBoltEntity> entityType, Level level) {
         super(entityType, level);
@@ -33,7 +70,7 @@ public class StunBlasterBoltEntity extends Snowball {
 
         if (!this.level().isClientSide() && result.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.addEffect(
-                    new MobEffectInstance(ModEffects.STUN_EFFECT, StunEffect.DURATION_TICKS),
+                    new MobEffectInstance(ModEffects.STUN_EFFECT, debugSettings == null ? StunEffect.DURATION_TICKS : debugSettings.integer("stun_duration")),
                     this.getOwner()
             );
         }
@@ -75,10 +112,11 @@ public class StunBlasterBoltEntity extends Snowball {
             this.setXRot((float) pitch);
             this.yRotO = this.getYRot();
             this.xRotO = this.getXRot();
-            this.setDeltaMovement(velocity.normalize().scale(BOLT_SPEED));
+            float debugSpeed = this.entityData.get(DEBUG_SPEED);
+            this.setDeltaMovement(velocity.normalize().scale(debugSpeed > 0 ? debugSpeed : BOLT_SPEED));
         }
 
-        if (!this.level().isClientSide() && this.tickCount > MAX_LIFETIME_TICKS) {
+        if (!this.level().isClientSide() && this.tickCount > (debugSettings == null ? MAX_LIFETIME_TICKS : debugSettings.integer("stun_lifetime"))) {
             this.discard();
         }
     }
@@ -90,7 +128,8 @@ public class StunBlasterBoltEntity extends Snowball {
 
     @Override
     protected double getDefaultGravity() {
-        return 0.002F;
+        float debugGravity = this.entityData.get(DEBUG_GRAVITY);
+        return debugGravity >= 0 ? debugGravity : 0.002F;
     }
 
     public AABB getBoundingBoxForCulling() {

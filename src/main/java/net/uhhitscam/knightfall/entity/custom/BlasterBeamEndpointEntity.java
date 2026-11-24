@@ -123,7 +123,7 @@ public class BlasterBeamEndpointEntity extends Entity {
             return;
         }
 
-        ammoDrainAccumulator += (4.0F / 20.0F);
+        ammoDrainAccumulator += weapon.debugValue(held, "beam_ammo_per_second", 4.0F) / 20.0F;
         int toConsume = (int) ammoDrainAccumulator;
         if (toConsume > 0) {
             ammoDrainAccumulator -= toConsume;
@@ -146,7 +146,7 @@ public class BlasterBeamEndpointEntity extends Entity {
         Vec3 end = hit.endPosition();
         this.setPos(end.x, end.y, end.z);
 
-        if (++damageTicker >= 5) {
+        if (++damageTicker >= weapon.debugValue(held, "beam_pulse_ticks", 5)) {
             damageTicker = 0;
 
             LivingEntity target = hit.livingEntity();

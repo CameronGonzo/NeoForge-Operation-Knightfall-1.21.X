@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 31 31">
+  <title>quad dot crosshair</title>
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2">
+    <circle cx="26.5" cy="15.5" r="1.5" fill="white" stroke="none"/><circle cx="15.5" cy="26.5" r="1.5" fill="white" stroke="none"/><circle cx="4.5" cy="15.5" r="1.5" fill="white" stroke="none"/><circle cx="15.5" cy="4.5" r="1.5" fill="white" stroke="none"/><circle cx="15.5" cy="15.5" r="1.35" fill="white" stroke="none"/>
+  </g>
+</svg>

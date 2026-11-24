@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 31 31">
+  <title>circle large dash crosshair</title>
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2">
+    <path d="M25.863 8.5101 A12.5 12.5 0 0 1 25.863 22.4899"/><path d="M22.4899 25.863 A12.5 12.5 0 0 1 8.5101 25.863"/><path d="M5.137 22.4899 A12.5 12.5 0 0 1 5.137 8.5101"/><path d="M8.5101 5.137 A12.5 12.5 0 0 1 22.4899 5.137"/><path d="M21.864 21.864 L27.5208 27.5208" stroke-width="2"/><path d="M9.136 21.864 L3.4792 27.5208" stroke-width="2"/><path d="M9.136 9.136 L3.4792 3.4792" stroke-width="2"/><path d="M21.864 9.136 L27.5208 3.4792" stroke-width="2"/>
+  </g>
+</svg>

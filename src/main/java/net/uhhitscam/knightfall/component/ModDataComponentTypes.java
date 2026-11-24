@@ -1,5 +1,7 @@
 package net.uhhitscam.knightfall.component;
 
+import net.uhhitscam.knightfall.item.custom.projectile.DebugBlasterSettings;
+
 import net.uhhitscam.knightfall.OperationKnightfall;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -12,6 +14,12 @@ import java.util.function.UnaryOperator;
 public class ModDataComponentTypes {
     public static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES =
             DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, OperationKnightfall.MODID);
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<DebugBlasterSettings>> DEBUG_BLASTER_SETTINGS =
+            register("debug_blaster_settings", builder -> builder
+                    .persistent(DebugBlasterSettings.CODEC)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.fromCodec(
+                            DebugBlasterSettings.CODEC)));
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> MELEE_ALTERNATE_FORM =
             register("melee_alternate_form", builder -> builder.persistent(com.mojang.serialization.Codec.BOOL)

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 31 31">
+  <title>circle concentric crosshair</title>
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2">
+    <path d="M9.7947 27.7352 A13.5 13.5 0 1 1 21.2053 27.7352"/><path d="M12.753 21.391 A6.5 6.5 0 1 1 18.247 21.391"/>
+  </g>
+</svg>

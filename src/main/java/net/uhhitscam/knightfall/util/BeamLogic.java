@@ -14,12 +14,12 @@ public final class BeamLogic {
     public static void startOrUpdateBeam(ServerPlayer player, ProjectileItem weapon, ItemStack stack, boolean mainHand) {
         ServerLevel level = player.level();
 
-        BeamWeaponStats beamStats = weapon.getBeamStats();
+        BeamWeaponStats beamStats = weapon.getBeamStats(stack);
         if (beamStats == null) {
             return;
         }
 
-        double range = BlasterBeamEndpointEntity.DEFAULT_RANGE;
+        double range = weapon.debugValue(stack, "beam_range", (float) BlasterBeamEndpointEntity.DEFAULT_RANGE);
         float damage = beamStats.damagePerPulse();
 
         BlasterBeamEndpointEntity beam = findExisting(level, player, mainHand);

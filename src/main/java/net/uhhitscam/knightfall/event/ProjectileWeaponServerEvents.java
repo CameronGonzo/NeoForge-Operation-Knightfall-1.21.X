@@ -1,5 +1,6 @@
 package net.uhhitscam.knightfall.event;
 
+
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -26,7 +27,6 @@ import java.util.UUID;
 @EventBusSubscriber(modid = OperationKnightfall.MODID)
 public final class ProjectileWeaponServerEvents {
     private static final int BURST_SHOT_COUNT = 3;
-    private static final int BURST_FOLLOWUP_DELAY_TICKS = 2;
     private static final Identifier HELD_WEAPON_SPEED_MODIFIER_ID =
             Identifier.fromNamespaceAndPath(OperationKnightfall.MODID, "held_projectile_weapon_speed");
     private static final Map<UUID, PlayerWeaponState> PLAYER_STATES = new HashMap<>();
@@ -125,7 +125,7 @@ public final class ProjectileWeaponServerEvents {
     private static void startBurst(ServerPlayer player, HandState state, ProjectileItem weapon, boolean mainHand) {
         if (weapon.fireServer(player, state.stack, mainHand, false)) {
             state.burstShotsFired = 1;
-            state.nextBurstTick = player.level().getGameTime() + weapon.getBurstRate();
+            state.nextBurstTick = player.level().getGameTime() + Math.max(1, weapon.getBurstRate(state.stack));
         }
     }
 
@@ -170,21 +170,21 @@ public final class ProjectileWeaponServerEvents {
     }
 
     private static void tickBurst(ServerPlayer player, HandState state, ProjectileItem weapon, boolean mainHand, long gameTime) {
-        if (state.burstShotsFired <= 0 || state.burstShotsFired >= BURST_SHOT_COUNT || gameTime < state.nextBurstTick) {
+        if (state.burstShotsFired <= 0 || state.burstShotsFired >= weapon.getBurstShotCount(state.stack) || gameTime < state.nextBurstTick) {
             return;
         }
 
         if (!weapon.fireServer(player, state.stack, mainHand, true)) {
-            state.burstShotsFired = BURST_SHOT_COUNT;
+            state.burstShotsFired = weapon.getBurstShotCount(state.stack);
             return;
         }
 
         state.burstShotsFired++;
-        state.nextBurstTick = gameTime + BURST_FOLLOWUP_DELAY_TICKS;
+        state.nextBurstTick = gameTime + Math.max(1, weapon.getBurstRate(state.stack));
     }
 
     private static void tickChargeAndShoot(ServerPlayer player, HandState state, ProjectileItem weapon, boolean mainHand, long gameTime) {
-        if (gameTime - state.pressTime < weapon.getChargeThreshold()) {
+        if (gameTime - state.pressTime < weapon.getChargeThreshold(state.stack)) {
             return;
         }
 
@@ -250,7 +250,7 @@ public final class ProjectileWeaponServerEvents {
 
         if (fireOnRelease && state.firingMode == FiringMode.CHARGENSHOOTONRELEASE) {
             ProjectileItem weapon = validateActiveInput(player, state, mainHand);
-            if (weapon != null && player.level().getGameTime() - state.pressTime >= weapon.getChargeThreshold()) {
+            if (weapon != null && player.level().getGameTime() - state.pressTime >= weapon.getChargeThreshold(state.stack)) {
                 weapon.fireServer(player, state.stack, mainHand, false);
             }
         }
@@ -281,6 +281,16 @@ public final class ProjectileWeaponServerEvents {
             weapon.startCooldown(player, currentStack, WeaponCooldownAction.EQUIP);
         }
         snapshot.update(currentStack, currentSlot);
+    }
+
+    public static void cancelForEditing(ServerPlayer player) {
+        PlayerWeaponState state = PLAYER_STATES.get(player.getUUID());
+        if (state != null) {
+            stopInput(player, state.mainHand, true, false);
+            stopInput(player, state.offHand, false, false);
+        }
+        BeamLogic.stopBeam(player, true);
+        BeamLogic.stopBeam(player, false);
     }
 
     private static boolean canAct(ServerPlayer player) {
@@ -320,7 +330,7 @@ public final class ProjectileWeaponServerEvents {
 
     private static double getHeldMovementSpeedMultiplier(ItemStack stack) {
         return stack.getItem() instanceof ProjectileItem weapon
-                ? weapon.getHeldMovementSpeedMultiplier()
+                ? weapon.getHeldMovementSpeedMultiplier(stack)
                 : 1.0;
     }
 
@@ -385,7 +395,7 @@ public final class ProjectileWeaponServerEvents {
         private boolean hasPendingBurst() {
             return firingMode == FiringMode.BURST
                     && burstShotsFired > 0
-                    && burstShotsFired < BURST_SHOT_COUNT;
+                    && burstShotsFired < (stack.getItem() instanceof ProjectileItem weapon ? weapon.getBurstShotCount(stack) : BURST_SHOT_COUNT);
         }
     }
 

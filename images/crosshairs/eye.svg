@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 31 31">
+  <title>eye crosshair</title>
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2">
+    <path d="M2 13 H10.5 C12 8.5 19 8.5 20.5 13 H29 M2 18 H10.5 C12 22.5 19 22.5 20.5 18 H29"/><circle cx="15.5" cy="15.5" r="1.35" fill="white" stroke="none"/>
+  </g>
+</svg>

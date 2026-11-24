@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 31 31">
+  <title>cross crosshair</title>
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2">
+    <path d="M20.5 15.5 L28.5 15.5" stroke-width="2"/><path d="M15.5 20.5 L15.5 28.5" stroke-width="2"/><path d="M10.5 15.5 L2.5 15.5" stroke-width="2"/><path d="M15.5 10.5 L15.5 2.5" stroke-width="2"/><circle cx="15.5" cy="15.5" r="1.35" fill="white" stroke="none"/>
+  </g>
+</svg>

@@ -1,5 +1,9 @@
 package net.uhhitscam.knightfall.entity.custom;
 
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.uhhitscam.knightfall.item.custom.projectile.DebugBlasterSettings;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -39,6 +43,17 @@ import java.util.function.Supplier;
 public class BlasterBoltEntity extends Snowball {
     private static final EntityDataAccessor<Integer> BOLT_TYPE =
             SynchedEntityData.defineId(BlasterBoltEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> DEBUG_SPEED =
+            SynchedEntityData.defineId(BlasterBoltEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> DEBUG_GRAVITY =
+            SynchedEntityData.defineId(BlasterBoltEntity.class, EntityDataSerializers.FLOAT);
+    private DebugBlasterSettings debugSettings;
+
+    public void configureDebug(DebugBlasterSettings settings) {
+        this.debugSettings = settings;
+        this.entityData.set(DEBUG_SPEED, settings.decimal("projectile_speed"));
+        this.entityData.set(DEBUG_GRAVITY, settings.decimal("projectile_gravity"));
+    }
 
     private float boltSpeed = 2.0F;
     private int blasterDamage;
@@ -89,6 +104,8 @@ public class BlasterBoltEntity extends Snowball {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(BOLT_TYPE, BoltType.TIBANNA.ordinal());
+        builder.define(DEBUG_SPEED, -1.0F);
+        builder.define(DEBUG_GRAVITY, -1.0F);
     }
 
     public BoltType getBoltType() {
@@ -155,7 +172,10 @@ public class BlasterBoltEntity extends Snowball {
 
         this.level().broadcastEntityEvent(this, (byte) 3);
         if (explosiveShot) {
-            CustomExplosion.create(this, result.getLocation(), 1.5, 3.5F, 0.25);
+            CustomExplosion.create(this, result.getLocation(),
+                    debugSettings == null ? 1.5 : debugSettings.number("explosion_radius"),
+                    debugSettings == null ? 3.5F : debugSettings.decimal("explosion_damage"),
+                    debugSettings == null ? 0.25 : debugSettings.number("explosion_knockback"));
         } else if (concussiveShot) {
             CustomExplosion.create(this, result.getLocation(), 1.5, 1.5F, 0.15);
 
@@ -268,16 +288,17 @@ public class BlasterBoltEntity extends Snowball {
             this.yRotO = this.getYRot();
             this.xRotO = this.getXRot();
 
-            this.setDeltaMovement(velocity.normalize().scale(this.boltSpeed));
+            float debugSpeed = this.entityData.get(DEBUG_SPEED);
+            this.setDeltaMovement(velocity.normalize().scale(debugSpeed > 0 ? debugSpeed : this.boltSpeed));
         }
 
-        if (!this.level().isClientSide() && this.tickCount > 50) {
+        if (!this.level().isClientSide() && this.tickCount > (debugSettings == null ? 50 : debugSettings.integer("projectile_lifetime"))) {
             this.discard();
         }
     }
 
     @Override
-    public void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         if (!meleeWeapon.isEmpty()) tag.store("MeleeWeapon", net.minecraft.world.item.ItemStack.CODEC, meleeWeapon);
         tag.putString("BoltType", getBoltType().name());
@@ -286,10 +307,11 @@ public class BlasterBoltEntity extends Snowball {
         tag.putString("WeaponClassification", this.classification.name());
         tag.putBoolean("ExplosiveShot", this.explosiveShot);
         tag.putBoolean("ConcussiveShot", this.concussiveShot);
+        if (debugSettings != null) tag.store("DebugSettings", DebugBlasterSettings.CODEC, debugSettings);
     }
 
     @Override
-    public void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         meleeWeapon = tag.read("MeleeWeapon", net.minecraft.world.item.ItemStack.CODEC).orElse(net.minecraft.world.item.ItemStack.EMPTY);
         this.setBoltType(BoltType.fromName(tag.getStringOr("BoltType", "")));
@@ -310,6 +332,7 @@ public class BlasterBoltEntity extends Snowball {
 
         this.explosiveShot = tag.getBooleanOr("ExplosiveShot", false);
         this.concussiveShot = tag.getBooleanOr("ConcussiveShot", false);
+        tag.read("DebugSettings", DebugBlasterSettings.CODEC).ifPresent(this::configureDebug);
     }
 
     @Override
@@ -319,7 +342,8 @@ public class BlasterBoltEntity extends Snowball {
 
     @Override
     protected double getDefaultGravity() {
-        return 0.002F;
+        float debugGravity = this.entityData.get(DEBUG_GRAVITY);
+        return debugGravity >= 0 ? debugGravity : 0.002F;
     }
 
     public AABB getBoundingBoxForCulling() {

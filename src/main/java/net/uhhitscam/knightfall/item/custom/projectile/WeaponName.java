@@ -1,6 +1,7 @@
 package net.uhhitscam.knightfall.item.custom.projectile;
 
 public enum WeaponName {
+    DEBUG_BLASTER,
     _22T4,
     _62AUG2_HUNTING_RIFLE,
     _84U_HUNTING_RIFLE,

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 31 31">
+  <title>sextuple dash crosshair</title>
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2">
+    <path d="M15.5 7 L15.5 1" stroke-width="2"/><path d="M22.8612 11.25 L28.0574 8.25" stroke-width="2"/><path d="M22.8612 19.75 L28.0574 22.75" stroke-width="2"/><path d="M15.5 24 L15.5 30" stroke-width="2"/><path d="M8.1388 19.75 L2.9426 22.75" stroke-width="2"/><path d="M8.1388 11.25 L2.9426 8.25" stroke-width="2"/><circle cx="15.5" cy="15.5" r="1.35" fill="white" stroke="none"/>
+  </g>
+</svg>

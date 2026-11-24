@@ -1,5 +1,9 @@
 package net.uhhitscam.knightfall.util;
 
+import net.uhhitscam.knightfall.item.custom.projectile.DebugBlasterItem;
+import net.uhhitscam.knightfall.item.custom.projectile.DebugBlasterSettings;
+import net.uhhitscam.knightfall.network.SSDebugBlasterEditorPacket;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -37,6 +41,9 @@ public final class KeyBinding {
     );
 
     private static boolean reloadKeyHeld;
+    public static final KeyMapping DEBUG_BLASTER_EDITOR_KEY = new KeyMapping(
+            "key.knightfall.debug_blaster_editor", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_F8), CATEGORY);
     private static boolean unloadTriggered;
     private static int reloadKeyHoldTicks;
 
@@ -54,6 +61,7 @@ public final class KeyBinding {
         event.registerCategory(CATEGORY);
         event.register(RELOAD_KEY);
         event.register(SWITCH_FIRING_MODE_KEY);
+        event.register(DEBUG_BLASTER_EDITOR_KEY);
     }
 
     private static void onClientTick(ClientTickEvent.Post event) {
@@ -64,6 +72,24 @@ public final class KeyBinding {
             return;
         }
 
+        if (DEBUG_BLASTER_EDITOR_KEY.consumeClick()) {
+            if (player.isCreative()) {
+                boolean mainHand = player.getMainHandItem().getItem() instanceof DebugBlasterItem;
+                boolean offHand = player.getOffhandItem().getItem() instanceof DebugBlasterItem;
+                if (mainHand || offHand) {
+                    PayloadRegister.sendToServer(new SSDebugBlasterEditorPacket(
+                            SSDebugBlasterEditorPacket.OPEN, mainHand, 0,
+                            DebugBlasterSettings.DEFAULT));
+                    ModClientEvents.stopFiring(true);
+                    ModClientEvents.stopFiring(false);
+                } else {
+                    player.sendSystemMessage(net.minecraft.network.chat.Component.literal("Hold a Debug Blaster to open its editor."));
+                }
+            } else {
+                player.sendSystemMessage(net.minecraft.network.chat.Component.literal("The Debug Blaster editor requires Creative mode."));
+            }
+            return;
+        }
         handleReloadKey(player);
         if (SWITCH_FIRING_MODE_KEY.consumeClick()) {
             sendActionForHeldWeapons(player, WeaponAction.SWITCH_MODE);
@@ -102,7 +128,7 @@ public final class KeyBinding {
         if (!(stack.getItem() instanceof ProjectileItem weapon)) {
             return;
         }
-        if (action == WeaponAction.SWITCH_MODE && weapon.getFiringModes().size() <= 1) {
+        if (action == WeaponAction.SWITCH_MODE && weapon.getFiringModes(stack).size() <= 1) {
             return;
         }
 

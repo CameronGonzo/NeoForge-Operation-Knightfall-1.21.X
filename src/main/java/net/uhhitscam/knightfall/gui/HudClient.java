@@ -58,15 +58,15 @@ public class HudClient {
 
         if (player.getOffhandItem().getItem() instanceof ProjectileItem offhandBlasterItem) {
             int offhandAmmo = offhandBlasterItem.getAmmo(player.getOffhandItem());
-            int offhandMaxAmmo = offhandBlasterItem.getMaxAmmo();
+            int offhandMaxAmmo = offhandBlasterItem.getMaxAmmo(player.getOffhandItem());
             int offhandBlasterAmmoPercent = (offhandMaxAmmo > 0) ? (int) ((double) offhandAmmo / offhandMaxAmmo * 100) : 0;
 
             Component offhandAmmoComponent = Component.literal(String.format("Ammo: %d%%", offhandBlasterAmmoPercent));
             text(guiGraphics, textRenderer, offhandAmmoComponent, guiMidWidth - 180, guiHeight - 14, WHITE, OUTLINE_COLOR);
 
-            if (offhandBlasterItem.usesOverheat()) {
+            if (offhandBlasterItem.usesOverheat(player.getOffhandItem())) {
                 int heat = offhandBlasterItem.getOverheat(player.getOffhandItem(), level);
-                int maxHeat = offhandBlasterItem.getMaxOverheat();
+                int maxHeat = offhandBlasterItem.getMaxOverheat(player.getOffhandItem());
                 int heatPercent = (int) ((double) heat / maxHeat * 100);
                 boolean overheated = heat >= maxHeat;
                 Component heatComponent = Component.literal(String.format(
@@ -101,15 +101,15 @@ public class HudClient {
 
         if (player.getMainHandItem().getItem() instanceof ProjectileItem mainHandBlasterItem) {
             int mainHandAmmo = mainHandBlasterItem.getAmmo(player.getMainHandItem());
-            int mainHandMaxAmmo = mainHandBlasterItem.getMaxAmmo();
+            int mainHandMaxAmmo = mainHandBlasterItem.getMaxAmmo(player.getMainHandItem());
             int mainHandBlasterAmmoPercent = (mainHandMaxAmmo > 0) ? (int) ((double) mainHandAmmo / mainHandMaxAmmo * 100) : 0;
 
             Component mainHandAmmoComponent = Component.literal(String.format("Ammo: %d%%", mainHandBlasterAmmoPercent));
             text(guiGraphics, textRenderer, mainHandAmmoComponent, guiMidWidth + 115, guiHeight - 14, WHITE, OUTLINE_COLOR);
 
-            if (mainHandBlasterItem.usesOverheat()) {
+            if (mainHandBlasterItem.usesOverheat(player.getMainHandItem())) {
                 int heat = mainHandBlasterItem.getOverheat(player.getMainHandItem(), level);
-                int maxHeat = mainHandBlasterItem.getMaxOverheat();
+                int maxHeat = mainHandBlasterItem.getMaxOverheat(player.getMainHandItem());
                 int heatPercent = (int) ((double) heat / maxHeat * 100);
                 boolean overheated = heat >= maxHeat;
                 Component heatComponent = Component.literal(String.format(

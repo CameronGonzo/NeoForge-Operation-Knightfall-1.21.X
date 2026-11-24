@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 31 31">
+  <title>angle brackets square crosshair</title>
+  <g fill="none" stroke="white" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2">
+    <path d="M5 11.5 L1.5 15.5 L5 19.5 M26 11.5 L29.5 15.5 L26 19.5 M15.5 9 L22 15.5 L15.5 22 L9 15.5 Z"/>
+  </g>
+</svg>

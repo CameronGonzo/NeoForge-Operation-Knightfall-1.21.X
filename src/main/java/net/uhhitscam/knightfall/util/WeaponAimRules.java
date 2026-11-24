@@ -46,9 +46,9 @@ public final class WeaponAimRules {
         return isProjectileWeapon(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
     }
 
-    public static float adjustInaccuracy(Player player, ProjectileItem weapon, float inaccuracy) {
+    public static float adjustInaccuracy(Player player, ProjectileItem weapon, ItemStack stack, float inaccuracy) {
         if (isAiming(player)) {
-            return inaccuracy * AIMED_SPREAD_MULTIPLIER;
+            return inaccuracy * weapon.debugValue(stack, "aim_spread_multiplier", AIMED_SPREAD_MULTIPLIER);
         }
 
         if (!isDualWielding(player)) {
@@ -56,14 +56,14 @@ public final class WeaponAimRules {
         }
 
         return Math.max(
-                inaccuracy * weapon.getDualWieldInaccuracyMultiplier(),
-                inaccuracy + weapon.getDualWieldInaccuracyPenalty()
+                inaccuracy * weapon.getDualWieldInaccuracyMultiplier(stack),
+                inaccuracy + weapon.getDualWieldInaccuracyPenalty(stack)
         );
     }
 
-    public static float adjustRecoil(Player player, ProjectileItem weapon, float recoil) {
+    public static float adjustRecoil(Player player, ProjectileItem weapon, ItemStack stack, float recoil) {
         if (isAiming(player)) {
-            return recoil * AIMED_RECOIL_MULTIPLIER;
+            return recoil * weapon.debugValue(stack, "aim_recoil_multiplier", AIMED_RECOIL_MULTIPLIER);
         }
 
         if (!isDualWielding(player)) {
@@ -71,8 +71,8 @@ public final class WeaponAimRules {
         }
 
         return Math.max(
-                recoil * weapon.getDualWieldRecoilMultiplier(),
-                recoil + weapon.getDualWieldRecoilPenalty()
+                recoil * weapon.getDualWieldRecoilMultiplier(stack),
+                recoil + weapon.getDualWieldRecoilPenalty(stack)
         );
     }
 
@@ -102,7 +102,7 @@ public final class WeaponAimRules {
     @Nullable
     public static Identifier getCrosshairTexture(Player player) {
         WeaponSelection selection = getUiWeapon(player);
-        return selection == null ? null : selection.weapon().getUI().crosshair().texture();
+        return selection == null ? null : selection.weapon().getUI(selection.stack()).crosshair().texture();
     }
 
     @Nullable
@@ -117,7 +117,7 @@ public final class WeaponAimRules {
         }
 
         FiringMode firingMode = selection.weapon().getFiringMode(selection.stack());
-        ScopeTexture scope = selection.weapon().getUI().scope(firingMode);
+        ScopeTexture scope = selection.weapon().getUI(selection.stack()).scope(firingMode);
         return scope == null ? null : scope.texture();
     }
 
@@ -125,7 +125,7 @@ public final class WeaponAimRules {
         if (isAimingHand(player, mainHand)) {
             ItemStack stack = mainHand ? player.getMainHandItem() : player.getOffhandItem();
             if (stack.getItem() instanceof ProjectileItem weapon
-                    && weapon.getUI().scope(weapon.getFiringMode(stack)) != null) {
+                    && weapon.getUI(stack).scope(weapon.getFiringMode(stack)) != null) {
                 return new MuzzleOffset(0.0, 0.0);
             }
         }
@@ -168,7 +168,7 @@ public final class WeaponAimRules {
 
         ItemStack stack = mainHand ? player.getMainHandItem() : player.getOffhandItem();
         return stack.getItem() instanceof ProjectileItem weapon
-                && weapon.getUI().scope(weapon.getFiringMode(stack)) != null;
+                && weapon.getUI(stack).scope(weapon.getFiringMode(stack)) != null;
     }
 
     private static Vec3 getMuzzlePosition(
@@ -195,7 +195,7 @@ public final class WeaponAimRules {
 
     private static float getZoomFactor(WeaponSelection selection) {
         FiringMode firingMode = selection.weapon().getFiringMode(selection.stack());
-        return selection.weapon().getUI().zoom(firingMode);
+        return selection.weapon().getUI(selection.stack()).zoom(firingMode);
     }
 
     @Nullable

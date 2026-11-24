@@ -284,7 +284,7 @@ public final class ModClientEvents {
         }
 
         state.chargeTicks++;
-        if (state.chargeTicks < weapon.getChargeThreshold()) {
+        if (state.chargeTicks < weapon.getChargeThreshold(state.heldStack)) {
             return;
         }
 
@@ -332,7 +332,7 @@ public final class ModClientEvents {
 
     private static boolean shouldPlayUnchargeOnStop(WeaponInputState state, ProjectileItem weapon) {
         if (state.activeMode == FiringMode.CHARGENSHOOTONRELEASE) {
-            return state.charging && state.chargeTicks < weapon.getChargeThreshold();
+            return state.charging && state.chargeTicks < weapon.getChargeThreshold(state.heldStack);
         }
         return state.activeMode == FiringMode.CHARGENSHOOT && state.charging && !state.chargeFired;
     }
@@ -385,7 +385,7 @@ public final class ModClientEvents {
             player.playSound(WeaponSoundsUtil.getWeaponEquip(current.weaponName()), 0.5F, 1.0F);
             ItemStack stack = mainHand ? player.getMainHandItem() : player.getOffhandItem();
             if (stack.getItem() instanceof ProjectileItem weapon) {
-                long equipReadyTime = player.level().getGameTime() + weapon.getEquipTime();
+                long equipReadyTime = player.level().getGameTime() + weapon.getEquipTime(stack);
                 if (mainHand) {
                     mainEquipReadyTime = equipReadyTime;
                 } else {

@@ -18,6 +18,7 @@ public record ProjectileWeaponDefinition(
         int overheatCoolingAmount,
         int overheatCoolingIntervalTicks,
         int burstRate,
+        int burstShotCount,
         int scatterShots,
         EnumMap<FiringMode, ProjectileWeaponStats> stats,
         @Nullable BeamWeaponStats beamStats,
@@ -48,6 +49,7 @@ public record ProjectileWeaponDefinition(
         private int overheatCoolingAmount = -1;
         private int overheatCoolingIntervalTicks = -1;
         private int burstRate = 2;
+        private int burstShotCount = 3;
         private int scatterShots = 5;
         private final EnumMap<FiringMode, ProjectileWeaponStats> stats = new EnumMap<>(FiringMode.class);
         private BeamWeaponStats beamStats;
@@ -74,31 +76,37 @@ public record ProjectileWeaponDefinition(
             this.registryName = registryName;
         }
 
+        // Default reload duration in ticks
         public Builder reloadTime(long ticks) {
             this.timing = this.timing.withReloadTicks(ticks);
             return this;
         }
 
+        // Reload duration in ticks for specific firing mode
         public Builder reloadTime(FiringMode firingMode, long ticks) {
             this.timing = this.timing.withReloadTicks(firingMode, ticks);
             return this;
         }
 
+        // Default switching firing mode duration in ticks
         public Builder switchTime(long ticks) {
             this.timing = this.timing.withSwitchTicks(ticks);
             return this;
         }
 
+        // Switching firing mode cooldown in ticks
         public Builder switchTime(FiringMode firingMode, long ticks) {
             this.timing = this.timing.withSwitchTicks(firingMode, ticks);
             return this;
         }
 
+        // Threshold in ticks that must be held before a charged shot is ready
         public Builder chargeThreshold(int ticks) {
             this.timing = this.timing.withChargeThresholdTicks(ticks);
             return this;
         }
 
+        // Equipping weapon cooldown in ticks
         public Builder equipTime(long ticks) {
             this.timing = this.timing.withEquipTicks(ticks);
             return this;
@@ -109,32 +117,44 @@ public record ProjectileWeaponDefinition(
             return this;
         }
 
+        // Projectile speed in blocks per tick
         public Builder projectileSpeed(float projectileSpeed) {
             this.projectileSpeed = projectileSpeed;
             return this;
         }
 
+        // Maximum ammunition weapon can hold
         public Builder maxAmmo(int maxAmmo) {
             this.maxAmmo = maxAmmo;
             return this;
         }
 
+        // Threshold value for when blaster overheats
         public Builder maxOverheat(int maxOverheat) {
             this.maxOverheat = maxOverheat;
             return this;
         }
 
+        // Remove this much heat every intervalTicks after the cooling delay
         public Builder overheatCooling(int amount, int intervalTicks) {
             this.overheatCoolingAmount = amount;
             this.overheatCoolingIntervalTicks = intervalTicks;
             return this;
         }
 
+        // Fire rate in ticks between every burst shot
         public Builder burstRate(int burstRate) {
             this.burstRate = burstRate;
             return this;
         }
 
+        // Number of burst shots
+        public Builder burstShotCount(int burstShotCount) {
+            this.burstShotCount = burstShotCount;
+            return this;
+        }
+
+        // Number of projectiles shot for the scatter firing mode
         public Builder scatterShots(int scatterShots) {
             this.scatterShots = scatterShots;
             return this;
@@ -152,6 +172,7 @@ public record ProjectileWeaponDefinition(
             return this;
         }
 
+        // Damage per beam pulse
         public Builder beam(float damagePerPulse, int overheatPerPulse) {
             this.beamStats = new BeamWeaponStats(damagePerPulse, overheatPerPulse);
             return this;
@@ -162,6 +183,7 @@ public record ProjectileWeaponDefinition(
             return this;
         }
 
+        // Available firing modes and order of firing modes
         public Builder firingModes(FiringMode... firingModes) {
             this.firingModes.clear();
 
@@ -177,41 +199,49 @@ public record ProjectileWeaponDefinition(
             return this;
         }
 
+        // Firing mode weapon defaults to
         public Builder defaultFiringMode(FiringMode defaultFiringMode) {
             this.defaultFiringMode = Objects.requireNonNull(defaultFiringMode, "defaultFiringMode cannot be null");
             return this;
         }
 
+        // Ammo weapon defaults to
         public Builder ammoType(AmmoType ammoType) {
             this.ammoType = Objects.requireNonNull(ammoType, "ammoType cannot be null");
             return this;
         }
 
+        // Ammo type for weapon
         public Builder classification(WeaponClassification classification) {
             this.classification = Objects.requireNonNull(classification, "classification cannot be null");
             return this;
         }
 
+        // Recoil multiplier while dual wielding
         public Builder dualWieldRecoilMultiplier(float multiplier) {
             this.dualWieldRecoilMultiplier = multiplier;
             return this;
         }
 
+        // Flat added dual wield recoil
         public Builder dualWieldRecoilPenalty(float penalty) {
             this.dualWieldRecoilPenalty = penalty;
             return this;
         }
 
+        // Spread multiplier while dual wielding
         public Builder dualWieldInaccuracyMultiplier(float multiplier) {
             this.dualWieldInaccuracyMultiplier = multiplier;
             return this;
         }
 
+        // Flat added dual wield spread
         public Builder dualWieldInaccuracyPenalty(float penalty) {
             this.dualWieldInaccuracyPenalty = penalty;
             return this;
         }
 
+        // Movement speed multiplier while held
         public Builder heldMovementSpeedMultiplier(double multiplier) {
             this.heldMovementSpeedMultiplier = multiplier;
             return this;
@@ -230,6 +260,7 @@ public record ProjectileWeaponDefinition(
                     overheatCoolingAmount,
                     overheatCoolingIntervalTicks,
                     burstRate,
+                    burstShotCount,
                     scatterShots,
                     new EnumMap<>(stats),
                     beamStats,
@@ -274,6 +305,10 @@ public record ProjectileWeaponDefinition(
 
             if (scatterShots <= 0) {
                 throw new IllegalStateException(weaponName + " must have scatterShots greater than 0.");
+            }
+
+            if (burstShotCount <= 0) {
+                throw new IllegalStateException(weaponName + " must have burstShotCount greater than 0.");
             }
 
             if (firingModes.isEmpty()) {

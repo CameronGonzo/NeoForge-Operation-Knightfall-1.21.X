@@ -1,5 +1,8 @@
 package net.uhhitscam.knightfall.item;
 
+import net.uhhitscam.knightfall.item.custom.projectile.DebugBlasterItem;
+import net.uhhitscam.knightfall.item.custom.projectile.DebugBlasterSettings;
+
 import net.uhhitscam.knightfall.component.AmmoData;
 import net.uhhitscam.knightfall.component.AmmoTypeData;
 import net.uhhitscam.knightfall.component.FireCoolDownData;
@@ -158,6 +161,12 @@ public class ModItems {
             properties -> new GasItem(properties, 12800, 500, AmmoType.MAGNETIZED_SIG), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> SKEVON = ITEMS.registerItem("skevon_gas",
             properties -> new GasItem(properties, 2000, 200, AmmoType.SKEVON), () -> new Item.Properties().stacksTo(1));
+
+    public static final DeferredItem<Item> DEBUG_BLASTER = ITEMS.registerItem("debug_blaster",
+            DebugBlasterItem::new,
+            () -> projectileProperties(DebugBlasterSettings.DEFAULT.definition())
+                    .component(ModDataComponentTypes.AMMO.get(), new AmmoData(500))
+                    .component(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(AmmoType.TIBANNA.name())));
 
     // Projectile items
     public static final DeferredItem<Item> STEEL_SLUG = ITEMS.registerItem("steel_slug",
@@ -1047,13 +1056,13 @@ public class ModItems {
     );
     public static final DeferredItem<Item> _434_DEATHHAMMER = registerProjectile(
             ProjectileWeaponDefinition.builder(WeaponName._434_DEATHHAMMER, "_434_deathhammer")
-                    .projectileSpeed(2.0f)
+                    .projectileSpeed(1.2f)
                     .maxOverheat(500)
                     .overheatCooling(3,5)
                     .maxAmmo(50)
                     .burstRate(0)
                     .scatterShots(1)
-                    .stat(FiringMode.SEMI_AUTO, 0, 0f, 0f, 14, 3)
+                    .stat(FiringMode.SEMI_AUTO, 5, 3f, 8f, 5, 3)
                     .firingModes(FiringMode.SEMI_AUTO)
                     .ui(ProjectileWeaponUI.of(CrosshairTexture.CIRCLE_SMALL_LINE, 0.8f))
                     .defaultFiringMode(FiringMode.SEMI_AUTO)
@@ -5368,11 +5377,14 @@ public class ModItems {
                     .maxOverheat(500)
                     .overheatCooling(3,5)
                     .maxAmmo(200)
+                    .burstRate(2)
+                    .burstShotCount(5)
                     .scatterShots(1)
                     .stat(FiringMode.FULL_AUTO, 3, 0.6f, 5.1f, 7, 3)
-                    .firingModes(FiringMode.FULL_AUTO)
+                    .stat(FiringMode.BURST, 3, 0.6f, 5.1f, 7, 3)
+                    .firingModes(FiringMode.BURST, FiringMode.FULL_AUTO)
                     .ui(ProjectileWeaponUI.of(CrosshairTexture.TRI_DASH, 0.75f))
-                    .defaultFiringMode(FiringMode.FULL_AUTO)
+                    .defaultFiringMode(FiringMode.BURST)
                     .classification(WeaponClassification.REPEATER)
                     .reloadTime(15)
                     .build()

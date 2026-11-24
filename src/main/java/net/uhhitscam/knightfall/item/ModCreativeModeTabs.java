@@ -21,6 +21,7 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("itemGroup.knightfall.hand_blasters"))
                     .icon(() -> new ItemStack(ModItems.DL44.get()))
                     .displayItems((pParameters, pOutput) -> {
+                        pOutput.accept(ModItems.DEBUG_BLASTER);
                         pOutput.accept(ModItems._22T4);
                         pOutput.accept(ModItems._434_DEATHHAMMER);
                         pOutput.accept(ModItems.A2H);

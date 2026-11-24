@@ -20,6 +20,8 @@ public class PayloadRegister {
         client(CSMeleeRecoveryPacket.TYPE, CSMeleeRecoveryPacket.STREAM_CODEC);
         server(SSProjectileWeaponInputPacket.TYPE, SSProjectileWeaponInputPacket.STREAM_CODEC);
         server(SSProjectileWeaponActionPacket.TYPE, SSProjectileWeaponActionPacket.STREAM_CODEC);
+        server(SSDebugBlasterEditorPacket.TYPE, SSDebugBlasterEditorPacket.STREAM_CODEC);
+        client(CSDebugBlasterEditorPacket.TYPE, CSDebugBlasterEditorPacket.STREAM_CODEC);
         server(SSSoundPacket.TYPE, SSSoundPacket.STREAM_CODEC);
 
         client(CSProjectileWeaponRecoilPacket.TYPE, CSProjectileWeaponRecoilPacket.STREAM_CODEC);

@@ -41,7 +41,7 @@ public record ProjectileWeaponUI(
     }
 
     public float zoom(FiringMode firingMode) {
-        if (firingMode == FiringMode.STUN) {
+        if (firingMode == FiringMode.STUN && !zoomByMode.containsKey(firingMode)) {
             return 0.85f;
         }
 
@@ -50,10 +50,6 @@ public record ProjectileWeaponUI(
 
     @Nullable
     public ScopeTexture scope(FiringMode firingMode) {
-        if (firingMode == FiringMode.STUN) {
-            return null;
-        }
-
         return scopeByMode.get(firingMode);
     }
 }

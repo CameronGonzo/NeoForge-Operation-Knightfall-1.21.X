@@ -15,7 +15,8 @@ import java.util.UUID;
 @EventBusSubscriber(modid = OperationKnightfall.MODID, value = Dist.CLIENT)
 public final class ClientProjectileWeaponRecoil {
     private static final float MAX_RECOIL = 20.0F;
-    private static final float RECOIL_DECAY = 0.8F;
+    // Remaining kick per tick; 0.5 delivers about 90% of a shot's recoil within 0.17 seconds.
+    private static final float RECOIL_DECAY = 0.5F;
     private static final float MIN_RECOIL_TO_KEEP = 0.01F;
 
     private static float recoil;

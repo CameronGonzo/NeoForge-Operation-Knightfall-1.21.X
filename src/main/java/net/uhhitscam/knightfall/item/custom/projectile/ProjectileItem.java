@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -41,7 +40,6 @@ import net.uhhitscam.knightfall.util.WeaponSoundsUtil;
 import net.uhhitscam.knightfall.util.WeaponTargeting;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumMap;
 import java.util.List;
 
 public class ProjectileItem extends Item {
@@ -50,84 +48,138 @@ public class ProjectileItem extends Item {
     private static final int OVERHEAT_PENALTY = 20;
     private static final int OVERHEAT_COOLING_DELAY_TICKS = 20;
 
-    private final float projectileSpeed;
-    private final int maxAmmo;
-    private final int maxOverheat;
-    private final int overheatCoolingAmount;
-    private final int overheatCoolingIntervalTicks;
-    private final int burstRate;
-    private final int scatterShots;
-    private final EnumMap<FiringMode, ProjectileWeaponStats> stats;
-    private final BeamWeaponStats beamStats;
-    private final List<FiringMode> firingModes;
-    private final FiringMode defaultFiringMode;
-    private final AmmoType typAmmoType;
-    private final WeaponClassification classification;
+    private final ProjectileWeaponDefinition definition;
     private final WeaponName projectileWeaponName;
-    private final ProjectileWeaponUI ui;
-    private final float dualWieldRecoilMultiplier;
-    private final float dualWieldRecoilPenalty;
-    private final float dualWieldInaccuracyMultiplier;
-    private final float dualWieldInaccuracyPenalty;
-    private final double heldMovementSpeedMultiplier;
-    private final ProjectileWeaponTiming timing;
 
     public ProjectileItem(Properties properties, ProjectileWeaponDefinition definition) {
         super(properties);
-        this.projectileSpeed = definition.projectileSpeed();
-        this.maxAmmo = definition.maxAmmo();
-        this.maxOverheat = definition.maxOverheat();
-        this.overheatCoolingAmount = definition.overheatCoolingAmount();
-        this.overheatCoolingIntervalTicks = definition.overheatCoolingIntervalTicks();
-        this.burstRate = definition.burstRate();
-        this.scatterShots = definition.scatterShots();
-        this.stats = definition.stats();
-        this.beamStats = definition.beamStats();
-        this.firingModes = definition.firingModes();
-        this.ui = definition.ui();
-        this.defaultFiringMode = definition.defaultFiringMode();
-        this.typAmmoType = definition.ammoType();
-        this.classification = definition.classification();
+        this.definition = definition;
         this.projectileWeaponName = definition.weaponName();
-        this.dualWieldRecoilMultiplier = definition.dualWieldRecoilMultiplier();
-        this.dualWieldRecoilPenalty = definition.dualWieldRecoilPenalty();
-        this.dualWieldInaccuracyMultiplier = definition.dualWieldInaccuracyMultiplier();
-        this.dualWieldInaccuracyPenalty = definition.dualWieldInaccuracyPenalty();
-        this.heldMovementSpeedMultiplier = definition.heldMovementSpeedMultiplier();
-        this.timing = definition.timing();
     }
 
-    public long getReloadTime(FiringMode firingMode) {
-        return timing.reloadTicks(firingMode);
+    public int getMaxAmmo() {
+        return getMaxAmmo(ItemStack.EMPTY);
     }
 
-    public long getSwitchTime(FiringMode firingMode) {
-        return timing.switchTicks(firingMode);
+    public double getHeldMovementSpeedMultiplier() {
+        return getHeldMovementSpeedMultiplier(ItemStack.EMPTY);
     }
 
-    public long getEquipTime() {
-        return timing.equipTicks();
+    public float getDualWieldInaccuracyPenalty() {
+        return getDualWieldInaccuracyPenalty(ItemStack.EMPTY);
     }
 
-    public int getChargeThreshold() {
-        return timing.chargeThresholdTicks();
+    public float getDualWieldInaccuracyMultiplier() {
+        return getDualWieldInaccuracyMultiplier(ItemStack.EMPTY);
     }
 
-    public int getBurstRate() {
-        return burstRate;
+    public float getDualWieldRecoilPenalty() {
+        return getDualWieldRecoilPenalty(ItemStack.EMPTY);
     }
 
-    public ProjectileWeaponStats getStats(FiringMode firingMode) {
-        return stats.get(firingMode);
+    public float getDualWieldRecoilMultiplier() {
+        return getDualWieldRecoilMultiplier(ItemStack.EMPTY);
+    }
+
+    public WeaponClassification getClassification() {
+        return getClassification(ItemStack.EMPTY);
+    }
+
+    public List<FiringMode> getFiringModes() {
+        return getFiringModes(ItemStack.EMPTY);
+    }
+
+    public int getOverheatCoolingIntervalTicks() {
+        return getOverheatCoolingIntervalTicks(ItemStack.EMPTY);
+    }
+
+    public int getOverheatCoolingAmount() {
+        return getOverheatCoolingAmount(ItemStack.EMPTY);
+    }
+
+    public int getMaxOverheat() {
+        return getMaxOverheat(ItemStack.EMPTY);
+    }
+
+    public boolean usesOverheat() {
+        return usesOverheat(ItemStack.EMPTY);
+    }
+
+    public BeamWeaponStats getBeamStats() {
+        return getBeamStats(ItemStack.EMPTY);
     }
 
     public ProjectileWeaponUI getUI() {
-        return ui;
+        return getUI(ItemStack.EMPTY);
+    }
+
+    public ProjectileWeaponStats getStats(FiringMode firingMode) {
+        return getStats(ItemStack.EMPTY, firingMode);
+    }
+
+    public int getBurstRate() {
+        return getBurstRate(ItemStack.EMPTY);
+    }
+
+    public int getChargeThreshold() {
+        return getChargeThreshold(ItemStack.EMPTY);
+    }
+
+    public long getEquipTime() {
+        return getEquipTime(ItemStack.EMPTY);
+    }
+
+    public long getSwitchTime(FiringMode firingMode) {
+        return getSwitchTime(ItemStack.EMPTY, firingMode);
+    }
+
+    public long getReloadTime(FiringMode firingMode) {
+        return getReloadTime(ItemStack.EMPTY, firingMode);
+    }
+
+    public float debugValue(ItemStack stack, String key, float fallback) {
+        return this instanceof DebugBlasterItem ? DebugBlasterItem.settings(stack).decimal(key) : fallback;
+    }
+
+    public int getBurstShotCount(ItemStack stack) {
+        return getDefinition(stack).burstShotCount();
+    }
+
+    public ProjectileWeaponDefinition getDefinition(ItemStack stack) {
+        return definition;
+    }
+
+    public long getReloadTime(ItemStack stack, FiringMode firingMode) {
+        return getDefinition(stack).timing().reloadTicks(firingMode);
+    }
+
+    public long getSwitchTime(ItemStack stack, FiringMode firingMode) {
+        return getDefinition(stack).timing().switchTicks(firingMode);
+    }
+
+    public long getEquipTime(ItemStack stack) {
+        return getDefinition(stack).timing().equipTicks();
+    }
+
+    public int getChargeThreshold(ItemStack stack) {
+        return getDefinition(stack).timing().chargeThresholdTicks();
+    }
+
+    public int getBurstRate(ItemStack stack) {
+        return getDefinition(stack).burstRate();
+    }
+
+    public ProjectileWeaponStats getStats(ItemStack stack, FiringMode firingMode) {
+        return getDefinition(stack).stats().get(firingMode);
+    }
+
+    public ProjectileWeaponUI getUI(ItemStack stack) {
+        return getDefinition(stack).ui();
     }
 
     @Nullable
-    public BeamWeaponStats getBeamStats() {
-        return beamStats;
+    public BeamWeaponStats getBeamStats(ItemStack stack) {
+        return getDefinition(stack).beamStats();
     }
 
     @Override
@@ -222,10 +274,10 @@ public class ProjectileItem extends Item {
     }
 
     private void fireRepulse(Level level, Player player, ItemStack stack, FiringMode firingMode) {
-        Repulse.execute(level, player, 7, 2.5);
+        Repulse.execute(level, player, debugValue(stack, "repulse_radius", 7), debugValue(stack, "repulse_strength", 2.5F));
         playFireSound(level, player, firingMode);
         player.awardStat(Stats.ITEM_USED.get(this));
-        applyShotRecoil(player, getRequiredStats(firingMode));
+        applyShotRecoil(stack, player, getRequiredStats(stack, firingMode));
         setFireCooldown(level, stack, firingMode);
     }
 
@@ -235,7 +287,7 @@ public class ProjectileItem extends Item {
             return;
         }
 
-        for (int shot = 0; shot < scatterShots; shot++) {
+        for (int shot = 0; shot < getDefinition(stack).scatterShots(); shot++) {
             fireBolt(level, player, stack, currentAmmo, currentAmmoType, mainHand, firingMode, 0);
         }
 
@@ -269,13 +321,13 @@ public class ProjectileItem extends Item {
     }
 
     private void setFireCooldown(Level level, ItemStack stack, FiringMode firingMode) {
-        ProjectileWeaponStats currentStats = getRequiredStats(firingMode);
+        ProjectileWeaponStats currentStats = getRequiredStats(stack, firingMode);
         long cooldownEndTime = level.getGameTime() + currentStats.fireRate();
         stack.set(ModDataComponentTypes.FIRE_COOLDOWN, getFireCoolDownData(stack).withFireCoolDownEndTime(cooldownEndTime));
     }
 
-    private ProjectileWeaponStats getRequiredStats(FiringMode firingMode) {
-        ProjectileWeaponStats currentStats = stats.get(firingMode);
+    private ProjectileWeaponStats getRequiredStats(ItemStack stack, FiringMode firingMode) {
+        ProjectileWeaponStats currentStats = getDefinition(stack).stats().get(firingMode);
         if (currentStats == null) {
             throw new IllegalStateException(projectileWeaponName + " is missing stats for firing mode " + firingMode);
         }
@@ -307,7 +359,7 @@ public class ProjectileItem extends Item {
     }
 
     private void fireBolt(Level level, Player player, ItemStack stack, int currentAmmo, AmmoType currentAmmoType, boolean mainHand, FiringMode firingMode, int shot) {
-        ProjectileWeaponStats currentStats = getRequiredStats(firingMode);
+        ProjectileWeaponStats currentStats = getRequiredStats(stack, firingMode);
 
         if (currentAmmo <= 0) {
             playNoAmmoSound(level, player);
@@ -315,12 +367,12 @@ public class ProjectileItem extends Item {
             return;
         }
 
-        Snowball projectile = createProjectile(level, player, currentAmmoType, currentStats, firingMode);
+        Snowball projectile = createProjectile(stack, level, player, currentAmmoType, currentStats, firingMode);
         projectile.setOwner(player);
         positionProjectile(player, projectile, mainHand);
 
         Vec3 aimDirection = getMuzzleToCrosshairDirection(level, player, projectile.position());
-        setProjectileVelocity(player, projectile, currentAmmoType, currentStats, shot, aimDirection);
+        setProjectileVelocity(stack, player, projectile, currentAmmoType, currentStats, shot, aimDirection);
         level.addFreshEntity(projectile);
 
         setAmmo(stack, currentAmmo - 1);
@@ -330,22 +382,22 @@ public class ProjectileItem extends Item {
             playFireSound(level, player, firingMode);
         }
 
-        applyShotRecoil(player, currentStats);
+        applyShotRecoil(stack, player, currentStats);
     }
 
-    private Snowball createProjectile(Level level, Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, FiringMode firingMode) {
+    private Snowball createProjectile(ItemStack stack, Level level, Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, FiringMode firingMode) {
         boolean explosiveShot = isExplosiveShot(firingMode);
         boolean concussiveShot = isConcussiveShot();
 
         if (AmmoType.getGasTypes().contains(currentAmmoType)) {
-            return createGasProjectile(level, player, currentAmmoType, currentStats, firingMode, explosiveShot, concussiveShot);
+            return createGasProjectile(stack, level, player, currentAmmoType, currentStats, firingMode, explosiveShot, concussiveShot);
         }
 
         if (AmmoType.getSlugTypes().contains(currentAmmoType)) {
-            return createSlugProjectile(level, player, currentAmmoType, currentStats);
+            return createSlugProjectile(stack, level, player, currentAmmoType, currentStats);
         }
 
-        return createFlechetteProjectile(level, player, currentAmmoType, currentStats);
+        return createFlechetteProjectile(stack, level, player, currentAmmoType, currentStats);
     }
 
     private boolean isExplosiveShot(FiringMode firingMode) {
@@ -362,44 +414,48 @@ public class ProjectileItem extends Item {
                 || projectileWeaponName == WeaponName.W90;
     }
 
-    private Snowball createGasProjectile(Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats, FiringMode firingMode, boolean explosiveShot, boolean concussiveShot) {
+    private Snowball createGasProjectile(ItemStack stack, Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats, FiringMode firingMode, boolean explosiveShot, boolean concussiveShot) {
         if (firingMode == FiringMode.STUN) {
-            return new StunBlasterBoltEntity(ModEntities.STUN_BLASTER_BOLT.get(), level);
+            var stun = new StunBlasterBoltEntity(ModEntities.STUN_BLASTER_BOLT.get(), level);
+            if (this instanceof DebugBlasterItem) stun.configureDebug(DebugBlasterItem.settings(stack));
+            return stun;
         } else if (getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER) || getProjectileWeaponName().equals(WeaponName.SONIC_BLASTER_PISTOL)) {
             return new SonicBoltEntity(ModEntities.SONIC_BOLT.get(), level, player, 1.4F, 18);
         }
 
-        return new BlasterBoltEntity(
+        var bolt = new BlasterBoltEntity(
                 ModEntities.BLASTER_BOLT.get(),
                 level,
                 player,
                 BlasterBoltEntity.BoltType.fromAmmoType(ammoType),
-                projectileSpeed,
+                getDefinition(stack).projectileSpeed(),
                 currentStats.damage(),
-                classification,
+                getDefinition(stack).classification(),
                 explosiveShot,
                 concussiveShot
         );
+        if (this instanceof DebugBlasterItem) bolt.configureDebug(DebugBlasterItem.settings(stack));
+        return bolt;
     }
 
-    private Snowball createSlugProjectile(Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats) {
+    private Snowball createSlugProjectile(ItemStack stack, Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats) {
         return switch (ammoType) {
-            case EXPLOSIVE_TIPPED_STEEL_SLUG -> new ExplosiveTippedSteelSlugEntity(ModEntities.EXPLOSIVE_TIPPED_STEEL_SLUG.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName);
-            case POISON_TIPPED_STEEL_SLUG -> new PoisonTippedSteelSlugEntity(ModEntities.POISON_TIPPED_STEEL_SLUG.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName);
-            case ION_TIPPED_STEEL_SLUG -> new IonTippedSteelSlugEntity(ModEntities.ION_TIPPED_STEEL_SLUG.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName);
-            case RAZOR_STEEL_SLUG -> new RazorSteelSlugEntity(ModEntities.RAZOR_STEEL_SLUG.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName);
-            case PLASTIC_SLUG -> new PlasticSlugEntity(ModEntities.PLASTIC_SLUG.get(), level, player, projectileSpeed, currentStats.damage(), classification);
-            case CERAMIC_SLUG -> new CeramicSlugEntity(ModEntities.CERAMIC_SLUG.get(), level, player, projectileSpeed, currentStats.damage(), classification);
-            default -> new SteelSlugEntity(ModEntities.STEEL_SLUG.get(), level, player, projectileSpeed, currentStats.damage(), classification, projectileWeaponName);
+            case EXPLOSIVE_TIPPED_STEEL_SLUG -> new ExplosiveTippedSteelSlugEntity(ModEntities.EXPLOSIVE_TIPPED_STEEL_SLUG.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), getDefinition(stack).classification(), projectileWeaponName);
+            case POISON_TIPPED_STEEL_SLUG -> new PoisonTippedSteelSlugEntity(ModEntities.POISON_TIPPED_STEEL_SLUG.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), getDefinition(stack).classification(), projectileWeaponName);
+            case ION_TIPPED_STEEL_SLUG -> new IonTippedSteelSlugEntity(ModEntities.ION_TIPPED_STEEL_SLUG.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), getDefinition(stack).classification(), projectileWeaponName);
+            case RAZOR_STEEL_SLUG -> new RazorSteelSlugEntity(ModEntities.RAZOR_STEEL_SLUG.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), getDefinition(stack).classification(), projectileWeaponName);
+            case PLASTIC_SLUG -> new PlasticSlugEntity(ModEntities.PLASTIC_SLUG.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), getDefinition(stack).classification());
+            case CERAMIC_SLUG -> new CeramicSlugEntity(ModEntities.CERAMIC_SLUG.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), getDefinition(stack).classification());
+            default -> new SteelSlugEntity(ModEntities.STEEL_SLUG.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), getDefinition(stack).classification(), projectileWeaponName);
         };
     }
 
-    private Snowball createFlechetteProjectile(Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats) {
+    private Snowball createFlechetteProjectile(ItemStack stack, Level level, Player player, AmmoType ammoType, ProjectileWeaponStats currentStats) {
         return switch (ammoType) {
-            case FLECHETTE_SPREAD_CAN -> new FlechetteSpreadCanEntity(ModEntities.FLECHETTE_SPREAD_CAN.get(), level, player, projectileSpeed, currentStats.damage());
-            case FLECHETTE_TOXIC_SPREAD_CAN -> new FlechetteToxicSpreadCanEntity(ModEntities.FLECHETTE_TOXIC_SPREAD_CAN.get(), level, player, projectileSpeed, currentStats.damage());
-            case FLECHETTE_TOXIC_CAN -> new FlechetteToxicEntity(ModEntities.FLECHETTE_TOXIC.get(), level, player, projectileSpeed, currentStats.damage(), 50);
-            default -> new FlechetteEntity(ModEntities.FLECHETTE.get(), level, player, projectileSpeed, currentStats.damage(), 50);
+            case FLECHETTE_SPREAD_CAN -> new FlechetteSpreadCanEntity(ModEntities.FLECHETTE_SPREAD_CAN.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage());
+            case FLECHETTE_TOXIC_SPREAD_CAN -> new FlechetteToxicSpreadCanEntity(ModEntities.FLECHETTE_TOXIC_SPREAD_CAN.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage());
+            case FLECHETTE_TOXIC_CAN -> new FlechetteToxicEntity(ModEntities.FLECHETTE_TOXIC.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), 50);
+            default -> new FlechetteEntity(ModEntities.FLECHETTE.get(), level, player, getDefinition(stack).projectileSpeed(), currentStats.damage(), 50);
         };
     }
 
@@ -417,7 +473,7 @@ public class ProjectileItem extends Item {
         return direction.lengthSqr() < 1.0e-6 ? player.getLookAngle().normalize() : direction.normalize();
     }
 
-    private void setProjectileVelocity(Player player, Snowball projectile, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, int shot, Vec3 forward) {
+    private void setProjectileVelocity(ItemStack stack, Player player, Snowball projectile, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, int shot, Vec3 forward) {
         Vec3 worldUp = new Vec3(0, 1, 0);
         Vec3 right = forward.cross(worldUp);
 
@@ -429,16 +485,16 @@ public class ProjectileItem extends Item {
 
         right = right.normalize();
         Vec3 cameraUp = right.cross(forward).normalize();
-        Vec3 direction = applyShotSpread(player, currentAmmoType, currentStats, shot, forward, right, cameraUp);
+        Vec3 direction = applyShotSpread(stack, player, currentAmmoType, currentStats, shot, forward, right, cameraUp);
 
-        WeaponAimRules.setProjectileMotion(projectile, direction.scale(projectileSpeed));
+        WeaponAimRules.setProjectileMotion(projectile, direction.scale(getDefinition(stack).projectileSpeed()));
     }
 
-    private Vec3 applyShotSpread(Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, int shot, Vec3 forward, Vec3 right, Vec3 cameraUp) {
+    private Vec3 applyShotSpread(ItemStack stack, Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats, int shot, Vec3 forward, Vec3 right, Vec3 cameraUp) {
         double angle = shot == 0 ? 0.0 : shot == 2 ? -0.10 : 0.10;
         Vec3 direction = forward.scale(Math.cos(angle)).add(right.scale(Math.sin(angle)));
 
-        float accuracyFactor = getAccuracyFactor(player, currentAmmoType, currentStats);
+        float accuracyFactor = getAccuracyFactor(stack, player, currentAmmoType, currentStats);
 
         return direction
                 .add(right.scale((player.getRandom().nextDouble() - 0.5) * accuracyFactor))
@@ -446,14 +502,14 @@ public class ProjectileItem extends Item {
                 .normalize();
     }
 
-    private float getAccuracyFactor(Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats) {
+    private float getAccuracyFactor(ItemStack stack, Player player, AmmoType currentAmmoType, ProjectileWeaponStats currentStats) {
         float baseInaccuracy = isSpreadFlechetteAmmo(currentAmmoType) ? 1.8f : currentStats.inaccuracy();
-        return WeaponAimRules.adjustInaccuracy(player, this, baseInaccuracy) / 100;
+        return WeaponAimRules.adjustInaccuracy(player, this, stack, baseInaccuracy) / 100;
     }
 
-    private void applyShotRecoil(Player player, ProjectileWeaponStats currentStats) {
+    private void applyShotRecoil(ItemStack stack, Player player, ProjectileWeaponStats currentStats) {
         if (player instanceof ServerPlayer serverPlayer) {
-            float recoil = WeaponAimRules.adjustRecoil(player, this, currentStats.recoil());
+            float recoil = WeaponAimRules.adjustRecoil(player, this, stack, currentStats.recoil());
             PayloadRegister.sendToPlayer(serverPlayer, new CSProjectileWeaponRecoilPacket(recoil));
         }
     }
@@ -474,15 +530,15 @@ public class ProjectileItem extends Item {
         }
 
         int currentAmmo = getAmmo(stack);
-        if (currentAmmo >= maxAmmo) {
+        if (currentAmmo >= getDefinition(stack).maxAmmo()) {
             return;
         }
 
-        setAmmo(stack, Math.min(maxAmmo, currentAmmo + 1));
+        setAmmo(stack, Math.min(getDefinition(stack).maxAmmo(), currentAmmo + 1));
 
         AmmoType currentType = getAmmoType(stack);
-        if (currentType == AmmoType.NONE && typAmmoType != null && typAmmoType != AmmoType.NONE) {
-            stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(typAmmoType.name()));
+        if (currentType == AmmoType.NONE && getDefinition(stack).ammoType() != null && getDefinition(stack).ammoType() != AmmoType.NONE) {
+            stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(getDefinition(stack).ammoType().name()));
         }
 
         player.inventoryMenu.broadcastChanges();
@@ -493,76 +549,76 @@ public class ProjectileItem extends Item {
         return data != null ? data.ammo() : 0;
     }
 
-    public boolean usesOverheat() {
-        return maxOverheat > 0;
+    public boolean usesOverheat(ItemStack stack) {
+        return getDefinition(stack).maxOverheat() > 0;
     }
 
-    public int getMaxOverheat() {
-        return maxOverheat;
+    public int getMaxOverheat(ItemStack stack) {
+        return getDefinition(stack).maxOverheat();
     }
 
-    public int getOverheatCoolingAmount() {
-        return overheatCoolingAmount;
+    public int getOverheatCoolingAmount(ItemStack stack) {
+        return getDefinition(stack).overheatCoolingAmount();
     }
 
-    public int getOverheatCoolingIntervalTicks() {
-        return overheatCoolingIntervalTicks;
+    public int getOverheatCoolingIntervalTicks(ItemStack stack) {
+        return getDefinition(stack).overheatCoolingIntervalTicks();
     }
 
     public int getOverheat(ItemStack stack, Level level) {
-        if (!usesOverheat()) {
+        if (!usesOverheat(stack)) {
             return 0;
         }
 
-        return resolveOverheatData(getOverheatData(stack), level.getGameTime()).heat();
+        return resolveOverheatData(stack, getOverheatData(stack), level.getGameTime()).heat();
     }
 
     public boolean isOverheated(ItemStack stack, Level level) {
-        return usesOverheat() && getOverheat(stack, level) >= maxOverheat;
+        return usesOverheat(stack) && getOverheat(stack, level) >= getDefinition(stack).maxOverheat();
     }
 
     public boolean addBeamOverheat(ItemStack stack, Level level) {
-        if (beamStats == null) {
+        if (getDefinition(stack).beamStats() == null) {
             return false;
         }
 
-        return addOverheat(stack, level, beamStats.overheatPerPulse());
+        return addOverheat(stack, level, getDefinition(stack).beamStats().overheatPerPulse());
     }
 
     private void addShotOverheat(ItemStack stack, Level level, FiringMode firingMode) {
-        if (!usesOverheat() || firingMode == FiringMode.REPULSE) {
+        if (!usesOverheat(stack) || firingMode == FiringMode.REPULSE) {
             return;
         }
 
-        addOverheat(stack, level, getRequiredStats(firingMode).overheatPerShot());
+        addOverheat(stack, level, getRequiredStats(stack, firingMode).overheatPerShot());
     }
 
     private boolean addOverheat(ItemStack stack, Level level, int amount) {
-        if (!usesOverheat() || amount <= 0) {
+        if (!usesOverheat(stack) || amount <= 0) {
             return false;
         }
 
         OverheatData currentData = updateOverheat(stack, level);
-        if (currentData.heat() >= maxOverheat) {
+        if (currentData.heat() >= getDefinition(stack).maxOverheat()) {
             return true;
         }
 
         int newHeat = currentData.heat() + amount;
-        if (newHeat >= maxOverheat) {
-            newHeat += OVERHEAT_PENALTY;
+        if (newHeat >= getDefinition(stack).maxOverheat()) {
+            newHeat += (int) debugValue(stack, "overheat_penalty", OVERHEAT_PENALTY);
         }
 
         stack.set(
                 ModDataComponentTypes.OVERHEAT.get(),
-                new OverheatData(newHeat, level.getGameTime() + OVERHEAT_COOLING_DELAY_TICKS)
+                new OverheatData(newHeat, level.getGameTime() + (int) debugValue(stack, "cooling_delay", OVERHEAT_COOLING_DELAY_TICKS))
         );
-        return newHeat >= maxOverheat;
+        return newHeat >= getDefinition(stack).maxOverheat();
     }
 
     private OverheatData updateOverheat(ItemStack stack, Level level) {
         OverheatData currentData = getOverheatData(stack);
 
-        if (!usesOverheat()) {
+        if (!usesOverheat(stack)) {
             OverheatData clearedData = new OverheatData(0, 0);
             if (!clearedData.equals(currentData)) {
                 stack.set(ModDataComponentTypes.OVERHEAT.get(), clearedData);
@@ -570,7 +626,7 @@ public class ProjectileItem extends Item {
             return clearedData;
         }
 
-        OverheatData resolvedData = resolveOverheatData(currentData, level.getGameTime());
+        OverheatData resolvedData = resolveOverheatData(stack, currentData, level.getGameTime());
 
         if (!resolvedData.equals(currentData)) {
             stack.set(ModDataComponentTypes.OVERHEAT.get(), resolvedData);
@@ -584,18 +640,19 @@ public class ProjectileItem extends Item {
         return data != null ? data : new OverheatData(0, 0);
     }
 
-    private OverheatData resolveOverheatData(OverheatData data, long gameTime) {
-        if (data.heat() <= 0 || data.nextCoolingTick() <= 0 || gameTime < data.nextCoolingTick()) {
+    private OverheatData resolveOverheatData(ItemStack stack, OverheatData data, long gameTime) {
+        if (data.heat() <= 0 || data.nextCoolingTick() <= 0 || gameTime < data.nextCoolingTick()
+                || getOverheatCoolingAmount(stack) <= 0) {
             return data;
         }
 
-        long coolingSteps = 1L + (gameTime - data.nextCoolingTick()) / overheatCoolingIntervalTicks;
-        long maximumUsefulSteps = ((long) data.heat() + overheatCoolingAmount - 1L) / overheatCoolingAmount;
+        long coolingSteps = 1L + (gameTime - data.nextCoolingTick()) / getDefinition(stack).overheatCoolingIntervalTicks();
+        long maximumUsefulSteps = ((long) data.heat() + getDefinition(stack).overheatCoolingAmount() - 1L) / getDefinition(stack).overheatCoolingAmount();
         long appliedCoolingSteps = Math.min(coolingSteps, maximumUsefulSteps);
-        long heatReduction = appliedCoolingSteps * overheatCoolingAmount;
+        long heatReduction = appliedCoolingSteps * getDefinition(stack).overheatCoolingAmount();
         int cooledHeat = (int) (data.heat() - heatReduction);
         long nextCoolingTick = cooledHeat > 0
-                ? data.nextCoolingTick() + coolingSteps * overheatCoolingIntervalTicks
+                ? data.nextCoolingTick() + coolingSteps * getDefinition(stack).overheatCoolingIntervalTicks()
                 : 0L;
         return new OverheatData(cooledHeat, nextCoolingTick);
     }
@@ -639,59 +696,59 @@ public class ProjectileItem extends Item {
     public FiringMode getFiringMode(ItemStack stack) {
         FiringModeData data = stack.get(ModDataComponentTypes.FIRING_MODE.get());
         if (data == null || data.firingMode() == null || data.firingMode().isBlank()) {
-            return defaultFiringMode;
+            return getDefinition(stack).defaultFiringMode();
         }
 
         try {
             FiringMode firingMode = FiringMode.valueOf(data.firingMode());
-            if (firingModes.contains(firingMode)) {
+            if (getDefinition(stack).firingModes().contains(firingMode)) {
                 return firingMode;
             }
         } catch (IllegalArgumentException ignored) {
         }
 
-        return defaultFiringMode;
+        return getDefinition(stack).defaultFiringMode();
     }
 
-    public List<FiringMode> getFiringModes() {
-        return firingModes;
+    public List<FiringMode> getFiringModes(ItemStack stack) {
+        return getDefinition(stack).firingModes();
     }
 
-    public WeaponClassification getClassification() {
-        return classification;
+    public WeaponClassification getClassification(ItemStack stack) {
+        return getDefinition(stack).classification();
     }
 
-    public float getDualWieldRecoilMultiplier() {
-        return dualWieldRecoilMultiplier;
+    public float getDualWieldRecoilMultiplier(ItemStack stack) {
+        return getDefinition(stack).dualWieldRecoilMultiplier();
     }
 
-    public float getDualWieldRecoilPenalty() {
-        return dualWieldRecoilPenalty;
+    public float getDualWieldRecoilPenalty(ItemStack stack) {
+        return getDefinition(stack).dualWieldRecoilPenalty();
     }
 
-    public float getDualWieldInaccuracyMultiplier() {
-        return dualWieldInaccuracyMultiplier;
+    public float getDualWieldInaccuracyMultiplier(ItemStack stack) {
+        return getDefinition(stack).dualWieldInaccuracyMultiplier();
     }
 
-    public float getDualWieldInaccuracyPenalty() {
-        return dualWieldInaccuracyPenalty;
+    public float getDualWieldInaccuracyPenalty(ItemStack stack) {
+        return getDefinition(stack).dualWieldInaccuracyPenalty();
     }
 
-    public double getHeldMovementSpeedMultiplier() {
-        return heldMovementSpeedMultiplier;
+    public double getHeldMovementSpeedMultiplier(ItemStack stack) {
+        return getDefinition(stack).heldMovementSpeedMultiplier();
     }
 
     public WeaponName getProjectileWeaponName() {
         return projectileWeaponName;
     }
 
-    public int getMaxAmmo() {
-        return maxAmmo;
+    public int getMaxAmmo(ItemStack stack) {
+        return getDefinition(stack).maxAmmo();
     }
 
     public boolean reload(ServerPlayer player, ItemStack stack) {
         if (projectileWeaponName == WeaponName.DC15S_SIDEARM
-                || getAmmo(stack) >= maxAmmo
+                || getAmmo(stack) >= getDefinition(stack).maxAmmo()
                 || getReloadNSwitchCooldownData(stack).blocksReload(player.level())) {
             return false;
         }
@@ -709,7 +766,7 @@ public class ProjectileItem extends Item {
         }
 
         startCooldown(player, stack, WeaponCooldownAction.RELOAD);
-        playReloadSound(player, getFiringMode(stack), 0.5F);
+        playReloadSound(stack, player, getFiringMode(stack), 0.5F);
         player.inventoryMenu.broadcastChanges();
         return true;
     }
@@ -719,15 +776,15 @@ public class ProjectileItem extends Item {
             ItemStack ammoStack = player.getInventory().getItem(slotIndex);
             Item item = ammoStack.getItem();
 
-            if (classification == WeaponClassification.SLUGTHROWER && item instanceof SlugItem slugItem) {
+            if (getDefinition(weaponStack).classification() == WeaponClassification.SLUGTHROWER && item instanceof SlugItem slugItem) {
                 if (reloadItemAmmo(player, weaponStack, ammoStack, slugItem.getAmmoType(), currentAmmo, currentAmmoType)) {
                     return true;
                 }
-            } else if (classification == WeaponClassification.FLECHETTE && item instanceof FlechetteCanisterItem flechetteItem) {
+            } else if (getDefinition(weaponStack).classification() == WeaponClassification.FLECHETTE && item instanceof FlechetteCanisterItem flechetteItem) {
                 if (reloadItemAmmo(player, weaponStack, ammoStack, flechetteItem.getAmmoType(), currentAmmo, currentAmmoType)) {
                     return true;
                 }
-            } else if (usesGasAmmo() && item instanceof GasItem gasItem) {
+            } else if (usesGasAmmo(weaponStack) && item instanceof GasItem gasItem) {
                 if (reloadGasAmmo(player, weaponStack, ammoStack, gasItem, slotIndex, currentAmmo, currentAmmoType)) {
                     return true;
                 }
@@ -743,8 +800,8 @@ public class ProjectileItem extends Item {
         }
 
         int ammoToReload = player.isCreative()
-                ? maxAmmo - currentAmmo
-                : Math.min(maxAmmo - currentAmmo, ammoStack.getCount());
+                ? getDefinition(weaponStack).maxAmmo() - currentAmmo
+                : Math.min(getDefinition(weaponStack).maxAmmo() - currentAmmo, ammoStack.getCount());
 
         if (ammoToReload <= 0) {
             return false;
@@ -768,8 +825,8 @@ public class ProjectileItem extends Item {
 
         int gasAmmo = gasItem.getAmmo(gasStack);
         int ammoToReload = player.isCreative()
-                ? maxAmmo - currentAmmo
-                : Math.min(maxAmmo - currentAmmo, gasAmmo);
+                ? getDefinition(weaponStack).maxAmmo() - currentAmmo
+                : Math.min(getDefinition(weaponStack).maxAmmo() - currentAmmo, gasAmmo);
 
         if (ammoToReload <= 0) {
             return false;
@@ -790,31 +847,31 @@ public class ProjectileItem extends Item {
         return true;
     }
 
-    private boolean usesGasAmmo() {
-        return classification != WeaponClassification.FLECHETTE && classification != WeaponClassification.SLUGTHROWER;
+    private boolean usesGasAmmo(ItemStack stack) {
+        return getDefinition(stack).classification() != WeaponClassification.FLECHETTE && getDefinition(stack).classification() != WeaponClassification.SLUGTHROWER;
     }
 
     private boolean tryCreativeReload(ItemStack stack, int currentAmmo, AmmoType currentAmmoType) {
-        AmmoType assumedType = currentAmmoType != AmmoType.NONE ? currentAmmoType : typAmmoType;
-        if (assumedType == null || assumedType == AmmoType.NONE || !canUseAmmoType(assumedType)) {
+        AmmoType assumedType = currentAmmoType != AmmoType.NONE ? currentAmmoType : getDefinition(stack).ammoType();
+        if (assumedType == null || assumedType == AmmoType.NONE || !canUseAmmoType(stack, assumedType)) {
             return false;
         }
 
-        setAmmo(stack, maxAmmo);
+        setAmmo(stack, getDefinition(stack).maxAmmo());
         stack.set(ModDataComponentTypes.AMMO_TYPE.get(), new AmmoTypeData(assumedType.name()));
-        return currentAmmo < maxAmmo;
+        return currentAmmo < getDefinition(stack).maxAmmo();
     }
 
-    private boolean canUseAmmoType(AmmoType ammoType) {
-        return switch (classification) {
+    private boolean canUseAmmoType(ItemStack stack, AmmoType ammoType) {
+        return switch (getDefinition(stack).classification()) {
             case SLUGTHROWER -> AmmoType.getSlugTypes().contains(ammoType);
             case FLECHETTE -> AmmoType.getFlechetteTypes().contains(ammoType);
             default -> AmmoType.getGasTypes().contains(ammoType);
         };
     }
 
-    private void playReloadSound(Player player, FiringMode firingMode, float volume) {
-        SoundEvent reloadSound = WeaponSoundsUtil.getWeaponReloadSound(projectileWeaponName, firingMode, classification);
+    private void playReloadSound(ItemStack stack, Player player, FiringMode firingMode, float volume) {
+        SoundEvent reloadSound = WeaponSoundsUtil.getWeaponReloadSound(projectileWeaponName, firingMode, getDefinition(stack).classification());
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), reloadSound, SoundSource.PLAYERS, volume, 1.0F);
     }
 
@@ -831,8 +888,8 @@ public class ProjectileItem extends Item {
             return false;
         }
 
-        if (classification == WeaponClassification.FLECHETTE || classification == WeaponClassification.SLUGTHROWER) {
-            giveUnloadedAmmo(player, currentAmmoType, currentAmmo);
+        if (getDefinition(stack).classification() == WeaponClassification.FLECHETTE || getDefinition(stack).classification() == WeaponClassification.SLUGTHROWER) {
+            giveUnloadedAmmo(stack, player, currentAmmoType, currentAmmo);
         } else {
             spawnUnloadSmoke(player, mainHand);
         }
@@ -844,14 +901,14 @@ public class ProjectileItem extends Item {
         return true;
     }
 
-    private void giveUnloadedAmmo(Player player, AmmoType currentAmmoType, int currentAmmo) {
-        ItemStack unloadedAmmo = getUnloadedAmmoStack(currentAmmoType, currentAmmo);
+    private void giveUnloadedAmmo(ItemStack stack, Player player, AmmoType currentAmmoType, int currentAmmo) {
+        ItemStack unloadedAmmo = getUnloadedAmmoStack(stack, currentAmmoType, currentAmmo);
         if (!player.getInventory().add(unloadedAmmo) && !unloadedAmmo.isEmpty()) {
             player.drop(unloadedAmmo, false);
         }
     }
 
-    private ItemStack getUnloadedAmmoStack(AmmoType ammoType, int amount) {
+    private ItemStack getUnloadedAmmoStack(ItemStack stack, AmmoType ammoType, int amount) {
         return switch (ammoType) {
             case FLECHETTE_TOXIC_SPREAD_CAN -> new ItemStack(ModItems.FLECHETTE_TOXIC_SPREAD_CANISTER.get(), amount);
             case FLECHETTE_TOXIC_CAN -> new ItemStack(ModItems.FLECHETTE_TOXIC_CANISTER.get(), amount);
@@ -864,7 +921,7 @@ public class ProjectileItem extends Item {
             case EXPLOSIVE_TIPPED_STEEL_SLUG -> new ItemStack(ModItems.EXPLOSIVE_TIPPED_STEEL_SLUG.get(), amount);
             case ION_TIPPED_STEEL_SLUG -> new ItemStack(ModItems.ION_TIPPED_STEEL_SLUG.get(), amount);
             case STEEL_SLUG -> new ItemStack(ModItems.STEEL_SLUG.get(), amount);
-            default -> classification == WeaponClassification.SLUGTHROWER
+            default -> getDefinition(stack).classification() == WeaponClassification.SLUGTHROWER
                     ? new ItemStack(ModItems.STEEL_SLUG.get(), amount)
                     : new ItemStack(ModItems.FLECHETTE_CANISTER.get(), amount);
         };
@@ -890,7 +947,7 @@ public class ProjectileItem extends Item {
     }
 
     private void playUnloadSound(Player player, ItemStack stack) {
-        SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(getFiringMode(stack), classification);
+        SoundEvent unloadSound = WeaponSoundsUtil.getWeaponUnloadSound(getFiringMode(stack), getDefinition(stack).classification());
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), unloadSound, SoundSource.PLAYERS, 0.5F, 1.0F);
     }
 
@@ -908,9 +965,9 @@ public class ProjectileItem extends Item {
         FiringMode firingMode = getFiringMode(stack);
 
         long cooldownDuration = switch (action) {
-            case RELOAD -> getReloadTime(firingMode);
-            case SWITCH -> getSwitchTime(firingMode);
-            case EQUIP -> getEquipTime();
+            case RELOAD -> getReloadTime(stack, firingMode);
+            case SWITCH -> getSwitchTime(stack, firingMode);
+            case EQUIP -> getEquipTime(stack);
         };
 
         long cooldownEndTime = level.getGameTime() + cooldownDuration;
@@ -923,17 +980,17 @@ public class ProjectileItem extends Item {
 
     public boolean switchFiringMode(ServerPlayer player, ItemStack stack) {
         ReloadNSwitchCoolDownData cooldownData = getReloadNSwitchCooldownData(stack);
-        if (cooldownData.isOnCooldown(player.level()) || firingModes.size() <= 1) {
+        if (cooldownData.isOnCooldown(player.level()) || getDefinition(stack).firingModes().size() <= 1) {
             return false;
         }
 
         FiringMode currentFiringMode = getFiringMode(stack);
-        int index = firingModes.indexOf(currentFiringMode);
+        int index = getDefinition(stack).firingModes().indexOf(currentFiringMode);
         if (index == -1) {
             index = 0;
         }
 
-        FiringMode nextMode = firingModes.get((index + 1) % firingModes.size());
+        FiringMode nextMode = getDefinition(stack).firingModes().get((index + 1) % getDefinition(stack).firingModes().size());
         stack.set(ModDataComponentTypes.FIRING_MODE.get(), new FiringModeData(nextMode.name()));
 
         startCooldown(player, stack, WeaponCooldownAction.SWITCH);
@@ -985,7 +1042,7 @@ public class ProjectileItem extends Item {
     }
 
     public void appendBaseTooltip(ItemStack weaponStack, java.util.function.Consumer<Component> tooltip) {
-        tooltip.accept(Component.literal("Ammo: " + getAmmo(weaponStack) + "/" + maxAmmo));
+        tooltip.accept(Component.literal("Ammo: " + getAmmo(weaponStack) + "/" + getDefinition(weaponStack).maxAmmo()));
         tooltip.accept(Component.translatable("tooltip.knightfall.blaster.shift"));
     }
 
